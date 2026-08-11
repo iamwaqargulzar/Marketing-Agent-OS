@@ -1,0 +1,2357 @@
+{
+  "package": "marketing-agent-os",
+  "version": "1.1.0",
+  "skills": [
+    {
+      "name": "ab-test-setup",
+      "description": "Compatibility skill for ab test setup. Use when a user or upstream workflow invokes this name; route the task to `ab-testing` while preserving the requested scope and source-specific intent.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": "ab-testing",
+      "phase": null
+    },
+    {
+      "name": "ab-testing",
+      "description": "Design valid marketing experiments with hypotheses, primary metrics, guardrails, sample/traffic assumptions, implementation QA and decision rules.",
+      "domain": "cro",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "ad-account-auditor",
+      "description": "Use when auditing a paid ad account for incremental contribution, wasted spend, or measurement integrity before scaling; runs a typed 20-item ROAS profile with verified vetoes and a SHIP/FIX/BLOCK/UNDECIDED gate on own exported data. Not for campaign structure design — use campaign-architect; not for creative production — use ad-creative-builder. 付费广告账户审计/ROAS评分",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "activate"
+    },
+    {
+      "name": "ad-creative",
+      "description": "Generate and iterate paid-ad creative systems: angles, hooks, copy, concepts, variants, fatigue management and test matrices.",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "ad-creative-builder",
+      "description": "Use when the user asks to \"write ad copy\", \"generate RSA headlines\", or \"build ad creative at volume\"; produces ad units — RSA headlines/descriptions, hooks, and an angle matrix — message-matched to the destination landing page. Not for scoring an ad account — use ad-account-auditor; not for the post-click page — use landing-optimizer; not for organic articles — use content-writer. 广告创意/广告文案/RSA标题",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "orchestrate"
+    },
+    {
+      "name": "ad-test-designer",
+      "description": "Use when the user asks to \"design an A/B test\", \"set up a creative/landing test\", \"run an incrementality test\", or \"is this result statistically and practically material?\"; produces a hypothesis, variant matrix, sample-size/duration/power plan, and a documented effect/uncertainty read from own exported results. It applies only a precommitted owner-approved action rule; the statistical helper never chooses a business action. Not for producing variants — use ad-creative-builder; not for reading back one shipped change — use paid-measurement-loop. 广告AB测试设计/实验设计/显著性判定/增效测试",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "orchestrate"
+    },
+    {
+      "name": "ads",
+      "description": "Plan and optimize paid media across search, social and other platforms, including account structure, targeting, bidding, measurement, budget and creative testing.",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "advocacy-program-designer",
+      "description": "Use when the user asks to \"design an employee advocacy program\", \"set up founder-led sharing\", or \"build a share kit for the team\"; produces an advocacy program blueprint in two modes — participation-driven opt-in (default) or top-down assigned with its coercion and authenticity risks flagged — with a voluntary opt-in roster spec submitted as channel-registry proposal events, share kits with mandatory per-person variation, staggered human posting windows plus anti-pod guardrails (no coordinated identical reshares, no engagement rings), per-person material-connection disclosure lines per FTC and 《互联网广告管理办法》, and a Slack/Teams distribution spec. Not for paid creator campaigns — use campaign-planner. 员工倡导/创始人IP分享/内部分享计划/披露合规",
+      "domain": "social-growth",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "craft"
+    },
+    {
+      "name": "ai-seo",
+      "description": "Optimize for AI search, answer engines, GEO/AEO/LLMO and conventional search together. Use for citability, AI crawler access, entity/brand evidence, llms.txt evaluation, platform readiness and AI-answer visibility.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "analytics",
+      "description": "Design, audit or improve marketing analytics, event tracking, funnels, UTM governance, reporting and decision-grade measurement.",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "analytics-tracking",
+      "description": "Compatibility skill for analytics tracking. Use when a user or upstream workflow invokes this name; route the task to `analytics` while preserving the requested scope and source-specific intent.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": "analytics",
+      "phase": null
+    },
+    {
+      "name": "aso",
+      "description": "When the user wants to audit or optimize an App Store or Google Play listing. Also use when the user mentions 'ASO audit,' 'app store optimization,' 'optimize my app listing,' 'improve app visibility,' 'app store ranking,' 'audit my listing,' 'why aren't people downloading my app,' 'improve my app conversion,' 'keyword optimization for app,' or 'compare my app to competitors.' Use when the user shares an App Store or Google Play URL and wants to improve it.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "aso-audit",
+      "description": "Compatibility skill for aso audit. Use when a user or upstream workflow invokes this name; route the task to `aso` while preserving the requested scope and source-specific intent.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": "aso",
+      "phase": null
+    },
+    {
+      "name": "attribution",
+      "description": "Analyze channel and campaign contribution using explicit attribution assumptions, reconciliation across systems, incrementality where possible, and confidence labels.",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "attribution-reconciler",
+      "description": "Use when platform-reported conversions disagree with GA4/ecommerce, when you suspect Meta and Google are double-counting the same sales, or for a standing (monthly) reconciliation workbook that de-dups stacked credit against an order-ID truth set, normalizes attribution windows and currency, compares attribution models, and reads incrementality from a geo/holdout test. Not for the point-in-time R2 veto or RQS gate — use ad-account-auditor; not for the ROI/ROAS ratio math itself — use roi-calculator; not for organic dark-social share attribution or GA4 direct-traffic decomposition — use dark-social-attributor. 付费广告归因对账/去重/增量",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "scale"
+    },
+    {
+      "name": "audience-belief-mapper",
+      "description": "Use when the user asks to \"map what our buyers believe\", \"capture the objections we keep hearing\", or \"find the switching forces that move the beachhead\"; produces a belief map of the beachhead — held beliefs and mental models, the recurring objections and their reframes, and the JTBD four forces (push of the problem, pull of the new, anxiety of switching, habit of the present) — each item sourced from interviews or win-loss notes (User-provided) and labeled Measured / User-provided / Estimated, with any unverified quote or comparative claim marked \"[needs source]\" and routed to the claims candidates, never adjudicated here. Not for demographic or persona profiling — use audience-mapper; not for the positioning canvas — use positioning-truth-tracer. 受众信念/异议地图/切换四力/流失语言",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "trace"
+    },
+    {
+      "name": "audience-mapper",
+      "description": "Use when the user asks to \"analyze my target audience\", \"build an audience profile for influencer targeting\", \"research a niche community\", or \"deep-dive a subculture before partnering with creators\"; in audience mode produces demographic/psychographic profiles, a platform-priority matrix, named personas, and an influencer-selection criteria set, and in niche mode produces a community map, culture decode (language/norms/taboos), key-voice tiers, a Brand Fit Score, and a phased entry strategy. Not for finding specific creators to contract — use influencer-discovery; not for scoring a shortlist on Suitability — use fit-scorer. 目标受众画像/人群分析 · 细分社群/亚文化调研",
+      "domain": "influencer",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "scout"
+    },
+    {
+      "name": "audience-segment-builder",
+      "description": "Use when the user asks to \"build audience segments from my customer list\", \"make value-based / lookalike seed lists\", \"set up exclusion / suppression segments\", or \"map audiences to funnel stages across platforms\"; turns the user's OWN customer/CRM/GA4 export into seed audiences, value-based lookalike SEED lists, exclusion/suppression segments, and a cross-platform funnel-stage targeting map, informing the ROAS A (Audience) dimension. Not for building account structure or match types — use campaign-architect; not for organic SERP intent — use keyword-research. 付费广告受众分群/种子人群/排除人群/相似人群种子",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "research"
+    },
+    {
+      "name": "bid-strategy-planner",
+      "description": "Use when the user asks to \"pick a bid strategy\", \"set a tCPA/tROAS target\", or \"plan the learning-phase entry\"; produces a bid-strategy choice (tCPA / tROAS / max-conversions / manual CPC), the starting target math, a portfolio grouping map, and a learning-phase entry plan. Not for splitting the budget across campaigns — use budget-optimizer; not for in-flight pacing/scale moves — use budget-pacing-monitor; not for scoring the account — use ad-account-auditor. 出价策略/tCPA目标/tROAS/学习期",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "orchestrate"
+    },
+    {
+      "name": "brand-language-codifier",
+      "description": "Use when the user asks to \"codify our brand voice\", \"define naming rules for our products and tiers\", or \"write the tone-of-voice guide with banned phrases\"; produces the brand-level voice canon (register, tone spectrum, banned-phrase list, few-shot examples drawn only from the brand's own published material) and the naming tax (product / feature / tier naming rules plus approved and banned terms) that seeds the narrative-registry canon and that every channel's voice adaptation points up to. Not for per-platform voice adaptation — use channel-registry's voice-dossier; not for finished copy or blog posts — use content-writer; not for the message hierarchy itself — use message-system-architect; not for claim adjudication — use offer-claims-registry. 品牌语气/词汇表/命名税/禁用词/品牌语言规范",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "architect"
+    },
+    {
+      "name": "brief-generator",
+      "description": "Use when the user asks to \"create an influencer brief\" or \"write a campaign brief\"; produces a structured creator brief with deliverables, key messages, creative direction, timeline, disclosure rules, and compensation terms. Not for choosing how to split spend across creators — use budget-optimizer. 达人合作简报/创作者BF",
+      "domain": "influencer",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "target"
+    },
+    {
+      "name": "budget-optimizer",
+      "description": "Use when the user asks to \"allocate my influencer budget\", \"optimize spend across tiers\", or \"compare budget scenarios\"; produces a tier/platform/content allocation table, ROI and CPM/CPE projections, scenario comparisons, and mid-campaign reallocation moves. Not for building the full campaign plan — use campaign-planner. 达人预算分配/投放预算优化",
+      "domain": "influencer",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "target"
+    },
+    {
+      "name": "budget-pacing-monitor",
+      "description": "Use when the user asks to \"check pacing\", \"am I over/under-spending\", \"is this campaign on track to hit budget\", or \"why did spend spike/stall mid-flight\"; returns a spend-vs-target-curve read, learning-phase status, an over/under-delivery call, and a reallocation trigger. Not for initial budget allocation — use budget-optimizer; not for choosing the bid strategy — use bid-strategy-planner; not for the RQS gate — use ad-account-auditor. 付费广告预算节奏监控/跑量过快过慢/在途配速",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "scale"
+    },
+    {
+      "name": "campaign-architect",
+      "description": "Use when the user asks to \"plan my paid account structure\", \"pick Search vs PMax\", \"lay out ad groups / asset groups\", or \"audit paid-vs-organic cannibalization\"; designs campaign-type selection, ad-group/asset-group layout, targeting + match types, negative/exclusion hygiene, and a paid↔organic overlap audit, and scores the ROAS A (Audience) dimension + structure. Not for computing the final RQS — use ad-account-auditor; not for budget split — use budget-optimizer; not for organic site architecture — use site-structure-optimizer. 付费广告账户结构/广告系列规划/否定关键词",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "research"
+    },
+    {
+      "name": "campaign-planner",
+      "description": "Use when the user asks to \"plan an influencer campaign\", \"build a campaign blueprint\", or \"launch a product with creators\"; produces campaign objectives, platform and influencer-tier strategy, content requirements, a phased timeline, budget allocation, and KPI targets. Not for writing individual creator briefs — use brief-generator; not for the overall product-launch plan (tiering, calendar, press, community day) — use launch-tier-planner, which hands this skill the creator lane. A launch request that does not mention creators routes to the launch discipline, not here. 达人营销策划/种草方案",
+      "domain": "influencer",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "target"
+    },
+    {
+      "name": "category-narrative-mapper",
+      "description": "Use when the user asks to \"map the category narrative\", \"tear down how competitors tell their story\", or \"find the language conventions in our market\"; produces a category narrative map — the dominant stories and points of view in the category, its language conventions and framing clichés, and a per-competitor narrative teardown (arc, claimed onlyness, proof pattern) plus how each rival's messaging has shifted over time (scraped copy vs archived copy). Not for the positioning canvas itself — use positioning-mapper; not for the beachhead's beliefs and objections — use audience-belief-mapper; not for SERP keyword targeting — use keyword-research; not for claim adjudication — use offer-claims-registry. 品类叙事/竞争叙事拆解/语言惯例/叙事演变",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "trace"
+    },
+    {
+      "name": "channel-portfolio-planner",
+      "description": "Use when the user asks to \"pick which social channels to run\", \"should we be on X platform or 小红书\", or \"plan our organic social channel portfolio\"; produces an audience/objective-first portfolio with capability/access matrix, cadence-budget reality check, declared ECHO operating profile, boundary routing, and proposed-state registry events. Not for recording canonical channel facts — use channel-registry. 社媒渠道选择/渠道组合规划/平台能力矩阵/自然社媒",
+      "domain": "social-growth",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "explore"
+    },
+    {
+      "name": "channel-registry",
+      "description": "Use when the user asks to register/query a social channel, record channel state, cadence, governance, voice adaptation, UGC permission, or advocacy facts; curates them through the append-only channels event stream and derived views. Not for ECHO scoring — use social-quality-auditor; not for channel selection — use channel-portfolio-planner. 渠道台账/账号档案/UGC授权记录",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "govern"
+    },
+    {
+      "name": "churn-prevention",
+      "description": "When the user wants to reduce churn, build cancellation flows, set up save offers, recover failed payments, or implement retention strategies. Also use when the user mentions 'churn,' 'cancel flow,' 'offboarding,' 'save offer,' 'dunning,' 'failed payment recovery,' 'win-back,' 'retention,' 'exit survey,' 'pause subscription,' 'involuntary churn,' 'people keep canceling,' 'churn rate is too high,' 'how do I keep users,' or 'customers are leaving.' Use this whenever someone is losing subscribers or wants to build systems to prevent it. For post-cancel win-back email sequences, see emails. For in-app upgrade paywalls, see paywalls.",
+      "domain": "lifecycle",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "co-marketing",
+      "description": "When the user wants to find co-marketing partners, plan joint campaigns, or brainstorm partnership opportunities. Use when the user says 'co-marketing,' 'partner marketing,' 'joint campaign,' 'who should we partner with,' 'integration marketing,' 'cross-promotion,' 'collaborate with another company,' 'partnership ideas,' or 'co-brand.' For customer referral programs, see referrals. For launch-specific partnerships, see launch.",
+      "domain": "social-growth",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "cold-email",
+      "description": "Write B2B cold outreach and follow-up sequences grounded in relevance, evidence, concise value, compliant sending practices and clear calls to action.",
+      "domain": "lifecycle",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "cold-outbound-sequencer",
+      "description": "Use when the user asks to \"build a B2B cold-outbound sequence\", \"design reply-triage branching\", \"plan a domain warmup / sending throttle\", or \"make my outbound CAN-SPAM / opt-in compliant\"; produces a multi-step outbound sequence with reply-triage branches (positive / objection / referral / not-now / opt-out), a warmup + send-throttle ramp schedule, jurisdiction opt-in/CAN-SPAM guardrails (guidance, not legal advice), and a SEND S-dimension read. Not for B2C lifecycle flows — use email-sequence-designer; not for the consent record — use consent-registry; not for computing EQS — use email-quality-auditor. B2B冷启动外联序列/回复分流/域名预热",
+      "domain": "lifecycle",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "deliver"
+    },
+    {
+      "name": "community-launch-runner",
+      "description": "Use when the user asks to \"launch on Product Hunt / Hacker News\", \"prepare community or directory launch submissions\", or \"plan the launch submission waves\"; produces per-platform submission packages — a Product Hunt tagline / gallery / first-comment skeleton, a factual Show HN title and text, per-subreddit posts with a self-promotion rules table, tiered directory waves, and a regional channel matrix including Chinese communities — plus a platform red-line check (never solicit votes or organize voting rings) and T-0 submission-status lines for the launch registry. Not for paid amplification — use content-amplifier; not for creator channels — use campaign-planner; not for launch telemetry readouts — use launch-monitor; not for ongoing community presence or pre-launch karma-building outside the launch window — use participation-warmup-planner. 社区发布/PH提交包/Show HN/目录波次/平台红线/中文渠道",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "mobilize"
+    },
+    {
+      "name": "community-marketing",
+      "description": "Build and leverage online communities to drive product growth and brand loyalty. Use when the user wants to create a community strategy, grow a Discord or Slack community, manage a forum or subreddit, build brand advocates, increase word-of-mouth, drive community-led growth, engage users post-signup, or turn customers into evangelists. Trigger phrases: \"build a community,\" \"community strategy,\" \"Discord community,\" \"Slack community,\" \"community-led growth,\" \"brand advocates,\" \"user community,\" \"forum strategy,\" \"community engagement,\" \"grow our community,\" \"ambassador program,\" \"community flywheel.\"",
+      "domain": "social-growth",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "competitor-alternatives",
+      "description": "Compatibility skill for competitor alternatives. Use when a user or upstream workflow invokes this name; route the task to `competitors` while preserving the requested scope and source-specific intent.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": "competitors",
+      "phase": null
+    },
+    {
+      "name": "competitor-analysis",
+      "description": "Use when the user asks to \"analyze competitors\" or \"竞品分析\"; benchmarks competitor keywords, content, backlinks, AI citations, and traffic share into strengths, weaknesses, and an action plan. Not for a pairwise topic-coverage gap map — use content-gap-analysis. 竞品分析/竞争对手",
+      "domain": "seo-geo",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "survey"
+    },
+    {
+      "name": "competitor-profiling",
+      "description": "When the user wants to research, profile, or analyze competitors from their URLs. Also use when the user mentions 'competitor profile,' 'competitor research,' 'competitor analysis,' 'profile this competitor,' 'analyze competitor,' 'competitive intelligence,' 'competitor deep dive,' 'who are my competitors,' 'competitor landscape,' 'competitor dossier,' 'competitive audit,' or 'research these competitors.' Input is a list of competitor URLs. Output is structured competitor profile markdown files. For creating comparison/alternative pages from profiles, see competitors. For sales-specific battle cards, see sales-enablement.",
+      "domain": "strategy",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "competitor-tracker",
+      "description": "Use when the user asks to \"track competitor influencer marketing\", \"see who my rivals partner with\", or \"benchmark my influencer program\"; produces a competitor partnership roster, campaign and content-strategy breakdown, performance estimates, and a gap/opportunity list. Not for finding your own new creators — use influencer-discovery. 竞品达人合作追踪/竞品营销分析",
+      "domain": "influencer",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "target"
+    },
+    {
+      "name": "competitors",
+      "description": "When the user wants to create competitor comparison or alternative pages for SEO and sales enablement. Also use when the user mentions 'alternative page,' 'vs page,' 'competitor comparison,' 'comparison page,' '[Product] vs [Product],' '[Product] alternative,' 'competitive landing pages,' 'how do we compare to X,' 'battle card,' or 'competitor teardown.' Use this for any content that positions your product against competitors. Covers four formats: singular alternative, plural alternatives, you vs competitor, and competitor vs competitor. For sales-specific competitor docs, see sales-enablement.",
+      "domain": "strategy",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "consent-registry",
+      "description": "Use when the user asks to \"log this subscriber's opt-in\", record unsubscribes/complaints, or query lawful basis; curates pseudonymous consent facts through the append-only consent stream and applies suppression/erasure tombstones immediately. Not for SEND scoring — use email-quality-auditor; not for building segments — use list-segment-builder. 订阅同意台账/实时退订抑制/合法性依据登记",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "govern"
+    },
+    {
+      "name": "content-amplifier",
+      "description": "Use when the user asks to \"amplify influencer content with paid media\", \"set up whitelisting or Spark Ads\", \"decide which posts to boost\", \"repurpose influencer content\", \"turn one video into multiple ads\", or \"build a UGC asset library\"; produces (paid mode) a content-selection scorecard, a paid amplification strategy (whitelisting/boosting/dark posts), audience targeting, and a budget+optimization plan, or (repurpose mode) a rights-tracked content inventory, a 1-video-to-10+-asset repurposing map, per-format transformation specs, and a 30-day distribution plan. Not for gating whether a deliverable is publishable or FTC-compliant — use creator-content-auditor; not for the always-on brand posting calendar — use social-calendar-builder; not for drafting a net-new idea into platform-native packages — use social-creative-builder. 复用达人内容 / 内容放量.",
+      "domain": "influencer",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "activate"
+    },
+    {
+      "name": "content-gap-analysis",
+      "description": "Use when the user asks to \"find content gaps\", \"竞品写了什么\", or \"还应该写什么\"; builds a competitor-relative coverage map of missing topics, keyword gaps, and editorial-calendar opportunities. Not for raw keyword demand discovery — use keyword-research. 内容缺口/选题规划",
+      "domain": "seo-geo",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "survey"
+    },
+    {
+      "name": "content-quality-auditor",
+      "description": "Use when auditing content quality, E-E-A-T, or publish readiness; runs a typed 80-item CORE-EEAT profile with evidence coverage, veto checks, and a fix plan. Not for structural tags/headers alone — use on-page-seo-checker; not for domain/citation trust — use domain-authority-auditor. 内容质量/EEAT评分",
+      "domain": "seo-geo",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "tune"
+    },
+    {
+      "name": "content-strategy",
+      "description": "When the user wants to plan a content strategy, decide what content to create, or figure out what topics to cover. Also use when the user mentions \"content strategy,\" \"what should I write about,\" \"content ideas,\" \"blog strategy,\" \"topic clusters,\" \"content planning,\" \"editorial calendar,\" \"content marketing,\" \"content roadmap,\" \"what content should I create,\" \"blog topics,\" \"content pillars,\" or \"I don't know what to write.\" Use this whenever someone needs help deciding what content to produce, not just writing it. For writing individual pieces, see copywriting. For SEO-specific audits, see seo-audit. For social media content specifically, see social.",
+      "domain": "content",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "content-writer",
+      "description": "Use when the user asks to \"write SEO content\", \"draft a blog post / landing page\", \"update outdated content\", or \"fix traffic/ranking decay\"; two modes — new drafts pages with keywords, headers, snippets, and evidence boundaries; refresh scores decay, prioritizes update work, and produces a republish plan with GEO guidance. Not for AI-citation/GEO readiness scoring — use geo-content-optimizer; not for publish-gate scoring — use content-quality-auditor. SEO文章写作/内容更新/排名恢复",
+      "domain": "seo-geo",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "implement"
+    },
+    {
+      "name": "contract-helper",
+      "description": "Use when the user asks to \"draft an influencer contract\", \"review these agreement terms\", or \"build a partnership template\"; produces a full influencer agreement framework (scope, compensation, usage rights, exclusivity, FTC disclosure), a clause-by-clause review with red flags, and a negotiation cheat sheet. Not for outreach negotiation before a deal exists — use outreach-manager. 达人合同/合作协议条款审查",
+      "domain": "influencer",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "activate"
+    },
+    {
+      "name": "conversion-signal-qa",
+      "description": "Use when the user asks to \"QA my conversion tracking before launch\", \"check my UTMs / pixel / event firing\", \"set up a tracking pre-flight\", or \"set the dedup rule so Meta and Google stop double-counting\"; builds and fixes the measurement plumbing — conversion-event firing, UTM hygiene, cross-platform dedup rules, attribution-window alignment, and offline/iOS-ATT modeled-gap flags — as a pre-flight checklist plus a UTM/event-spec builder. Not for scoring R1/R2 — that is a scored veto in ad-account-auditor; not for account structure — use campaign-architect. 付费广告转化追踪QA/UTM规范/跨平台去重",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "activate"
+    },
+    {
+      "name": "conversion-value-mapper",
+      "description": "Use when the user asks to \"set up conversion values so tROAS optimizes profit not orders\", \"map margin onto my purchase value\", \"build value rules for lead / phone / signup conversions\", or \"stop bidding to revenue when I care about profit\"; defines and QAs the conversion VALUE model — per-conversion values, margin/net-value adjustment, static-vs-dynamic value rules, proxy values for non-revenue actions, and a value-vs-count sanity check — as a value-model spec plus a pre-launch value QA sheet. Not for whether the tag fires or UTMs are clean — use conversion-signal-qa; not for cross-platform double-count de-dup — use attribution-reconciler; not for scoring R1/R2 — that is a scored veto in ad-account-auditor. 付费广告转化价值建模/利润出价/价值规则QA",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "activate"
+    },
+    {
+      "name": "copy-editing",
+      "description": "When the user wants to edit, review, or improve existing marketing copy, or refresh outdated content. Also use when the user mentions 'edit this copy,' 'review my copy,' 'copy feedback,' 'proofread,' 'polish this,' 'make this better,' 'copy sweep,' 'tighten this up,' 'this reads awkwardly,' 'clean up this text,' 'too wordy,' 'sharpen the messaging,' 'refresh this content,' 'update this page,' 'this content is outdated,' or 'content audit.' Use this when the user already has copy and wants it improved or refreshed rather than rewritten from scratch. For writing new copy, see copywriting.",
+      "domain": "content",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "copywriting",
+      "description": "Write or rewrite high-intent marketing copy grounded in product context, customer language, claims evidence, offer structure and conversion goals.",
+      "domain": "content",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "creator-content-auditor",
+      "description": "Use when the user asks to \"review this influencer content\" or \"check if this post meets brand guidelines\"; runs the typed STAR pre-publish gate, scores Trust and Appeal on the deliverable, folds in the creator Suitability read, computes the profile-weighted SQS, checks the disclosure/claim/brand-safety and fraud/fake-engagement vetoes, and writes constructive revision feedback. Not for drafting the brief — use brief-generator; not for partnership terms — use contract-helper. 达人内容审核/发布前质检",
+      "domain": "influencer",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "activate"
+    },
+    {
+      "name": "creator-registry",
+      "description": "Use when the user asks \"what did we pay this creator last time\" or to \"update the creator roster\"; curates creator identity, rate, rights, exclusivity, compliance-event, and performance facts through the append-only creators event stream. Not for scoring fit — use fit-scorer; not for reviewing content — use creator-content-auditor. 创作者档案/达人名册",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "govern"
+    },
+    {
+      "name": "crisis-response-planner",
+      "description": "Use when the user asks to \"build our social crisis protocol\", \"mentions are exploding — what do we do first\", or \"when do we pause the posting queue\"; produces a 1-5 severity ladder with tunable Estimated trigger thresholds (mention-velocity multiples vs the 7-day listening baseline, sentiment flip, journalist/regulator contact, employee-conduct class), the first-mechanical-action rule — pause ALL scheduled posts AND paid amplification, with dated state markers dropped to the channels proposal protocol and reconciled post-incident — a pre-approved holding-statement library with committed update cadences, when-NOT-to-post rules, a spokesperson/approval matrix, and a post-crisis retro template; re-runs the social-quality-auditor pre-publish gate before un-pausing the queue. Not for email deliverability incidents (blocklist, spam-rate spikes) — use deliverability-qa; inside a launch window launch-day-conductor owns incident handling. 社媒危机预案/暂停队列/声明库/发言人矩阵",
+      "domain": "social-growth",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "host"
+    },
+    {
+      "name": "cro",
+      "description": "Improve conversion performance on marketing pages and forms through diagnosis, message hierarchy, friction analysis, proof, UX hypotheses, instrumentation and experiments.",
+      "domain": "cro",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "customer-research",
+      "description": "Plan, analyze and synthesize customer research into pains, jobs, triggers, objections, language, segments and evidence-backed marketing implications.",
+      "domain": "strategy",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "dark-social-attributor",
+      "description": "Use when the user asks to \"figure out where our direct traffic really comes from\", \"measure dark social\", \"add a how-did-you-hear-about-us field\", or \"show social drives signups without click data\"; produces a share-link/UTM hygiene spec for owned share surfaces, a self-reported attribution field design that replaces an existing form field (free-text first, coded later), a GA4 direct-traffic decomposition read (deep-URL directs, mobile-app skew, private-push correlation) with every derived number hard-labeled Estimated/proxy, and a branded-search-lift proxy from GSC plus Wikipedia pageviews — the declared dark-social method behind ECHO O2. Not for paid-channel attribution reconciliation (platform-claimed vs analytics conversions) — use attribution-reconciler. 暗社交归因/直接流量分解/自报来源字段/分享链路UTM",
+      "domain": "social-growth",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "observe"
+    },
+    {
+      "name": "deliverability-qa",
+      "description": "Use when the user asks to \"run a deliverability pre-flight before I send\", \"check my SPF/DKIM/DMARC/BIMI\", \"why am I landing in spam / promotions\", or \"score my sender reputation and list hygiene\"; runs the ONE-TIME pre-send SEND S1 authentication pre-flight and builds the SEND S (Sender-integrity / Deliverability) evidence read — DNS + DMARC-RUA auth, domain/IP reputation, inbox placement, content/link/render, and point-in-time bounce/complaint hygiene — using Pass/Partial/Fail/Unknown/N/A states and scoring only at complete applicable coverage. Not for the recurring hygiene trend — use list-hygiene-monitor; not for final EQS or veto verdicts — use email-quality-auditor; not for segments/suppression lists — use list-segment-builder. 邮件送达率预检/SPF DKIM DMARC认证/发件域声誉",
+      "domain": "lifecycle",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "setup"
+    },
+    {
+      "name": "directory-submissions",
+      "description": "When the user wants to submit their product to startup, SaaS, AI, agent, MCP, no-code, or review directories for backlinks, domain rating, and discovery. Also use when the user mentions \"directory submissions,\" \"submit to directories,\" \"backlinks from directories,\" \"list my product,\" \"submit to Product Hunt,\" \"BetaList,\" \"TAAFT,\" \"Futurepedia,\" \"G2 listing,\" \"Capterra listing,\" \"AlternativeTo,\" \"SaaSHub,\" \"AI directories,\" \"MCP registry,\" \"agent directory,\" \"dofollow backlinks,\" \"launch directories,\" or \"directory tracker.\" Use this whenever someone is planning the directory layer of a product launch or an ongoing backlink campaign. For the broader launch moment, see launch. For programmatic SEO pages that should live behind these backlinks, see programmatic-seo. For AI citation optimization, see ai-seo.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "domain-authority-auditor",
+      "description": "Use when auditing domain authority, trust, or citation credibility; runs a peer-relative 40-item CITE profile with evidence coverage and verified manipulation/penalty veto checks. Not for page-level content quality — use content-quality-auditor; not for backlink profiling alone — use offsite-signal-analyzer. 域名权威/网站可信度",
+      "domain": "seo-geo",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "evaluate"
+    },
+    {
+      "name": "dynamic-content-personalizer",
+      "description": "Use when the user asks to \"personalize the email\", \"add merge tags / dynamic content\", \"set up conditional blocks per segment\", or \"make first-name and product-recommendation fields fall back safely\"; produces a merge-tag map with per-tag fallbacks, conditional-block rules with per-segment variations, a fallback-safety audit, and a PII guard on what may render, informing the SEND E (Engagement/personalization) dimension. Not for building the segments — use list-segment-builder; not for writing the base copy — use email-creative-builder; not for scoring EQS or running vetoes — use email-quality-auditor. 邮件个性化/合并标签/条件内容块/兜底默认值",
+      "domain": "lifecycle",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "engage"
+    },
+    {
+      "name": "early-access-designer",
+      "description": "Use when the user asks to \"design an early access program\", \"set up a waitlist and beta stages\", or \"define beta graduation criteria\"; produces a waitlist→concept→alpha→beta→GA stage ladder with per-stage purpose and opt-in semantics, quantified graduation criteria per stage (labeled Estimated), a cohort-gating and invite-throttling plan, tester recruitment with launch-day social-proof prep, a feedback-loop spec where every status change notifies its subscribers, and a referral-loop mechanism spec (invite codes, anti-abuse). Not for waitlist acquisition strategy or the capture-flow spec — use list-growth-designer; not for the canonical stage record — use launch-registry. waitlist/内测阶梯/抢先体验/毕业标准/反馈闭环",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "research"
+    },
+    {
+      "name": "email-creative-builder",
+      "description": "Use when the user asks to \"write the email\", \"draft subject lines\", or \"build email creative\"; produces the pre-click unit — subject-line variants + preheader, body copy, one clear CTA, and a plain-text alt — message-matched to the destination page and claims-ledger-aware. Not for pre-scoring or ranking subject-line variants (spam/truncation/render pre-score) — use subject-line-lab; not for scoring the email or computing EQS — use email-quality-auditor; not for the multi-step flow — use email-sequence-designer; not for the A/B test plan — use send-experiment-designer. 邮件文案/主题行/邮件创意",
+      "domain": "lifecycle",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "engage"
+    },
+    {
+      "name": "email-quality-auditor",
+      "description": "Use when the user asks to \"audit an email program\" or \"is this campaign safe to send\"; runs a typed 20-item SEND profile with authentication, consent, opt-out, and claim veto checks on own evidence. Not for building deliverability setup — use deliverability-qa; not for designing lifecycle flows — use email-sequence-designer. 邮件质量审计/EQS评分/发送前放行",
+      "domain": "lifecycle",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "deliver"
+    },
+    {
+      "name": "email-render-builder",
+      "description": "Use when the user asks to \"build the email HTML\", \"make this email responsive\", \"fix dark-mode rendering\", or \"QA the email across clients\"; produces the coded HTML build — a responsive table layout, dark-mode + accessibility pass, a client-render matrix, image-block fallbacks, and a plain-text parity check. Not for writing the copy — use email-creative-builder; not for scoring the email or computing EQS — use email-quality-auditor. 邮件HTML/响应式邮件/暗色模式渲染",
+      "domain": "lifecycle",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "engage"
+    },
+    {
+      "name": "email-sequence",
+      "description": "Compatibility skill for email sequence. Use when a user or upstream workflow invokes this name; route the task to `emails` while preserving the requested scope and source-specific intent.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": "emails",
+      "phase": null
+    },
+    {
+      "name": "email-sequence-designer",
+      "description": "Use when the user asks to \"design a welcome flow\", \"set up an abandoned-cart sequence\", \"build a light re-engagement branch inside a lifecycle flow\", or \"plan a cold-outbound sequence\"; produces general lifecycle automation flows (welcome, cart, browse-abandon, post-purchase, in-flow re-engagement, B2B cold outbound) with trigger, step timing, branch/exit conditions, goal, frequency governance (send caps, quiet hours, fatigue guardrail), a sunset path, and a SEND N-dimension score. Not for the closed-loop win-back / re-consent (re-permission) program on a lapsed cohort — use reactivation-specialist; not for writing each email's copy — use email-creative-builder; not for computing EQS or the N1 unsubscribe veto — use email-quality-auditor. 邮件自动化流程设计/购物车挽回/流失召回序列",
+      "domain": "lifecycle",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "nurture"
+    },
+    {
+      "name": "emails",
+      "description": "Design lifecycle email programs and sequences with segmentation, deliverability, personalization, testing and measurement.",
+      "domain": "lifecycle",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "engagement-inbox-manager",
+      "description": "Use when the user asks to \"triage our comments, DMs, and mentions\", \"draft replies to this thread\", \"can we repost this fan post\", or \"set up inbox SLAs and an escalation path\"; produces a ranked triage queue with register detection (sincere / ironic / performative / parasocial, sentiment-inversion table included — \"this is so bad\" under a comedy register is praise), a commenter taxonomy (troll monitor-only / rager / misguided / unhappy-customer / advocate) with a response-tier ladder and per-channel SLAs, an escalation matrix ending at the crisis path, a moderation ladder plus house rules for owned spaces, and a UGC curation-and-rights mode whose dated permission entries route to the channel registry — every reply is a ranked DRAFT a human posts; nothing is ever auto-sent. Not for launch-window feedback triage — use launch-feedback-synthesizer. 评论私信提及分诊/语域识别/回复草稿/UGC授权",
+      "domain": "social-growth",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "host"
+    },
+    {
+      "name": "entity-registry",
+      "description": "Use when the user asks to \"optimize entity presence\", reconcile an entity identity, or update canonical Knowledge Graph facts; audits and maintains machine-facing identity, sameAs, schema, disambiguation, and AI-recognition evidence through the entities registry. Not for page-level AI-citation readiness - use geo-content-optimizer; not for human-facing brand canon - use narrative-registry. 实体注册/知识图谱",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "govern"
+    },
+    {
+      "name": "fatigue-frequency-manager",
+      "description": "Use when the user asks to \"is my ad fatiguing\", \"why is CTR dropping at scale\", or \"should I rotate creative / widen the audience\"; reads frequency, CTR and CVR decay against an early-flight baseline and returns Rotate-creative / Widen-audience / Hold triggers with a per-ad-set fatigue read. Not for building the replacement creative — use ad-creative-builder; not for the RQS score or vetoes — use ad-account-auditor. 广告疲劳检测/频次管理/换素材还是扩人群",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "scale"
+    },
+    {
+      "name": "fit-scorer",
+      "description": "Use when the user asks to \"score this influencer\", \"rank these creators for our campaign\", or \"tell me which influencer is the best fit\"; produces the typed STAR Suitability (S) read plus a separately labeled campaign-fit ranking without mixing campaign-specific commercial fit into the Suitability read. Not for finding new influencers — use influencer-discovery; not for sending outreach — use outreach-manager. 达人适配度评分/创作者筛选排名",
+      "domain": "influencer",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "scout"
+    },
+    {
+      "name": "form-cro",
+      "description": "Compatibility skill for form cro. Use when a user or upstream workflow invokes this name; route the task to `cro` while preserving the requested scope and source-specific intent.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": "cro",
+      "phase": null
+    },
+    {
+      "name": "free-tool-strategy",
+      "description": "Compatibility skill for free tool strategy. Use when a user or upstream workflow invokes this name; route the task to `free-tools` while preserving the requested scope and source-specific intent.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": "free-tools",
+      "phase": null
+    },
+    {
+      "name": "free-tools",
+      "description": "When the user wants to plan, evaluate, or build a free tool for marketing purposes — lead generation, SEO value, or brand awareness. Also use when the user mentions \"engineering as marketing,\" \"free tool,\" \"marketing tool,\" \"calculator,\" \"generator,\" \"interactive tool,\" \"lead gen tool,\" \"build a tool for leads,\" \"free resource,\" \"ROI calculator,\" \"grader tool,\" \"audit tool,\" \"should I build a free tool,\" or \"tools for lead gen.\" Use this whenever someone wants to build something useful and give it away to attract leads or earn links. For downloadable content lead magnets (ebooks, checklists, templates), see lead-magnets.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "geo",
+      "description": "Compatibility skill for geo. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-c"
+      ],
+      "alias_of": "ai-seo",
+      "phase": null
+    },
+    {
+      "name": "geo-audit",
+      "description": "Compatibility skill for geo audit. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-c"
+      ],
+      "alias_of": "ai-seo",
+      "phase": null
+    },
+    {
+      "name": "geo-brand-mentions",
+      "description": "Compatibility skill for geo brand mentions. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-c"
+      ],
+      "alias_of": "ai-seo",
+      "phase": null
+    },
+    {
+      "name": "geo-citability",
+      "description": "Compatibility skill for geo citability. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-c"
+      ],
+      "alias_of": "ai-seo",
+      "phase": null
+    },
+    {
+      "name": "geo-compare",
+      "description": "Compatibility skill for geo compare. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-c"
+      ],
+      "alias_of": "ai-seo",
+      "phase": null
+    },
+    {
+      "name": "geo-content",
+      "description": "Compatibility skill for geo content. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-c"
+      ],
+      "alias_of": "ai-seo",
+      "phase": null
+    },
+    {
+      "name": "geo-content-optimizer",
+      "description": "Use when the user asks to \"optimize for AI citations\"; improves citation readiness for ChatGPT, Perplexity, AI Overviews, Gemini, and Claude. Not for structural on-page SEO — use on-page-seo-checker; not for net-new drafting — use content-writer. AI引用优化/GEO优化/AI搜索",
+      "domain": "seo-geo",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "implement"
+    },
+    {
+      "name": "geo-crawlers",
+      "description": "Compatibility skill for geo crawlers. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-c"
+      ],
+      "alias_of": "ai-seo",
+      "phase": null
+    },
+    {
+      "name": "geo-llmstxt",
+      "description": "Compatibility skill for geo llmstxt. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-c"
+      ],
+      "alias_of": "ai-seo",
+      "phase": null
+    },
+    {
+      "name": "geo-platform-optimizer",
+      "description": "Compatibility skill for geo platform optimizer. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-c"
+      ],
+      "alias_of": "ai-seo",
+      "phase": null
+    },
+    {
+      "name": "geo-proposal",
+      "description": "Compatibility skill for geo proposal. Use when a user or upstream workflow invokes this name; route the task to `sales-enablement` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-c"
+      ],
+      "alias_of": "sales-enablement",
+      "phase": null
+    },
+    {
+      "name": "geo-prospect",
+      "description": "Compatibility skill for geo prospect. Use when a user or upstream workflow invokes this name; route the task to `prospecting` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-c"
+      ],
+      "alias_of": "prospecting",
+      "phase": null
+    },
+    {
+      "name": "geo-report",
+      "description": "Compatibility skill for geo report. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-c"
+      ],
+      "alias_of": "ai-seo",
+      "phase": null
+    },
+    {
+      "name": "geo-report-pdf",
+      "description": "Compatibility skill for geo report pdf. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-c"
+      ],
+      "alias_of": "ai-seo",
+      "phase": null
+    },
+    {
+      "name": "geo-schema",
+      "description": "Compatibility skill for geo schema. Use when a user or upstream workflow invokes this name; route the task to `schema` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-c"
+      ],
+      "alias_of": "schema",
+      "phase": null
+    },
+    {
+      "name": "geo-technical",
+      "description": "Compatibility skill for geo technical. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-c"
+      ],
+      "alias_of": "ai-seo",
+      "phase": null
+    },
+    {
+      "name": "geo-update",
+      "description": "Update an installed Marketing Agent OS GEO skill set safely. Use when users ask to check for GEO workflow updates, compare an installation with its configured source, or refresh GEO skills without overwriting custom work silently.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-c"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "image",
+      "description": "When the user wants to create, generate, edit, or optimize images for marketing — blog heroes, social graphics, product mockups, profile banners, listing visuals, or brand assets. Also use when the user mentions 'AI image generation,' 'generate an image,' 'create a graphic,' 'product mockup,' 'hero image,' 'social media graphic,' 'banner image,' 'cover photo,' 'profile banner,' 'listing screenshot,' 'Flux,' 'Flux Kontext,' 'Midjourney,' 'DALL-E,' 'GPT Image,' 'ChatGPT Images,' 'Ideogram,' 'Gemini image,' 'Nano Banana,' 'Recraft,' 'Stable Diffusion,' 'Canva,' 'Figma,' 'image optimization,' 'compress images,' 'WebP,' or 'OG image.' Use this for general-purpose marketing image creation and optimization. For paid ad image creative and platform-specific ad specs, see ad-creative. For video production, see video.",
+      "domain": "content",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "inbox-placement-monitor",
+      "description": "Use when the user asks to \"track where my emails are actually landing after I send\", \"read my seed-list inbox vs spam vs promotions results\", \"trend my Gmail Postmaster / Microsoft SNDS reputation\", or \"did placement drop after my last send\"; produces a per-provider inbox/spam/promotions placement read, a domain/IP reputation trend from Postmaster + SNDS, a send-over-send delta with named regressions, and a reusable SEND-S placement snapshot on your own exported telemetry. Not for the pre-send SPF/DKIM/DMARC auth pre-flight — use deliverability-qa; not for computing the EQS or running the vetoes — use email-quality-auditor. 邮件收件箱落点监测/收件箱vs垃圾邮件/Postmaster声誉趋势",
+      "domain": "lifecycle",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "deliver"
+    },
+    {
+      "name": "influencer-discovery",
+      "description": "Use when the user asks to \"find influencers\", \"build an influencer list\", or \"discover creators in [niche]\"; produces a multi-platform candidate pool, per-influencer profiles, authenticity red-flag screening, and a tiered shortlist with preliminary triage signals. Not for STAR scoring or ranking a known shortlist — use fit-scorer. 达人挖掘/找达人/创作者名单",
+      "domain": "influencer",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "scout"
+    },
+    {
+      "name": "influencer-marketing",
+      "description": "Plan creator and influencer programs from audience mapping and discovery through outreach, contracting, content review, amplification and ROI measurement.",
+      "domain": "influencer",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "keyword-research",
+      "description": "Use when the user asks to \"find keywords\", \"挖词\", or \"搜什么词\"; prioritizes search volume, keyword difficulty, intent, and topic clusters from provided or connected data. Not for competitor-relative coverage gaps — use content-gap-analysis. 关键词研究/内容选题",
+      "domain": "seo-geo",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "survey"
+    },
+    {
+      "name": "landing-experience-checker",
+      "description": "Use when the user asks to \"pre-launch check the landing page\", \"run a Quality-Score preflight\", or \"verify ad-to-page message match before launch\"; produces an ad↔page continuity report — message-match gaps, above-the-fold check, page-speed read, form-friction count, mobile-render flags — as a pass/fix punch list. Not for redesigning or rewriting the page — use landing-optimizer; not for scoring the account or the RQS — use ad-account-auditor. 落地页体验预检/广告落地页一致性检查",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "orchestrate"
+    },
+    {
+      "name": "landing-optimizer",
+      "description": "Use when the user asks to \"optimize our landing page for influencer traffic\", \"fix our promo-code landing page\", or \"improve conversion from a creator campaign\"; produces a message-match audit, page-structure and social-proof recommendations, a promo-code/CTA conversion plan, and an A/B test roadmap. Not for measuring campaign results after launch — use performance-analyzer. 落地页优化/达人流量转化提升",
+      "domain": "influencer",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "report"
+    },
+    {
+      "name": "launch",
+      "description": "Plan and run product or feature launches from positioning and tiering through asset readiness, launch-day orchestration, feedback and momentum.",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "launch-asset-packager",
+      "description": "Use when the user asks to \"package the launch assets\", \"build a press kit\", or \"prep the store listing and go-live checklist\"; produces a tier-scoped launch asset manifest with production status — a press kit spec (factsheet, description, history, features, videos, images, logo and icon, awards, contact), demo script and screenshot specs, a launch FAQ, dual-store listing metadata drafts against the official character budgets (per App Store Connect / Play Console documentation), and a technical go-live checklist manifest (robots flip, sitemap, OG tags, analytics verification — execution stays with technical-seo-checker and serp-markup-builder). Not for the message copy itself — use message-house-builder or content-writer; not for landing page UX — use landing-optimizer; not for keyword research beyond the store surfaces — use keyword-research. 发布资产打包/press kit/商店listing规格/上线检查清单",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "assemble"
+    },
+    {
+      "name": "launch-day-conductor",
+      "description": "Use when the user asks to \"run my launch day\", \"build a launch day runbook / war room\", or \"decide CONTINUE or ROLLBACK after the push\"; produces a pre-conditions gate check (launch-readiness-auditor SHIP verdict + the authoritative date in launch-registry — missing either stops the skill), a dated hour-blocked runbook with owners (morning irreversible pushes, daytime monitoring loop, evening consolidation), a forced observation-window verdict after every irreversible action against pre-declared kill criteria, a P0-P3 incident ladder with rollback playbooks, and T-0 status lines for the registry proposal protocol. Not for channel submission content and platform rules — use community-launch-runner; not for media replies — use press-media-relations. 发布日runbook/作战室/观察窗/回滚裁决/发布日指挥",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "mobilize"
+    },
+    {
+      "name": "launch-feedback-synthesizer",
+      "description": "Use when the user asks to \"triage launch feedback\", \"cluster reviews, comments, and board posts into themes\", or \"set up a you asked, we shipped loop\"; produces a feedback theme digest (frequency, severity, representative quotes per theme), an open→planned→started→completed/declined status loop with duplicate-merge and notification rules, shipped-change announcement material, and a compliant social-proof harvest protocol (never incentivized store reviews). Not for repurposing or amplifying the harvested proof — use content-amplifier; not for executing testimonial outreach threads — use outreach-manager. 反馈分诊/状态环/社证收割/评测合规",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "prove"
+    },
+    {
+      "name": "launch-monitor",
+      "description": "Use when the user asks to \"monitor my launch\", \"track our Product Hunt / Hacker News ranking\", or \"watch the launch window\"; runs the T-0 to T+30 window watch — pre-launch instrumentation verification (UTM/event checks, the upstream of RAMP P1), HN rank/points/comments polling with a comments-over-points flamewar early-warning (Estimated heuristic), PH votes/featured status, store charts and reviews, news echo, D0/W1/M1 KPI snapshots vs targets, spike-vs-sustain and owned-capture reads, and alert thresholds against the launch-tier KPI targets. Not for launch-day go/rollback calls — use launch-day-conductor; not for metric deep-dives — use performance-analyzer; not for SEO rank tracking — use rank-tracker. 发布监控/排名轮询/火焰战比/spike-sustain",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "prove"
+    },
+    {
+      "name": "launch-readiness-auditor",
+      "description": "Use when the user asks to \"audit our launch plan\", \"are we ready to launch\", or evaluate launch execution/outcomes; runs one typed RAMP preflight, execution, or outcome profile without mixing time horizons. Not for recording launch state — use launch-registry; not for running launch day — use launch-day-conductor. 发布就绪审计/RAMP分阶段评估/发布前放行",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "mobilize"
+    },
+    {
+      "name": "launch-registry",
+      "description": "Use when the user asks to \"log this launch\", query a launch date/embargo, record a stage transition, or update submissions/outcomes; curates launch facts through the append-only launches event stream with optimistic revisions and derived dossier/calendar views. Not for RAMP scoring — use launch-readiness-auditor; not for planning tier/window — use launch-tier-planner. 发布台账/发布日历/阶段与禁运期记录",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "govern"
+    },
+    {
+      "name": "launch-retro-analyzer",
+      "description": "Use when the user asks to \"run a launch retro / post-mortem\", \"compare launch results vs targets by channel\", or \"decide what to keep or kill for the next launch\"; produces a structured D1/W1/M1 retrospective — a per-channel actual-vs-target table (UTM-attributed own analytics as the truth column, platform self-reported numbers as reference, every figure labeled Measured / User-provided / Estimated), a 5-Whys chain on the single largest miss, keep / kill / change decisions per channel, 3-5 actionable learnings for the next launch, and an outcome snapshot submitted to the launch registry. Not for return math (CPA / ROI) — use roi-calculator; not for the stakeholder-facing report writeup — use report-generator; not for a metric deep-dive — use performance-analyzer. 发布复盘/渠道归因/5-Whys/keep-kill",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "prove"
+    },
+    {
+      "name": "launch-strategy",
+      "description": "Compatibility skill for launch strategy. Use when a user or upstream workflow invokes this name; route the task to `launch` while preserving the requested scope and source-specific intent.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": "launch",
+      "phase": null
+    },
+    {
+      "name": "launch-tier-planner",
+      "description": "Use when the user asks to \"plan my launch tier\", \"how big should this launch be\", or \"build a launch risk register with kill criteria\"; produces a tier decision (Tier 1 flagship all-channel / Tier 2 targeted / Tier 3 changelog-level), a launch-type declaration (new-product / feature / relaunch / partnership with co-marketing split), an effort calibration matrix (tier to channel intensity and asset scope), D0/W1/M1 KPI targets (labeled Estimated), a risk register (likelihood x blast-radius, owners, mitigations, kill criteria / rollback thresholds), and a T-8w to T+4w timeline skeleton. Not for picking the launch date or window — use launch-window-planner; not for creator-channel launch campaigns — use campaign-planner. 发布分级/发布类型/风险登记册/kill criteria",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "research"
+    },
+    {
+      "name": "launch-window-planner",
+      "description": "Use when the user asks to \"pick a launch date\", \"plan the launch window\", or \"set the embargo and lift time\"; produces a candidate-window comparison table (conflict / tailwind / risk per window) built from industry-event cycles and the competitor launch calendar, a launch-week vs rolling-release format call, store-review buffer padding (labeled Estimated), and an embargo window definition (lift moment + timezone) submitted to the launch registry as a candidate. Not for judging the cultural moment itself — use trend-spotter; not for launch-day execution — use launch-day-conductor. 发布择时/发布窗口/竞品日历/禁运期窗口/审核缓冲",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "research"
+    },
+    {
+      "name": "lead-magnets",
+      "description": "When the user wants to create, plan, or optimize a lead magnet for email capture or lead generation. Also use when the user mentions \"lead magnet,\" \"gated content,\" \"content upgrade,\" \"downloadable,\" \"ebook,\" \"cheat sheet,\" \"checklist,\" \"template download,\" \"opt-in,\" \"freebie,\" \"PDF download,\" \"resource library,\" \"content offer,\" \"email capture content,\" \"Notion template,\" \"spreadsheet template,\" or \"what should I give away for emails.\" Use this for planning what to create and how to distribute it. For interactive tools as lead magnets, see free-tools. For writing the actual content, see copywriting. For the email sequence after capture, see emails.",
+      "domain": "content",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "list-growth-designer",
+      "description": "Use when the user asks to \"grow my email list\", \"design a lead magnet / signup incentive\", \"set up double opt-in\", or \"plan a referral / recommendation loop\"; produces a list-growth plan — acquisition channels, lead-magnet / incentive concepts, a compliant double-opt-in capture-flow spec, referral-loop mechanics, and subscriber-growth / cost-per-opt-in targets (labeled Estimated) — that feeds SEND-S (consent quality captured at acquisition) and SEND-N (lifecycle entry). Not for the signup page/popup UX itself — use landing-optimizer; not for recording the opt-in — use consent-registry; not for the confirmation-email copy — use email-creative-builder. 邮件列表增长/lead magnet/双重确认/推荐环",
+      "domain": "lifecycle",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "setup"
+    },
+    {
+      "name": "list-hygiene-monitor",
+      "description": "Use when the user asks to \"watch my list health over time\", \"flag decaying / unengaged subscribers on a schedule\", \"why is my open rate drifting down / bounces creeping up\", or \"build me a re-permission and prune worklist\"; runs the scheduled SEND list-decay + suppression-drift watch — an engagement-recency cohort read (30/90/180/365-day), hard-bounce and spam-complaint trend vs benchmark, suppression-list growth/leakage check, and a segmented re-permission / sunset / prune worklist tied to SEND S (list hygiene) and E (engagement-decay) sub-items. Not for the one-time pre-send authentication pre-flight — use deliverability-qa; not for the consent/suppression record itself — use consent-registry; not for computing the EQS or enforcing vetoes — use email-quality-auditor. 邮件列表健康度监控/退订漂移/沉睡用户清理",
+      "domain": "lifecycle",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "setup"
+    },
+    {
+      "name": "list-segment-builder",
+      "description": "Use when the user asks to \"build email segments from my list\", \"make engaged / lapsed / RFM segments\", \"set up cart-abandoner or lifecycle-stage audiences\", or \"build a suppression list of unsubscribes and bounces\"; turns the user's OWN list/CRM/GA4/ecommerce export into behavioral, attribute, and lifecycle-stage segments plus a suppression list, with per-segment sizes labeled Measured/Estimated, informing the SEND E (Engagement/targeting) dimension. Not for scoring EQS or running vetoes — use email-quality-auditor; not for authentication or spam-content checks — use deliverability-qa. 邮件列表分群/生命周期分群/抑制名单/流失召回",
+      "domain": "lifecycle",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "setup"
+    },
+    {
+      "name": "marketing-council",
+      "description": "Stress-test a marketing decision using multiple expert lenses and synthesize disagreements into a clear decision with evidence and risks.",
+      "domain": "strategy",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "marketing-ideas",
+      "description": "When the user needs marketing ideas, inspiration, or strategies for their SaaS or software product. Also use when the user asks for 'marketing ideas,' 'growth ideas,' 'how to market,' 'marketing strategies,' 'marketing tactics,' 'ways to promote,' 'ideas to grow,' 'what else can I try,' 'I don't know how to market this,' 'brainstorm marketing,' or 'what marketing should I do.' Use this as a starting point whenever someone is stuck or looking for inspiration on how to grow. For specific channel execution, see the relevant skill (ads, social, emails, etc.).",
+      "domain": "strategy",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "marketing-loops",
+      "description": "When the user wants to set up a recurring, self-running marketing workflow — a repeatable loop an AI agent runs on a cadence (weekly, daily, on a trigger) rather than a one-off task. Also use when the user mentions 'marketing loop,' 'recurring marketing workflow,' 'automate my marketing,' 'marketing on autopilot,' 'weekly marketing review,' 'ad fatigue check,' 'content refresh loop,' 'churn watch,' 'ranking drop alert,' 'always-on marketing,' 'marketing automation workflow,' or 'run this every week.' Use this to pick, adapt, and schedule an ongoing marketing loop that orchestrates the other marketing skills. For one-off marketing ideas, see marketing-ideas. For the experimentation loop specifically, see ab-testing.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "marketing-os",
+      "description": "Route complex marketing work across strategy, narrative, SEO/GEO, CRO, lifecycle, paid, social, influencer, launch, sales and measurement. Use for broad marketing plans, multi-channel work, or when the right specialist skill is unclear.",
+      "domain": "marketing",
+      "sources": [
+        "unified"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "marketing-plan",
+      "description": "Create a comprehensive marketing plan grounded in current state, positioning, growth constraints, channels, budget, measurement, team and execution cadence.",
+      "domain": "strategy",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "marketing-psychology",
+      "description": "When the user wants to apply psychological principles, mental models, or behavioral science to marketing. Also use when the user mentions 'psychology,' 'mental models,' 'cognitive bias,' 'persuasion,' 'behavioral science,' 'why people buy,' 'decision-making,' 'consumer behavior,' 'anchoring,' 'social proof,' 'scarcity,' 'loss aversion,' 'framing,' or 'nudge.' Use this whenever someone wants to understand or leverage how people think and make decisions in a marketing context. For applying psychology to specific pages, see cro; for pricing tactics, see pricing; for copy framing, see copywriting.",
+      "domain": "strategy",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "memory-management",
+      "description": "Use when the user asks to \"remember project context\", review saved findings, initialize runtime memory, archive stale work, reconcile notes, or erase a subject; manages authorized HOT/WARM/COLD working memory across all disciplines while preserving registry event ownership and privacy controls. Not for changing canonical registry facts - route those through the owning registry. 项目记忆/跨会话",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "govern"
+    },
+    {
+      "name": "message-house-builder",
+      "description": "Use when the user asks to \"build a message house\", \"write a PR-FAQ for our launch\", or \"define the launch narrative and value pillars\"; derives from the positioning canvas a message house — tagline, one-liner, three value pillars, per-persona proof points (each labeled Measured / User-provided / [needs source]) — plus a working-backwards PR-FAQ narrative spine (launch-day tense, empty-chair test, five external + five internal FAQs) and per-channel message angle packs (angles, not finished copy). Not for the positioning canvas itself — use positioning-mapper; not for finished blog posts or pages — use content-writer; not for ad or email units — use each discipline creative builder; not for claim adjudication — use offer-claims-registry. 消息屋/PR-FAQ/价值支柱/发布叙事",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "assemble"
+    },
+    {
+      "name": "message-system-architect",
+      "description": "Use when the user asks to \"author our durable brand message hierarchy\", \"build the brand message house that seeds the canon\", or \"define the main narrative, three pillars, and tagline for the whole brand\"; produces the DURABLE brand message system — main narrative, three value pillars, per-persona proof points (each labeled Measured / User-provided / '[needs source]'), and the tagline/one-liner — that seeds the narrative-registry canon and from which every per-launch house derives. Not for a single launch's message house or PR-FAQ — use message-house-builder; not for claim adjudication — use offer-claims-registry; not for the change-narrative arc itself — use strategic-narrative-designer. 品牌消息屋/主叙事/三支柱/标语/持久叙事 canon",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "architect"
+    },
+    {
+      "name": "message-test-designer",
+      "description": "Use when the user asks to \"test our messaging before we scale it\", \"design a message-market-fit panel\", or \"run a 5-second comprehension test on our new tagline\"; produces a message-test design spec — hypothesis, panel and recruit criteria, comprehension / 5-second / message-market-fit (Wynter-style) protocols, stimulus set drawn from the canon, success thresholds, and a stop/revise decision rule — for the TALE Evaluate phase so the message is validated before any paid scale. It designs the test; it never runs the experiment or adjudicates a claim. Not for running the panel or A/B experiment — use send-experiment-designer or ad-test-designer; not for analyzing the results — use performance-analyzer; not for authoring the message itself — use message-system-architect. 消息测试/理解度测试/面板设计/五秒测试/消息市场契合",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "evaluate"
+    },
+    {
+      "name": "momentum-planner",
+      "description": "Use when the user asks to \"keep the launch momentum going after launch week\", \"plan a changelog / release-notes cadence as GTM\", or \"is this update worth a relaunch\"; produces a T+1→T+30 momentum plan — a launch-moment calendar (milestone / shipped-loop / badge moments only), announcement-tier routing (major = full-channel, medium = targeted, minor = changelog-only), a relaunch legitimacy call, spike-to-owned handoff briefs, and the next Tier-1 moment with launch-stacking spacing. Not for the 30-day content-reuse map or paid amplification execution — use content-amplifier; not for planning the next launch end to end — use launch-tier-planner. 抗第二周断崖/changelog-as-GTM/relaunch/下一发布时刻",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "prove"
+    },
+    {
+      "name": "narrative-baseline-mapper",
+      "description": "Use when the user asks to \"map what our surfaces say today\", \"inventory our current messaging\", or \"find the gap between what we say and what we mean\"; produces the narrative baseline — a surface-by-surface inventory of what every owned touchpoint (homepage, pricing, docs, decks, social bios, email footers) claims RIGHT NOW, each line labeled Measured / User-provided / Estimated, plus a per-surface gap read vs the intended message and the drift-baseline snapshot the Evaluate phase measures future drift against. Not for authoring the canon — use message-system-architect; not for scoring the surfaces or running the vetoes — use narrative-quality-auditor. 现状叙事盘点/各触点口径/意图差距/漂移基线",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "trace"
+    },
+    {
+      "name": "narrative-cascade-planner",
+      "description": "Use when the user asks to \"plan how our narrative lands on every surface\", \"write per-surface message-match specs\", or \"brief each creative builder from the canon\"; maps the narrative-registry canon onto every flagship surface (homepage, pricing, store listing, sales deck, social bio, docs, email) as a per-surface message-match spec — what claim, pillar, proof, and objection reframe each surface must carry — and cuts a handoff brief to each discipline's creative builder (content-writer, ad-creative-builder, email-creative-builder, social-creative-builder, message-house-builder), so the same story lands consistently everywhere. Not for writing the finished surface copy — use each discipline creative builder; not for the tier-scoped launch asset manifest — use launch-asset-packager; not for scoring cross-surface consistency — use narrative-quality-auditor; not for claim adjudication — use offer-claims-registry. 叙事落地/逐面消息一致/创意交接简报/画布传导",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "land"
+    },
+    {
+      "name": "narrative-drift-monitor",
+      "description": "Use when the user asks to \"check if our surfaces have drifted from the canon\", \"watch for competitor repositioning\", or \"define when we should reposition\"; produces a drift report — self-drift per flagship surface vs the narrative-registry canon over time (via wayback.py, change history Measured with as-of dates), competitor-repositioning alerts, an explicit repositioning-trigger condition set, and a D1/W1/M1 message-shift retro (intended vs actual pull-through, evidence-labeled) — feeding the TALE L drift-audit sub-items and the narrative-whiplash guardrail fact base. Not for the first-time consistency check before a surface ships — use narrative-cascade-planner; not for computing the TALE profile result or running the vetoes — use narrative-quality-auditor; not for echo-rate / AI-answer resonance measurement — use narrative-resonance-monitor. 自漂移监测/竞品重定位告警/重定位触发/叙事漂移复盘",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "evaluate"
+    },
+    {
+      "name": "narrative-enablement-kit",
+      "description": "Use when the user asks to \"make everyone tell the same story\", \"write our elevator pitch ladder\", or \"build a spokesperson Q&A and approved boilerplate pack\"; derives from the narrative-registry canon, message house, and brand voice a repeatable enablement kit — an elevator ladder (10-second / 30-second / 2-minute), a spokesperson Q&A (tough questions with on-canon answers), an approved boilerplate/bio pack (25 / 50 / 100-word), and a do/don't language sheet — so sales, support, founders, and partners repeat one consistent story. Not for the launch-day runbook — use launch-day-conductor; not for finished per-channel copy — use content-writer or each discipline creative builder; not for launch-window battle cards — use sales-enablement-kit; this kit never adjudicates a claim. 叙事赋能包/电梯梯度/发言人问答/审定样板/该说不该说",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "land"
+    },
+    {
+      "name": "narrative-quality-auditor",
+      "description": "Use when the user asks to \"audit our brand narrative\" or \"is this message on-canon\"; runs separate typed TALE truth, system, or effectiveness profiles and never averages them into one composite. Checks differentiation, canon, landing consistency, and evidence integrity. Not for launch readiness — use launch-readiness-auditor; not for social operations — use social-quality-auditor. 品牌叙事分层审计/发布前一致性放行",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "evaluate"
+    },
+    {
+      "name": "narrative-registry",
+      "description": "Use when the user asks to record/query the brand narrative canon, tagline, message hierarchy, voice/naming rules, or a canon re-version; curates complete versioned canon events through the append-only narrative stream and derived views. Not for TALE scoring — use narrative-quality-auditor; not for authoring the system — use message-system-architect. 品牌叙事台账/canon 记录/语气与命名规范",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "govern"
+    },
+    {
+      "name": "narrative-resonance-monitor",
+      "description": "Use when the user asks to \"measure how our narrative is landing\", \"track echo rate against our canon lexicon\", or \"check how AI answer engines describe our brand\"; produces a resonance report — echo rate (overlap of market language with the narrative-registry canon lexicon, method declared), AI-answer perception via tavily.py --answer (proxy-labeled), share-of-voice on a locked competitor panel (reusing share-of-voice-tracker), and resonance signals from bluesky.py / gdelt.py / pageviews.py — every number labeled Measured / proxy / User-provided, feeding the TALE E dimension and the upstream of the E1 evidence-integrity veto. Not for rebuilding share-of-voice machinery — use share-of-voice-tracker; not for own-site GA4/GSC analytics — use performance-monitor; not for scoring TALE profile result — use narrative-quality-auditor; not for adjudicating claims — use offer-claims-registry. 回声率/AI回答感知/份额之声/共鸣信号",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "evaluate"
+    },
+    {
+      "name": "newsletter-monetization-planner",
+      "description": "Use when the user asks to \"monetize my newsletter\", \"build a sponsorship rate card\", or \"model paid-subscription revenue\"; produces a revenue model (paid tiers, ad/sponsorship inventory + CPM/flat rate card, referral/boost loops), a list-growth ↔ revenue projection, and honest-offer / disclosure checks for the SEND-D lever. Not for scoring the whole program or running D1 — use email-quality-auditor; not for the return math — use roi-calculator; not for the post-click page — use landing-optimizer. 邮件newsletter变现/赞助刊例/付费订阅测算",
+      "domain": "lifecycle",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "nurture"
+    },
+    {
+      "name": "offer-claims-registry",
+      "description": "Use when the user asks to \"register this claim\", \"log our current offers\", or \"where is the proof for this figure\"; curates claim wording, evidence, disclosures, terms, review dates, and live offers through the append-only claims event stream. Not for scoring claim vetoes — use the relevant auditor; not for writing ad copy — use ad-creative-builder. 广告声明台账/优惠信息登记/证据溯源",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "govern"
+    },
+    {
+      "name": "offers",
+      "description": "When the user wants to design, construct, or improve an offer — the thing they actually sell — including value framing, bonus stacking, guarantee design, scarcity/urgency, naming, and payment structure. Also use when the user mentions 'offer,' 'offer design,' 'build an offer,' 'grand slam offer,' 'irresistible offer,' 'value stack,' 'bonus stack,' 'guarantee,' 'risk reversal,' 'money-back guarantee,' 'scarcity,' 'urgency,' 'high-ticket offer,' 'productize a service,' 'naming an offer,' 'payment plan,' 'down-sell,' 'upsell offer,' or 'why isn't my offer converting.' Best for services, agencies, courses, coaching, info products, high-ticket B2B, and direct-response. If you run pure self-serve SaaS, read pricing first — tiers and packaging do more work there. For price level itself (tiers, freemium, value metric), see pricing. For the page that presents the offer, see copywriting. For the launch moment, see launch. For sales collateral, see sales-enablement.",
+      "domain": "cro",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "offsite-signal-analyzer",
+      "description": "Use when the user asks to \"analyze backlinks\", \"analyze my off-site signals\", or \"track AI traffic / ChatGPT / Perplexity referrals\"; profiles referring domains, anchor-text mix, toxic links, and disavow candidates (backlinks mode) or isolates AI-assistant referral sessions in GA4/GSC/logs and reports their trend, landing pages, and AI-vs-organic conversion (ai-referrals mode). Not for internal links — use site-structure-optimizer; not for keyword positions — use rank-tracker; not for multi-metric stakeholder reports — use performance-monitor. 外链分析/反向链接/AI流量/AI引荐/ChatGPT流量/AI转化",
+      "domain": "seo-geo",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "evaluate"
+    },
+    {
+      "name": "on-page-seo-checker",
+      "description": "Use when the user asks to \"audit on-page SEO\" or \"diagnose why a single page dropped\"; scores titles, meta, header structure, keyword placement, links, and images with prioritized fixes. Not for E-E-A-T / publish-readiness scoring — use content-quality-auditor; not for crawl / CWV / indexing — use technical-seo-checker. 页面SEO审计/排名诊断",
+      "domain": "seo-geo",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "tune"
+    },
+    {
+      "name": "onboarding",
+      "description": "When the user wants to optimize post-signup onboarding, user activation, first-run experience, or time-to-value. Also use when the user mentions \"onboarding flow,\" \"activation rate,\" \"user activation,\" \"first-run experience,\" \"empty states,\" \"onboarding checklist,\" \"aha moment,\" \"new user experience,\" \"users aren't activating,\" \"nobody completes setup,\" \"low activation rate,\" \"users sign up but don't use the product,\" \"time to value,\" or \"first session experience.\" Use this whenever users are signing up but not sticking around. For signup/registration optimization, see signup. For ongoing email sequences, see emails.",
+      "domain": "cro",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "onboarding-cro",
+      "description": "Compatibility skill for onboarding cro. Use when a user or upstream workflow invokes this name; route the task to `onboarding` while preserving the requested scope and source-specific intent.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": "onboarding",
+      "phase": null
+    },
+    {
+      "name": "outreach-manager",
+      "description": "Use when the user asks to \"write influencer outreach\", \"follow up with a creator\", \"pitch a journalist, hunter, or launch partner\", or \"negotiate partnership terms\"; produces personalized pitches, multi-touch follow-up sequences, negotiation scripts with objection handling, and a status pipeline tracker — the shared outreach mechanics engine for creator, media/analyst, launch-partner, and social-selling / advocate-recruitment targets. Not for finalizing signed agreements — use contract-helper; not for media-list tiering, embargo terms, or press-release structure — use press-media-relations. 达人邀约建联/合作谈判话术",
+      "domain": "influencer",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "activate"
+    },
+    {
+      "name": "page-cro",
+      "description": "Compatibility skill for page cro. Use when a user or upstream workflow invokes this name; route the task to `cro` while preserving the requested scope and source-specific intent.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": "cro",
+      "phase": null
+    },
+    {
+      "name": "page-play-builder",
+      "description": "Use when the user asks to \"build programmatic SEO pages\", \"generate pages at scale\", \"rank on a high-authority third-party site\", \"borrow domain authority\", \"build a vs / alternative page\", \"do local SEO\", \"optimize a Google Business Profile\", or \"fix NAP\" — one page-build router with four modes: programmatic (template × dataset systems), parasite (barnacle publishing on Medium/Reddit/LinkedIn/GitHub), comparison (vs / alternative pages in four formats), and local (GBP + NAP + citations + location pages), each with its own thin/duplicate, honesty, or reputation-abuse guardrail. Not for finding what to target — use keyword-research or content-gap-analysis; not for drafting one standalone article — use content-writer; not for scoring a page for publish — use content-quality-auditor. 程序化SEO/批量页面/寄生SEO/借势权重/对比页/vs页/替代页/本地SEO/谷歌商家档案/NAP一致性",
+      "domain": "seo-geo",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "implement"
+    },
+    {
+      "name": "paid-ads",
+      "description": "Compatibility skill for paid ads. Use when a user or upstream workflow invokes this name; route the task to `ads` while preserving the requested scope and source-specific intent.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": "ads",
+      "phase": null
+    },
+    {
+      "name": "paid-measurement-loop",
+      "description": "Use when the user asks to \"read back\" a paid campaign change, \"did this ad change work\", or \"compare ROAS/CPA before and after\"; reads ROAS/CPA against a control over a fixed readback window and returns a Promote / Keep-testing / Rollback / Unproven readback decision with the math delegated to roi-calculator. Not for RQS scoring or veto adjudication — use ad-account-auditor; not for the ROI ratio math — use roi-calculator; not for cross-channel rollups — use performance-analyzer. 付费广告复盘/ROAS回看/投放效果归因",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "scale"
+    },
+    {
+      "name": "participation-warmup-planner",
+      "description": "Use when the user asks to \"plan the participation ramp before we promote\", \"how much account history or karma do we need in this community\", or \"design entry incentives and member lifecycle for our own Discord\"; produces the per-community pre-promotion warming plan — account-history/tenure expectations (Estimated, named sources), a give-before-ask ledger spec, a per-community etiquette + rule digest with last-verified dates, and the warming → active graduation criteria that channel-registry requires as state-transition evidence — plus the owned-community variant (entry paths + member lifecycle for your own Discord/Slack/forum/企业微信私域). Not for launch-day submissions or T-0 threads — use community-launch-runner. 社区预热/先给后取/账号养成/毕业标准",
+      "domain": "social-growth",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "explore"
+    },
+    {
+      "name": "paywall-upgrade-cro",
+      "description": "Compatibility skill for paywall upgrade cro. Use when a user or upstream workflow invokes this name; route the task to `paywalls` while preserving the requested scope and source-specific intent.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": "paywalls",
+      "phase": null
+    },
+    {
+      "name": "paywalls",
+      "description": "When the user wants to create or optimize in-app paywalls, upgrade screens, upsell modals, or feature gates. Also use when the user mentions \"paywall,\" \"upgrade screen,\" \"upgrade modal,\" \"upsell,\" \"feature gate,\" \"convert free to paid,\" \"freemium conversion,\" \"trial expiration screen,\" \"limit reached screen,\" \"plan upgrade prompt,\" \"in-app pricing,\" \"free users won't upgrade,\" \"trial to paid conversion,\" or \"how do I get users to pay.\" Use this for any in-product moment where you're asking users to upgrade. Distinct from public pricing pages (see cro) — this focuses on in-product upgrade moments where the user has already experienced value. For pricing decisions, see pricing.",
+      "domain": "cro",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "performance-analyzer",
+      "description": "Use when the user asks to \"analyze influencer campaign performance\", \"compare influencers\", or \"find what content worked\"; produces metric scorecards vs target and benchmark, platform/influencer/content rankings, engagement-quality and sentiment reads, conversion-attribution breakdowns, and ranked learnings. Not for dollar-level return math — use roi-calculator. 达人营销效果分析/投放复盘",
+      "domain": "influencer",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "report"
+    },
+    {
+      "name": "performance-monitor",
+      "description": "Use when the user asks to \"generate an SEO report\", \"出月报\", \"set SEO alerts\", or \"排名掉了提醒我\"; two modes — report builds multi-metric traffic/ranking/authority/content dashboards, and alert configures threshold notifications for future ranking, traffic, technical, backlink, competitor, and AI-visibility changes. Not for raw position-by-position deltas — use rank-tracker. SEO报告/绩效仪表盘/SEO预警/排名监控",
+      "domain": "seo-geo",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "evaluate"
+    },
+    {
+      "name": "pitch-narrative-builder",
+      "description": "Use when the user asks to \"build our pitch deck narrative\", \"write a fundraising story\", or \"structure the sales pitch narrative\"; derives from the narrative canon a company pitch/deck narrative — problem → the undeniable shift → product-as-hero → proof → the ask — as a slide-beat outline (one narrative beat per slide, with the claim ID each proof beat rests on), for both a sales pitch and a fundraising deck. Every proof beat is labeled Measured / User-provided / '[needs source]' and unverified ones route to the claims candidates. Not for the launch-window battle cards and talk track — use sales-enablement-kit; not for the durable message hierarchy or the arc itself — use message-system-architect / strategic-narrative-designer; not for finished deck visual design — out of scope; not for claim adjudication — use offer-claims-registry. 路演叙事/融资故事/销售 pitch/幻灯节拍",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "land"
+    },
+    {
+      "name": "placement-exclusion-manager",
+      "description": "Use when the user asks to \"build my brand-safety exclusion lists\", \"set placement / topic / content exclusions before launch\", \"add network and audience exclusions\", or \"prep the A1 brand-safety evidence for the auditor\"; produces a placement/network exclusion list, a content-suitability & sensitive-topic block list, an audience/negative-audience exclusion set, and a packaged A1 brand/placement-safety evidence file for the gate. Not for building the audiences you target — use audience-segment-builder; not for computing the RQS or issuing the A1 verdict — use ad-account-auditor. 品牌安全/排除位置/否定受众列表",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "activate"
+    },
+    {
+      "name": "platform-norm-profiler",
+      "description": "Use when the user asks to \"build the norm card for this platform\", \"what are the char limits and visible-fold cutoffs here\", \"is the LinkedIn link-in-first-comment thing documented or folklore\", or \"which of our platform cards are stale\"; maintains the dated, versioned per-platform norm cards in the references/platforms/ pack — char limits, visible-fold cutoffs, hashtag norms, format/aspect specs, link and first-comment placement, disclosure-label mechanics, algorithm emphases (e.g. 小红书 search+saves weighting) — every row labeled platform-documented (official doc, Measured) or Estimated-folklore (named source) with last-verified and review-by dates, and any card past its review date flagged stale rather than trusted. Extends the single pack in place; never forks a second one. Not for picking which channels to run — use channel-portfolio-planner. 平台规范卡/字符限制/折叠线/话题标签/算法侧重/过期标记",
+      "domain": "social-growth",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "explore"
+    },
+    {
+      "name": "popup-cro",
+      "description": "Compatibility skill for popup cro. Use when a user or upstream workflow invokes this name; route the task to `popups` while preserving the requested scope and source-specific intent.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": "popups",
+      "phase": null
+    },
+    {
+      "name": "popups",
+      "description": "When the user wants to create or optimize popups, modals, overlays, slide-ins, or banners for conversion purposes. Also use when the user mentions \"exit intent,\" \"popup conversions,\" \"modal optimization,\" \"lead capture popup,\" \"email popup,\" \"announcement banner,\" \"overlay,\" \"collect emails with a popup,\" \"exit popup,\" \"scroll trigger,\" \"sticky bar,\" or \"notification bar.\" Use this for any overlay or interrupt-style conversion element. For forms outside of popups, see cro. For general page conversion optimization, see cro.",
+      "domain": "cro",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "positioning-mapper",
+      "description": "Use when the user asks to \"map our positioning\", \"name our competitive alternatives\", or \"pick a beachhead segment for the launch\"; produces a Dunford-style positioning canvas — named competitive alternatives (including spreadsheet and status quo), unique attributes (verifiable, or routed to the claims ledger), value themes (attribute→benefit→value chains), a target beachhead segment scored on serviceability / pain intensity / reachability, and a one-sentence onlyness statement — the sole upstream of the message house and the entity-signal source for the canonical entity profile. Not for the message house or per-channel launch copy — use message-house-builder; not for audience/persona profiling itself — use audience-mapper; not for SEO keyword positioning — use keyword-research. 定位画布/竞争替代品/独特价值/滩头细分",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "research"
+    },
+    {
+      "name": "positioning-truth-tracer",
+      "description": "Use when the user asks to \"check our positioning against what we can actually ship\", \"trace which differentiators we can defend\", or \"reconcile the positioning canvas with the claims ledger\"; reconciles the reused positioning canvas against the shippable stage and the claims ledger to produce a differentiation truth set — every differentiating claim verifiable or marked '[needs source]' — that TALE-T1 is judged against. Not for building the canvas — use positioning-mapper; not for adjudicating claims — use offer-claims-registry; not for authoring the message house — use message-system-architect. 定位真相/差异化校准/可交付现实/主张核对",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "trace"
+    },
+    {
+      "name": "preference-frequency-manager",
+      "description": "Use when the user asks to \"build a preference center\", \"set up a frequency opt-down ladder\", \"give people a step-down instead of unsubscribe\", or \"design a topic/cadence preference page\"; produces a preference-center field spec, a frequency/topic opt-down ladder (down-tier paths that substitute for a hard unsubscribe), a preference-to-suppression mapping, and a SEND N-dimension sub-item note on preference-center / frequency options offered. Not for the lifecycle flow map or cadence governance — use email-sequence-designer; not for the consent/suppression record itself — use consent-registry; not for computing EQS or ruling the N1 unsubscribe veto — use email-quality-auditor. 邮件偏好中心/降频阶梯设计/退订替代降档",
+      "domain": "lifecycle",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "nurture"
+    },
+    {
+      "name": "press-media-relations",
+      "description": "Use when the user asks to \"build a media list for my launch\", \"write a launch press release\", or \"pitch press under embargo\"; produces a three-tier media and analyst list (Tier 1 exclusive candidates, Tier 2 vertical press, Tier 3 communities and newsletters), an embargo pitch timing skeleton keyed to the launch-registry date, a press-release draft in standard structure with no fabricated quotes or numbers, and an analyst briefing outline. Not for press-kit assets — use launch-asset-packager; not for follow-up sequence mechanics — use outreach-manager; not for post-launch news-echo monitoring — use launch-monitor. 媒体名单/禁运期pitch/新闻稿/分析师简报",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "mobilize"
+    },
+    {
+      "name": "pricing",
+      "description": "Design or evaluate pricing and packaging using customer value, willingness-to-pay evidence, competitive context, unit economics and experiment design.",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "pricing-packaging-planner",
+      "description": "Use when the user asks to \"plan launch pricing\", \"design pricing tiers / packaging\", or \"set up a launch discount / early-bird offer\"; produces a launch pricing and packaging plan — tier structure and naming, a value-to-price map aligned to the message house, a launch-offer ladder with a true deadline reason, beta / early-adopter pricing with a post-launch graduation path, and guarantee / refund terms — with every price claim and offer term submitted to memory/events/claims.ndjson. Not for the canonical offer / claim record — use offer-claims-registry; not for paid-newsletter subscription economics — use newsletter-monetization-planner; not for ad bidding — use bid-strategy-planner. 发布定价/梯度打包/早鸟优惠/保证设计",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "assemble"
+    },
+    {
+      "name": "pricing-strategy",
+      "description": "Compatibility skill for pricing strategy. Use when a user or upstream workflow invokes this name; route the task to `pricing` while preserving the requested scope and source-specific intent.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": "pricing",
+      "phase": null
+    },
+    {
+      "name": "product-feed-optimizer",
+      "description": "Use when the user asks to \"optimize my Shopping feed\", \"fix product disapprovals\", \"improve product titles/attributes\", or \"build feed-driven PMax asset groups\"; audits and rewrites the Shopping/Performance Max product feed — title/description patterns, required and recommended attributes, GTIN/availability/price hygiene, disapproval triage, and feed-driven asset-group / listing-group structure — informing the ROAS O (Offer) dimension. Not for text ad copy — use ad-creative-builder; not for scoring the account or the RQS — use ad-account-auditor. 商品Feed优化/购物广告Feed/商品标题优化/商品禁投修复",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "research"
+    },
+    {
+      "name": "product-marketing",
+      "description": "Build or update the shared product-marketing context: product, audience, positioning, competitors, jobs-to-be-done, objections, customer language, proof and goals. Use before downstream execution when context is missing.",
+      "domain": "strategy",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "product-marketing-context",
+      "description": "Compatibility skill for product marketing context. Use when a user or upstream workflow invokes this name; route the task to `product-marketing` while preserving the requested scope and source-specific intent.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": "product-marketing",
+      "phase": null
+    },
+    {
+      "name": "programmatic-seo",
+      "description": "Design scalable SEO page systems using templates, structured data sources, quality thresholds, internal linking, indexation controls and anti-thin-content gates.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "proof-point-packager",
+      "description": "Use when the user asks to \"package our proof points\", \"build reusable stat cards and case snippets\", or \"put proof where each pillar makes its claim\"; turns claims-ledger-approved proofs into reusable proof modules — stat cards, case snippets, testimonial blocks, comparison proofs — each pinned to a message-house pillar and the ledger claim ID it substantiates, and flags any pillar making a claim with no approved proof behind it. Never adjudicates a proof: unverified or ledger-absent proofs are marked '[needs source]' and routed to the claims candidates. Not for adjudicating or substantiating claims — use offer-claims-registry; not for fabricating a benchmark to fill a gap — a missing proof is flagged, not invented; not for scoring narrative quality — use narrative-quality-auditor. 证据模块/证据卡/客户案例/主张对齐",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "land"
+    },
+    {
+      "name": "prospecting",
+      "description": "Build qualified prospect lists using an explicit ICP, source provenance, qualification criteria, scoring, enrichment hygiene and outreach-compliance checks.",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "public-relations",
+      "description": "When the user wants help with public relations, earned media, press coverage, journalist outreach, or media strategy (not pull requests). Also use when the user mentions 'PR,' 'public relations,' 'press,' 'press release,' 'press coverage,' 'media outreach,' 'pitch a journalist,' 'get featured,' 'media list,' 'media kit,' 'press kit,' 'newsjacking,' 'news hijack,' 'HARO,' 'Qwoted,' 'Featured,' 'Help A Reporter,' 'reporter request,' 'tech press,' 'TechCrunch,' 'earned media,' 'thought leadership placement,' 'op-ed,' 'guest article,' 'press contacts,' or 'how do I get press.' Use this for earned media work — finding journalists, pitching stories, newsjacking, and responding to press requests. For startup/SaaS/AI directory submissions, see directory-submissions. For product launches, see launch. For social-media engagement, see social. For cold-email outreach to prospects, see cold-email.",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "rank-tracker",
+      "description": "Use when the user asks to \"track rankings\" or \"查排名\"; measures keyword and SERP-position deltas over time from provided exports or connected tools, including AI-response checks. Not for multi-metric stakeholder reports or setting alerts — use performance-monitor (report or alert mode). 排名追踪/SERP监控",
+      "domain": "seo-geo",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "evaluate"
+    },
+    {
+      "name": "reactivation-specialist",
+      "description": "Use when the user asks to \"build a win-back campaign\", \"re-engage lapsed subscribers\", \"run a re-permission / re-consent sweep\", or \"sunset my dead list\"; produces a closed-loop reactivation program — a lapsed-cohort definition, a staged offer ladder, a re-consent (re-permission) capture step, and a sunset-confirm / suppression rule. Owns none of the SEND-N sub-item notes: engagement-decay / sunset is email-sequence-designer's and preference-center / frequency options is preference-frequency-manager's — this skill references those notes, it does not re-emit them. Not for the general lifecycle flows (welcome/cart/post-purchase) — use email-sequence-designer; not for the preference-center / opt-down ladder — use preference-frequency-manager; not for the consent record itself — use consent-registry; not for computing EQS or the N1 veto — use email-quality-auditor. 流失召回/重新授权/沉默用户清理",
+      "domain": "lifecycle",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "nurture"
+    },
+    {
+      "name": "referral-program",
+      "description": "Compatibility skill for referral program. Use when a user or upstream workflow invokes this name; route the task to `referrals` while preserving the requested scope and source-specific intent.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": "referrals",
+      "phase": null
+    },
+    {
+      "name": "referrals",
+      "description": "When the user wants to create, optimize, or analyze a referral program, affiliate program, or word-of-mouth strategy. Also use when the user mentions 'referral,' 'affiliate,' 'ambassador,' 'word of mouth,' 'viral loop,' 'refer a friend,' 'partner program,' 'referral incentive,' 'how to get referrals,' 'customers referring customers,' or 'affiliate payout.' Use this whenever someone wants existing users or partners to bring in new customers. For launch-specific virality, see launch.",
+      "domain": "social-growth",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "report-generator",
+      "description": "Use when the user asks to \"create a campaign report\", \"build an executive summary\", or \"deliver client results\"; produces audience-tailored influencer marketing reports (executive, client, internal team) with data tables, narrative, key learnings, and recommendations. Not for raw metric computation — use performance-analyzer. 达人营销报告/结案汇报",
+      "domain": "influencer",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "report"
+    },
+    {
+      "name": "revops",
+      "description": "Design revenue operations across lifecycle stages, lead/account routing, scoring, handoffs, pipeline definitions, CRM hygiene and SLA measurement.",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "roi-calculator",
+      "description": "Use when the user asks to \"calculate influencer ROI\", \"prove campaign value\", or \"what was our ROAS\"; produces direct ROI/ROAS, earned media value, attribution-modeled revenue, LTV-based ROI, and a stakeholder-ready summary. Not for building the full slide/written report — use report-generator. 达人营销ROI计算/投资回报测算",
+      "domain": "influencer",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "report"
+    },
+    {
+      "name": "sales-enablement",
+      "description": "Create sales enablement systems including one-pagers, decks, battlecards, objection handling, demo narratives and proof assets.",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "sales-enablement-kit",
+      "description": "Use when the user asks to \"build battle cards\", \"prep the sales team for launch\", or \"write the internal launch FAQ\"; produces the internal enablement kit for a sales-led launch — battle cards vs each named alternative (where we win / where they win / trap questions, every fact traceable), a sales talk track derived from the PR-FAQ spine, an objection-handling table (objection → response → evidence), internal FAQ + CS macros, and an internal launch announcement with embargo discipline. Not for the external message house — use message-house-builder; not for competitor tracking itself — use competitor-tracker or competitor-analysis; not for outbound sequences — use cold-outbound-sequencer. 销售赋能/battle card/销售叙事/异议处理/内部FAQ",
+      "domain": "gtm-sales",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "assemble"
+    },
+    {
+      "name": "schema",
+      "description": "Design, validate and implement structured data that accurately represents visible page content and current search-engine eligibility rules.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "schema-markup",
+      "description": "Compatibility skill for schema markup. Use when a user or upstream workflow invokes this name; route the task to `schema` while preserving the requested scope and source-specific intent.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": "schema",
+      "phase": null
+    },
+    {
+      "name": "search-term-miner",
+      "description": "Use when the user asks to \"mine my search terms\", \"find new keywords from converting queries\", \"build a negative-keyword list\", or \"cut wasted paid spend\"; harvests converting queries into new keywords/ad-groups, builds a standing negative-keyword list and an n-gram waste report from the search-terms export, and delivers a maintenance diff (add / negate / move). Not for account structure — use campaign-architect; not for budget split — use budget-optimizer; not for computing the final RQS — use ad-account-auditor. 付费广告搜索词挖掘/否定关键词/浪费词清单",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "research"
+    },
+    {
+      "name": "send-experiment-designer",
+      "description": "Use when the user asks to \"design an email A/B test\", \"set up a multivariate subject/CTA test\", \"run a send-time test\", \"build a hold-out group\", or \"is this email result statistically and practically material?\"; produces a falsifiable hypothesis, one-variable-per-cell matrix, sample-size/MDE/duration/power plan, and an effect/uncertainty read from own ESP data. Applies only a precommitted owner-approved action rule; the helper never chooses a business action. Not for EQS/vetoes or writing the email. 邮件AB测试设计/多变量测试/发送时间测试/留出组/显著性判定",
+      "domain": "lifecycle",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "deliver"
+    },
+    {
+      "name": "seo",
+      "description": "Orchestrate comprehensive SEO work across technical, content, schema, backlinks, local, ecommerce, programmatic SEO and AI-search/GEO. Use for full-site audits, SEO plans, or multi-specialist SEO investigations.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "seo-ahrefs",
+      "description": "Analyze live Ahrefs backlink, referring-domain, organic-keyword, and content data when an authorized Ahrefs connector is available. Use for Ahrefs-specific SEO evidence, not for estimates when no live connection exists.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "seo-audit",
+      "description": "Audit a site or page across technical SEO, on-page quality, content, structured data, performance, indexability, AI-search readiness and conversion-sensitive search experience.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b",
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "seo-backlinks",
+      "description": "Compatibility skill for seo backlinks. Use when a user or upstream workflow invokes this name; route the task to `offsite-signal-analyzer` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "offsite-signal-analyzer",
+      "phase": null
+    },
+    {
+      "name": "seo-bing",
+      "description": "Audit Bing search visibility, Webmaster Tools evidence, and IndexNow readiness when authorized tools are available. Use for Bing indexing, link, crawl, or Microsoft search visibility work; not for Google indexing assumptions.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "seo-cluster",
+      "description": "Compatibility skill for seo cluster. Use when a user or upstream workflow invokes this name; route the task to `content-strategy` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "content-strategy",
+      "phase": null
+    },
+    {
+      "name": "seo-competitor-pages",
+      "description": "Compatibility skill for seo competitor pages. Use when a user or upstream workflow invokes this name; route the task to `competitors` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "competitors",
+      "phase": null
+    },
+    {
+      "name": "seo-content",
+      "description": "Compatibility skill for seo content. Use when a user or upstream workflow invokes this name; route the task to `content-strategy` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "content-strategy",
+      "phase": null
+    },
+    {
+      "name": "seo-content-brief",
+      "description": "Compatibility skill for seo content brief. Use when a user or upstream workflow invokes this name; route the task to `content-strategy` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "content-strategy",
+      "phase": null
+    },
+    {
+      "name": "seo-dataforseo",
+      "description": "Compatibility skill for seo dataforseo. Use when a user or upstream workflow invokes this name; route the task to `seo` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "seo",
+      "phase": null
+    },
+    {
+      "name": "seo-drift",
+      "description": "Compatibility skill for seo drift. Use when a user or upstream workflow invokes this name; route the task to `performance-monitor` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "performance-monitor",
+      "phase": null
+    },
+    {
+      "name": "seo-ecommerce",
+      "description": "Compatibility skill for seo ecommerce. Use when a user or upstream workflow invokes this name; route the task to `seo-audit` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "seo-audit",
+      "phase": null
+    },
+    {
+      "name": "seo-firecrawl",
+      "description": "Crawl, map, or scrape websites with Firecrawl when an authorized connector is available. Use for JavaScript-rendered pages, site inventories, broken-link discovery, and bounded multi-page SEO collection.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "seo-flow",
+      "description": "Compatibility skill for seo flow. Use when a user or upstream workflow invokes this name; route the task to `seo` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "seo",
+      "phase": null
+    },
+    {
+      "name": "seo-geo",
+      "description": "Compatibility skill for seo geo. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "ai-seo",
+      "phase": null
+    },
+    {
+      "name": "seo-google",
+      "description": "Compatibility skill for seo google. Use when a user or upstream workflow invokes this name; route the task to `seo-audit` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "seo-audit",
+      "phase": null
+    },
+    {
+      "name": "seo-hreflang",
+      "description": "Compatibility skill for seo hreflang. Use when a user or upstream workflow invokes this name; route the task to `seo-audit` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "seo-audit",
+      "phase": null
+    },
+    {
+      "name": "seo-image-gen",
+      "description": "Compatibility skill for seo image gen. Use when a user or upstream workflow invokes this name; route the task to `image` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "image",
+      "phase": null
+    },
+    {
+      "name": "seo-images",
+      "description": "Compatibility skill for seo images. Use when a user or upstream workflow invokes this name; route the task to `seo-audit` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "seo-audit",
+      "phase": null
+    },
+    {
+      "name": "seo-local",
+      "description": "Compatibility skill for seo local. Use when a user or upstream workflow invokes this name; route the task to `seo-audit` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "seo-audit",
+      "phase": null
+    },
+    {
+      "name": "seo-maps",
+      "description": "Compatibility skill for seo maps. Use when a user or upstream workflow invokes this name; route the task to `seo-audit` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "seo-audit",
+      "phase": null
+    },
+    {
+      "name": "seo-page",
+      "description": "Compatibility skill for seo page. Use when a user or upstream workflow invokes this name; route the task to `seo-audit` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "seo-audit",
+      "phase": null
+    },
+    {
+      "name": "seo-plan",
+      "description": "Compatibility skill for seo plan. Use when a user or upstream workflow invokes this name; route the task to `seo` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "seo",
+      "phase": null
+    },
+    {
+      "name": "seo-profound",
+      "description": "Analyze Profound AI-visibility and citation-tracking data when an authorized connector is available. Use for time-series brand mentions, cited prompts, competitor co-mentions, and AI-answer visibility trends.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "seo-programmatic",
+      "description": "Compatibility skill for seo programmatic. Use when a user or upstream workflow invokes this name; route the task to `programmatic-seo` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "programmatic-seo",
+      "phase": null
+    },
+    {
+      "name": "seo-schema",
+      "description": "Compatibility skill for seo schema. Use when a user or upstream workflow invokes this name; route the task to `schema` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "schema",
+      "phase": null
+    },
+    {
+      "name": "seo-seranking",
+      "description": "Analyze SE Ranking organic and AI-visibility data when an authorized connector is available. Use for rankings, competitors, backlinks, SERP features, and cross-platform AI share-of-voice evidence.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "seo-sitemap",
+      "description": "Compatibility skill for seo sitemap. Use when a user or upstream workflow invokes this name; route the task to `site-architecture` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "site-architecture",
+      "phase": null
+    },
+    {
+      "name": "seo-sxo",
+      "description": "Compatibility skill for seo sxo. Use when a user or upstream workflow invokes this name; route the task to `cro` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "cro",
+      "phase": null
+    },
+    {
+      "name": "seo-technical",
+      "description": "Compatibility skill for seo technical. Use when a user or upstream workflow invokes this name; route the task to `seo-audit` while preserving the requested scope and source-specific intent.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": "seo-audit",
+      "phase": null
+    },
+    {
+      "name": "seo-unlighthouse",
+      "description": "Run or interpret bounded multi-page Unlighthouse audits for local Lighthouse evidence. Use for site-wide performance, accessibility, best-practice, and SEO regression checks when field data or API quotas are insufficient.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "serp-analysis",
+      "description": "Use when the user asks to \"analyze the SERP\" or \"SERP分析\"; maps SERP features, layout, ranking factors, search intent, AI Overviews, and snippet opportunities for a query. Not for keyword demand discovery — use keyword-research. SERP分析/搜索结果",
+      "domain": "seo-geo",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "survey"
+    },
+    {
+      "name": "serp-markup-builder",
+      "description": "Use when the user asks to \"optimize meta tags\", \"write title tags / meta descriptions\", \"add Open Graph or Twitter cards\", or \"generate schema / JSON-LD\" for FAQ, HowTo, Article, Product, or LocalBusiness rich-result candidates. Produces title/description options, an OG+Twitter block, and validated JSON-LD for the document head. Not for body copy — use content-writer; not for crawl/index technical issues — use technical-seo-checker. 标题优化/元描述/Schema标记/结构化数据",
+      "domain": "seo-geo",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "implement"
+    },
+    {
+      "name": "share-of-voice-tracker",
+      "description": "Use when the user asks to \"track our share of voice\", \"what share of the conversation do we own vs competitors\", or \"trend our SOV this quarter\"; computes SOV% = brand mentions ÷ (brand + competitor panel mentions) per platform per period on a LOCKED competitor panel — a panel switch invalidates the trend (restart the series and log the break; the ECHO O3 rule) — plus a sentiment-weighted SOV variant (sentiment labeled Estimated unless human-coded) and a Wikipedia-pageviews attention-share alternative; built from keyless listening connectors, gdelt.py news echo, and user exports — public counts only, closed platforms are never scraped. Not for backlink or offsite SEO signals — use offsite-signal-analyzer. 声量份额/竞品声量对比/提及份额/注意力份额",
+      "domain": "social-growth",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "observe"
+    },
+    {
+      "name": "short-video-scripter",
+      "description": "Use when the user asks to \"script this short video\", \"write a TikTok / Reels / Shorts script\", \"给这条抖音或视频号视频写脚本\", or \"fix the hook — viewers drop off in the first seconds\"; produces timestamped beat-sheet scripts on the retention-gate model (0-2s hook / 2-5s confirmation / 5-15s payoff / loop-or-CTA) with per-scene script lines, on-screen text for muted viewing, asset keywords, and 9:16 format-param rows per platform norm card for TikTok, Reels, Shorts, 抖音, and 视频号 — plus 2-3 hook options from named hook families and an AI-content disclosure line by default on realistic synthetic media. Spec-only: rendering, TTS, and publishing stay with the user's own tools — no pipelines, no upload automation. Not for creator video briefs — use brief-generator; long-form video SEO belongs to content-writer. 短视频脚本/抖音分镜/开头钩子/竖屏9:16",
+      "domain": "social-growth",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "craft"
+    },
+    {
+      "name": "signup",
+      "description": "When the user wants to optimize signup, registration, account creation, or trial activation flows. Also use when the user mentions \"signup conversions,\" \"registration friction,\" \"signup form optimization,\" \"free trial signup,\" \"reduce signup dropoff,\" \"account creation flow,\" \"people aren't signing up,\" \"signup abandonment,\" \"trial conversion rate,\" \"nobody completes registration,\" \"too many steps to sign up,\" or \"simplify our signup.\" Use this whenever the user has a signup or registration flow that isn't performing. For post-signup onboarding, see onboarding. For lead capture forms (not account creation), see cro.",
+      "domain": "cro",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "signup-flow-cro",
+      "description": "Compatibility skill for signup flow cro. Use when a user or upstream workflow invokes this name; route the task to `signup` while preserving the requested scope and source-specific intent.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": "signup",
+      "phase": null
+    },
+    {
+      "name": "site-architecture",
+      "description": "When the user wants to plan, map, or restructure their website's page hierarchy, navigation, URL structure, or internal linking. Also use when the user mentions \"sitemap,\" \"site map,\" \"visual sitemap,\" \"site structure,\" \"page hierarchy,\" \"information architecture,\" \"IA,\" \"navigation design,\" \"URL structure,\" \"breadcrumbs,\" \"internal linking strategy,\" \"website planning,\" \"what pages do I need,\" \"how should I organize my site,\" or \"site navigation.\" Use this whenever someone is planning what pages a website should have and how they connect. NOT for XML sitemaps (that's technical SEO — see seo-audit). For SEO audits, see seo-audit. For structured data, see schema.",
+      "domain": "seo-geo",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "site-structure-optimizer",
+      "description": "Use when the user asks to \"plan my site structure\", \"design the page hierarchy / navigation / URL taxonomy\", \"fix internal linking\", or \"find orphan pages\"; runs two modes — architecture (hierarchy, nav, URL patterns, hub/spoke clusters, Mermaid site maps) and linking (link graph, authority flow, anchor text, orphan disposition, source/target/anchor plan) — and outputs a structure score /100 plus a handoff summary. Not for external backlinks — use offsite-signal-analyzer; not for XML sitemap or indexation issues — use technical-seo-checker. 网站架构/信息架构/站点地图/内链优化",
+      "domain": "seo-geo",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "tune"
+    },
+    {
+      "name": "sms",
+      "description": "When the user wants to plan, build, or optimize SMS or MMS marketing — including welcome flows, abandoned cart texts, post-purchase, win-back, promotional sends, or transactional/auth SMS. Also use when the user mentions \"SMS marketing,\" \"text message campaigns,\" \"SMS sequence,\" \"SMS automation,\" \"abandoned cart text,\" \"post-purchase SMS,\" \"Klaviyo SMS,\" \"Postscript,\" \"Attentive,\" \"Twilio,\" \"A2P 10DLC,\" \"TCPA,\" \"SMS compliance,\" \"short code,\" \"toll-free SMS,\" \"MMS campaign,\" \"should I do SMS,\" or \"SMS vs email.\" For email sequences, see emails. For SMS copy framing, see copywriting. For opt-in popups that capture phone numbers, see popups.",
+      "domain": "lifecycle",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "social",
+      "description": "Plan and execute organic social strategy, calendar, creative, community engagement, social selling and measurement.",
+      "domain": "social-growth",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "social-calendar-builder",
+      "description": "Use when the user asks to \"build our social posting calendar\", \"set weekly slots and queue depth per channel\", or \"plan the evergreen recycle rotation\"; produces the always-on brand calendar — pillar allocation with hero/hub/help balance and give:ask targets (all labeled Estimated starting heuristics to calibrate against own analytics, never scored rules), per-channel recurring slots with queue depth, a batching workflow, an evergreen recycle cycle with freshness re-checks, deliberate open slots for realtime/trend moments fed by trend-spotter go/skip verdicts, and first-comment/publish-order ops — cadence commitments filed to the channel registry, and no batch ships to the queue without a SHIP verdict from social-quality-auditor pre-publish mode. Not for repurposing an existing asset or the paid-amplification calendar — use content-amplifier. 社媒排期/内容日历/栏目配比/常青循环复用",
+      "domain": "social-growth",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "craft"
+    },
+    {
+      "name": "social-content",
+      "description": "Compatibility skill for social content. Use when a user or upstream workflow invokes this name; route the task to `social` while preserving the requested scope and source-specific intent.",
+      "domain": "marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": "social",
+      "phase": null
+    },
+    {
+      "name": "social-creative-builder",
+      "description": "Use when the user asks to \"turn this idea into posts for every platform\", \"write the X thread / LinkedIn post / 小红书 note\", or \"spec the carousel slides\"; turns one idea into N platform-native ready-to-paste packages — post/thread, caption, Threads text, 小红书 note, link post with first-comment placement — each adapted per the dated platform norm card (never verbatim cross-posting), every product claim held to approved claims-ledger wording or flagged [needs source], every variant tagged {formula | hook family | CTA type | signal optimized}, plus a carousel slide-spec mode (intro/content/outro slide roles, per-element char budgets, 小红书 3:4 / IG 4:5 / LinkedIn document PDF artboards, text-safe-zone + alt-text checklist). Not for creator deliverable briefs — use brief-generator; not for repurposing existing assets with paid boost — use content-amplifier. 社媒文案/一稿多发改写/小红书笔记/轮播图脚本",
+      "domain": "social-growth",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "craft"
+    },
+    {
+      "name": "social-measurement-loop",
+      "description": "Use when the user asks to \"run the weekly social readout\", \"which denominator does our engagement rate use\", or \"which posts won this week and what changes next cycle\"; produces the organic-social metric dictionary (every rate names its denominator — ERR engagement-by-reach vs ERI by-impressions vs ER-by-follower — locked across periods), median-not-mean per-post rollups with organic and boosted separated, EMV as labeled exec-translation only (never inside any score), an attributed CHAOSS/Orbit-style community-health readout with employees excluded, and the best/worst-performer write-back the next calendar cycle consumes. Not for dollar-ROI math or the ECHO profile result gate verdict — use roi-calculator and social-quality-auditor. 社媒周报/互动率分母/指标字典/复盘回写",
+      "domain": "social-growth",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "observe"
+    },
+    {
+      "name": "social-pulse-monitor",
+      "description": "Use when the user asks to \"monitor brand mentions\", \"set up social listening\", \"did anything spike about us this week\", or \"watch these accounts for buying triggers\"; runs always-on keyless listening — a versioned listening-query architecture (brand variants incl. misspellings and 中文 names, exclusion terms, per-source syntax for HN Algolia / Bluesky / GDELT / Tavily), a mention sweep with six-class triage (crisis / bug / lead / praise / question / spam) each routed with an SLA, a 7-day rolling baseline with spike flags (the crisis trigger input), a B2B trigger watchlist (funding / hiring / launch signals), and an explicit coverage disclosure where X/IG/TikTok/LinkedIn/小红书 numbers are proxy-labeled, never Measured. Not for launch-window telemetry (T-0→T+30 rank and review polling) — use launch-monitor. 舆情监听/品牌提及监测/基线突刺/触发信号",
+      "domain": "social-growth",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "observe"
+    },
+    {
+      "name": "social-quality-auditor",
+      "description": "Use when the user asks to \"audit our social presence\" or \"is this batch safe to publish\"; runs either the typed ECHO asset gate or a separate program-maturity profile, with channel-truth, claim, disclosure, manipulation, UGC-rights, and denominator checks. Not for creator deliverables — use creator-content-auditor; not for launch readiness — use launch-readiness-auditor. 社媒资产门/运营成熟度/发布前放行",
+      "domain": "social-growth",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "host"
+    },
+    {
+      "name": "social-selling-planner",
+      "description": "Use when the user asks to \"set up my founder social-selling routine\", \"build a daily engagement block for target accounts\", or \"turn funding / hiring signals into selling plays\"; produces the founder/seller daily operating block — a time-boxed engagement-block spec (substantive value-add comments on target-account posts, never a pitch), warm-touch-before-ask cadence rules, trigger-response plays consuming the social-pulse-monitor B2B trigger watchlist (funding / hiring / launch signals), and a quarterly diagnostic that reads LinkedIn SSI as an input diagnostic only (Estimated, vendor-defined — never a target metric). All volume norms are Estimated/community-derived; all execution is human — zero mass-DM, zero connection-request automation, zero engagement automation (LinkedIn UA §8.2 red line); 1:1 pitch and DM mechanics route to outreach-manager. Not for cold email sequences — use cold-outbound-sequencer. 社交销售/创始人日常互动块/热身触达节奏/触发信号剧本",
+      "domain": "social-growth",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "host"
+    },
+    {
+      "name": "story-bank-builder",
+      "description": "Use when the user asks to \"build a story bank\", \"collect our origin and customer stories\", or \"assemble reusable proof stories for the message\"; assembles reusable narrative units — origin, founder, customer, transformation, and proof stories — each tagged to a claims-ledger ID and a message-house pillar, with every proof labeled Measured / User-provided / [needs source]. Not for authoring the message house or pillars — use message-system-architect; not for brand voice or naming rules — use brand-language-codifier; not for finished long-form prose — use content-writer; not for adjudicating whether a proof is true — use offer-claims-registry. 品牌故事库/起源客户转化/证据故事单元",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "architect"
+    },
+    {
+      "name": "strategic-narrative-designer",
+      "description": "Use when the user asks to \"design our change narrative\", \"build the old-world-to-new-game story arc\", or \"frame the shift our category is undergoing\"; produces a Raskin-style strategic narrative arc — old world → the undeniable shift → winners vs losers under the new rules → the promised land → proof the promised land is real — derived from the positioning truth set and the belief/objection map, feeding the TALE Architecture arc sub-item. Every proof beat is labeled Measured / User-provided / [needs source] and this skill never adjudicates a claim. Not for the message house hierarchy — use message-system-architect; not for the pitch deck narrative — use pitch-narrative-builder; not for claim substantiation — use offer-claims-registry. 变革叙事弧/旧世界/应许之地/战略叙事结构",
+      "domain": "strategy",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "architect"
+    },
+    {
+      "name": "subject-line-lab",
+      "description": "Use when the user asks to \"generate subject line variants\", \"pre-score my subject lines\", or \"will this subject get truncated / trigger spam filters\"; produces a labeled subject + preheader variant set and a per-variant heuristic pre-score card — spam-trigger flags, length/truncation across desktop + mobile, emoji-count, and the inbox preview render (from-name + subject + preheader) — before any test is run. Not for the body copy or CTA — use email-creative-builder; not for the A/B test design or significance read — use send-experiment-designer; not for the profile-weighted EQS or the S1/S2/N1/D1 vetoes — use email-quality-auditor. 邮件主题行生成/主题行预打分/截断与垃圾词检查",
+      "domain": "lifecycle",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "engage"
+    },
+    {
+      "name": "technical-seo-checker",
+      "description": "Use when the user asks to \"check technical SEO\"; audits crawlability, indexing, Core Web Vitals, robots.txt, sitemaps, canonicals, redirects, and migrations. Not for on-page tags or content — use on-page-seo-checker. 技术SEO/网站速度",
+      "domain": "seo-geo",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "tune"
+    },
+    {
+      "name": "trend-spotter",
+      "description": "Use when the user asks to \"find trending topics\", \"what trends should my brand jump on\", or \"time a campaign around a cultural moment\"; produces a ranked trend report with brand-fit scores, format calls (rising/peak/declining), a cultural calendar, and go/skip recommendations. Not for finding the creators to run those trends — use influencer-discovery; not for building the brand posting calendar from a go verdict — use social-calendar-builder. 热点趋势洞察/借势营销",
+      "domain": "influencer",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "scout"
+    },
+    {
+      "name": "video",
+      "description": "When the user wants to create, generate, or produce video content using AI tools or programmatic frameworks. Also use when the user mentions 'video production,' 'AI video,' 'Remotion,' 'Hyperframes,' 'HeyGen,' 'Synthesia,' 'Veo,' 'Sora,' 'Runway,' 'Kling,' 'Seedance,' 'Hailuo,' 'MiniMax,' 'Pika,' 'Hunyuan,' 'Wan,' 'video generation,' 'AI avatar,' 'talking head video,' 'programmatic video,' 'video template,' 'explainer video,' 'product demo video,' 'video pipeline,' 'copy this edit,' 'match this video style,' 'reverse-engineer this video,' 'edit like this reference,' or 'make me a video.' Use this for video creation, generation, and production workflows. For video content strategy and what to post, see social. For paid video ad creative, see ad-creative.",
+      "domain": "content",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "voice-dossier-builder",
+      "description": "Use when the user asks to \"codify how our founder sounds\", \"build a founder voice dossier\", or \"set our content pillars\"; runs an 80%-extraction interview over the user's OWN posts, emails, and decks (never competitor scraping, never an invented persona) and produces the versioned voice record — a per-platform register map (incl. 小红书/微信公众号), banned phrases, per-context disclosure lines (the ECHO C2 upstream), a few-shot bank built exclusively from own posts, and 3-5 content pillars with Estimated %-allocations — submitted via memory/events/channels.ndjson for channel-registry to store as voice-dossier.md, the record every Craft-phase skill reads first. Not for the brand-level voice canon — use brand-language-codifier; not for audience/persona research — use audience-mapper. 声音档案/品牌语气/创始人语气/内容支柱/披露声明",
+      "domain": "social-growth",
+      "sources": [
+        "source-a"
+      ],
+      "alias_of": null,
+      "phase": "explore"
+    }
+  ]
+}

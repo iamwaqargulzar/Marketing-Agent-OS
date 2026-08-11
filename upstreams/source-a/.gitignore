@@ -1,0 +1,61 @@
+# macOS
+.DS_Store
+.DS_Store?
+._*
+
+# Windows
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Internal planning docs
+docs/plans/
+
+# OSS reference clones (competitive analysis only, not part of the bundle)
+reference-oss/
+
+# Local agent/app state
+.claude/
+.codex/
+.docs/
+.planning/
+
+# Operational marketing memory. Runtime records may contain consent, creator,
+# campaign, and customer data; keep only the documentation/templates below.
+memory/**
+!memory/
+!memory/README.md
+!memory/templates/
+!memory/templates/**
+
+# Environment variables
+.env
+.env.*
+
+# Node (if any tooling added later)
+node_modules/
+
+# npx skills install artifacts (local-only)
+.agents/
+skills-lock.json
+
+# Python bytecode (connectors import _http)
+__pycache__/
+*.pyc
+
+# macOS Finder duplicate-copy artifacts
+* 2.*
+*\ 2.md
+*\ 2.py
+
+# macOS/iCloud cloud-sync conflict copies (e.g. "SKILL 2.md", ".gitkeep 3")
+* [0-9]
+* [0-9].md
+
+# ClawHub Plugin Inspector output
+reports/

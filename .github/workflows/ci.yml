@@ -1,0 +1,53 @@
+name: validate
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  cross-platform:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Reconcile pinned sources
+        run: python scripts/reconcile_upstreams.py
+      - name: Validate package
+        run: python scripts/doctor.py
+      - name: Run tests
+        run: python -m unittest discover -s tests -v
+      - name: Installer smoke test
+        run: python scripts/install.py --agent all --scope project --project "${{ runner.temp }}/marketing-agent-os-smoke" --skill marketing-os --dry-run
+
+  ecosystem-discovery:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify Agent Skills discovery
+        shell: bash
+        run: |
+          set -o pipefail
+          npx --yes skills@1.5.22 add . --list --full-depth 2>&1 | tee /tmp/skills-discovery.txt
+          grep -q "Found 235 skills" /tmp/skills-discovery.txt
+      - name: Verify major-harness projections
+        shell: bash
+        run: |
+          target="$(mktemp -d)"
+          git -C "$target" init -q
+          cd "$target"
+          npx --yes skills@1.5.22 add "$GITHUB_WORKSPACE" --skill marketing-os --agent codex claude-code opencode pi amp cursor -y --copy
+          test -f .agents/skills/marketing-os/SKILL.md
+          test -f .claude/skills/marketing-os/SKILL.md
+          test -f .pi/skills/marketing-os/SKILL.md

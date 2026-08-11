@@ -1,0 +1,22 @@
+# Weekly read-only drift sentinel for the downstream repo family (docs/repo-family.md).
+# Deliberately NOT wired to pull_request: drift while references/ evolves on main ahead
+# of a release is expected — sync happens at release time via scripts/sync-family.sh --live
+# (owner-run, never CI-automated). This job only makes silent drift loud.
+name: family-drift
+
+on:
+  schedule:
+    - cron: '17 6 * * 1' # Mondays 06:17 UTC
+  workflow_dispatch:
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check family repos against SSOT (dry-run)
+        env:
+          # Raises the GitHub Contents API limit from 60 to 5,000 req/hr so the shared
+          # runner IP can't spend the budget and make a rate-limit 403 look like drift.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash scripts/sync-family.sh

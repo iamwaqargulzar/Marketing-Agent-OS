@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aaron-he-zhu/aaron-marketing-skills/references/framework-catalog.schema.json",
+  "title": "Aaron Marketing Framework Catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["catalog_version", "semantics", "frameworks"],
+  "properties": {
+    "catalog_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "semantics": {"$ref": "#/$defs/semantics"},
+    "frameworks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["CORE-EEAT", "CITE", "STAR", "ROAS", "SEND", "RAMP", "ECHO", "TALE"],
+      "properties": {
+        "CORE-EEAT": {"$ref": "#/$defs/framework"},
+        "CITE": {"$ref": "#/$defs/framework"},
+        "STAR": {"$ref": "#/$defs/framework"},
+        "ROAS": {"$ref": "#/$defs/framework"},
+        "SEND": {"$ref": "#/$defs/framework"},
+        "RAMP": {"$ref": "#/$defs/framework"},
+        "ECHO": {"$ref": "#/$defs/framework"},
+        "TALE": {"$ref": "#/$defs/framework"}
+      }
+    }
+  },
+  "$defs": {
+    "semantics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "external_validity", "score_states", "item_points", "evidence_types",
+        "confidence_factors", "required_coverage", "missingness", "rounding",
+        "veto_ceiling", "multi_veto", "bands"
+      ],
+      "properties": {
+        "external_validity": {"type": "string", "minLength": 1},
+        "score_states": {"const": ["pass", "partial", "fail", "unknown", "na"]},
+        "item_points": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["pass", "partial", "fail"],
+          "properties": {"pass": {"const": 10}, "partial": {"const": 5}, "fail": {"const": 0}}
+        },
+        "evidence_types": {"$ref": "#/$defs/evidenceWeights"},
+        "confidence_factors": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["high", "medium", "low"],
+          "properties": {
+            "high": {"type": "number", "minimum": 0, "maximum": 1},
+            "medium": {"type": "number", "minimum": 0, "maximum": 1},
+            "low": {"type": "number", "minimum": 0, "maximum": 1}
+          }
+        },
+        "required_coverage": {"const": 100},
+        "missingness": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["unknown", "na", "missing"],
+          "properties": {
+            "unknown": {"type": "string", "minLength": 1},
+            "na": {"type": "string", "minLength": 1},
+            "missing": {"type": "string", "minLength": 1}
+          }
+        },
+        "rounding": {"const": "floor"},
+        "veto_ceiling": {"const": 59},
+        "multi_veto": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["minimum", "verdict", "emit_final_score"],
+          "properties": {
+            "minimum": {"const": 2},
+            "verdict": {"const": "BLOCK"},
+            "emit_final_score": {"const": false}
+          }
+        },
+        "bands": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "minimum", "maximum"],
+            "properties": {
+              "name": {"type": "string", "minLength": 1},
+              "minimum": {"type": "integer", "minimum": 0, "maximum": 100},
+              "maximum": {"type": "integer", "minimum": 0, "maximum": 100}
+            }
+          }
+        }
+      }
+    },
+    "evidenceWeights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["measured", "user-provided", "calculated", "estimated", "proxy"],
+      "properties": {
+        "measured": {"type": "number", "minimum": 0, "maximum": 1},
+        "user-provided": {"type": "number", "minimum": 0, "maximum": 1},
+        "calculated": {"type": "number", "minimum": 0, "maximum": 1},
+        "estimated": {"type": "number", "minimum": 0, "maximum": 1},
+        "proxy": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "framework": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "construct", "unit_of_analysis", "required_context", "profiles", "dimensions", "veto_items"],
+      "properties": {
+        "source": {"type": "string", "pattern": "^references/.+\\.md$"},
+        "construct": {"type": "string", "minLength": 1},
+        "unit_of_analysis": {"type": "string", "minLength": 1},
+        "required_context": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "context_allowed": {
+          "type": "object",
+          "additionalProperties": {"type": "array", "minItems": 1, "uniqueItems": true}
+        },
+        "profiles": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {"$ref": "#/$defs/profile"}
+        },
+        "dimensions": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {"$ref": "#/$defs/dimension"}
+        },
+        "item_definitions": {"type": "object", "additionalProperties": {"type": "string", "minLength": 1}},
+        "item_policies": {"type": "object", "additionalProperties": {"$ref": "#/$defs/itemPolicy"}},
+        "veto_items": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "benchmark_mode": {"type": "string", "minLength": 1},
+        "composite_score": {"type": "boolean"},
+        "outcomes": {"type": "string", "minLength": 1}
+      }
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dimensions"],
+      "properties": {
+        "context_equals": {"type": "object"},
+        "dimensions": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}
+        },
+        "include_items": {"$ref": "#/$defs/itemSelection"},
+        "exclude_items": {"$ref": "#/$defs/itemSelection"}
+      }
+    },
+    "itemSelection": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "uniqueItems": true,
+        "items": {"type": "string", "minLength": 1}
+      }
+    },
+    "dimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "item_prefix", "item_count", "id_width"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "item_prefix": {"type": "string", "minLength": 1},
+        "item_count": {"type": "integer", "minimum": 1},
+        "id_width": {"type": "integer", "minimum": 1}
+      }
+    },
+    "itemPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "applicability": {"enum": ["conditional"]},
+        "applicable_when": {"type": "object"},
+        "condition": {"type": "string", "minLength": 1},
+        "definition": {"type": "string", "minLength": 1},
+        "benchmark": {"type": "string", "minLength": 1},
+        "unknown_policy": {"enum": ["needs-input"]},
+        "veto": {"type": "boolean"},
+        "fail_flag": {"type": "string", "minLength": 1},
+        "asset_gate_note": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+name: Skill Request
+description: Suggest a new skill for Aaron Marketing Skills (SEO/GEO, influencer, or paid ads/ROAS)
+title: "[Skill Request] "
+labels: ["skill-request"]
+body:
+  - type: input
+    id: skill-name
+    attributes:
+      label: Skill Name
+      description: Proposed name (lowercase, hyphens only, 1-64 chars)
+      placeholder: e.g., local-seo-optimizer
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: Which category does this skill belong to?
+      options:
+        - SEO/GEO — Research (keywords, competitors, SERP, content gaps)
+        - SEO/GEO — Build (SEO writing, GEO optimization, meta tags, schema)
+        - SEO/GEO — Optimize (on-page audit, technical SEO, linking, content quality)
+        - SEO/GEO — Monitor (rankings, backlinks, performance, domain authority)
+        - Influencer — Discover (audience, niche, trends, influencer discovery, fit scoring)
+        - Influencer — Plan (competitor tracking, campaign, brief, budget)
+        - Influencer — Activate (outreach, content review, contracts, amplification)
+        - Influencer — Measure (landing pages, performance, ROI, reporting)
+        - Paid ROAS — Research (campaign structure, audience segments)
+        - Paid ROAS — Orchestrate (ad creative, test design)
+        - Paid ROAS — Activate (account gate, conversion-signal QA)
+        - Paid ROAS — Scale (measurement loop, attribution)
+        - Protocol (truth registries — entity/creator/offer-claims — and memory)
+        - Cross-discipline (spans SEO/GEO, influencer, and paid)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What should this skill do?
+      description: Describe the skill's purpose, when users would invoke it, and what output it should produce.
+      placeholder: "This skill should... Users would invoke it when they want to... It should output..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: existing-gaps
+    attributes:
+      label: Why can't existing skills cover this?
+      description: Explain why the 69 existing skills don't address this need.
+      placeholder: "The closest existing skill is X, but it doesn't handle..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: data-sources
+    attributes:
+      label: Data sources
+      description: What data or tools would this skill need? Use ~~placeholder format.
+      placeholder: "Would need ~~SEO tool for keyword data and ~~analytics for traffic data"
+    validations:
+      required: false

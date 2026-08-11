@@ -1,0 +1,31 @@
+{
+  "hooks": {
+    "SessionStart": [{
+      "matcher": "startup|resume|clear|compact",
+      "hooks": [{ "type": "command", "command": "bash", "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/claude-hook.sh", "session-start"], "timeout": 5 }]
+    }],
+    "UserPromptSubmit": [{
+      "matcher": "",
+      "hooks": [{ "type": "command", "command": "bash", "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/claude-hook.sh", "user-prompt-submit"], "timeout": 5 }]
+    }],
+    "PreToolUse": [{
+      "matcher": "Write|Edit|NotebookEdit|Bash|PowerShell|Monitor|mcp__.*",
+      "hooks": [{ "type": "command", "command": "bash", "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/claude-hook.sh", "pre-tool-use"], "timeout": 60 }]
+    }],
+    "PostToolUse": [{
+      "matcher": "Write|Edit|NotebookEdit|Bash|PowerShell|Monitor|mcp__.*",
+      "hooks": [{ "type": "command", "command": "bash", "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/claude-hook.sh", "post-tool-use"], "timeout": 60 }]
+    }],
+    "PostToolUseFailure": [{
+      "matcher": "Write|Edit|NotebookEdit|Bash|PowerShell|Monitor|mcp__.*",
+      "hooks": [{ "type": "command", "command": "bash", "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/claude-hook.sh", "post-tool-failure"], "timeout": 60 }]
+    }],
+    "PostToolBatch": [{
+      "hooks": [{ "type": "command", "command": "bash", "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/claude-hook.sh", "post-tool-batch"], "timeout": 60 }]
+    }],
+    "Stop": [{
+      "matcher": "",
+      "hooks": [{ "type": "command", "command": "bash", "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/claude-hook.sh", "stop"], "timeout": 60 }]
+    }]
+  }
+}

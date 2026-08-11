@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use Marketing Agent OS, please cite this repository."
+title: "Marketing Agent OS"
+type: software
+authors:
+  - name: "Marketing Agent OS contributors"
+version: 1.1.0
+date-released: 2026-08-11
+license: Apache-2.0
+repository-code: "https://github.com/iamwaqargulzar/marketing-agent-os"
+url: "https://github.com/iamwaqargulzar/marketing-agent-os"
+abstract: >-
+  A cross-platform, governed collection of 235 portable AI agent skills for
+  marketing, SEO, GEO, AEO, content, CRO, paid media, lifecycle, social,
+  analytics, growth, sales, and revenue operations.
+keywords:
+  - agent-skills
+  - ai-agents
+  - marketing
+  - seo
+  - geo
+  - aeo
+  - codex
+  - claude-code
+  - opencode

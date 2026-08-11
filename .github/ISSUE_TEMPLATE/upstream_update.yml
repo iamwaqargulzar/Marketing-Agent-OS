@@ -1,0 +1,45 @@
+name: Upstream update report
+description: Report a relevant commit, release, license change, or security fix from a pinned source.
+title: "[Upstream]: "
+labels:
+  - upstream-update
+body:
+  - type: dropdown
+    id: source
+    attributes:
+      label: Source ID
+      options:
+        - source-a
+        - source-b
+        - source-c
+        - source-d
+    validations:
+      required: true
+  - type: input
+    id: revision
+    attributes:
+      label: Commit or release
+      placeholder: Full commit SHA or release URL
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: Relevant changes
+      description: Summarize skill, security, dependency, behavior, or license changes.
+    validations:
+      required: true
+  - type: textarea
+    id: reconciliation
+    attributes:
+      label: Suggested normalized-layer impact
+      description: Identify affected Marketing Agent OS skills or explain why no runtime change is needed.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checks
+      options:
+        - label: I reviewed `docs/MAINTENANCE.md`.
+          required: true
+        - label: I did not manually edit a pinned snapshot.
+          required: true

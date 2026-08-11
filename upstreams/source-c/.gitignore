@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+
+# Output files (generated reports - may contain sensitive client data)
+/GEO-*.md
+/GEO-*.pdf
+*.pdf
+/llms.txt
+/llms-full.txt
+/audit-data*.json
+
+# Credentials and secrets (never commit these)
+*.key
+*.pem
+*.p12
+*.secret
+*.token
+credentials.*
+
+# Screenshots
+screenshots/
+*.png
+*.jpg
+*.jpeg
+!schema/*.json
+
+# Test files
+test_output/
+.pytest_cache/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Git worktrees
+.worktrees/

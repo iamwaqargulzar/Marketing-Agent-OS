@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aaron-he-zhu/aaron-marketing-skills/evals/behavior-adapter.schema.json",
+  "title": "Optional semantic behavior-eval adapter result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "passed", "evidence"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "passed": {"type": "boolean"},
+    "evidence": {"type": "string", "minLength": 1},
+    "observed_assertions": {"type": "array", "items": {"type": "string"}},
+    "failure_modes_seen": {"type": "array", "items": {"type": "string"}},
+    "adapter_version": {"type": "string"}
+  }
+}

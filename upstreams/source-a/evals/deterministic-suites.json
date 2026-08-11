@@ -1,0 +1,171 @@
+{
+  "schema_version": "1.0",
+  "description": "Offline behavior-conformance suites. Commands are argument arrays; no shell expansion is permitted.",
+  "suites": [
+    {
+      "id": "framework-catalog-and-scorer",
+      "command": ["{python}", "tests/test_rubric_score.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "framework-golden-behavior",
+      "command": ["{python}", "scripts/golden-auditor-math.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "registry-events-adversarial",
+      "command": ["{python}", "tests/test_registry_events.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "run-events-adversarial",
+      "command": ["{python}", "tests/test_run_events.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "shared-http-and-connectors",
+      "command": ["{python}", "tests/test_connectors_local.py"],
+      "timeout_seconds": 120
+    },
+    {
+      "id": "audit-artifact-permissions",
+      "command": ["{python}", "tests/test_audit_artifact_validator.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "hook-artifact-gate",
+      "command": ["bash", "tests/test_hook_artifact_gate.sh"],
+      "timeout_seconds": 120
+    },
+    {
+      "id": "eval-and-routing-contracts",
+      "command": ["{python}", "scripts/check-evals.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "architecture-contracts",
+      "command": ["{python}", "scripts/check-architecture.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "architecture-regressions",
+      "command": ["{python}", "tests/test_architecture.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "staged-pii-adversarial",
+      "command": ["{python}", "tests/test_check_pii.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "memory-privacy-preflight",
+      "command": ["{python}", "tests/test_memory_privacy.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "root-runtime-distribution",
+      "command": ["bash", "tests/test_runtime_distribution.sh"],
+      "timeout_seconds": 120
+    },
+    {
+      "id": "distribution-supply-chain",
+      "command": ["{python}", "tests/test_distribution_builder.py"],
+      "timeout_seconds": 120
+    },
+    {
+      "id": "publisher-release-safety",
+      "command": ["{python}", "-m", "unittest", "tests.test_publish_release", "tests.test_publish_state"],
+      "timeout_seconds": 120
+    },
+    {
+      "id": "machine-contract-context-planning",
+      "command": ["{python}", "-m", "unittest", "tests.test_skill_contracts", "tests.test_context_plan"],
+      "timeout_seconds": 120
+    },
+    {
+      "id": "supported-runtime-controller",
+      "command": ["{python}", "-m", "unittest", "tests.test_runtime_controller"],
+      "timeout_seconds": 120
+    },
+    {
+      "id": "workflow-graph-loop",
+      "command": ["{python}", "-m", "unittest", "tests.test_workflow_graph", "tests.test_workflow_loop"],
+      "timeout_seconds": 120
+    },
+    {
+      "id": "five-engineering-maturity-contract",
+      "command": ["{python}", "-m", "unittest", "tests.test_engineering_maturity", "tests.test_semantic_evidence_verifier", "tests.test_behavior_evals_adapter"],
+      "timeout_seconds": 120
+    },
+    {
+      "id": "generated-context-projections",
+      "command": ["{python}", "-m", "unittest", "tests.test_claude_index", "tests.test_skill_capsules", "tests.test_router_facades", "tests.test_auditor_runtime"],
+      "timeout_seconds": 120
+    },
+    {
+      "id": "context-profile-certification-regressions",
+      "command": ["{python}", "-m", "unittest", "tests.test_context_profile_resolver", "tests.test_context_assembly", "tests.test_prompt_profile_evidence"],
+      "timeout_seconds": 120
+    },
+    {
+      "id": "blind-routing-v3-regressions",
+      "command": ["{python}", "-m", "unittest", "tests.test_codex_behavior_adapter"],
+      "timeout_seconds": 120
+    },
+    {
+      "id": "standalone-auditor-runtime",
+      "command": ["{python}", "scripts/generate-auditor-runtime.py", "--check"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "generated-system-docs",
+      "command": ["{python}", "scripts/generate-system-docs.py", "--check"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "local-links",
+      "command": ["{python}", "scripts/check-local-links.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "context-budget",
+      "command": ["{python}", "scripts/check-context-budget.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "context-budget-regressions",
+      "command": ["{python}", "tests/test_context_budget.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "context-efficiency",
+      "command": ["{python}", "scripts/check-context-efficiency.py", "--check"],
+      "timeout_seconds": 120
+    },
+    {
+      "id": "context-measurement-and-isolation-regressions",
+      "command": ["{python}", "-m", "unittest", "tests.test_context_usage", "tests.test_context_efficiency", "tests.test_isolated_evals"],
+      "timeout_seconds": 120
+    },
+    {
+      "id": "routing-lint",
+      "command": ["{python}", "scripts/check-routing.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "routing-lint-regressions",
+      "command": ["{python}", "tests/test_routing.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "audit-trends-regressions",
+      "command": ["{python}", "tests/test_audit_trends.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "audit-loop-regressions",
+      "command": ["{python}", "tests/test_audit_loop.py"],
+      "timeout_seconds": 60
+    }
+  ]
+}

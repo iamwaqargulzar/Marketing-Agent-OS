@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aaron-he-zhu/aaron-marketing-skills/references/audit-run.schema.json",
+  "title": "Aaron Marketing Typed Audit Run Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["framework", "profile", "target", "observed_at", "context", "items"],
+  "properties": {
+    "framework": {"type": "string"},
+    "profile": {"type": "string"},
+    "target": {"type": "string", "minLength": 1},
+    "observed_at": {"type": "string", "format": "date"},
+    "context": {"type": "object"},
+    "items": {
+      "type": "array",
+      "maxItems": 80,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "state"],
+        "properties": {
+          "id": {"type": "string"},
+          "state": {"enum": ["pass", "partial", "fail", "unknown", "na"]},
+          "reason": {"type": "string"},
+          "evidence": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["type", "source", "observed_at", "confidence"],
+            "properties": {
+              "type": {"enum": ["measured", "user-provided", "calculated", "estimated", "proxy"]},
+              "source": {"type": "string", "minLength": 1},
+              "observed_at": {"type": "string", "format": "date"},
+              "confidence": {"enum": ["high", "medium", "low"]}
+            }
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"framework": {"const": "STAR"}},
+        "required": ["framework"]
+      },
+      "then": {
+        "properties": {
+          "context": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["goal", "assessment_time", "platform", "market"],
+            "properties": {
+              "goal": {"enum": ["awareness", "engagement", "conversion", "brand-building"]},
+              "assessment_time": {"enum": ["forecast", "actual"]},
+              "platform": {"type": "string", "minLength": 1},
+              "market": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    }
+  ]
+}

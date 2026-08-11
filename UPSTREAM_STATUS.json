@@ -1,0 +1,46 @@
+{
+  "normalized_skill_count": 235,
+  "schema_version": 1,
+  "sources": {
+    "source-a": {
+      "commit": "388172e65e58f7487e22dcf436349b6003d64d0d",
+      "declared_names": 120,
+      "missing_from_normalized_layer": [],
+      "skill_files": 120,
+      "snapshot_matches_lock": true,
+      "snapshot_path": "upstreams/source-a",
+      "tracked_entries": 1018,
+      "unique_skill_names": 120
+    },
+    "source-b": {
+      "commit": "09d37c7b66ed3ca9c6efbdb765a805a6c76a8f01",
+      "declared_names": 33,
+      "missing_from_normalized_layer": [],
+      "skill_files": 33,
+      "snapshot_matches_lock": true,
+      "snapshot_path": "upstreams/source-b",
+      "tracked_entries": 379,
+      "unique_skill_names": 31
+    },
+    "source-c": {
+      "commit": "03fd44d02412889705aa01a635c585c4fa3b1584",
+      "declared_names": 16,
+      "missing_from_normalized_layer": [],
+      "skill_files": 16,
+      "snapshot_matches_lock": true,
+      "snapshot_path": "upstreams/source-c",
+      "tracked_entries": 71,
+      "unique_skill_names": 16
+    },
+    "source-d": {
+      "commit": "7868cb9251fad80a73d26e488a5ad5f6c4a9f335",
+      "declared_names": 49,
+      "missing_from_normalized_layer": [],
+      "skill_files": 49,
+      "snapshot_matches_lock": true,
+      "snapshot_path": "upstreams/source-d",
+      "tracked_entries": 429,
+      "unique_skill_names": 49
+    }
+  }
+}

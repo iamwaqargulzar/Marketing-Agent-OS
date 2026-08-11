@@ -1,0 +1,207 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aaron-he-zhu/aaron-marketing-skills/references/system-catalog.schema.json",
+  "title": "Aaron Marketing System Catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema", "schema_version", "architecture_version", "bundle_version",
+    "capability_profiles", "counts", "logical_order", "layers", "commands", "disciplines",
+    "protocol", "registries", "auditors", "l1_dependency", "symmetry", "distribution_profiles"
+  ],
+  "properties": {
+    "$schema": {"const": "./system-catalog.schema.json"},
+    "schema_version": {"const": "1.2"},
+    "architecture_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "bundle_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "capability_profiles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "sha256"],
+      "properties": {
+        "source": {"const": "references/capability-profiles.json"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["disciplines", "discipline_skills", "protocol_skills", "total_skills", "commands", "registries", "auditors"],
+      "properties": {
+        "disciplines": {"const": 7},
+        "discipline_skills": {"const": 112},
+        "protocol_skills": {"const": 8},
+        "total_skills": {"const": 120},
+        "commands": {"const": 8},
+        "registries": {"const": 7},
+        "auditors": {"const": 8}
+      }
+    },
+    "logical_order": {"type": "array", "minItems": 8, "maxItems": 8, "uniqueItems": true, "items": {"type": "string"}},
+    "layers": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "prefixItems": [
+        {"$ref": "#/$defs/layerL1"},
+        {"$ref": "#/$defs/layerL2"},
+        {"$ref": "#/$defs/layerL3"},
+        {"$ref": "#/$defs/layerL4"}
+      ],
+      "items": false
+    },
+    "commands": {"type": "array", "minItems": 8, "maxItems": 8, "uniqueItems": true, "items": {"type": "string"}},
+    "disciplines": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["narrative", "seo-geo", "social", "email", "ad", "influencer", "launch"],
+      "properties": {
+        "narrative": {"$ref": "#/$defs/discipline"},
+        "seo-geo": {"$ref": "#/$defs/discipline"},
+        "social": {"$ref": "#/$defs/discipline"},
+        "email": {"$ref": "#/$defs/discipline"},
+        "ad": {"$ref": "#/$defs/discipline"},
+        "influencer": {"$ref": "#/$defs/discipline"},
+        "launch": {"$ref": "#/$defs/discipline"}
+      }
+    },
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["display_name", "layer", "skills"],
+      "properties": {
+        "display_name": {"type": "string", "minLength": 1},
+        "layer": {"const": "L4"},
+        "skills": {"type": "array", "minItems": 8, "maxItems": 8, "uniqueItems": true, "items": {"type": "string"}}
+      }
+    },
+    "registries": {"type": "array", "minItems": 7, "maxItems": 7},
+    "auditors": {"type": "array", "minItems": 8, "maxItems": 8, "items": {"$ref": "#/$defs/auditor"}},
+    "l1_dependency": {"type": "object"},
+    "symmetry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rules", "deviations"],
+      "properties": {
+        "rules": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": {"pattern": "^SYM-[0-9]{2}-[a-z0-9-]+$"},
+          "additionalProperties": {"type": "string", "minLength": 1}
+        },
+        "deviations": {"type": "array", "items": {"$ref": "#/$defs/deviation"}}
+      }
+    },
+    "distribution_profiles": {"type": "object"}
+  },
+  "$defs": {
+    "layer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "purpose", "disciplines", "cadence"],
+      "properties": {
+        "id": {"enum": ["L1", "L2", "L3", "L4"]},
+        "name": {"type": "string", "minLength": 1},
+        "purpose": {"type": "string", "minLength": 1},
+        "disciplines": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "cadence": {"type": "string", "minLength": 1}
+      }
+    },
+    "layerL1": {
+      "allOf": [
+        {"$ref": "#/$defs/layer"},
+        {"properties": {"id": {"const": "L1"}, "disciplines": {"const": ["narrative"]}}}
+      ]
+    },
+    "layerL2": {
+      "allOf": [
+        {"$ref": "#/$defs/layer"},
+        {"properties": {"id": {"const": "L2"}, "disciplines": {"const": ["seo-geo", "social", "email", "ad", "influencer"]}}}
+      ]
+    },
+    "layerL3": {
+      "allOf": [
+        {"$ref": "#/$defs/layer"},
+        {"properties": {"id": {"const": "L3"}, "disciplines": {"const": ["launch"]}}}
+      ]
+    },
+    "layerL4": {
+      "allOf": [
+        {"$ref": "#/$defs/layer"},
+        {"properties": {"id": {"const": "L4"}, "disciplines": {"const": ["protocol"]}}}
+      ]
+    },
+    "discipline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["display_name", "layer", "frameworks", "loop_name", "loop", "phase_order", "command", "registry", "gates", "phases"],
+      "properties": {
+        "display_name": {"type": "string", "minLength": 1},
+        "layer": {"enum": ["L1", "L2", "L3"]},
+        "frameworks": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "loop_name": {"type": "string", "pattern": "^[A-Z]{4}$"},
+        "loop": {"type": "string", "minLength": 1},
+        "phase_order": {"type": "array", "minItems": 4, "maxItems": 4, "uniqueItems": true, "items": {"type": "string"}},
+        "command": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "selector", "values"],
+          "properties": {
+            "name": {"type": "string", "minLength": 1},
+            "selector": {"const": "phase"},
+            "values": {"type": "array", "minItems": 4, "maxItems": 4, "uniqueItems": true, "items": {"type": "string"}}
+          }
+        },
+        "registry": {"type": "string", "minLength": 1},
+        "gates": {"type": "array", "minItems": 1, "maxItems": 2, "uniqueItems": true, "items": {"type": "string"}},
+        "phases": {
+          "type": "object",
+          "minProperties": 4,
+          "maxProperties": 4,
+          "additionalProperties": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "uniqueItems": true,
+            "items": {"type": "string"}
+          }
+        }
+      }
+    },
+    "auditor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["skill", "framework", "path", "sink", "runtime_sources", "score_surface"],
+      "properties": {
+        "skill": {"type": "string", "minLength": 1},
+        "framework": {"type": "string", "minLength": 1},
+        "path": {"type": "string", "minLength": 1},
+        "sink": {"type": "string", "pattern": "^memory/audits/[a-z-]+/$"},
+        "runtime_sources": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "score_surface": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "name", "rollup"],
+          "properties": {
+            "type": {"enum": ["composite", "diagnostic", "profiles-only"]},
+            "name": {"type": ["string", "null"], "minLength": 1},
+            "rollup": {"enum": ["weighted-arithmetic-mean", "geometric-mean", "none"]}
+          }
+        }
+      }
+    },
+    "deviation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "rule", "scope", "rationale", "since_version"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^DEV-[A-Z0-9-]+$"},
+        "rule": {"type": "string", "pattern": "^SYM-[0-9]{2}-[a-z0-9-]+$"},
+        "scope": {"type": "string", "pattern": "^(discipline|registry|auditor|skill|command):[a-z0-9/_-]+$"},
+        "rationale": {"type": "string", "minLength": 1},
+        "source_doc": {"type": "string", "minLength": 1},
+        "since_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"}
+      }
+    }
+  }
+}

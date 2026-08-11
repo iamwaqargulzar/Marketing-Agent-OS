@@ -1,0 +1,84 @@
+name: Bug report
+description: Report a reproducible problem in a skill, installer, helper, or package workflow.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Marketing Agent OS. Remove credentials and private business data before submitting.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options:
+        - Skill behavior or routing
+        - Installer or harness path
+        - Helper script
+        - Upstream reconciliation
+        - Documentation
+        - CI or repository metadata
+    validations:
+      required: true
+  - type: input
+    id: skill
+    attributes:
+      label: Skill name
+      description: Leave blank when the issue is not skill-specific.
+      placeholder: marketing-os
+  - type: input
+    id: environment
+    attributes:
+      label: Operating system and version
+      placeholder: Ubuntu 24.04, macOS 15, or Windows 11
+    validations:
+      required: true
+  - type: input
+    id: harness
+    attributes:
+      label: Agent harness and version
+      placeholder: Codex CLI 0.x, OpenCode 1.x, Claude Code, Pi, Amp, or other
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Provide the smallest sequence that reliably reproduces the problem.
+      placeholder: |
+        1. Run ...
+        2. Install ...
+        3. Invoke ...
+        4. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior and sanitized logs
+    validations:
+      required: true
+  - type: textarea
+    id: doctor
+    attributes:
+      label: Doctor or reconciliation output
+      description: Paste sanitized output from `python3 scripts/doctor.py` or the relevant validation command.
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checks
+      options:
+        - label: I searched existing issues and discussions.
+          required: true
+        - label: I removed credentials and private data.
+          required: true
+        - label: This is not a private security vulnerability.
+          required: true

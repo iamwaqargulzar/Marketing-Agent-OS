@@ -1,0 +1,21 @@
+# Keep release hashes stable across Linux, macOS, and Windows checkouts.
+* text=auto eol=lf
+/install.sh text eol=lf
+/install.ps1 text eol=lf
+/scripts/** text eol=lf
+/tests/** text eol=lf
+/.github/** text eol=lf
+/*.md text eol=lf
+/*.json text eol=lf
+/*.txt text eol=lf
+
+# Preserve exact upstream bytes and keep vendored sources out of language stats.
+/upstreams/** -text -eol linguist-vendored
+/THIRD_PARTY_LICENSES/** -text -eol
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.pdf binary

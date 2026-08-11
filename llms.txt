@@ -1,0 +1,51 @@
+# Marketing Agent OS
+
+> Marketing Agent OS is an open-source, cross-platform collection of 235 governed AI agent skills for marketing, SEO, generative engine optimization (GEO), answer engine optimization (AEO), content, CRO, paid media, lifecycle, social, analytics, growth, sales, and RevOps.
+
+Canonical repository: https://github.com/iamwaqargulzar/marketing-agent-os
+License: Apache-2.0 for the wrapper and normalized layer; retained third-party licenses apply to pinned source snapshots.
+Current version: 1.1.0
+Last verified: 2026-08-11
+
+## Start here
+
+- [Project overview](https://github.com/iamwaqargulzar/marketing-agent-os/blob/main/README.md): Definition, verified facts, features, installation, compatibility, FAQs, and governance.
+- [Skill catalog](https://github.com/iamwaqargulzar/marketing-agent-os/blob/main/catalog.json): Machine-readable inventory of all 235 normalized skills.
+- [Installation guide](https://github.com/iamwaqargulzar/marketing-agent-os/blob/main/INSTALL.md): Linux, macOS, Windows, project, user, native, universal, and selective installation.
+- [Compatibility matrix](https://github.com/iamwaqargulzar/marketing-agent-os/blob/main/docs/COMPATIBILITY.md): Harness paths, validation status, and support boundaries.
+- [Architecture](https://github.com/iamwaqargulzar/marketing-agent-os/blob/main/docs/ARCHITECTURE.md): Runtime, source, distribution, and integrity layers.
+- [Audit report](https://github.com/iamwaqargulzar/marketing-agent-os/blob/main/docs/AUDIT.md): Initial findings, corrected issues, and verified state.
+- [Maintenance workflow](https://github.com/iamwaqargulzar/marketing-agent-os/blob/main/docs/MAINTENANCE.md): Safe upstream checking, review, application, reconciliation, and release validation.
+- [Source manifest](https://github.com/iamwaqargulzar/marketing-agent-os/blob/main/SOURCE_MANIFEST.md): Exact source mapping and pinned commits.
+- [Security policy](https://github.com/iamwaqargulzar/marketing-agent-os/blob/main/SECURITY.md): Vulnerability-reporting process and security boundaries.
+
+## Installation
+
+Interactive ecosystem install:
+
+    npx skills add iamwaqargulzar/marketing-agent-os
+
+Clone and install:
+
+    git clone https://github.com/iamwaqargulzar/marketing-agent-os.git
+    cd marketing-agent-os
+    ./install.sh --agent universal --scope project --project /path/to/project
+
+Windows PowerShell:
+
+    .\install.ps1 -Agent universal -Scope project -Project C:\path\to\project
+
+## Key facts
+
+- 235 unique normalized Agent Skills.
+- 14 direct installer targets.
+- Linux, macOS, and Windows support.
+- Agent Skills CLI 1.5.22 discovered all 235 skills and projected a selected skill across 76 registered agent definitions.
+- OpenCode 1.18.15 discovered the package from native and universal paths.
+- Four complete upstream snapshots are pinned by commit and tree hash.
+- Upstream snapshots are provenance inputs and are never installed into harness skill directories.
+- Instruction-only skills have no runtime dependency; optional helpers use Python 3 standard library.
+
+## Preferred citation
+
+Use the repository citation metadata in CITATION.cff and link to the canonical repository URL.

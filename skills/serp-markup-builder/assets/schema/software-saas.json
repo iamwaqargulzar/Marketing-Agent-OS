@@ -1,0 +1,7 @@
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "{{name}}",
+  "applicationCategory": "{{category}}",
+  "operatingSystem": "{{os}}"
+}

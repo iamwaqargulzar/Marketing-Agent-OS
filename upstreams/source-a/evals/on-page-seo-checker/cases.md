@@ -1,0 +1,3 @@
+```yaml
+{id: routing-command-audit-onpage-001, type: eval-case, status: simulated, target_skill: on-page-seo-checker, scenario: "User asks for page-level SEO defects before content quality gating.", input_summary: "Audit headings, title, image alt text, internal links, and keyword fit for this URL.", expected_behavior: ["Route /aaron-marketing:seo-geo --phase tune to on-page-seo-checker when the request is page SEO mechanics.", "Hand off quality or YMYL readiness to content-quality-auditor.", "Do not mark publish-ready from on-page checks alone."], failure_modes: ["Routes every audit to content-quality-auditor.", "Skips on-page mechanics.", "Claims ready without quality gate."]}
+```

@@ -1,0 +1,359 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aaron-he-zhu/aaron-marketing-skills/references/release-assets.schema.json",
+  "title": "Deterministic release asset ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "product",
+    "version",
+    "source",
+    "archive_policy",
+    "assets",
+    "checksums"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.1"
+    },
+    "product": {
+      "const": "aaron-marketing-skills"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "commit"
+      ],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"
+        }
+      }
+    },
+    "archive_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "tar_format",
+        "root",
+        "path_order",
+        "mtime",
+        "uid",
+        "gid",
+        "uname",
+        "gname",
+        "directory_mode",
+        "regular_mode",
+        "executable_mode",
+        "gzip_mtime",
+        "gzip_os"
+      ],
+      "properties": {
+        "format": {
+          "const": "tar+gzip"
+        },
+        "tar_format": {
+          "const": "ustar"
+        },
+        "root": {
+          "const": "filename-without-.tar.gz"
+        },
+        "path_order": {
+          "const": "bytewise-ascending"
+        },
+        "mtime": {
+          "const": 0
+        },
+        "uid": {
+          "const": 0
+        },
+        "gid": {
+          "const": 0
+        },
+        "uname": {
+          "const": ""
+        },
+        "gname": {
+          "const": ""
+        },
+        "directory_mode": {
+          "const": "0755"
+        },
+        "regular_mode": {
+          "const": "0644"
+        },
+        "executable_mode": {
+          "const": "0755"
+        },
+        "gzip_mtime": {
+          "const": 0
+        },
+        "gzip_os": {
+          "const": 255
+        }
+      }
+    },
+    "assets": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/liteAsset"
+        },
+        {
+          "$ref": "#/$defs/proAsset"
+        },
+        {
+          "$ref": "#/$defs/governedAsset"
+        },
+        {
+          "$ref": "#/$defs/agentPluginV1LiteAsset"
+        }
+      ],
+      "items": false
+    },
+    "checksums": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "filename",
+        "algorithm",
+        "covers",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "filename": {
+          "const": "SHA256SUMS"
+        },
+        "algorithm": {
+          "const": "sha256"
+        },
+        "covers": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "string",
+            "pattern": "^aaron-marketing-skills-[0-9]+\\.[0-9]+\\.[0-9]+-(?:lite|pro|governed|agent-plugin-v1-lite)\\.tar\\.gz$"
+          },
+          "uniqueItems": true
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "profile",
+        "host_profile",
+        "filename",
+        "archive_root",
+        "bytes",
+        "sha256",
+        "distribution_manifest_sha256",
+        "distribution_files_sha256",
+        "profile_definition_sha256",
+        "capability_ceiling"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "plugin",
+            "agent-plugin"
+          ]
+        },
+        "profile": {
+          "enum": [
+            "lite",
+            "pro",
+            "governed",
+            "portable-lite"
+          ]
+        },
+        "host_profile": {
+          "enum": [
+            "claude-code-plugin-host",
+            "agent-plugins-v1"
+          ]
+        },
+        "filename": {
+          "type": "string",
+          "pattern": "^aaron-marketing-skills-[0-9]+\\.[0-9]+\\.[0-9]+-(?:lite|pro|governed|agent-plugin-v1-lite)\\.tar\\.gz$"
+        },
+        "archive_root": {
+          "type": "string",
+          "pattern": "^aaron-marketing-skills-[0-9]+\\.[0-9]+\\.[0-9]+-(?:lite|pro|governed|agent-plugin-v1-lite)$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "distribution_manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "distribution_files_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "profile_definition_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "capability_ceiling": {
+          "enum": [
+            "lite",
+            "pro",
+            "governed",
+            "portable-lite"
+          ]
+        }
+      }
+    },
+    "liteAsset": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/asset"
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "plugin"
+            },
+            "profile": {
+              "const": "lite"
+            },
+            "host_profile": {
+              "const": "claude-code-plugin-host"
+            },
+            "filename": {
+              "pattern": "^aaron-marketing-skills-[0-9]+\\.[0-9]+\\.[0-9]+-lite\\.tar\\.gz$"
+            },
+            "archive_root": {
+              "pattern": "^aaron-marketing-skills-[0-9]+\\.[0-9]+\\.[0-9]+-lite$"
+            },
+            "capability_ceiling": {
+              "const": "lite"
+            }
+          }
+        }
+      ]
+    },
+    "proAsset": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/asset"
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "plugin"
+            },
+            "profile": {
+              "const": "pro"
+            },
+            "host_profile": {
+              "const": "claude-code-plugin-host"
+            },
+            "filename": {
+              "pattern": "^aaron-marketing-skills-[0-9]+\\.[0-9]+\\.[0-9]+-pro\\.tar\\.gz$"
+            },
+            "archive_root": {
+              "pattern": "^aaron-marketing-skills-[0-9]+\\.[0-9]+\\.[0-9]+-pro$"
+            },
+            "capability_ceiling": {
+              "const": "pro"
+            }
+          }
+        }
+      ]
+    },
+    "governedAsset": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/asset"
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "plugin"
+            },
+            "profile": {
+              "const": "governed"
+            },
+            "host_profile": {
+              "const": "claude-code-plugin-host"
+            },
+            "filename": {
+              "pattern": "^aaron-marketing-skills-[0-9]+\\.[0-9]+\\.[0-9]+-governed\\.tar\\.gz$"
+            },
+            "archive_root": {
+              "pattern": "^aaron-marketing-skills-[0-9]+\\.[0-9]+\\.[0-9]+-governed$"
+            },
+            "capability_ceiling": {
+              "const": "governed"
+            }
+          }
+        }
+      ]
+    },
+    "agentPluginV1LiteAsset": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/asset"
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "agent-plugin"
+            },
+            "profile": {
+              "const": "portable-lite"
+            },
+            "host_profile": {
+              "const": "agent-plugins-v1"
+            },
+            "filename": {
+              "pattern": "^aaron-marketing-skills-[0-9]+\\.[0-9]+\\.[0-9]+-agent-plugin-v1-lite\\.tar\\.gz$"
+            },
+            "archive_root": {
+              "pattern": "^aaron-marketing-skills-[0-9]+\\.[0-9]+\\.[0-9]+-agent-plugin-v1-lite$"
+            },
+            "capability_ceiling": {
+              "const": "portable-lite"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

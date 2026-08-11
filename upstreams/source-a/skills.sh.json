@@ -1,0 +1,174 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Brand Narrative · TALE (16) — trace → architect → land → evaluate",
+      "description": "L1 strategy: trace positioning truth, architect the message/voice/story canon, land it across surfaces, then evaluate separate truth, system, and effectiveness profiles. narrative-quality-auditor never averages those unlike constructs.",
+      "skills": [
+        "narrative-baseline-mapper",
+        "category-narrative-mapper",
+        "audience-belief-mapper",
+        "positioning-truth-tracer",
+        "strategic-narrative-designer",
+        "message-system-architect",
+        "brand-language-codifier",
+        "story-bank-builder",
+        "narrative-cascade-planner",
+        "pitch-narrative-builder",
+        "narrative-enablement-kit",
+        "proof-point-packager",
+        "narrative-quality-auditor",
+        "message-test-designer",
+        "narrative-resonance-monitor",
+        "narrative-drift-monitor"
+      ]
+    },
+    {
+      "title": "SEO/GEO · SITE · CORE-EEAT+CITE (16) — survey → implement → tune → evaluate",
+      "description": "Search and generative-engine optimization: keyword/SERP/gap research, content and citation readiness, markup/page plays, CORE-EEAT and CITE auditor gates, then rank, performance, and off-site monitoring.",
+      "skills": [
+        "keyword-research",
+        "competitor-analysis",
+        "serp-analysis",
+        "content-gap-analysis",
+        "content-writer",
+        "geo-content-optimizer",
+        "serp-markup-builder",
+        "page-play-builder",
+        "content-quality-auditor",
+        "technical-seo-checker",
+        "on-page-seo-checker",
+        "site-structure-optimizer",
+        "domain-authority-auditor",
+        "rank-tracker",
+        "performance-monitor",
+        "offsite-signal-analyzer"
+      ]
+    },
+    {
+      "title": "Social · ECHO (16) — explore → craft → host → observe",
+      "description": "Organic social: channel/voice discovery, platform-native planning and creative, inbox/crisis operations, then listening and measurement. social-quality-auditor runs one asset-gate or program-maturity profile per unit, never a mixed composite.",
+      "skills": [
+        "channel-portfolio-planner",
+        "voice-dossier-builder",
+        "platform-norm-profiler",
+        "participation-warmup-planner",
+        "social-calendar-builder",
+        "social-creative-builder",
+        "short-video-scripter",
+        "advocacy-program-designer",
+        "social-quality-auditor",
+        "engagement-inbox-manager",
+        "social-selling-planner",
+        "crisis-response-planner",
+        "social-pulse-monitor",
+        "share-of-voice-tracker",
+        "dark-social-attributor",
+        "social-measurement-loop"
+      ]
+    },
+    {
+      "title": "Email · SEND (16) — setup → engage → nurture → deliver",
+      "description": "Email across promotional, retention, cold-outbound, and newsletter profiles: sender/list setup, creative/rendering, lifecycle journeys, the email-quality-auditor gate, experiments, and provider-level placement monitoring.",
+      "skills": [
+        "deliverability-qa",
+        "list-segment-builder",
+        "list-growth-designer",
+        "list-hygiene-monitor",
+        "email-creative-builder",
+        "subject-line-lab",
+        "email-render-builder",
+        "dynamic-content-personalizer",
+        "email-sequence-designer",
+        "newsletter-monetization-planner",
+        "preference-frequency-manager",
+        "reactivation-specialist",
+        "email-quality-auditor",
+        "send-experiment-designer",
+        "inbox-placement-monitor",
+        "cold-outbound-sequencer"
+      ]
+    },
+    {
+      "title": "Paid ads · ROAS (16) — research → orchestrate → activate → scale",
+      "description": "Paid media across direct-response, prospecting, and incremental-profit profiles: structure/audiences/queries/feed, creative/tests/bids/landing, the ad-account-auditor gate, then attribution, pacing, fatigue, and causal readback.",
+      "skills": [
+        "campaign-architect",
+        "audience-segment-builder",
+        "search-term-miner",
+        "product-feed-optimizer",
+        "ad-creative-builder",
+        "ad-test-designer",
+        "bid-strategy-planner",
+        "landing-experience-checker",
+        "ad-account-auditor",
+        "conversion-signal-qa",
+        "placement-exclusion-manager",
+        "conversion-value-mapper",
+        "paid-measurement-loop",
+        "attribution-reconciler",
+        "budget-pacing-monitor",
+        "fatigue-frequency-manager"
+      ]
+    },
+    {
+      "title": "Influencer marketing · STAR (16) — scout → target → activate → report",
+      "description": "Creator campaigns end to end: audience and creator discovery, planning/briefs/budgets, outreach and the STAR content gate, contracts/amplification, then post-click, ROI, and reporting evidence.",
+      "skills": [
+        "audience-mapper",
+        "trend-spotter",
+        "influencer-discovery",
+        "fit-scorer",
+        "competitor-tracker",
+        "campaign-planner",
+        "brief-generator",
+        "budget-optimizer",
+        "outreach-manager",
+        "creator-content-auditor",
+        "contract-helper",
+        "content-amplifier",
+        "landing-optimizer",
+        "performance-analyzer",
+        "roi-calculator",
+        "report-generator"
+      ]
+    },
+    {
+      "title": "Launch · RAMP (16) — research → assemble → mobilize → prove",
+      "description": "Product launch orchestration: positioning/tier/window/access, assets/pricing/enablement, then separate preflight, execution, and outcome profiles around launch operations, monitoring, feedback, retro, and momentum.",
+      "skills": [
+        "positioning-mapper",
+        "launch-tier-planner",
+        "launch-window-planner",
+        "early-access-designer",
+        "message-house-builder",
+        "launch-asset-packager",
+        "pricing-packaging-planner",
+        "sales-enablement-kit",
+        "launch-readiness-auditor",
+        "launch-day-conductor",
+        "community-launch-runner",
+        "press-media-relations",
+        "launch-monitor",
+        "launch-feedback-synthesizer",
+        "launch-retro-analyzer",
+        "momentum-planner"
+      ]
+    },
+    {
+      "title": "Protocol layer (8) — shared truth registries & memory",
+      "description": "Seven sole-writer registries backed by append-only event streams and rebuildable projections, plus non-canonical HOT/WARM/COLD working memory. Other skills propose; registry owners authorize canonical mutations.",
+      "skills": [
+        "entity-registry",
+        "creator-registry",
+        "offer-claims-registry",
+        "consent-registry",
+        "launch-registry",
+        "channel-registry",
+        "narrative-registry",
+        "memory-management"
+      ]
+    }
+  ]
+}

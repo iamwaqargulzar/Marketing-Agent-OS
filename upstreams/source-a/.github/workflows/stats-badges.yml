@@ -1,0 +1,42 @@
+name: Refresh stats badges
+
+# Self-hosted shields.io endpoint badges: this job reads each registry's
+# registry totals (ClawHub profile downloads, SkillHub totalDownloads, skills.sh
+# profile installs, and the combined installs from two ClaudeSkills collection
+# pages) and writes badges/*.json, which the README renders via
+# img.shields.io/endpoint. Badges refresh every six hours — a transient fetch
+# failure keeps the prior committed value rather than zeroing.
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # 00:00, 06:00, 12:00, 18:00 GMT/UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stats-badges
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate badge JSONs
+        run: python3 scripts/stats-dashboard.py --badges badges
+
+      - name: Commit if changed
+        run: |
+          set -euo pipefail
+          if [ -n "$(git status --porcelain badges/)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add badges/
+            git commit -m "chore(badges): refresh registry download stats [skip ci]"
+            git push
+          else
+            echo "no badge changes"
+          fi

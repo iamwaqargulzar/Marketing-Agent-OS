@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Skill install artifacts (npx skills add)
+.agents/
+.claude/
+skills-lock.json
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# macOS / iCloud duplicate files
+* 2.*
+* 2/
+
+# Remotion video project (root only, not skills/video/)
+/video/
+
+# Editor
+*.swp
+*.swo
+*~
+.idea/
+.vscode/

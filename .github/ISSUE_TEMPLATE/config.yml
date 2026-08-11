@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and support
+    url: https://github.com/iamwaqargulzar/marketing-agent-os/discussions/categories/q-a
+    about: Ask installation, usage, and workflow questions in Discussions.
+  - name: Ideas and open-ended proposals
+    url: https://github.com/iamwaqargulzar/marketing-agent-os/discussions/categories/ideas
+    about: Explore broad ideas before turning them into scoped issues.
+  - name: Private security report
+    url: https://github.com/iamwaqargulzar/marketing-agent-os/security/advisories/new
+    about: Report vulnerabilities privately; do not disclose them in a public issue.

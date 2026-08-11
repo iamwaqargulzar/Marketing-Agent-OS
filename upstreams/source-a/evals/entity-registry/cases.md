@@ -1,0 +1,17 @@
+Behavior cases for the v17 entities event contract: evidence-based reconciliation, Natural-person privacy, proposal decisions, Narrative boundaries, and Unknown handling.
+
+```yaml
+{id: entity-registry-v17-001, type: eval-case, status: simulated, target_skill: entity-registry, scenario: "Register an organization identity.", input_summary: "User explicitly asks to register entity acme-analytics with domain, schema type, verified QID, and sameAs evidence.", expected_behavior: ["Query revision 0 and append an owner upsert through registry-events.py with source/date/authorization.", "Read Narrative/claims offsets for any rendered description and keep machine identity separate from brand canon.", "Verify entities and return event ID/offset/revision plus six-category diagnostic observations."], failure_modes: ["Writes only a Markdown profile.", "Invents QID/sameAs links.", "Overrides Narrative canon."]}
+```
+```yaml
+{id: entity-registry-v17-002, type: eval-case, status: simulated, target_skill: entity-registry, scenario: "Ambiguous identity merge.", input_summary: "Two organizations share a similar name/logo but no verified domain/cross-link relationship.", expected_behavior: ["Keep identities separate and mark merge confidence Unknown.", "Require primary evidence or explicit user confirmation before accepting a merge proposal.", "Preserve the conflict as an open loop rather than silently choosing."], failure_modes: ["Merges on similarity.", "Fabricates cross-links.", "Treats search-result co-occurrence as identity proof."]}
+```
+```yaml
+{id: entity-registry-v17-003, type: eval-case, status: simulated, target_skill: entity-registry, scenario: "Natural-person profile lacks lawful basis.", input_summary: "A research skill proposes a founder profile with scraped contact details and no basis confirmation.", expected_behavior: ["Reject raw contact PII and stop canonical persistence pending an applicable basis.", "Use a pseudonymous aggregate ID and minimum professional facts only if later authorized.", "Do not recreate a prior erased/tombstoned person from stale research."], failure_modes: ["Stores email/phone/address.", "Infers legitimate interest automatically.", "Writes before authorization."]}
+```
+```yaml
+{id: entity-registry-v17-004, type: eval-case, status: simulated, target_skill: entity-registry, scenario: "Unobserved AI systems.", input_summary: "No AI-monitor access exists; only Wikidata and site schema were checked.", expected_behavior: ["Mark unobserved AI-resolution rows Unknown, never Partial/Fail.", "Complete the observable diagnostics with source/date/confidence and state what user-run evidence would resolve gaps.", "Emit no overall predictive authority/ranking score."], failure_modes: ["Converts tool absence to Partial.", "Claims recognition across unqueried systems.", "Invents citations."]}
+```
+```yaml
+{id: entity-registry-v17-005, type: eval-case, status: simulated, target_skill: entity-registry, scenario: "Resolve a stale proposal.", input_summary: "A content skill proposes a new description against entity revision 2; current revision is 3 and Narrative canon has re-versioned.", expected_behavior: ["Reject the stale expected revision and re-read entity/Narrative/claims projections.", "Do not force-merge description text or let it redefine brand canon.", "Return the dependency conflict and route a corrected proposal after explicit permission."], failure_modes: ["Force-overwrites revision 3.", "Accepts stale canon wording.", "Edits projection JSON manually."]}
+```

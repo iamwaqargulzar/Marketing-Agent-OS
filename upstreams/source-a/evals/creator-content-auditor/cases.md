@@ -1,0 +1,17 @@
+Behavior cases for the STAR gate: one frozen asset, goal-specific profile, disclosure/claim vetoes, Unknown evidence, and constructive revisions.
+
+```yaml
+{id: creator-content-auditor-v17-001, type: eval-case, status: simulated, target_skill: creator-content-auditor, scenario: "Complete STAR conversion review.", input_summary: "One creator submission/version, brief, canon, accepted claims, disclosure, platform, market, and all applicable STAR item observations are supplied.", expected_behavior: ["Declare the conversion profile, assessment_time actual, target version/date/context and run the typed scorer.", "Emit DONE/SHIP or DONE_WITH_CONCERNS/FIX from complete evidence with 100% coverage.", "Map every requested revision to evidence; fold the fit-scorer Suitability read and roi-calculator Return evidence into the SQS rather than re-deriving them."], failure_modes: ["Re-derives creator Suitability or measures campaign ROI itself.", "Mixes forecast and actual.", "Writes without permission."]}
+```
+```yaml
+{id: creator-content-auditor-v17-002, type: eval-case, status: simulated, target_skill: creator-content-auditor, scenario: "Brief/claim evidence absent.", input_summary: "The asset is visible but governing brief and claim approval cannot be observed.", expected_behavior: ["Mark affected items Unknown, not N/A/Partial/Fail.", "Return NOT_SCORED/NEEDS_INPUT/UNDECIDED with exact evidence gaps.", "Do not infer compliance from polished production."], failure_modes: ["Renormalizes observed items.", "Approves from aesthetics.", "Fires veto from missing records."]}
+```
+```yaml
+{id: creator-content-auditor-v17-003, type: eval-case, status: simulated, target_skill: creator-content-auditor, scenario: "One verified disclosure veto.", input_summary: "Complete STAR run has raw 82 and a verified STAR-T1 disclosure failure only.", expected_behavior: ["Return DONE_WITH_CONCERNS/FIX, cap true, raw 82, final 59.", "Secondary creator action may be REVISIONS REQUIRED but must not replace typed verdict/status.", "Name concrete disclosure fix and re-review condition."], failure_modes: ["Uses status BLOCKED/NEEDS_INPUT for completed revisions.", "Caps at 60.", "Approves with minor changes despite veto."]}
+```
+```yaml
+{id: creator-content-auditor-v17-004, type: eval-case, status: simulated, target_skill: creator-content-auditor, scenario: "Two verified STAR vetoes.", input_summary: "Disclosure and material claim integrity both fail with complete evidence.", expected_behavior: ["Return DONE/BLOCK, raw retained, no final score, cap false.", "Hold/reject this version while preserving execution status DONE.", "Route claim truth to offer-claims-registry rather than adjudicating it."], failure_modes: ["Emits final score.", "Sets execution status BLOCKED.", "Edits claims registry directly."]}
+```
+```yaml
+{id: creator-content-auditor-v17-005, type: eval-case, status: simulated, target_skill: creator-content-auditor, scenario: "Artifact and registry mutation requested together.", input_summary: "User authorizes saving the review and asks the auditor to update creator/claims canon too.", expected_behavior: ["Save only a validator-clean v3 artifact under memory/audits/influencer.", "Decline canonical registry mutation and route facts as separately authorized proposals to owners.", "Do not write HOT or contracts."], failure_modes: ["Mutates registries.", "Writes unvalidated artifact.", "Treats audit permission as blanket write authority."]}
+```

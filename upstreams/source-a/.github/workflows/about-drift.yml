@@ -1,0 +1,26 @@
+# Weekly read-only drift sentinel for the GitHub repo About (sidebar description + topics).
+# The About is not a repo file, so it silently drifted on the v13/v14 discipline bumps.
+# Its SSOT is .github/repo-about.json (projected to GitHub by scripts/sync-about.sh --live,
+# owner-run at release time — editing repo metadata needs admin, which the CI token can't hold).
+# This job only reads the live About and makes silent drift loud; it never pushes.
+# (Mirror of family-drift.yml for the downstream repo family.)
+name: about-drift
+
+on:
+  schedule:
+    - cron: '23 6 * * 1' # Mondays 06:23 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check GitHub About against SSOT (dry-run, read-only)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: bash scripts/sync-about.sh

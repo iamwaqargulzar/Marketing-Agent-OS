@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aaron-he-zhu/aaron-marketing-skills/references/registry-event.schema.json",
+  "title": "Aaron Marketing Registry Event Request v1",
+  "description": "Request shape only. The registry argument is external to this JSON, so the runtime additionally enforces request/root-bound host capabilities, consent-specific minimization, and event authority signatures.",
+  "x-runtime-constraints": {
+    "authority": "Owner capabilities authorize exactly one normalized request and bind registry, principal, operation, aggregate_id, idempotency_key, resolved project-root hash, single-use capability ID, and expiry. Data-subject consent erase requires the same request-bound safety capability. Canonical events persist an HMAC authority signature that replay verifies.",
+    "suppression": "Consent suppress is an intentional privacy-first deny-only path: any schema-valid producer may add suppression for a pseudonymous aggregate, but cannot erase, restore, authorize delivery, or mutate other canonical state.",
+    "consent_minimization": {
+      "normalization": "All strings and keys are checked after Unicode NFKC normalization; only actual timestamp fields receive ISO date-time phone-pattern exemption.",
+      "set_fields": ["subscription_status", "basis_ref", "proof_ref", "capture_ref", "lawful_basis", "consented_at", "expires_at", "jurisdiction", "channel"],
+      "reason_codes": ["complaint", "consent-correction", "data-subject-erasure", "hard-bounce", "new-confirmed-opt-in", "retention-expiry", "unsubscribe", "user-request", "withdrawal"],
+      "free_text": "Consent payloads reject unrecognized set/unset fields and free-text reasons; references must be opaque non-PII tokens matching ^[A-Za-z0-9][A-Za-z0-9._:-]{0,511}$, not URLs or percent-encoded contact data."
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "upsertPayload": {
+      "type": "object",
+      "not": {"required": ["transition"]},
+      "anyOf": [
+        {"required": ["set"], "properties": {"set": {"minProperties": 1}}},
+        {"required": ["unset"], "properties": {"unset": {"minItems": 1}}}
+      ]
+    },
+    "transitionPayload": {
+      "type": "object",
+      "required": ["transition"],
+      "not": {"anyOf": [{"required": ["set"]}, {"required": ["unset"]}]}
+    },
+    "reasonOnlyPayload": {
+      "type": "object",
+      "required": ["reason"],
+      "properties": {"reason": {"minLength": 1}},
+      "not": {"anyOf": [
+        {"required": ["set"]}, {"required": ["unset"]}, {"required": ["transition"]}
+      ]}
+    },
+    "restorePayload": {
+      "type": "object",
+      "required": ["reason", "set"],
+      "properties": {
+        "reason": {"minLength": 1},
+        "set": {
+          "minProperties": 2,
+          "required": ["subscription_status", "basis_ref"],
+          "properties": {
+            "subscription_status": {"const": "subscribed"},
+            "basis_ref": {
+              "description": "Trusted opt-in evidence pointer. Runtime requires this string to equal source.ref.",
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      "not": {"anyOf": [{"required": ["unset"]}, {"required": ["transition"]}]}
+    }
+  },
+  "required": [
+    "schema_version", "idempotency_key", "aggregate_id", "operation",
+    "occurred_at", "actor", "authorized_by", "authorization_ref", "source"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "idempotency_key": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "aggregate_id": {
+      "description": "Pseudonymous record identity. For data-subject consent erasure, runtime requires actor.id equality plus a host-issued safety capability bound to the complete request.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "operation": {"enum": ["propose", "accept", "reject", "upsert", "transition", "tombstone", "suppress", "restore", "erase"]},
+    "proposed_operation": {"enum": ["upsert", "transition", "tombstone"]},
+    "proposal_event_id": {"type": "string", "format": "uuid"},
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "actor": {
+      "description": "Audit attribution only. Canonical/erasure authority is an out-of-band, request-specific host capability and cannot be asserted in this request.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "id"],
+      "properties": {
+        "type": {"enum": ["user", "skill", "system", "data-subject"]},
+        "id": {"type": "string", "minLength": 1, "maxLength": 128}
+      }
+    },
+    "authorized_by": {
+      "description": "Claimed decision provenance, never an owner or data-subject credential.",
+      "enum": ["user", "data-subject"]
+    },
+    "authorization_ref": {
+      "description": "Audit pointer only; never a bearer token or owner capability.",
+      "type": "string", "minLength": 1, "maxLength": 256
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "ref", "observed_at"],
+      "properties": {
+        "type": {"enum": ["measured", "user-provided", "calculated", "estimated", "proxy"]},
+        "ref": {"type": "string", "minLength": 1, "maxLength": 512},
+        "observed_at": {
+          "type": "string",
+          "oneOf": [{"format": "date"}, {"format": "date-time"}]
+        }
+      }
+    },
+    "expected_revision": {"type": "integer", "minimum": 0},
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "set": {
+          "type": "object",
+          "propertyNames": {"pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$"}
+        },
+        "unset": {"type": "array", "items": {"type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$"}, "uniqueItems": true},
+        "transition": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["from", "to"],
+          "properties": {"from": {"type": ["string", "null"]}, "to": {"type": "string", "minLength": 1}}
+        },
+        "reason": {"type": "string", "maxLength": 1024}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"operation": {"const": "propose"}}, "required": ["operation"]},
+      "then": {"required": ["proposed_operation", "expected_revision", "payload"]},
+      "else": {"not": {"required": ["proposed_operation"]}}
+    },
+    {
+      "if": {"properties": {"operation": {"const": "propose"}, "proposed_operation": {"const": "upsert"}}, "required": ["operation", "proposed_operation"]},
+      "then": {"properties": {"payload": {"$ref": "#/$defs/upsertPayload"}}}
+    },
+    {
+      "if": {"properties": {"operation": {"const": "propose"}, "proposed_operation": {"const": "transition"}}, "required": ["operation", "proposed_operation"]},
+      "then": {"properties": {"payload": {"$ref": "#/$defs/transitionPayload"}}}
+    },
+    {
+      "if": {"properties": {"operation": {"const": "propose"}, "proposed_operation": {"const": "tombstone"}}, "required": ["operation", "proposed_operation"]},
+      "then": {"properties": {"payload": {"$ref": "#/$defs/reasonOnlyPayload"}}}
+    },
+    {
+      "if": {"properties": {"operation": {"const": "upsert"}}, "required": ["operation"]},
+      "then": {"required": ["expected_revision", "payload"], "properties": {"payload": {"$ref": "#/$defs/upsertPayload"}}}
+    },
+    {
+      "if": {"properties": {"operation": {"const": "transition"}}, "required": ["operation"]},
+      "then": {"required": ["expected_revision", "payload"], "properties": {"payload": {"$ref": "#/$defs/transitionPayload"}}}
+    },
+    {
+      "if": {"properties": {"operation": {"const": "tombstone"}}, "required": ["operation"]},
+      "then": {"required": ["expected_revision", "payload"], "properties": {"payload": {"$ref": "#/$defs/reasonOnlyPayload"}}}
+    },
+    {
+      "if": {"properties": {"operation": {"const": "suppress"}}, "required": ["operation"]},
+      "then": {"required": ["payload"], "properties": {"payload": {"$ref": "#/$defs/reasonOnlyPayload"}}}
+    },
+    {
+      "if": {"properties": {"operation": {"const": "restore"}}, "required": ["operation"]},
+      "then": {
+        "required": ["expected_revision", "payload"],
+        "properties": {
+          "payload": {"$ref": "#/$defs/restorePayload"},
+          "source": {
+            "description": "Runtime also requires source.ref to equal payload.set.basis_ref and source.observed_at to be later than the latest withdrawal and no later than occurred_at.",
+            "properties": {
+              "type": {"enum": ["measured", "user-provided"]},
+              "observed_at": {"type": "string", "format": "date-time"}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"operation": {"const": "erase"}}, "required": ["operation"]},
+      "then": {"required": ["payload"], "properties": {"payload": {"$ref": "#/$defs/reasonOnlyPayload"}}}
+    },
+    {
+      "if": {
+        "properties": {"authorized_by": {"const": "data-subject"}},
+        "required": ["authorized_by"]
+      },
+      "then": {
+        "description": "Runtime additionally requires actor.id to equal aggregate_id. Erase also requires a request-bound host safety capability; JSON Schema cannot express either cross-field equality or out-of-band authority portably.",
+        "properties": {
+          "operation": {"enum": ["suppress", "erase"]},
+          "actor": {
+            "properties": {"type": {"const": "data-subject"}},
+            "required": ["type"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "allOf": [
+          {"properties": {"operation": {"const": "erase"}}, "required": ["operation"]},
+          {"not": {"properties": {
+            "authorized_by": {"const": "data-subject"},
+            "actor": {"properties": {"type": {"const": "data-subject"}}, "required": ["type"]}
+          }, "required": ["authorized_by", "actor"]}}
+        ]
+      },
+      "then": {"required": ["expected_revision"]}
+    },
+    {
+      "if": {"properties": {"operation": {"enum": ["accept", "reject"]}}, "required": ["operation"]},
+      "then": {
+        "required": ["proposal_event_id"],
+        "not": {"anyOf": [
+          {"required": ["expected_revision"]},
+          {"properties": {"payload": {"anyOf": [
+            {"required": ["set"]}, {"required": ["unset"]}, {"required": ["transition"]}
+          ]}}, "required": ["payload"]}
+        ]}
+      },
+      "else": {"not": {"required": ["proposal_event_id"]}}
+    },
+    {
+      "if": {"properties": {"operation": {"const": "reject"}}, "required": ["operation"]},
+      "then": {
+        "required": ["payload"],
+        "properties": {"payload": {"required": ["reason"], "properties": {"reason": {"minLength": 1}}}}
+      }
+    }
+  ]
+}
