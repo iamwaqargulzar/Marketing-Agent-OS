@@ -12,6 +12,7 @@
 - Added complete pinned snapshots of all four upstream repositories.
 - Added atomic upstream checking/updating, lock hashes, reconciliation, and local maintenance documentation.
 - Added a citation-friendly public repository page, `llms.txt`, citation metadata, support and security policies, issue forms, pull-request checks, and dependency maintenance.
+- Published the canonical public repository as `iamwaqargulzar/Marketing-Agent-OS` and standardized the root Apache-2.0 license for GitHub detection.
 
 ## 1.0.0 — 2026-08-10
 

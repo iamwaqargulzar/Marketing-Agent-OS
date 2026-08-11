@@ -2,11 +2,11 @@
 
 Use the channel that matches your request:
 
-- **Setup or usage question:** start a [GitHub Discussion](https://github.com/iamwaqargulzar/marketing-agent-os/discussions/categories/q-a).
-- **Idea or broad proposal:** use [Ideas](https://github.com/iamwaqargulzar/marketing-agent-os/discussions/categories/ideas).
-- **Reproducible defect:** open a [bug report](https://github.com/iamwaqargulzar/marketing-agent-os/issues/new?template=bug_report.yml).
-- **Scoped enhancement:** open a [feature request](https://github.com/iamwaqargulzar/marketing-agent-os/issues/new?template=feature_request.yml).
-- **Upstream source change:** open an [upstream update report](https://github.com/iamwaqargulzar/marketing-agent-os/issues/new?template=upstream_update.yml).
+- **Setup or usage question:** start a [GitHub Discussion](https://github.com/iamwaqargulzar/Marketing-Agent-OS/discussions/categories/q-a).
+- **Idea or broad proposal:** use [Ideas](https://github.com/iamwaqargulzar/Marketing-Agent-OS/discussions/categories/ideas).
+- **Reproducible defect:** open a [bug report](https://github.com/iamwaqargulzar/Marketing-Agent-OS/issues/new?template=bug_report.yml).
+- **Scoped enhancement:** open a [feature request](https://github.com/iamwaqargulzar/Marketing-Agent-OS/issues/new?template=feature_request.yml).
+- **Upstream source change:** open an [upstream update report](https://github.com/iamwaqargulzar/Marketing-Agent-OS/issues/new?template=upstream_update.yml).
 - **Security vulnerability:** follow [`SECURITY.md`](SECURITY.md) and report it privately.
 
 Before requesting help, run:

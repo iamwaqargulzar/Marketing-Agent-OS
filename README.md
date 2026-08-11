@@ -2,9 +2,8 @@
 
 **A cross-platform operating system for AI-powered marketing work.**
 
-[![CI](https://github.com/iamwaqargulzar/marketing-agent-os/actions/workflows/ci.yml/badge.svg)](https://github.com/iamwaqargulzar/marketing-agent-os/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/iamwaqargulzar/marketing-agent-os?display_name=tag)](https://github.com/iamwaqargulzar/marketing-agent-os/releases/latest)
-[![License](https://img.shields.io/github/license/iamwaqargulzar/marketing-agent-os)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/iamwaqargulzar/Marketing-Agent-OS?display_name=tag)](https://github.com/iamwaqargulzar/Marketing-Agent-OS/releases/latest)
+[![License](https://img.shields.io/github/license/iamwaqargulzar/Marketing-Agent-OS)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-235-6f42c1)](catalog.json)
 [![Platforms](https://img.shields.io/badge/platforms-Linux%20%7C%20macOS%20%7C%20Windows-167d3e)](docs/COMPATIBILITY.md)
 
@@ -61,13 +60,13 @@ Browse the complete machine-readable inventory in [`catalog.json`](catalog.json)
 The easiest cross-harness installation route is:
 
 ```bash
-npx skills add iamwaqargulzar/marketing-agent-os
+npx skills add iamwaqargulzar/Marketing-Agent-OS
 ```
 
 Choose only the agents and skills you need when prompted. For a focused starting set:
 
 ```bash
-npx skills add iamwaqargulzar/marketing-agent-os \
+npx skills add iamwaqargulzar/Marketing-Agent-OS \
   --skill marketing-os product-marketing seo ai-seo cro \
   --agent codex claude-code opencode pi amp
 ```
@@ -77,7 +76,7 @@ Installing all 235 skills into every harness creates many copies and may crowd s
 ### Clone and use the cross-platform installer
 
 ```bash
-git clone https://github.com/iamwaqargulzar/marketing-agent-os.git
+git clone https://github.com/iamwaqargulzar/Marketing-Agent-OS.git
 cd marketing-agent-os
 ```
 
@@ -187,7 +186,7 @@ python3 -m unittest discover -s tests -v
 npx --yes skills@1.5.22 add . --list --full-depth
 ```
 
-The current release passes 14 tests, validates all 235 skills with zero doctor errors or warnings, and records every release entry in [`SHA256SUMS.json`](SHA256SUMS.json). CI repeats validation on Linux, macOS, and Windows.
+The current release passes 14 tests, validates all 235 skills with zero doctor errors or warnings, and records every release entry in [`SHA256SUMS.json`](SHA256SUMS.json). The included GitHub Actions workflow is configured to repeat validation on Linux, macOS, and Windows when repository runners are available.
 
 ## Frequently asked questions
 
@@ -230,7 +229,7 @@ Each source is pinned by repository URL, commit hash, file count, license, and n
 
 ## Community
 
-Questions and ideas belong in [GitHub Discussions](https://github.com/iamwaqargulzar/marketing-agent-os/discussions). Reproducible defects and scoped feature requests belong in [GitHub Issues](https://github.com/iamwaqargulzar/marketing-agent-os/issues). Contributions are welcome through pull requests; read [`CONTRIBUTING.md`](CONTRIBUTING.md) first.
+Questions and ideas belong in [GitHub Discussions](https://github.com/iamwaqargulzar/Marketing-Agent-OS/discussions). Reproducible defects and scoped feature requests belong in [GitHub Issues](https://github.com/iamwaqargulzar/Marketing-Agent-OS/issues). Contributions are welcome through pull requests; read [`CONTRIBUTING.md`](CONTRIBUTING.md) first.
 
 ## License and provenance
 
