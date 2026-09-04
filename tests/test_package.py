@@ -274,6 +274,7 @@ class PackageTests(unittest.TestCase):
     def test_manifest_is_sorted_and_complete(self):
         manifest = json.loads((ROOT / "SHA256SUMS.json").read_text(encoding="utf-8"))
         self.assertEqual(list(manifest), sorted(manifest))
+        self.assertTrue(all("\\" not in relative for relative in manifest))
         for relative, expected in manifest.items():
             path = ROOT / relative
             payload = os.readlink(path).encode("utf-8") if path.is_symlink() else path.read_bytes()

@@ -24,7 +24,7 @@ def included(path: Path) -> bool:
 
 
 manifest = {
-    str(path.relative_to(ROOT)): hashlib.sha256(
+    path.relative_to(ROOT).as_posix(): hashlib.sha256(
         os.readlink(path).encode("utf-8") if path.is_symlink() else path.read_bytes()
     ).hexdigest()
     for path in sorted(ROOT.rglob("*"))

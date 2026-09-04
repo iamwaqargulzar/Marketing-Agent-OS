@@ -249,7 +249,7 @@ def validate_manifest(errors: list[str]) -> None:
         elif digest(target) != expected:
             errors.append(f"manifest: changed {relative}")
     actual = {
-        str(path.relative_to(ROOT))
+        path.relative_to(ROOT).as_posix()
         for path in ROOT.rglob("*")
         if path.is_file()
         and path.name != "SHA256SUMS.json"
