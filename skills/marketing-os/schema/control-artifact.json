@@ -1,0 +1,91 @@
+{
+  "$id": "https://github.com/iamwaqargulzar/Marketing-Agent-OS/blob/main/schema/control-artifact.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "action": {
+      "additionalProperties": false,
+      "properties": {
+        "payload_sha256": { "pattern": "^[0-9a-f]{64}$", "type": "string" },
+        "scope": { "maxLength": 500, "minLength": 1, "type": "string" },
+        "type": {
+          "enum": ["planning", "read-only", "file-write", "account-write", "send", "publish", "spend", "delete", "other"]
+        }
+      },
+      "required": ["type", "scope"],
+      "type": "object"
+    },
+    "artifact_id": { "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$", "type": "string" },
+    "authority": {
+      "additionalProperties": false,
+      "properties": {
+        "granted_at": { "format": "date-time", "type": "string" },
+        "granted_by": { "maxLength": 200, "minLength": 1, "type": "string" },
+        "required": { "type": "boolean" },
+        "scope": { "maxLength": 500, "minLength": 1, "type": "string" },
+        "status": { "enum": ["not-required", "pending", "granted", "denied"] }
+      },
+      "required": ["required", "status", "scope"],
+      "type": "object"
+    },
+    "constraints": {
+      "additionalProperties": false,
+      "properties": {
+        "budget_cap": { "minimum": 0, "type": "number" },
+        "currency": { "pattern": "^[A-Z]{3}$", "type": "string" },
+        "deadline": { "format": "date-time", "type": "string" },
+        "recovery": { "maxLength": 1000, "minLength": 1, "type": "string" },
+        "start_after": { "format": "date-time", "type": "string" },
+        "stop_condition": { "maxLength": 1000, "minLength": 1, "type": "string" }
+      },
+      "type": "object"
+    },
+    "created_at": { "format": "date-time", "type": "string" },
+    "idempotency_key": { "maxLength": 200, "minLength": 1, "type": "string" },
+    "inputs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence_label": { "enum": ["measured", "user-provided", "calculated", "estimated", "proxy"] },
+          "ref": { "maxLength": 500, "minLength": 1, "type": "string" },
+          "sha256": { "pattern": "^[0-9a-f]{64}$", "type": "string" }
+        },
+        "required": ["ref", "evidence_label"],
+        "type": "object"
+      },
+      "maxItems": 100,
+      "type": "array"
+    },
+    "measurement": {
+      "additionalProperties": false,
+      "properties": {
+        "decision_rule": { "maxLength": 1000, "minLength": 1, "type": "string" },
+        "metric": { "maxLength": 200, "minLength": 1, "type": "string" },
+        "source_ref": { "maxLength": 500, "minLength": 1, "type": "string" },
+        "window": { "maxLength": 200, "minLength": 1, "type": "string" }
+      },
+      "required": ["metric", "window", "decision_rule"],
+      "type": "object"
+    },
+    "objective": { "maxLength": 1000, "minLength": 1, "type": "string" },
+    "owner": { "maxLength": 200, "minLength": 1, "type": "string" },
+    "result": {
+      "additionalProperties": false,
+      "properties": {
+        "observed_at": { "format": "date-time", "type": "string" },
+        "outcome": { "enum": ["succeeded", "failed", "partial", "unknown"] },
+        "receipt_ref": { "maxLength": 500, "minLength": 1, "type": "string" }
+      },
+      "required": ["outcome", "observed_at"],
+      "type": "object"
+    },
+    "revision": { "minimum": 1, "type": "integer" },
+    "schema_version": { "const": "1.0" },
+    "state": { "enum": ["proposed", "approved", "executing", "complete", "blocked"] },
+    "updated_at": { "format": "date-time", "type": "string" }
+  },
+  "required": ["schema_version", "artifact_id", "revision", "state", "objective", "owner", "created_at", "updated_at", "inputs", "action", "authority"],
+  "title": "Marketing Agent OS Control Artifact",
+  "type": "object"
+}

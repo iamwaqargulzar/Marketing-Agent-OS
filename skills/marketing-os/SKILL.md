@@ -29,7 +29,8 @@ Use this skill for **marketing os**. Start from the user’s concrete objective 
 3. For cross-channel work, establish the narrative/claims truth before producing publish-ready downstream assets.
 4. Run specialists in parallel only when their inputs are independent. Otherwise sequence by dependency.
 5. Apply the evidence, permission, and handoff contract in `references/skill-contract.md`.
-6. For high-impact deliverables, run the relevant quality gate and return one integrated recommendation rather than disconnected expert notes.
+6. For cross-skill or side-effecting workflows, apply `references/control-artifacts.md`; keep proposal, approval, execution, receipt, and measurement separate.
+7. For high-impact deliverables, run the relevant quality gate and return one integrated recommendation rather than disconnected expert notes.
 
 ## Domain Checklist
 
@@ -62,6 +63,7 @@ Prefer first-party/project evidence, then direct public sources, then reputable 
 ## Reference Materials
 
 - `references/skill-contract.md` — shared evidence, permission and handoff rules
+- `references/control-artifacts.md` — portable action lifecycle and receipt binding
 - `references/routing-policy.md` — precedence and conflict resolution
 - `references/product-context-schema.md` — shared marketing context
 - `references/connectors.md` — optional data/tool integrations

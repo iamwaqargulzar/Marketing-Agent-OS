@@ -220,6 +220,7 @@ def validate_shared_copies(errors: list[str]) -> None:
         for path in (ROOT / "references").glob("*.md")
         if path.name in {
             "connectors.md",
+            "control-artifacts.md",
             "product-context-schema.md",
             "routing-policy.md",
             "skill-contract.md",

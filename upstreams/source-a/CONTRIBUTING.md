@@ -81,11 +81,11 @@ Cross-cutting reference protocols apply across disciplines: the humanizer-slop p
 
 CI runs additional guards beyond the per-skill validator:
 - **golden behavior** — runs every typed profile through the real catalog/scorer, including Unknown, one-veto, multi-veto, cap, and STAR rollup boundaries; it never regex-scrapes Markdown formulas.
-- **behavior conformance** — orchestrates rubric, registry, HTTP, hook, permission, and routing suites offline; strict smoke/change-aware/nightly profiles select 24 to 700 provenance-bound semantic cases. Protocol v2 is the current real-provider smoke and engineering-maturity evidence path; protocol v3 adds blind route → selected context → independent judge execution for paired explicit-versus-balanced/lean evaluation. Model-backed adapters remain outside credential-free CI.
+- **behavior conformance** — orchestrates rubric, registry, HTTP, hook, permission, and routing suites offline; strict smoke/change-aware/nightly profiles select 24 to 734 provenance-bound semantic cases. Protocol v2 is the current real-provider smoke and engineering-maturity evidence path; protocol v3 adds blind route → selected context → independent judge execution for paired explicit-versus-balanced/lean evaluation. Model-backed adapters remain outside credential-free CI.
 - **runtime protocol** — verifies operational run idempotency, event trees/hash chains, immutable snapshots/save points/envelopes, concurrency, bounded resume, Git-ignore/path defenses, and the non-authority boundary.
 - **audit outer loop** — verifies event-first v2 anchors and same-request step recovery, verification-only public binding, selected-ancestry/sibling-isolated closure, a reserved terminal event slot, strict success versus bounded failed/aborted escape, exact active-loop coverage for waiting/needs-input/blocked, lease fencing, monotonic time, optimistic concurrency, separate retry/cycle/byte/deadline budgets, audit identity and observation-time provenance, strict convergence, exact-byte deduplication, graph-wide exact-hash linkage, and control-escaped terminal output without executing interventions.
 - **architecture conformance** — checks `references/system-catalog.json` against all 120 paths/frontmatters, plugin order, framework/auditor/registry ownership, transition graphs, L1 dependencies, distribution contracts, and the **symmetry contract** (SYM-01..17: loop/acronym derivation, command selector, registry/gate naming and topology, score surfaces, grouping titles, Scope edges, metadata key set — every violation must be licensed by a `symmetry.deviations` entry, and stale deviations fail).
-- **five-engineering maturity** — validates the closed 100-control Prompt/Context/Harness/Loop/Graph rubric and report contract. Before release, run `python3 scripts/check-engineering-maturity.py --semantic-evidence-run-id <uuid>` against a complete current-source protocol-v2 real-provider smoke run; every dimension must reach 95/100 and pass its hard gates. Protocol-v3 compact certification is separate: it requires canonical real cases, stored hash-chained v3 provenance for every arm, an immutable model revision, and a current Governed binding. The current 700-case corpus is simulated and the bundled adapter reports a null revision, so no compact binding is certified and `explicit` remains the deployment default. Until a release carries either complete paired evidence for trusted revalidation or a signed release attestation, distribution builds and manifest verification reject every non-empty `certified_bindings` array; package-local hashes alone are never promotion authority.
+- **five-engineering maturity** — validates the closed 100-control Prompt/Context/Harness/Loop/Graph rubric and report contract. Before release, run `python3 scripts/check-engineering-maturity.py --semantic-evidence-run-id <uuid>` against a complete current-source protocol-v2 real-provider smoke run; every dimension must reach 95/100 and pass its hard gates. Protocol-v3 compact certification is separate: it requires canonical real cases, stored hash-chained v3 provenance for every arm, an immutable model revision, and a current Governed binding. The current 734-case corpus is simulated and the bundled adapter reports a null revision, so no compact binding is certified and `explicit` remains the deployment default. Until a release carries either complete paired evidence for trusted revalidation or a signed release attestation, distribution builds and manifest verification reject every non-empty `certified_bindings` array; package-local hashes alone are never promotion authority.
 
 Build the four physical archives users receive and run their boundary tests.
 The Lite, Pro, and Governed plugin archives share the 120 canonical Skills and
@@ -99,8 +99,8 @@ python3 scripts/build-release-assets.py \
   --source-repo /path/to/aaron-marketing-skills \
   --source-repository aaron-he-zhu/aaron-marketing-skills \
   --source-commit <exact-40-hex-release-commit> \
-  --version 19.2.0 \
-  --output /private/path/v19.2.0-release-assets
+  --version 20.1.0 \
+  --output /private/path/v20.1.0-release-assets
 python3 -m unittest tests.test_distribution_builder tests.test_release_assets tests.test_publish_release tests.test_publish_state
 ```
 
@@ -126,7 +126,7 @@ never add or commit a root `skills/` mirror. See
 [`docs/agent-plugins-v1.md`](docs/agent-plugins-v1.md).
 
 The allowlist in `references/distribution-files.json` is authoritative. Runtime additions must be declared there; tests, evals, CI, generators, and repository-maintenance documentation must not leak into the plugin payload. The builder rejects symlinks, special files, and multiply linked files and emits a complete SHA-256 manifest with its physical profile ceiling. Governed distributions carry the generated capsule index as a reference-only model projection; generic shared-root host projections additionally replace slash commands with eight router facades. Host catalogs and sidecars bind every facade and target to exact hashes, while standalone installs continue to route directly to one complete skill. To meet the Governed hard budget, the builder deterministically replaces the expanded `references/skill-contracts/` tree with `references/skill-contracts.pack.json.gz`; the resolver accepts that derived pack only after bounded decompression and exact record/aggregate hash checks. Keep expanded generated trees in source control for review and CI, and never hand-edit a pack, capsule, facade, compact root index, or portable projection. Bare `--plugin` is a deprecated Governed-ceiling alias through v20; contributor and release commands must name `--profile`. The release-asset builder privately exports one exact Git commit, builds Lite/Pro/Governed plus Agent Plugins v1 Portable Lite independently, emits four canonical fixed-root tarballs plus `SHA256SUMS` and `release-assets.json`, safely unpacks them, and verifies each profile/projection/provenance-bound manifest against a fresh build of that same commit. Run it twice into new directories and require all six outputs to be byte-identical before release. Every live release publisher/projector accepts only a clean commit reachable from successfully refreshed `origin/main`; per-skill and built-package publishers package a private Git export of that pinned commit and verify repository/commit-bound manifests before upload. Dry-runs do not apply the live clean-tree gate. Standalone one-folder auditor bundles stay compact and fail closed; regenerate them with `python3 scripts/generate-auditor-runtime.py --write` after changing any bound source. Auto-routing cases are maintained only in `evals/auto-routing-scenarios.source.md`; regenerate the runtime index/eight shards with `python3 scripts/generate-auto-routing-shards.py --write` and never hand-edit the generated views. Auditor prompt contracts are maintenance/evaluation artifacts derived from the system/framework catalogs and bound sources; regenerate them with `python3 scripts/generate-auditor-prompt-contracts.py --write` and never hand-edit `references/prompt-contracts/`.
-- **check-evals** — strict case parsing plus structural lint over all 700 authored/generated semantic fixtures and their real-evidence bindings (phase directories and command selectors derive from the system catalog).
+- **check-evals** — strict case parsing plus structural lint over all 734 authored/generated semantic fixtures and their real-evidence bindings (phase directories and command selectors derive from the system catalog).
 - **check-context-budget** — the progressive-disclosure budget as a hard gate: compact root-policy and combined-agent byte ceilings, SKILL.md line caps, capsule-plus-kernel and auditor activation-chain byte budgets, recursive per-reference byte budgets, the largest valid command + index + three-shard `/auto` assembly, and the HOT template's runtime 80-line/25 KB limit.
 - **check-routing** — description-routing health as a hard gate: quoted trigger phrases are uniquely owned across all 120 skills, every description carries a `Not for X — use Y` boundary clause, and bare-name handoffs in Next Best Skill blocks resolve to real skills.
 - **check-local-links** — every repo-local Markdown link target must resolve inside the repo.
@@ -171,7 +171,7 @@ issue a private `engineering-validation-v19` receipt with
 python3 scripts/issue-engineering-release-receipt.py \
   --semantic-evidence-run-id "<fresh-current-source-run-uuid>" \
   --evidence-root "/private/project-root" \
-  --release-candidate "19.2.0-rc.N" \
+  --release-candidate "20.1.0-rc.N" \
   --owner-authorization "release-v19-without-real-project-outcomes" \
   --maturity-report-output "/private/path/v19-engineering-maturity-report.json" \
   --output "/private/path/v19-engineering-release-receipt.json"
@@ -189,28 +189,37 @@ export AARON_RELEASE_MATURITY_REPORT="/private/path/v19-engineering-maturity-rep
 export AARON_RELEASE_EVIDENCE_ROOT="/absolute/private/project-root"
 python3 scripts/verify-release-receipt.py "$AARON_RELEASE_RECEIPT" \
   --source-commit "$(git rev-parse --verify 'HEAD^{commit}')" \
-  --release-version 19.2.0 \
+  --release-version 20.1.0 \
   --required-gate engineering-validation-v19 \
   --maturity-report "$AARON_RELEASE_MATURITY_REPORT" \
   --evidence-root "$AARON_RELEASE_EVIDENCE_ROOT"
 ```
 
-Every v19 live publisher requires all three variables and rapidly revalidates
-the receipt, the exact report bytes, and the original semantic event chain with
-the current verifier. Receipt issuance and `create-github-release.py --live`
-always enforce the strict 24-hour freshness gate for the receipt and semantic
-evidence.
-After the immutable final tag, non-draft Release, exact six assets, and owner
-workflow have all been verified, publisher entrypoints may internally use the
-explicit post-release-continuation verifier mode: it relaxes only the current
-wall-clock check, still proves issuance-time freshness and every
-receipt/report/raw-evidence/tool/source hash, and remains bounded by the
-committed semantic policy (currently 30 days). Do not invoke that mode to create
-or authorize a release. If the policy window expires, run fresh provider
+`create-github-release.py --live` still takes the private receipt, maturity
+report, and evidence root as CLI flags and rapidly revalidates the receipt, the
+exact report bytes, and the original semantic event chain with the current
+verifier. Live publishers do not require `AARON_RELEASE_RECEIPT`,
+`AARON_RELEASE_MATURITY_REPORT`, or `AARON_RELEASE_EVIDENCE_ROOT`
+(`sync-about.sh`, `sync-family.sh`, and the `publish-*.sh` family). They still
+require a clean worktree, a canonical `github.com` origin, no Git
+`url.*.insteadOf` rewrites, and — for v19 and later — an immutable final tag
+that resolves to HEAD, a non-draft/non-prerelease GitHub Release, exact
+downloaded assets, and a green owner-run release-validation workflow on that
+commit.
+Receipt issuance and `create-github-release.py --live` always enforce the
+strict 24-hour freshness gate for the receipt and semantic evidence.
+The verifier's `--post-release-continuation` mode remains available for
+owner-local receipt revalidation after the immutable final tag exists: it
+relaxes only the current wall-clock check, still proves issuance-time freshness
+and every receipt/report/raw-evidence/tool/source hash, and remains bounded by
+the committed semantic policy (currently 30 days). Live publishers do not
+invoke that mode and do not read the private bundle. Do not invoke that mode to
+create or authorize a release. If the policy window expires, run fresh provider
 evidence against the same immutable release commit and issue a new private
-report/receipt before resuming distribution. The evidence root may be a real
-directory outside the repository, or the repository's absolute root only when
-the bound `memory/runs/<run-id>` directory is Git-ignored and wholly untracked.
+report/receipt before calling `create-github-release.py --live` again. The
+evidence root may be a real directory outside the repository, or the
+repository's absolute root only when the bound `memory/runs/<run-id>` directory
+is Git-ignored and wholly untracked.
 Never upload the receipt, report, or raw evidence. The real-provider smoke run
 executes real models, but its cases are simulated semantic fixtures. It proves
 engineering conformance, not customer or real-project outcomes; the public
@@ -225,7 +234,7 @@ projects (four per discipline), with two distinct blind reviewers. Keep all
 evidence outside Git and run
 `python3 scripts/verify-profile-outcomes.py /private/path/evidence.json
 --stage governed-promotion --source-commit "$RELEASE_COMMIT"
---release-candidate 19.2.0-rc.N
+--release-candidate 20.1.0-rc.N
 --evidence-manifest /private/path/manifest.json --receipt
 /private/path/promotion-receipt.json --json`. The verifier refuses simulated,
 duplicated, or identity-mismatched evidence and checks the attested private
@@ -251,12 +260,24 @@ drift, and `scripts/check-versions.sh` validates product-version bindings and
 each skill row. A coordinated cut additionally runs
 `bash scripts/check-versions.sh --release-all-current`, which requires exactly
 120/120 skills on the same bundle version/date. Run both locally before pushing.
+`check-versions.sh` also fails if a live Portable Lite install row still names a
+prior-release `aaron-marketing-skills-<ver>-agent-plugin-v1-lite.tar.gz` asset.
 
 **Adding a connector?** Follow [docs/connector-playbook.md](docs/connector-playbook.md) — the end-to-end pipeline (qualify → verify → implement → test → wire → document → track → regress → record) with the safety-class gate table and the connector-vs-recipe decision rule.
 
 ## Improving Existing Skills
 
 Keep changes focused. Bump both top-level `version` and `metadata.version` together. Update `VERSIONS.md`. Put new reference docs in the skill's `references/` subdirectory.
+
+### Wiki-first evolution (path-safe)
+
+Do not rename, move, or re-slug an existing Skill. Do not add a 121st Skill.
+Compile the lesson into [`references/wiki/`](references/wiki/index.md) first
+(one atomic pattern + log row), then optionally open a Skill-body PR that
+cites the pattern id. Use
+[`references/wiki/skill-evolution-proposal.md`](references/wiki/skill-evolution-proposal.md).
+The wiki is maintenance-time only — never add it to `### Runtime Reads` or
+context-assembly defaults. Schema: [`references/wiki/SCHEMA.md`](references/wiki/SCHEMA.md).
 
 ## Craft Checklist
 
@@ -286,6 +307,26 @@ Before submitting a PR:
 ## Submitting
 
 - Fork, create a `feature/your-skill-name` branch, and submit a PR.
+
+## Team conventions
+
+These sit on top of the authoring rules above; they do not replace the
+10-surface list, the validator, or wiki-first evolution.
+
+- **Branch naming:** `feature/<skill-or-topic>`, `fix/<skill-or-topic>`,
+  `docs/<description>` — lowercase, one concern. Matches the existing
+  `feature/your-skill-name` submitting rule.
+- **PR size:** Keep Staff/docs/smoke, skill-body, and connector work on
+  separate PRs when they do not share a single contract change.
+- **Merge:** Squash-merge after AaronMarketing.ai review. Do not merge a
+  contributor PR without that review.
+- **Skill path freeze:** Do not rename, move, or re-slug an existing Skill.
+  Do not add a 121st Skill. Compile lessons in `references/wiki/` first.
+- **AI Staff:** generate into a private directory outside the repository.
+  Phase 1 has no Usage Gateway, billing, Web UI, or cloud hosting.
+- **Wiki / maintenance scripts:** never add `references/wiki/` or
+  `scripts/check-wiki.py` to runtime assembly, `### Runtime Reads`, or the
+  plugin distribution allowlist.
 
 ## Code of Conduct
 

@@ -2,12 +2,12 @@
 
 # Aaron 行銷技能庫
 
-**120 個行銷技能 —— 品牌敘事、SEO/GEO、紅人、付費廣告、郵件、產品發布、社媒 —— 共享一套契約。**
+**120 個行銷技能，7 個學科，一套契約 —— 你的 AI 行銷團隊，可裝成外掛、可攜技能或 8-bot 小隊。**
 
 <p align="center">
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills"><img src="https://img.shields.io/github/stars/aaron-he-zhu/aaron-marketing-skills?style=flat" alt="GitHub Stars"></a>
 <!-- GENERATED:BEGIN release-surface:version-badge -->
-  <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md"><img src="https://img.shields.io/badge/version-19.2.0-orange" alt="Version"></a>
+  <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md"><img src="https://img.shields.io/badge/version-20.1.0-orange" alt="Version"></a>
 <!-- GENERATED:END release-surface:version-badge -->
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-green" alt="License"></a>
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/commits/main"><img src="https://img.shields.io/github/last-commit/aaron-he-zhu/aaron-marketing-skills" alt="Last Commit"></a>
@@ -22,7 +22,7 @@
 
 </div>
 
-一套 Claude 技能與斜線命令，讓聊天 Agent 成為行銷操作員。七個學科 + 一個共享協議層，一圖總覽：
+一支**可安裝、而不是靠提示詞堆出來的 AI 行銷團隊** —— 120 個 agent skills，可裝成帶命令與記憶的外掛、70+ 宿主上的可攜技能，或 named-bot 宿主（Grok Bot、Hermes Bot Mode）上的 **8-bot AI Staff**。七個學科 + 一個共享協議層，一圖總覽：
 
 | 層 | 技能 | 生命週期（階段目錄） | 框架 → 門 | 入口命令 |
 |----|------|----------------------|-----------|----------|
@@ -47,6 +47,7 @@
 
 - [為什麼選它](#為什麼選它)
 - [安裝](#安裝)
+  - [AI Staff](#ai-staff)
 - [初次使用](#初次使用)
 - [架構](#架構)
   - [共享技能契約](#共享技能契約)
@@ -97,7 +98,8 @@
 |------|------|
 | **Claude Code** | `/plugin marketplace add aaron-he-zhu/aaron-marketing-skills` 然後 `/plugin install aaron-marketing@aaron` |
 | **Codex · Cursor · OpenCode · Antigravity · Gemini CLI · Copilot CLI · OpenClaw · Hermes · [70+ 宿主](https://github.com/vercel-labs/skills#supported-agents)** | `npx skills add aaron-he-zhu/aaron-marketing-skills` |
-| **Agent Plugins v1 客戶端 · Portable Lite** | 從 [v19.2.0 Release](https://github.com/aaron-he-zhu/aaron-marketing-skills/releases/tag/v19.2.0)下載 `aaron-marketing-skills-19.2.0-agent-plugin-v1-lite.tar.gz`，解壓後安裝其中的外掛目錄 |
+| **Agent Plugins v1 客戶端 · Portable Lite** | 從 [v20.1.0 Release](https://github.com/aaron-he-zhu/aaron-marketing-skills/releases/tag/v20.1.0)下載 `aaron-marketing-skills-20.1.0-agent-plugin-v1-lite.tar.gz`，解壓後安裝其中的外掛目錄 |
+| **Grok Bot · Hermes Bot Mode（AI Staff）** | 產生 8-bot 花名冊：`python3 scripts/generate-bot-projections.py --output <private-dir>` —— 7 個專科 + `aaron-chief`。見 [AI Staff](#ai-staff) |
 | **[SkillHub.cn](https://skillhub.cn)（中文社群）** | `skillhub install <frontmatter-slug>`（如 `keyword-research`） |
 | **任意宿主** | `git clone https://github.com/aaron-he-zhu/aaron-marketing-skills` |
 
@@ -106,6 +108,18 @@
 安裝外掛**不會**往你的 `/mcp` 清單新增任何東西——MCP 目錄位於 [`docs/mcp-catalog.json`](mcp-catalog.json)，刻意放在 Claude Code 會自動註冊的外掛根 `.mcp.json` 路徑之外，僅作複製貼上參考（見[連接器與層級](#連接器與層級)）。
 
 儲存庫根目錄是編寫單一事實來源，**不是** Agent Plugins v1 的標準安裝根。請使用上述 Release 資產；它把 **120/120 個嚴格 Agent Skills** 投影為扁平的 `skills/<name>/`，且不含 `mcp.json`、命令、hooks、連接器或儲存庫執行環境。現有客戶端相容層繼續保留；詳見 [Portable Lite 套件結構與能力邊界](agent-plugins-v1.md)。
+
+### AI Staff
+
+在 named-bot 宿主（xAI 的 **Grok Bot**、Hermes Agent 的 **Bot Mode**）上，本倉庫不是裝成 120 個技能的一堆，而是一支 **團隊**：八個有名字的同事，用 @ 像對同事說話。七個專科各管一條線 —— `aaron-narrative`、`aaron-seo-geo`、`aaron-social`、`aaron-email`、`aaron-ad`、`aaron-influencer`、`aaron-launch` —— **`aaron-chief`** 坐席：它持有 8 個協議註冊表，並用 @mention 路由跨線目標（visited set、三次交棒上限）。這就是這些宿主圍繞的「參謀長 + 專科」編制，來源與其它安裝形態相同的類型化目錄：120 個技能恰好覆蓋一次，沒有第二套清單。
+
+對 `@aaron-chief` 說「三週後在 Product Hunt 發 v2」，計畫會經 `@aaron-launch`、`@aaron-email`、`@aaron-social` 回來 —— 每個 bot 只答自己的線，不會越權兼職。
+
+```bash
+python3 scripts/generate-bot-projections.py --output /private/path/aaron-bot-roster
+```
+
+產生器寫出 8 個可安裝的 Hermes profile 包（`hermes/<bot>/`，雜湊綁定清單）以及 Grok Bot 安裝包（`grok/bot-cards.md`、各 bot 啟用列表、檢查清單）。Staff 包是 **Tier-1 靜態**：無連接器、MCP、cron 或執行環境；auditor 回傳 `NOT_SCORED` 而不是瞎猜；註冊表與記憶寫入保持 propose-only。在 Grok Bot 上，同一成員的所有 bot 共享一台雲端電腦 —— bot 名字不是安全邊界。部署步驟、宿主限制與 owner-run smoke backlog：[agent-compatibility.md](agent-compatibility.md#named-bot-roster-deployment-grok-bot--hermes-bot-mode)。
 
 ---
 
@@ -548,7 +562,7 @@ Artifact Gate 是**框架無關**的——同一個 hook 驗證 TALE、CORE-EEAT
 |----|------------|
 | **28 個內建零依賴連接器** | 純 Python 標準庫——無 `pip`、無建置。keyless 即時 SERP + JS 渲染抓取（Firecrawl、Tavily）、AI 答案引用探針、DNS-over-HTTPS 郵件認證拉取、維基百科關注度序列、GDELT 新聞提及、真實 YouTube 創作者指標、IndexNow + 百度收錄推送、Resend ESP 自動化，以及能把上述任一變成前後對比時間序列的 git 可差分測量台帳。 |
 | **60+ 個記錄在案的官方/免費 API** | 每一行都連結廠商**官方文件**、帶核驗日期，且每條連結入庫前都經過 HTTP 實測。包含多數工具清單遺漏的路徑：GSC URL Inspection、CrUX History（40 週真實使用者 CWV）、Gmail Postmaster Tools API、Meta 廣告庫、微軟 Clarity 資料匯出 API。 |
-| **廠商 MCP 伺服器** | 18 個遠端端點入目錄（絕不自動註冊——你的 `/mcp` 清單保持乾淨），外加 Google Analytics、Search Console、**Google Ads**、**微軟 Clarity** 的官方自架伺服器。其中兩個遠端 MCP 完全免鑑權（Firecrawl、Tavily）。 |
+| **廠商 MCP 伺服器** | 20 個選用目錄項目（19 個廠商託管的遠端端點 + 1 個自架 OpenSEO 項目）絕不自動註冊，因此你的 `/mcp` 清單保持乾淨。另有 Google Analytics、Search Console、**Google Ads**、**微軟 Clarity** 的官方自架伺服器說明。其中兩個遠端 MCP 完全免鑑權（Firecrawl、Tavily）。 |
 
 讓它們可信而不只是數量多的四個理由：
 
@@ -565,7 +579,7 @@ Artifact Gate 是**框架無關**的——同一個 hook 驗證 TALE、CORE-EEAT
 
 - **內建零依賴助手** 位於 `scripts/connectors/`（僅 Python 標準庫），在本地拉取公開/自有資料——如 PageSpeed/CrUX、Open PageRank、頁面抓取、Wayback CDX、Wikidata SPARQL、Common Crawl、advertools 配方——外加 **`resend.py`**：郵件技能直連 Resend ESP 的自動化（免費檔 key：寄件網域認證狀態、種子測試投遞、抑制名單同步、廣播定時發送；變更類子命令預設 dry-run，需 `--live` 才執行）；以及 **`firecrawl.py`** + **`tavily.py`**：研究類技能直連託管抓取器的 keyless 自動化（Firecrawl：即時搜尋結果 + JS 渲染頁 markdown + 站點 URL 清單；Tavily：帶評分的搜尋 + AI 答案引擎引用來源探針（GEO 用）+ URL 擷取——兩者完全無需 key，均內建本地 robots.txt 預檢）。
 - **免費/keyless 來源** 按類別記錄：Google Search Console 與 GA4（自有資料）、PageSpeed/CrUX、Wikidata、Common Crawl、Open PageRank、Firecrawl keyless SERP/抓取、Tavily keyless AI 搜尋、DNS-over-HTTPS 郵件認證記錄（`doh.py`）、維基百科關注度序列（`pageviews.py`）、GDELT 新聞提及（`gdelt.py`）、免費 key 的 YouTube 創作者指標（`youtube.py`）、IndexNow + 百度收錄推送（`indexpush.py`，dry-run 門控）、廣告透明庫（Meta/Google/TikTok），以及 crt.sh、W3C 驗證器、oEmbed、HN Algolia 的配方行。
-- **選配 MCP 伺服器**（Ahrefs、Semrush、SE Ranking、SISTRIX、SimilarWeb、自架免費的 **OpenSEO** 套件、Cloudflare、Vercel、HubSpot、Amplitude、Notion、Webflow、Sanity、Contentful、Slack、Resend、keyless 的 Firecrawl 與 Tavily）在 [`docs/mcp-catalog.json`](mcp-catalog.json) 中作為**僅複製貼上參考**——目錄位於會被自動註冊的外掛根 `.mcp.json` 路徑之外，不會為你註冊任何東西。把你想要的條目複製進自己的 MCP 設定即可。
+- **選配 MCP 伺服器**（Ahrefs、Semrush、SE Ranking、SISTRIX、SimilarWeb、自架免費的 **OpenSEO** 套件、Cloudflare、Vercel、HubSpot、Amplitude、Notion、Webflow、Sanity、Contentful、Slack、Resend、keyless 的 Firecrawl 與 Tavily、Appeeky、Upfluence）在 [`docs/mcp-catalog.json`](mcp-catalog.json) 中作為**僅複製貼上參考**——目錄位於會被自動註冊的外掛根 `.mcp.json` 路徑之外，不會為你註冊任何東西。把你想要的條目複製進自己的 MCP 設定即可。
 
 付費廣告技能基於你的**自有帳戶手動匯出**（原生廣告管理後台 CSV、GA4、電商）評分。帶金鑰的廣告 API（Google Ads SDK、Meta Marketing API）僅是 opt-in Tier-2/3，**絕不**作為 Tier-1 要求。郵件技能同理——基於你**自己的 ESP 匯出**評分，所有送達率訊號均 keyless（DNS 查詢、DMARC RUA 報告、種子收件測試），帶金鑰的 ESP API 也絕不是 Tier-1 要求；若你的 ESP 是 Resend，內建的 `resend.py` 可在免費檔上自動化同一閉環。
 
@@ -683,7 +697,7 @@ docs/            # 在地化 README（zh）
 
 - **[CONTRIBUTING.md](../CONTRIBUTING.md)** —— 撰寫規則、貢獻清單、權威的 10 個追蹤面列表。
 <!-- GENERATED:BEGIN release-surface:current-bundle -->
-- **[VERSIONS.md](../VERSIONS.md)** —— 各技能版本 + 變更日誌（目前套件：`19.2.0`）。
+- **[VERSIONS.md](../VERSIONS.md)** —— 各技能版本 + 變更日誌（目前套件：`20.1.0`）。
 <!-- GENERATED:END release-surface:current-bundle -->
 - **[SECURITY.md](../SECURITY.md)** · **[PRIVACY.md](../PRIVACY.md)** · **[CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md)** —— 安全、隱私、社群政策。
 - **[CLAUDE.md](../CLAUDE.md)** / **[AGENTS.md](../AGENTS.md)** —— 面向 Agent 的本倉庫上下文。

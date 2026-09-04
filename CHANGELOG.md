@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## 1.2.0 — 2026-09-04
+
+- Refreshed source A to v20.1.0 commit `b08683918e2bab70502f3d65ab0ae2f32beff2c6`. Incorporated its cross-discipline lifecycle lessons as a vendor-neutral control-artifact schema, standard-library validator, router contract, receipt/approval separation, and maintenance guidance; retained its source-specific runtime, generated projections, and detailed discipline bindings in the audited snapshot.
 - Refreshed source D to its v2.11.0 commit, `5cd4a7eae3a9a7b5d2aceb0613f7d1f7c4b65968`. Added the portable `events` skill for hosted events, webinars, sponsorships, speaking, trade shows, and event measurement; retained detailed upstream enrichments in the audited snapshot while preserving the normalized evidence and permission contract.
 - Refreshed source C to `9484cf0920da04448cf89ea7d710cffeddbbdcab`; the upstream change affects star-history chart assets only and does not change normalized skill behavior.
 - Refreshed source B to its v2.2.5 verification commit, `a1480c7e590b16001bd9dc1627eacdcd44d580f9`. Reviewed Windows uninstall, portability, rendered-page, JSON-LD, Google guidance, and dependency changes; source-specific runtime dependencies remain isolated from the standard-library Marketing Agent OS installer.

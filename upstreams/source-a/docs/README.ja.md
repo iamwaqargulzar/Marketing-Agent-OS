@@ -2,12 +2,12 @@
 
 # Aaron Marketing Skills
 
-**120 のマーケティングスキル — ブランドナラティブ、SEO/GEO、インフルエンサー、Paid Ads、メール、Launch、ソーシャル — を一つの契約で。**
+**120 のマーケティングスキル、7 領域、一つの契約 — プラグイン、ポータブルスキル、または 8 ボットチームとして入れられる AI マーケティングスタッフ。**
 
 <p align="center">
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills"><img src="https://img.shields.io/github/stars/aaron-he-zhu/aaron-marketing-skills?style=flat" alt="GitHub Stars"></a>
 <!-- GENERATED:BEGIN release-surface:version-badge -->
-  <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md"><img src="https://img.shields.io/badge/version-19.2.0-orange" alt="Version"></a>
+  <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md"><img src="https://img.shields.io/badge/version-20.1.0-orange" alt="Version"></a>
 <!-- GENERATED:END release-surface:version-badge -->
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-green" alt="License"></a>
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/commits/main"><img src="https://img.shields.io/github/last-commit/aaron-he-zhu/aaron-marketing-skills" alt="Last Commit"></a>
@@ -22,7 +22,7 @@
 
 </div>
 
-チャットエージェントをマーケティングオペレーターに変える Claude スキルとスラッシュコマンドのライブラリ。7 つの専門領域と 1 つの共有プロトコル層を一望：
+**プロンプトではなくインストールする AI マーケティングスタッフ** — 120 の agent skills が、コマンドとメモリ付きの一つのプラグイン、70+ ホスト上のポータブルスキル、または名前付きボットホスト（Grok Bot、Hermes Bot Mode）上の **8 ボット AI Staff** として動きます。7 つの専門領域と 1 つの共有プロトコル層を一望：
 
 | 層 | スキル | ライフサイクル（フェーズディレクトリ） | フレームワーク → ゲート | エントリポイント |
 |-------|--------|-------------------------------|------------------|------------|
@@ -47,6 +47,7 @@
 
 - [なぜこのライブラリか](#なぜこのライブラリか)
 - [インストール](#インストール)
+  - [AI Staff](#ai-staff)
 - [初回実行](#初回実行)
 - [アーキテクチャ](#アーキテクチャ)
   - [共有スキルコントラクト](#共有スキルコントラクト)
@@ -97,7 +98,8 @@ Claude Code、Agent Skills 互換の任意のホスト、あるいは単純な `
 |------|---------|
 | **Claude Code** | `/plugin marketplace add aaron-he-zhu/aaron-marketing-skills` の後に `/plugin install aaron-marketing@aaron` |
 | **Codex · Cursor · OpenCode · Antigravity · Gemini CLI · Copilot CLI · OpenClaw · Hermes · [70+ ホスト](https://github.com/vercel-labs/skills#supported-agents)** | `npx skills add aaron-he-zhu/aaron-marketing-skills` |
-| **Agent Plugins v1 クライアント · Portable Lite** | [v19.2.0 リリース](https://github.com/aaron-he-zhu/aaron-marketing-skills/releases/tag/v19.2.0)から `aaron-marketing-skills-19.2.0-agent-plugin-v1-lite.tar.gz` をダウンロードして展開し、抽出されたプラグインディレクトリをインストール |
+| **Agent Plugins v1 クライアント · Portable Lite** | [v20.1.0 リリース](https://github.com/aaron-he-zhu/aaron-marketing-skills/releases/tag/v20.1.0)から `aaron-marketing-skills-20.1.0-agent-plugin-v1-lite.tar.gz` をダウンロードして展開し、抽出されたプラグインディレクトリをインストール |
+| **Grok Bot · Hermes Bot Mode (AI Staff)** | 8 ボットの名簿を生成：`python3 scripts/generate-bot-projections.py --output <private-dir>` — 7 専門家 + `aaron-chief`。[AI Staff](#ai-staff) を参照 |
 | **[SkillHub.cn](https://skillhub.cn)（中国語コミュニティ）** | `skillhub install <frontmatter-slug>`（例：`keyword-research`） |
 | **任意のホスト** | `git clone https://github.com/aaron-he-zhu/aaron-marketing-skills` |
 
@@ -106,6 +108,18 @@ Claude Code では `marketplace add` はカタログを登録するだけです 
 プラグインをインストールしても `/mcp` リストには**何も**追加されません —— MCP カタログは [`docs/mcp-catalog.json`](mcp-catalog.json) にあり、Claude Code が自動登録するプラグインルートの `.mcp.json` パスの外に意図的に置かれているため、コピー＆ペースト用の参照にすぎません（[コネクタ](#コネクタと拡張ティア)を参照）。
 
 リポジトリのルートはオーサリング用 SSOT であり、Agent Plugins v1 の標準インストールルートでは**ありません**。上記のリリース資産を使ってください。**120/120 の厳格な Agent Skills** を `skills/<name>/` に投影し、`mcp.json`、コマンド、hooks、コネクタ、リポジトリのランタイムは含みません。既存のクライアント互換レイヤーは維持されます。詳細は [Portable Lite パッケージと機能境界](agent-plugins-v1.md)を参照してください。
+
+### AI Staff
+
+名前付きボットホスト（xAI の **Grok Bot**、Hermes Agent の **Bot Mode**）では、このバンドルは 120 スキルの山としては入りません。**スタッフ**として入ります。名前のある 8 人の同僚に、同僚と同じように @mention します。7 人の専門家がそれぞれ 1 レーンを持ちます —— `aaron-narrative`、`aaron-seo-geo`、`aaron-social`、`aaron-email`、`aaron-ad`、`aaron-influencer`、`aaron-launch` —— **`aaron-chief`** がデスクを回します。8 つのプロトコルレジストリを持ち、横断目標を @mention でルーティングします（visited set、3 回のハンドオフ上限）。これはこれらのホストが前提とするチーフ・オブ・スタッフ＋専門家の編成と同じで、他の導入形態と同じ型付きカタログから導出されます。120 スキルをちょうど 1 回ずつ、第二の在庫はありません。
+
+`@aaron-chief` に「3 週間後に Product Hunt で v2 を出す」と伝えると、計画は `@aaron-launch`、`@aaron-email`、`@aaron-social` 経由で戻ります。各ボットは自分のレーンだけ答えます。
+
+```bash
+python3 scripts/generate-bot-projections.py --output /private/path/aaron-bot-roster
+```
+
+ジェネレータはインストール可能な Hermes プロファイル 8 本（`hermes/<bot>/`、ハッシュ拘束マニフェスト）と Grok Bot セットアップパック（`grok/bot-cards.md`、有効化リスト、チェックリスト）を書き出します。Staff バンドルは **Tier-1 静的**：コネクタ、MCP、cron、ランタイムなし。auditor は推測せず `NOT_SCORED` を返します。レジストリとメモリの書き込みは propose-only のままです。Grok Bot ではメンバーの全ボットが 1 台のクラウドコンピュータを共有します —— ボット名はセキュリティ境界ではありません。デプロイ手順、ホスト上の注意、owner-run のスモークバックログ：[agent-compatibility.md](agent-compatibility.md#named-bot-roster-deployment-grok-bot--hermes-bot-mode)。
 
 ---
 
@@ -548,7 +562,7 @@ Artifact Gate は**フレームワーク非依存**です —— 同じフック
 |-------|--------------|
 | **28 の同梱・依存関係ゼロのコネクタ** | 純粋な Python 標準ライブラリ —— `pip` 不要、ビルドステップ不要。keyless なライブ SERP + JS レンダースクレイピング（Firecrawl、Tavily）、AI 回答の引用プローブ、DNS-over-HTTPS のメール認証取得、Wikipedia 注目度シリーズ、GDELT ニュース言及、本物の YouTube クリエイター指標、IndexNow + Baidu インデックス送信、Resend ESP 自動化、そしてそれらのいずれをも前後比較の時系列に変える git 差分可能な測定台帳。 |
 | **60 以上の文書化された公式/無料 API** | 各行がベンダーの**公式ドキュメント**をリンクし、検証日を持ち、各リンクは公開前に HTTP で確認されます。多くのツールリストが見落とすパスを含みます：GSC URL Inspection、CrUX History（40 週間のフィールド CWV）、Gmail Postmaster Tools API、Meta の Ad Library、Microsoft Clarity の Data Export API。 |
-| **ベンダー MCP サーバー** | 18 のリモートエンドポイントをカタログ化（決して自動登録されません —— あなたの `/mcp` リストはきれいなまま）、加えて Google Analytics、Search Console、**Google Ads**、**Microsoft Clarity** の公式セルフホストサーバー。2 つのリモート MCP はキー不要で動作します（Firecrawl、Tavily）。 |
+| **ベンダー MCP サーバー** | オプトインのカタログ項目は 20 件（ベンダーホストのリモートエンドポイント 19 件 + セルフホストの OpenSEO 1 件）で、決して自動登録されないため `/mcp` リストはきれいなままです。Google Analytics、Search Console、**Google Ads**、**Microsoft Clarity** の公式セルフホストサーバーも記載しています。2 つのリモート MCP はキー不要で動作します（Firecrawl、Tavily）。 |
 
 単に数が多いだけでなく信頼できる理由：
 
@@ -565,7 +579,7 @@ Artifact Gate は**フレームワーク非依存**です —— 同じフック
 
 - **同梱・依存関係ゼロのヘルパー** は `scripts/connectors/` 配下（Python 標準ライブラリのみ）にあり、公開/自有データをローカルで取得します —— 例：PageSpeed/CrUX、Open PageRank、ページクロール、Wayback CDX、Wikidata SPARQL、Common Crawl、advertools レシピ —— 加えて **`resend.py`**（メールスキル向けの Resend ESP 直結自動化：無料枠キーでドメイン認証状態、seed-test 送信、抑制同期、ブロードキャストのスケジューリング；変更系サブコマンドはデフォルト dry-run で `--live` が必要）、および **`firecrawl.py`** + **`tavily.py`**（research スキル向けの keyless ホスト型フェッチャー自動化：Firecrawl はライブ Web SERP + JS レンダーページの markdown + サイトマップ；Tavily はスコア付き検索 + GEO 用の AI 回答エンジンの引用元プローブ + URL 抽出 —— どちらもキー不要で無料、どちらもローカル robots.txt 事前検査を内蔵）。
 - **無料/keyless ソース**をカテゴリ別に文書化：Google Search Console & GA4（自有データ）、PageSpeed/CrUX、Wikidata、Common Crawl、Open PageRank、Firecrawl keyless SERP/スクレイプ、Tavily keyless AI 検索、DNS-over-HTTPS メール認証レコード（`doh.py`）、Wikipedia 注目度シリーズ（`pageviews.py`）、GDELT ニュース言及（`gdelt.py`）、無料キーの YouTube クリエイター指標（`youtube.py`）、IndexNow + Baidu インデックス送信（`indexpush.py`、dry-run ゲート付き）、広告透明性ライブラリ（Meta/Google/TikTok）、そして crt.sh、W3C バリデータ、oEmbed、HN Algolia のレシピ行。
-- **オプトイン MCP サーバー**（Ahrefs、Semrush、SE Ranking、SISTRIX、SimilarWeb、セルフホストの無料 **OpenSEO** スイート、Cloudflare、Vercel、HubSpot、Amplitude、Notion、Webflow、Sanity、Contentful、Slack、Resend、keyless の Firecrawl と Tavily）は [`docs/mcp-catalog.json`](mcp-catalog.json) に**コピー＆ペースト用の参照としてのみ**カタログ化されています —— カタログは自動登録されるプラグインルートの `.mcp.json` パスの外にあるため、あなたのために何も登録されません。欲しいエントリを自分の MCP 設定にコピーしてください。
+- **オプトイン MCP サーバー**（Ahrefs、Semrush、SE Ranking、SISTRIX、SimilarWeb、セルフホストの無料 **OpenSEO** スイート、Cloudflare、Vercel、HubSpot、Amplitude、Notion、Webflow、Sanity、Contentful、Slack、Resend、keyless の Firecrawl と Tavily、Appeeky、Upfluence）は [`docs/mcp-catalog.json`](mcp-catalog.json) に**コピー＆ペースト用の参照としてのみ**カタログ化されています —— カタログは自動登録されるプラグインルートの `.mcp.json` パスの外にあるため、あなたのために何も登録されません。欲しいエントリを自分の MCP 設定にコピーしてください。
 
 Paid Ads スキルは**自アカウントの手動エクスポート**（ネイティブ広告マネージャーの CSV、GA4、ecommerce）から採点します。キー付き広告プラットフォーム API（Google Ads SDK、Meta Marketing API）はオプトインの Tier-2/3 のみで、**決して** Tier 1 の要件ではありません。メールスキルも同様 —— **自分の ESP エクスポート**から採点します —— そして各 deliverability シグナルは keyless（DNS ルックアップ、DMARC RUA レポート、seed-list の inbox テスト）なので、キー付き ESP API もまた決して Tier 1 の要件ではありません；あなたの ESP が Resend なら、同梱の `resend.py` が無料枠で同じループを自動化します。
 
@@ -683,7 +697,7 @@ docs/            # ローカライズ済み README（zh）
 
 - **[CONTRIBUTING.md](../CONTRIBUTING.md)** —— オーサリングルール、コントリビューションチェックリスト、権威ある 10 の追跡サーフェスのリスト。
 <!-- GENERATED:BEGIN release-surface:current-bundle -->
-- **[VERSIONS.md](../VERSIONS.md)** —— スキルごとのバージョン + changelog（現在のバンドル：`19.2.0`）。
+- **[VERSIONS.md](../VERSIONS.md)** —— スキルごとのバージョン + changelog（現在のバンドル：`20.1.0`）。
 <!-- GENERATED:END release-surface:current-bundle -->
 - **[SECURITY.md](../SECURITY.md)** · **[PRIVACY.md](../PRIVACY.md)** · **[CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md)** —— セキュリティ、プライバシー、コミュニティのポリシー。
 - **[CLAUDE.md](../CLAUDE.md)** / **[AGENTS.md](../AGENTS.md)** —— この repo のエージェント向けコンテキスト。

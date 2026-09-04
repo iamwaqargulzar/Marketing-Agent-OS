@@ -4,14 +4,14 @@
     "name": "Marketing Agent OS contributors"
   },
   "metadata": {
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   "plugins": [
     {
       "name": "marketing-agent-os",
       "source": "./",
       "description": "All-in-one marketing Agent Skills package",
-      "version": "1.1.0"
+      "version": "1.2.0"
     }
   ]
 }

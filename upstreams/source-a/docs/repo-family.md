@@ -11,7 +11,7 @@ This repository (`aaron-marketing-skills`) is the **single source of truth (SSOT
 | [aaron-marketing-skills](https://github.com/aaron-he-zhu/aaron-marketing-skills) | **SSOT** | active development | — | — |
 | [core-eeat-content-benchmark](https://github.com/aaron-he-zhu/core-eeat-content-benchmark) | published standard | live mirror | `ids` | `references/core-eeat-benchmark.md` |
 | [cite-domain-rating](https://github.com/aaron-he-zhu/cite-domain-rating) | published standard | live mirror | `ids` | `references/cite-domain-rating.md` |
-| [influencer-marketing-star-benchmark](https://github.com/aaron-he-zhu/influencer-marketing-star-benchmark) | published standard | live mirror | `ids` | `references/star-benchmark.md` (v18 STAR reframe replaced the C3 split; **owner must rename the GitHub mirror from `influencer-marketing-c3-benchmark` before the next sync**) |
+| [influencer-marketing-star-benchmark](https://github.com/aaron-he-zhu/influencer-marketing-star-benchmark) | published standard | live mirror | `ids` | `references/star-benchmark.md` (v18 STAR reframe replaced the C3 split; the GitHub mirror is already `influencer-marketing-star-benchmark`) |
 | [paid-ads-roas-benchmark](https://github.com/aaron-he-zhu/paid-ads-roas-benchmark) | published standard | live mirror | `body` | `references/roas-benchmark.md` |
 | [email-marketing-send-benchmark](https://github.com/aaron-he-zhu/email-marketing-send-benchmark) | published standard | live mirror | `body` | `references/send-benchmark.md` |
 | [launch-marketing-ramp-benchmark](https://github.com/aaron-he-zhu/launch-marketing-ramp-benchmark) | published standard | live mirror | `body` | `references/ramp-benchmark.md` |
@@ -37,7 +37,7 @@ Freshness is self-documenting: every `body`/`list` mirror carries its synced umb
 
 - **`body`** — the mirror README's framework body between `<!-- SYNC:BEGIN -->` / `<!-- SYNC:END -->` markers is regenerated verbatim from the source file, with relative `references/` links rewritten to absolute umbrella URLs. Full-fidelity mirror.
 - **`ids`** — every framework item ID the source file references (bold or table-row, e.g. `T04`, `A2`) must exist in the published standard's ID set; the repo keeps its own standalone packaging and prose (these three predate this policy, and the umbrella file may be a compact summary of the full standard). ID drift is *reported* for manual reconciliation, never auto-pushed.
-- **`list`** — the skill list between SYNC markers is regenerated from `plugin.json`.
+- **`list`** — the skill list between SYNC markers is regenerated from `plugin.json`. Links use the crawlable `blob/main/{path}/SKILL.md` form pointing directly to the skill file.
 
 ## How sync runs
 

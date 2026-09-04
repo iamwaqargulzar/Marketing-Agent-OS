@@ -6,9 +6,9 @@ The authoritative source is [`references/workflow-graph.source.json`](../referen
 The source manifest pins context-budgeted authoritative edge shards by SHA-256; consumers load only the shards they need.
 
 - Nodes: **120**
-- Edges: **376**
+- Edges: **378**
 - Named workflows: **1**
-- Graph digest: `sha256:2660a353d53978049c7220fd62a2e73d797e4bc42d3d60363a55b9017d6bb50e`
+- Graph digest: `sha256:b775199bafcfd67185940d25e45212e2eca0e6938dde5d5f80b7e166eb4fca3f`
 
 ## Named Workflows
 

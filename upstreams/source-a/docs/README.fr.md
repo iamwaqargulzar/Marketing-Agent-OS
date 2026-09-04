@@ -2,12 +2,12 @@
 
 # Aaron Marketing Skills
 
-**120 skills marketing — brand narrative, SEO/GEO, influence, paid ads, e-mail, launch, social — sur un seul contrat.**
+**120 skills marketing, 7 disciplines, un contrat — votre AI marketing staff, installable en plugin, skills portables ou équipe de 8 bots.**
 
 <p align="center">
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills"><img src="https://img.shields.io/github/stars/aaron-he-zhu/aaron-marketing-skills?style=flat" alt="GitHub Stars"></a>
 <!-- GENERATED:BEGIN release-surface:version-badge -->
-  <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md"><img src="https://img.shields.io/badge/version-19.2.0-orange" alt="Version"></a>
+  <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md"><img src="https://img.shields.io/badge/version-20.1.0-orange" alt="Version"></a>
 <!-- GENERATED:END release-surface:version-badge -->
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-green" alt="License"></a>
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/commits/main"><img src="https://img.shields.io/github/last-commit/aaron-he-zhu/aaron-marketing-skills" alt="Last Commit"></a>
@@ -22,7 +22,7 @@
 
 </div>
 
-Une bibliothèque de skills Claude et de commandes slash qui transforme un agent de chat en opérateur marketing. Sept disciplines et une couche de protocole partagée, en un coup d'œil :
+Un **AI marketing staff que vous installez, pas que vous promptiez** — 120 agent skills qui tournent comme un plugin avec commandes et mémoire, comme skills portables sur 70+ hôtes, ou comme un **AI Staff de 8 bots** sur les hôtes à bots nommés (Grok Bot, Hermes Bot Mode). Sept disciplines et une couche de protocole partagée, en un coup d'œil :
 
 | Couche | Skills | Cycle de vie (répertoires de phase) | Framework → gate | Point d'entrée |
 |-------|--------|-------------------------------|------------------|------------|
@@ -47,6 +47,7 @@ La topologie typée faisant autorité est [`references/system-catalog.json`](../
 
 - [Pourquoi cette bibliothèque](#pourquoi-cette-bibliothèque)
 - [Installation](#installation)
+  - [AI Staff](#ai-staff)
 - [Première utilisation](#première-utilisation)
 - [Architecture](#architecture)
   - [Le contrat de skill partagé](#le-contrat-de-skill-partagé)
@@ -97,7 +98,8 @@ Utilisez-la avec Claude Code, n'importe quel host compatible Agent Skills ou un 
 |------|---------|
 | **Claude Code** | `/plugin marketplace add aaron-he-zhu/aaron-marketing-skills` puis `/plugin install aaron-marketing@aaron` |
 | **Codex · Cursor · OpenCode · Antigravity · Gemini CLI · Copilot CLI · OpenClaw · Hermes · [70+ hosts](https://github.com/vercel-labs/skills#supported-agents)** | `npx skills add aaron-he-zhu/aaron-marketing-skills` |
-| **Clients Agent Plugins v1 · Portable Lite** | Téléchargez `aaron-marketing-skills-19.2.0-agent-plugin-v1-lite.tar.gz` depuis la [release v19.2.0](https://github.com/aaron-he-zhu/aaron-marketing-skills/releases/tag/v19.2.0), décompressez-le puis installez le répertoire du plugin extrait |
+| **Clients Agent Plugins v1 · Portable Lite** | Téléchargez `aaron-marketing-skills-20.1.0-agent-plugin-v1-lite.tar.gz` depuis la [release v20.1.0](https://github.com/aaron-he-zhu/aaron-marketing-skills/releases/tag/v20.1.0), décompressez-le puis installez le répertoire du plugin extrait |
+| **Grok Bot · Hermes Bot Mode (AI Staff)** | Générez le roster 8 bots : `python3 scripts/generate-bot-projections.py --output <private-dir>` — 7 spécialistes + `aaron-chief`. Voir [AI Staff](#ai-staff) |
 | **[SkillHub.cn](https://skillhub.cn) (communauté chinoise)** | `skillhub install <frontmatter-slug>` (p. ex. `keyword-research`) |
 | **N'importe quel host** | `git clone https://github.com/aaron-he-zhu/aaron-marketing-skills` |
 
@@ -106,6 +108,18 @@ Dans Claude Code, `marketplace add` ne fait qu'enregistrer le catalogue — exé
 Installer le plugin n'ajoute **rien** à votre liste `/mcp` — le catalogue MCP vit dans [`docs/mcp-catalog.json`](mcp-catalog.json), délibérément hors du chemin `.mcp.json` de la racine du plugin que Claude Code enregistre automatiquement, si bien que c'est une référence à copier-coller uniquement (voir [Connecteurs](#connecteurs--paliers-damélioration)).
 
 La racine du dépôt est la source d'édition, **pas** la racine d'installation standard Agent Plugins v1. Utilisez l'asset de release ci-dessus : il projette **120/120 Agent Skills stricts** dans `skills/<name>/` et n'inclut ni `mcp.json`, ni commandes, hooks, connecteurs ou runtime du dépôt. Les couches de compatibilité existantes sont conservées ; consultez le [paquet Portable Lite et ses limites de capacité](agent-plugins-v1.md).
+
+### AI Staff
+
+Sur les hôtes à bots nommés (**Grok Bot** de xAI, **Bot Mode** de Hermes Agent), ce bundle ne s'installe pas comme un tas de 120 skills — il s'installe comme une **équipe** : huit collègues nommés que vous @mentionnez. Sept spécialistes possèdent chacun une voie — `aaron-narrative`, `aaron-seo-geo`, `aaron-social`, `aaron-email`, `aaron-ad`, `aaron-influencer`, `aaron-launch` — et **`aaron-chief`** tient le bureau : il porte les 8 registres de protocole et route tout objectif transversal par @mention (visited set, plafond de trois handoffs). C'est le même organigramme chef de staff + spécialistes pour lequel ces hôtes sont conçus, dérivé du même catalogue typé que les autres formes d'installation : les 120 skills, couvertes exactement une fois, sans second inventaire.
+
+Dites à `@aaron-chief` « launch v2 on Product Hunt in three weeks » : le plan revient via `@aaron-launch`, `@aaron-email` et `@aaron-social` — chaque bot ne répond que dans sa voie.
+
+```bash
+python3 scripts/generate-bot-projections.py --output /private/path/aaron-bot-roster
+```
+
+Le générateur écrit 8 bundles de profil Hermes installables (`hermes/<bot>/`, manifests liés par hash) plus le pack de setup Grok Bot (`grok/bot-cards.md`, listes d'activation, checklist). Les bundles staff sont **Tier-1 statiques** : pas de connecteurs, MCP, cron ni runtimes ; les auditors renvoient `NOT_SCORED` plutôt que de deviner ; les écritures registre et mémoire restent propose-only. Sur Grok Bot, tous les bots d'un membre partagent un ordinateur cloud — les noms de bot ne sont pas des frontières de sécurité. Déploiement, limites d'hôte et backlog smoke owner-run : [agent-compatibility.md](agent-compatibility.md#named-bot-roster-deployment-grok-bot--hermes-bot-mode).
 
 ---
 
@@ -548,7 +562,7 @@ Les skills nomment les outils avec des marqueurs `~~category` (`~~SEO tool`, `~~
 |-------|--------------|
 | **28 connecteurs embarqués sans dépendances** | Python bibliothèque standard pur — pas de `pip`, pas d'étape de build. SERP live keyless + scraping rendu par JS (Firecrawl, Tavily), une sonde de citation de réponses IA, extractions d'email-auth par DNS-over-HTTPS, séries d'attention Wikipedia, mentions news GDELT, vraies métriques de créateurs YouTube, push IndexNow + Baidu, automatisation ESP Resend, et un grand livre de mesure diffable par git qui transforme chacun d'eux en série temporelle avant/après. |
 | **Plus de 60 API officielles/gratuites documentées** | Chaque ligne lie la **documentation officielle** du fournisseur, porte une date de vérification, et chaque lien est vérifié par HTTP avant publication. Inclut les chemins que la plupart des listes d'outils manquent : GSC URL Inspection, CrUX History (40 semaines de CWV terrain), la Gmail Postmaster Tools API, l'Ad Library de Meta, la Data Export API de Microsoft Clarity. |
-| **Serveurs MCP de fournisseurs** | 18 endpoints distants catalogués (jamais auto-enregistrés — votre liste `/mcp` reste propre) plus les serveurs officiels auto-hébergés pour Google Analytics, Search Console, **Google Ads** et **Microsoft Clarity**. Deux MCP distants fonctionnent sans aucune clé (Firecrawl, Tavily). |
+| **Serveurs MCP de fournisseurs** | 20 entrées optionnelles au catalogue — 19 endpoints distants hébergés par les fournisseurs plus une entrée OpenSEO auto-hébergée — ne sont jamais enregistrées automatiquement, afin que votre liste `/mcp` reste propre. Les serveurs officiels auto-hébergés pour Google Analytics, Search Console, **Google Ads** et **Microsoft Clarity** sont également documentés. Deux MCP distants fonctionnent sans aucune clé (Firecrawl, Tavily). |
 
 Ce qui les rend fiables plutôt que simplement nombreux :
 
@@ -565,7 +579,7 @@ Ce qui les rend fiables plutôt que simplement nombreux :
 
 - **Helpers embarqués sans dépendances** sous `scripts/connectors/` (Python bibliothèque standard uniquement) tirent des données publiques/propres localement — p. ex. PageSpeed/CrUX, Open PageRank, crawl de page, Wayback CDX, Wikidata SPARQL, Common Crawl, recettes advertools — plus **`resend.py`**, automatisation directe de l'ESP Resend pour les skills e-mail (clé free-tier : statut d'auth de domaine, seed-test sends, sync de suppression, planification de broadcasts ; les sous-commandes qui mutent sont dry-run par défaut et requièrent `--live`), et **`firecrawl.py`** + **`tavily.py`**, automatisation de fetchers hébergés keyless pour les skills research (Firecrawl : SERP web live + markdown de page rendue par JS + site maps ; Tavily : recherche notée + sonde de sources citées d'un moteur de réponses IA pour GEO + extraction d'URL — les deux gratuits sans aucune clé, les deux avec un pré-flight local de robots.txt intégré).
 - **Sources gratuites/keyless** documentées par catégorie : Google Search Console & GA4 (données propres), PageSpeed/CrUX, Wikidata, Common Crawl, Open PageRank, SERP/scrape keyless Firecrawl, AI-search keyless Tavily, enregistrements d'email-auth par DNS-over-HTTPS (`doh.py`), séries d'attention Wikipedia (`pageviews.py`), mentions news GDELT (`gdelt.py`), métriques de créateurs YouTube sur clé gratuite (`youtube.py`), push IndexNow + Baidu (`indexpush.py`, sous gate dry-run), les bibliothèques d'ad-transparency (Meta/Google/TikTok), et des lignes de recette pour crt.sh, le validateur W3C, oEmbed et HN Algolia.
-- **Serveurs MCP opt-in** (Ahrefs, Semrush, SE Ranking, SISTRIX, SimilarWeb, la suite gratuite auto-hébergée **OpenSEO**, Cloudflare, Vercel, HubSpot, Amplitude, Notion, Webflow, Sanity, Contentful, Slack, Resend, les keyless Firecrawl et Tavily) sont catalogués dans [`docs/mcp-catalog.json`](mcp-catalog.json) comme **référence à copier-coller uniquement** — le catalogue se situe hors du chemin `.mcp.json` de la racine du plugin auto-enregistré, si bien que rien n'est enregistré pour vous. Copiez les entrées voulues dans votre propre config MCP.
+- **Serveurs MCP opt-in** (Ahrefs, Semrush, SE Ranking, SISTRIX, SimilarWeb, la suite gratuite auto-hébergée **OpenSEO**, Cloudflare, Vercel, HubSpot, Amplitude, Notion, Webflow, Sanity, Contentful, Slack, Resend, les keyless Firecrawl et Tavily, Appeeky et Upfluence) sont catalogués dans [`docs/mcp-catalog.json`](mcp-catalog.json) comme **référence à copier-coller uniquement** — le catalogue se situe hors du chemin `.mcp.json` de la racine du plugin auto-enregistré, si bien que rien n'est enregistré pour vous. Copiez les entrées voulues dans votre propre config MCP.
 
 Les skills paid ads notent à partir de votre **export manuel de votre propre compte** (CSV du gestionnaire d'annonces natif, GA4, ecommerce). Les API de plateforme publicitaire à clé (Google Ads SDK, Meta Marketing API) sont opt-in Tier-2/3 uniquement et **jamais** un prérequis de Tier 1. Les skills e-mail notent de même — à partir de votre **propre export ESP** — et chaque signal de deliverability est keyless (lookups DNS, un rapport DMARC RUA et un test d'inbox par seed-list), si bien qu'une API ESP à clé n'est jamais non plus un prérequis de Tier 1 ; quand Resend est votre ESP, le `resend.py` embarqué automatise la même boucle sur le free-tier.
 
@@ -683,7 +697,7 @@ La dérive d'endpoints en live est échantillonnée séparément par le **manuel
 
 - **[CONTRIBUTING.md](../CONTRIBUTING.md)** — règles d'authoring, la checklist de contribution et la liste autoritaire des 10 surfaces de tracking.
 <!-- GENERATED:BEGIN release-surface:current-bundle -->
-- **[VERSIONS.md](../VERSIONS.md)** — versions par skill + changelog (bundle actuel : `19.2.0`).
+- **[VERSIONS.md](../VERSIONS.md)** — versions par skill + changelog (bundle actuel : `20.1.0`).
 <!-- GENERATED:END release-surface:current-bundle -->
 - **[SECURITY.md](../SECURITY.md)** · **[PRIVACY.md](../PRIVACY.md)** · **[CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md)** — politique de sécurité, de confidentialité et de communauté.
 - **[CLAUDE.md](../CLAUDE.md)** / **[AGENTS.md](../AGENTS.md)** — contexte côté agent pour ce repo.

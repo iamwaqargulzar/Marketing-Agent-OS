@@ -11,7 +11,7 @@
           "end_char": 129,
           "path": "launch/prove/momentum-planner/SKILL.md",
           "section": "Skill Contract/Done when",
-          "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045",
+          "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f",
           "span_basis": "field-text",
           "start_char": 0
         },
@@ -26,7 +26,7 @@
           "end_char": 249,
           "path": "launch/prove/momentum-planner/SKILL.md",
           "section": "Skill Contract/Done when",
-          "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045",
+          "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f",
           "span_basis": "field-text",
           "start_char": 131
         },
@@ -41,7 +41,7 @@
           "end_char": 407,
           "path": "launch/prove/momentum-planner/SKILL.md",
           "section": "Skill Contract/Done when",
-          "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045",
+          "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f",
           "span_basis": "field-text",
           "start_char": 251
         },
@@ -53,7 +53,7 @@
     "source": {
       "path": "launch/prove/momentum-planner/SKILL.md",
       "section": "Skill Contract/Done when",
-      "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045"
+      "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f"
     }
   },
   "context_hints": {
@@ -62,14 +62,14 @@
         "path": "CONNECTORS.md",
         "reason_code": "authored-reference",
         "requirement": "optional",
-        "sha256": "5d552b77c4e55838122185895bf39fb90135b3d33de485d8a862ee510f7271ff",
+        "sha256": "82551243ae14adb3b28cc21b3122b0ec12fd4d25abb9124678c198af12455c63",
         "source_line": 38
       },
       {
         "path": "SECURITY.md",
         "reason_code": "authored-reference",
         "requirement": "optional",
-        "sha256": "ed302bd3d6734c72a85f4b2df79a4f6d86cdc2d424387bc36bb9087d826f4c82",
+        "sha256": "5600d9d70c61e34e09dfedc0d21c28994fa2aacbbab2b8802c800a61da047f09",
         "source_line": 42
       },
       {
@@ -83,13 +83,14 @@
         "path": "references/skill-contract.md",
         "reason_code": "authored-reference",
         "requirement": "optional",
-        "sha256": "54c83f016ae66079e735e058ce5829523eb53ad370999eb4c8efa5180979253e",
+        "sha256": "fe1e93a2bf475ba3cf915aa0274080b98cea259514e8c873266231929c884b4c",
         "source_line": 34
       }
     ],
     "project_paths": []
   },
   "contract_id": "skill:momentum-planner",
+  "control_requirements": [],
   "handoff_contract": {
     "extraction_status": "partially-classified",
     "items": [
@@ -102,7 +103,7 @@
           "end_char": 177,
           "path": "launch/prove/momentum-planner/SKILL.md",
           "section": "Next Best Skill",
-          "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045",
+          "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f",
           "span_basis": "field-text",
           "start_char": 0
         },
@@ -120,7 +121,7 @@
           "end_char": 394,
           "path": "launch/prove/momentum-planner/SKILL.md",
           "section": "Next Best Skill",
-          "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045",
+          "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f",
           "span_basis": "field-text",
           "start_char": 178
         },
@@ -138,7 +139,7 @@
           "end_char": 562,
           "path": "launch/prove/momentum-planner/SKILL.md",
           "section": "Next Best Skill",
-          "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045",
+          "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f",
           "span_basis": "field-text",
           "start_char": 395
         },
@@ -156,7 +157,7 @@
           "end_char": 965,
           "path": "launch/prove/momentum-planner/SKILL.md",
           "section": "Next Best Skill",
-          "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045",
+          "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f",
           "span_basis": "field-text",
           "start_char": 564
         },
@@ -169,7 +170,7 @@
     "summary_ref": {
       "path": "launch/prove/momentum-planner/SKILL.md",
       "section": "Skill Contract/Handoff Summary",
-      "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045"
+      "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f"
     },
     "summary_source": "skill-section",
     "target_skills": [
@@ -184,8 +185,8 @@
     "name": "momentum-planner",
     "path": "launch/prove/momentum-planner/SKILL.md",
     "phase": "prove",
-    "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045",
-    "version": "19.2.0"
+    "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f",
+    "version": "20.1.0"
   },
   "input_contract": {
     "argument_hint": "<launch slug / spike data> [window: T+1→T+30] [candidate next moments]",
@@ -199,7 +200,7 @@
           "end_char": 66,
           "path": "launch/prove/momentum-planner/SKILL.md",
           "section": "Skill Contract/Reads",
-          "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045",
+          "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f",
           "span_basis": "field-text",
           "start_char": 0
         },
@@ -214,7 +215,7 @@
           "end_char": 85,
           "path": "launch/prove/momentum-planner/SKILL.md",
           "section": "Skill Contract/Reads",
-          "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045",
+          "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f",
           "span_basis": "field-text",
           "start_char": 68
         },
@@ -229,7 +230,7 @@
           "end_char": 143,
           "path": "launch/prove/momentum-planner/SKILL.md",
           "section": "Skill Contract/Reads",
-          "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045",
+          "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f",
           "span_basis": "field-text",
           "start_char": 87
         },
@@ -244,7 +245,7 @@
           "end_char": 269,
           "path": "launch/prove/momentum-planner/SKILL.md",
           "section": "Skill Contract/Reads",
-          "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045",
+          "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f",
           "span_basis": "field-text",
           "start_char": 145
         },
@@ -259,7 +260,7 @@
           "end_char": 368,
           "path": "launch/prove/momentum-planner/SKILL.md",
           "section": "Skill Contract/Reads",
-          "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045",
+          "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f",
           "span_basis": "field-text",
           "start_char": 271
         },
@@ -274,7 +275,7 @@
           "end_char": 421,
           "path": "launch/prove/momentum-planner/SKILL.md",
           "section": "Skill Contract/Reads",
-          "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045",
+          "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f",
           "span_basis": "field-text",
           "start_char": 370
         },
@@ -286,7 +287,7 @@
     "source": {
       "path": "launch/prove/momentum-planner/SKILL.md",
       "section": "Skill Contract/Reads",
-      "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045"
+      "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f"
     }
   },
   "output_contract": {
@@ -301,7 +302,7 @@
           "end_char": 85,
           "path": "launch/prove/momentum-planner/SKILL.md",
           "section": "Skill Contract/Writes",
-          "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045",
+          "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f",
           "span_basis": "field-text",
           "start_char": 0
         },
@@ -317,7 +318,7 @@
           "end_char": 313,
           "path": "launch/prove/momentum-planner/SKILL.md",
           "section": "Skill Contract/Writes",
-          "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045",
+          "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f",
           "span_basis": "field-text",
           "start_char": 87
         },
@@ -328,7 +329,7 @@
     "source": {
       "path": "launch/prove/momentum-planner/SKILL.md",
       "section": "Skill Contract",
-      "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045"
+      "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f"
     },
     "summary": "a T+1→T+30 momentum plan — a dated launch-moment calendar with each moment classified (milestone / shipped-loop / badge), an announcement-tier routing rule for the changelog cadence, a relaunch legitimacy call, spike-to-owned handoff briefs addressed to their owning skills, the next Tier-1 moment candidate with its spacing check, and the standard handoff summary.",
     "summary_source": "expected-output",
@@ -339,12 +340,12 @@
     "shared_contract": {
       "path": "references/skill-contract.md",
       "section": "Skill Contract",
-      "sha256": "54c83f016ae66079e735e058ce5829523eb53ad370999eb4c8efa5180979253e"
+      "sha256": "fe1e93a2bf475ba3cf915aa0274080b98cea259514e8c873266231929c884b4c"
     },
     "system_catalog": {
       "path": "references/system-catalog.json",
-      "sha256": "bbe1d063d75c079dd0761f50904f1ab64faa8d8adcc9f25cd3fffb5ac0a3ff7c",
-      "version": "19.2.0"
+      "sha256": "ac5a3d42ccdc98e396c48ead96e8a99e1ba88cf101f9f57d6afd2f6394165f6f",
+      "version": "20.1.0"
     }
   },
   "routing_contract": {
@@ -353,7 +354,7 @@
     "source": {
       "path": "launch/prove/momentum-planner/SKILL.md",
       "section": "frontmatter",
-      "sha256": "201665db29a7a9e1c16befe9f53a6892ff2d339a5d6256fe255c1096ca592045"
+      "sha256": "f9ab6d3a6b2dff808c76bbb512d4e16bbbe68cab21e6997b6ac36e591693934f"
     },
     "trigger_phrases": [
       "is this update worth a relaunch",

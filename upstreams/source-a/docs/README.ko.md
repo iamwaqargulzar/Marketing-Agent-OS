@@ -2,12 +2,12 @@
 
 # Aaron Marketing Skills
 
-**120개의 마케팅 스킬 — 브랜드 내러티브, SEO/GEO, 인플루언서, Paid Ads, 이메일, Launch, 소셜 — 을 하나의 계약으로.**
+**120개의 마케팅 스킬, 7개 분야, 하나의 계약 — 플러그인, 휴대용 스킬, 또는 8봇 팀으로 설치하는 AI 마케팅 스태프.**
 
 <p align="center">
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills"><img src="https://img.shields.io/github/stars/aaron-he-zhu/aaron-marketing-skills?style=flat" alt="GitHub Stars"></a>
 <!-- GENERATED:BEGIN release-surface:version-badge -->
-  <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md"><img src="https://img.shields.io/badge/version-19.2.0-orange" alt="Version"></a>
+  <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md"><img src="https://img.shields.io/badge/version-20.1.0-orange" alt="Version"></a>
 <!-- GENERATED:END release-surface:version-badge -->
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-green" alt="License"></a>
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/commits/main"><img src="https://img.shields.io/github/last-commit/aaron-he-zhu/aaron-marketing-skills" alt="Last Commit"></a>
@@ -22,7 +22,7 @@
 
 </div>
 
-챗 에이전트를 마케팅 오퍼레이터로 바꾸는 Claude 스킬과 슬래시 명령어 라이브러리. 일곱 개의 분야와 하나의 공유 프로토콜 계층을 한눈에:
+**프롬프트가 아니라 설치하는 AI 마케팅 스태프** — 120개의 agent skills가 명령과 메모리를 갖춘 하나의 플러그인, 70+ 호스트의 휴대용 스킬, 또는 이름 있는 봇 호스트(Grok Bot, Hermes Bot Mode)의 **8봇 AI Staff**로 돌아갑니다. 일곱 개의 분야와 하나의 공유 프로토콜 계층을 한눈에:
 
 | 계층 | 스킬 | 라이프사이클(단계 디렉터리) | 프레임워크 → 게이트 | 진입점 |
 |-------|--------|-------------------------------|------------------|------------|
@@ -47,6 +47,7 @@
 
 - [왜 이 라이브러리인가](#왜-이-라이브러리인가)
 - [설치](#설치)
+  - [AI Staff](#ai-staff)
 - [첫 실행](#첫-실행)
 - [아키텍처](#아키텍처)
   - [공유 스킬 컨트랙트](#공유-스킬-컨트랙트)
@@ -97,7 +98,8 @@ Claude Code, 임의의 Agent Skills 호환 호스트, 또는 단순한 `git clon
 |------|---------|
 | **Claude Code** | `/plugin marketplace add aaron-he-zhu/aaron-marketing-skills` 후 `/plugin install aaron-marketing@aaron` |
 | **Codex · Cursor · OpenCode · Antigravity · Gemini CLI · Copilot CLI · OpenClaw · Hermes · [70+ 호스트](https://github.com/vercel-labs/skills#supported-agents)** | `npx skills add aaron-he-zhu/aaron-marketing-skills` |
-| **Agent Plugins v1 클라이언트 · Portable Lite** | [v19.2.0 릴리스](https://github.com/aaron-he-zhu/aaron-marketing-skills/releases/tag/v19.2.0)에서 `aaron-marketing-skills-19.2.0-agent-plugin-v1-lite.tar.gz`를 내려받아 압축을 풀고 추출된 플러그인 디렉터리를 설치 |
+| **Agent Plugins v1 클라이언트 · Portable Lite** | [v20.1.0 릴리스](https://github.com/aaron-he-zhu/aaron-marketing-skills/releases/tag/v20.1.0)에서 `aaron-marketing-skills-20.1.0-agent-plugin-v1-lite.tar.gz`를 내려받아 압축을 풀고 추출된 플러그인 디렉터리를 설치 |
+| **Grok Bot · Hermes Bot Mode (AI Staff)** | 8봇 명단 생성: `python3 scripts/generate-bot-projections.py --output <private-dir>` — 전문가 7명 + `aaron-chief`. [AI Staff](#ai-staff) 참고 |
 | **[SkillHub.cn](https://skillhub.cn)(중국어 커뮤니티)** | `skillhub install <frontmatter-slug>`(예: `keyword-research`) |
 | **임의의 호스트** | `git clone https://github.com/aaron-he-zhu/aaron-marketing-skills` |
 
@@ -106,6 +108,18 @@ Claude Code에서 `marketplace add`는 카탈로그만 등록합니다 — 스�
 플러그인을 설치해도 `/mcp` 목록에 **아무것도** 추가되지 않습니다 — MCP 카탈로그는 [`docs/mcp-catalog.json`](mcp-catalog.json)에 있으며, Claude Code가 자동 등록하는 플러그인 루트 `.mcp.json` 경로 밖에 의도적으로 두어 복사-붙여넣기 참조일 뿐입니다([커넥터](#커넥터--향상-티어) 참조).
 
 저장소 루트는 작성용 SSOT이며 Agent Plugins v1의 표준 설치 루트가 **아닙니다**. 위 릴리스 자산을 사용하세요. **120/120개의 엄격한 Agent Skills**를 `skills/<name>/`에 투영하며 `mcp.json`, 명령, hooks, 커넥터 또는 저장소 런타임을 포함하지 않습니다. 기존 클라이언트 호환 계층은 유지됩니다. 자세한 내용은 [Portable Lite 패키지 및 기능 경계](agent-plugins-v1.md)를 참조하세요.
+
+### AI Staff
+
+이름 있는 봇 호스트(xAI의 **Grok Bot**, Hermes Agent의 **Bot Mode**)에서 이 번들은 120개 스킬 더미로 설치되지 않습니다. **스태프**로 설치됩니다. 이름 있는 여덟 명의 동료에게 동료처럼 @mention합니다. 일곱 명의 전문가가 각각 한 레인을 가집니다 — `aaron-narrative`, `aaron-seo-geo`, `aaron-social`, `aaron-email`, `aaron-ad`, `aaron-influencer`, `aaron-launch` — **`aaron-chief`**가 데스크를 돌립니다. 8개 프로토콜 레지스트리를 들고 교차 목표를 @mention으로 라우팅합니다(visited set, 핸드오프 3회 상한). 이는 이 호스트가 전제로 하는 치프 오브 스태프+전문가 편성과 같고, 다른 설치 형태와 같은 타입 카탈로그에서 나옵니다. 120개 스킬을 정확히 한 번씩, 두 번째 목록은 없습니다.
+
+`@aaron-chief`에게 "3주 뒤 Product Hunt에서 v2를 런칭해"라고 하면 계획은 `@aaron-launch`, `@aaron-email`, `@aaron-social`을 거쳐 돌아옵니다. 각 봇은 자기 레인만 답합니다.
+
+```bash
+python3 scripts/generate-bot-projections.py --output /private/path/aaron-bot-roster
+```
+
+생성기는 설치 가능한 Hermes 프로필 번들 8개(`hermes/<bot>/`, 해시 바인딩 매니페스트)와 Grok Bot 셋업 팩(`grok/bot-cards.md`, 활성화 목록, 체크리스트)을 씁니다. Staff 번들은 **Tier-1 정적**입니다. 커넥터, MCP, cron, 런타임 없음. auditor는 추측하지 않고 `NOT_SCORED`를 반환합니다. 레지스트리와 메모리 쓰기는 propose-only로 남습니다. Grok Bot에서는 한 멤버의 모든 봇이 하나의 클라우드 컴퓨터를 공유합니다 — 봇 이름은 보안 경계가 아닙니다. 배포 단계, 호스트 주의점, owner-run 스모크 백로그: [agent-compatibility.md](agent-compatibility.md#named-bot-roster-deployment-grok-bot--hermes-bot-mode).
 
 ---
 
@@ -548,7 +562,7 @@ Artifact Gate는 **프레임워크 비의존적**입니다 — 같은 훅이 TAL
 |-------|--------------|
 | **28개의 번들 의존성 없는 커넥터** | 순수 Python 표준 라이브러리 — `pip` 없음, 빌드 단계 없음. keyless 라이브 SERP + JS 렌더 스크래핑(Firecrawl, Tavily), AI 답변 인용 프로브, DNS-over-HTTPS 이메일 인증 가져오기, Wikipedia 주목도 시계열, GDELT 뉴스 언급, 실제 YouTube 크리에이터 지표, IndexNow + Baidu 색인 푸시, Resend ESP 자동화, 그리고 이들 중 무엇이든 전후 비교 시계열로 바꾸는 git 디프 가능한 측정 원장. |
 | **60개 이상의 문서화된 공식/무료 API** | 각 행이 벤더의 **공식 문서**를 링크하고, 검증 날짜를 담으며, 각 링크는 출시 전 HTTP 확인됩니다. 대부분의 도구 목록이 놓치는 경로를 포함: GSC URL Inspection, CrUX History(40주간 필드 CWV), Gmail Postmaster Tools API, Meta의 Ad Library, Microsoft Clarity의 Data Export API. |
-| **벤더 MCP 서버** | 18개 원격 엔드포인트를 카탈로그화(절대 자동 등록되지 않음 — 당신의 `/mcp` 목록은 깨끗하게 유지)하고, Google Analytics, Search Console, **Google Ads**, **Microsoft Clarity**의 공식 셀프호스트 서버 추가. 두 개의 원격 MCP는 키 없이 동작합니다(Firecrawl, Tavily). |
+| **벤더 MCP 서버** | 옵트인 카탈로그 항목은 20개(벤더 호스팅 원격 엔드포인트 19개 + 셀프호스트 OpenSEO 항목 1개)이며 절대 자동 등록되지 않아 `/mcp` 목록이 깨끗하게 유지됩니다. Google Analytics, Search Console, **Google Ads**, **Microsoft Clarity**의 공식 셀프호스트 서버도 문서화되어 있습니다. 두 개의 원격 MCP는 키 없이 동작합니다(Firecrawl, Tavily). |
 
 단지 수가 많은 게 아니라 신뢰할 수 있게 만드는 이유:
 
@@ -565,7 +579,7 @@ Artifact Gate는 **프레임워크 비의존적**입니다 — 같은 훅이 TAL
 
 - **번들 의존성 없는 헬퍼**는 `scripts/connectors/` 아래(Python 표준 라이브러리만)에서 공개/자체 데이터를 로컬로 가져옵니다 — 예: PageSpeed/CrUX, Open PageRank, 페이지 크롤, Wayback CDX, Wikidata SPARQL, Common Crawl, advertools 레시피 — 그리고 **`resend.py`**(이메일 스킬용 Resend ESP 직결 자동화: 무료 티어 키로 도메인 인증 상태, seed-test 발송, 억제 동기화, 브로드캐스트 예약; 변경 서브커맨드는 기본 dry-run이며 `--live` 필요), 그리고 **`firecrawl.py`** + **`tavily.py`**(research 스킬용 keyless 호스트형 페처 자동화: Firecrawl은 라이브 웹 SERP + JS 렌더 페이지 markdown + 사이트맵; Tavily는 점수 검색 + GEO용 AI 답변 엔진 인용 소스 프로브 + URL 추출 — 둘 다 키 없이 무료, 둘 다 로컬 robots.txt 사전 점검 내장).
 - **무료/keyless 소스**를 카테고리별로 문서화: Google Search Console & GA4(자체 데이터), PageSpeed/CrUX, Wikidata, Common Crawl, Open PageRank, Firecrawl keyless SERP/스크래프, Tavily keyless AI 검색, DNS-over-HTTPS 이메일 인증 레코드(`doh.py`), Wikipedia 주목도 시계열(`pageviews.py`), GDELT 뉴스 언급(`gdelt.py`), 무료 키의 YouTube 크리에이터 지표(`youtube.py`), IndexNow + Baidu 색인 푸시(`indexpush.py`, dry-run 게이트), 광고 투명성 라이브러리(Meta/Google/TikTok), 그리고 crt.sh, W3C 검증기, oEmbed, HN Algolia의 레시피 행.
-- **옵트인 MCP 서버**(Ahrefs, Semrush, SE Ranking, SISTRIX, SimilarWeb, 셀프호스트 무료 **OpenSEO** 스위트, Cloudflare, Vercel, HubSpot, Amplitude, Notion, Webflow, Sanity, Contentful, Slack, Resend, keyless Firecrawl과 Tavily)는 [`docs/mcp-catalog.json`](mcp-catalog.json)에 **복사-붙여넣기 참조로만** 카탈로그화되어 있습니다 — 카탈로그는 자동 등록되는 플러그인 루트 `.mcp.json` 경로 밖에 있어 당신을 위해 아무것도 등록되지 않습니다. 원하는 항목을 자신의 MCP 설정에 복사하세요.
+- **옵트인 MCP 서버**(Ahrefs, Semrush, SE Ranking, SISTRIX, SimilarWeb, 셀프호스트 무료 **OpenSEO** 스위트, Cloudflare, Vercel, HubSpot, Amplitude, Notion, Webflow, Sanity, Contentful, Slack, Resend, keyless Firecrawl과 Tavily, Appeeky, Upfluence)는 [`docs/mcp-catalog.json`](mcp-catalog.json)에 **복사-붙여넣기 참조로만** 카탈로그화되어 있습니다 — 카탈로그는 자동 등록되는 플러그인 루트 `.mcp.json` 경로 밖에 있어 당신을 위해 아무것도 등록되지 않습니다. 원하는 항목을 자신의 MCP 설정에 복사하세요.
 
 Paid Ads 스킬은 **자기 계정의 수동 내보내기**(네이티브 광고 관리자 CSV, GA4, ecommerce)로 채점합니다. 키가 필요한 광고 플랫폼 API(Google Ads SDK, Meta Marketing API)는 옵트인 Tier-2/3 전용이며 **결코** Tier 1 요건이 아닙니다. 이메일 스킬도 같은 방식 — **자신의 ESP 내보내기**로 채점 — 이며 각 deliverability 신호는 keyless(DNS 조회, DMARC RUA 리포트, seed-list inbox 테스트)이므로 키가 필요한 ESP API도 결코 Tier 1 요건이 아닙니다; 당신의 ESP가 Resend라면 번들 `resend.py`가 무료 티어에서 같은 루프를 자동화합니다.
 
@@ -683,7 +697,7 @@ docs/            # 현지화된 README (de, es, fr, it, ja, ko, pt, zh, zh-Hant)
 
 - **[CONTRIBUTING.md](../CONTRIBUTING.md)** — 오서링 규칙, 기여 체크리스트, 권위 있는 10개 추적 표면 목록.
 <!-- GENERATED:BEGIN release-surface:current-bundle -->
-- **[VERSIONS.md](../VERSIONS.md)** — 스킬별 버전 + changelog(현재 번들: `19.2.0`).
+- **[VERSIONS.md](../VERSIONS.md)** — 스킬별 버전 + changelog(현재 번들: `20.1.0`).
 <!-- GENERATED:END release-surface:current-bundle -->
 - **[SECURITY.md](../SECURITY.md)** · **[PRIVACY.md](../PRIVACY.md)** · **[CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md)** — 보안, 프라이버시, 커뮤니티 정책.
 - **[CLAUDE.md](../CLAUDE.md)** / **[AGENTS.md](../AGENTS.md)** — 이 repo의 에이전트용 컨텍스트.

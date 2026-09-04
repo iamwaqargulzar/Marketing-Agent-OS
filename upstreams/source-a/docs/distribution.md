@@ -28,7 +28,7 @@ Portable Lite is additive and does not change that capability lattice. The
 repository root is its authoring source, **not** an Agent Plugins install root.
 The release builder generates the required flat `skills/<name>/` package and
 strict frontmatter without adding a committed mirror. Install the extracted
-`aaron-marketing-skills-19.2.0-agent-plugin-v1-lite.tar.gz` directory; see the
+`aaron-marketing-skills-20.1.0-agent-plugin-v1-lite.tar.gz` directory; see the
 exact [Agent Plugins v1 package and capability
 boundary](agent-plugins-v1.md).
 
@@ -38,6 +38,35 @@ one-folder payload: `authored-workflows`, `inline-delivery`, and
 persistence, or context planning. Auditor folders include a complete typed
 observation fallback, but without the root scorer and validator they must return
 `NOT_SCORED/UNDECIDED` and cannot persist under `memory/audits/`.
+
+Cross-discipline control artifacts have a separate machine-verification
+boundary. All profiles retain the complete authored evidence, measurement,
+intent, receipt, and retrospective procedures. Only the **Governed** runtime
+profile ships the generated `control-bindings` catalog and schema together with
+`validate-control-artifact.py`; a static payload may carry
+`control-artifact.schema.json` only as a shape/reference document. Lite, Pro,
+Portable Lite, named-bot, and standalone execution therefore label every
+control artifact, tracker, or projection `NOT_VERIFIED`. They cannot claim
+selected ancestry, a unique current head, a verified receipt, consumed
+permission, or persisted runtime state.
+
+| Control guarantee | Governed physical profile | Lite / Pro | Portable Lite / named-bot / standalone |
+|---|---|---|---|
+| Complete authored discipline semantics | Yes | Yes | Yes |
+| Control bindings plus semantic validator | Packaged | Not packaged | Not packaged |
+| Static control schema | Packaged and executable through the validator | May be omitted by the plugin boundary | May appear only as static shape guidance |
+| Exact artifact and local-reference digest validation | Available after explicit Governed selection | `NOT_VERIFIED` semantic output only | `NOT_VERIFIED` semantic output only |
+| Selected ancestry and unique-head claims | Only through the existing run runtime, selected ancestry, and compare-and-swap checks | Forbidden | Forbidden |
+| Recovery from a verified control checkpoint | Existing Governed save-point/envelope recovery | No runtime claim | No runtime claim |
+| External-action authority | Never granted by a validator, intent, receipt, package, or profile | Never granted | Never granted |
+
+In Governed execution, validate the immutable control bytes first and record the
+observation with the existing `artifact_validated` run event. The run event,
+selected ancestry, compare-and-swap checks, and recovery artifacts preserve
+traceability; they do not promote a control into registry truth. An
+`action-intent.permission_ref` is provenance only, and an `action-receipt`
+records an observed executor result only. The actual executor must re-check the
+current, exact user/host authority and all operation-specific safety controls.
 
 ## Host capability projections
 
@@ -53,6 +82,15 @@ connectors. The typed source is
 | `generic-shared-root-host` | plugin/repository | eight router-skill facades | `router-facades/<discipline>/SKILL.md` plus a typed sidecar manifest |
 | `standalone-skill-host` | one-folder standalone skill | direct skill invocation | none |
 | `agent-plugins-v1` | Portable Lite Agent Plugin | direct Skill discovery | exactly 120 immediate `skills/<name>/SKILL.md` directories |
+| `hermes-bot-host` (roster-projection-only) | `bot-roster` output of `generate-bot-projections.py` | named-bot roster (8 bots, handoff by @mention) | 8 Hermes profile-distribution bundles (`hermes/<bot>/`) |
+| `grok-bot-host` (roster-projection-only) | `bot-roster` output of `generate-bot-projections.py` | named-bot roster (8 bots, handoff by @mention) | `grok/bot-cards.md`, `enable-lists.md`, `setup-checklist.md` |
+
+The two `*-bot-host` rows are declared in the separate
+[`references/bot-roster-profiles.json`](../references/bot-roster-profiles.json)
+catalog (`context_assembly: excluded`), not in `host-capability-profiles.json`:
+they describe generated deployment surfaces only and never enter
+`build-distribution.py` payload selection, prompt/context assembly, or the
+certified resolver chain.
 
 Every plugin host projection, at every physical profile, ships the typed host,
 prompt, and context-module catalogs, `context-profile-resolver.py`, and the
@@ -76,6 +114,29 @@ evaluation artifacts only: because the package does not yet carry complete
 paired evidence for trusted revalidation or a signed release attestation, every
 distribution build and manifest verification rejects non-empty
 `certified_bindings`. Production therefore remains `explicit`-only.
+
+That Governed-only executable surface also contains the cross-discipline
+control schema, the generated control-bindings catalog and schema, and the
+stdlib control validator. Lite and Pro retain the same authored skill text but
+do not receive the bindings or validator. Agent Plugins v1 Portable Lite may
+carry the schema through its static-reference closure, but redirects executable
+runtime links to `PORTABILITY.md` and never treats the schema as proof that
+validation occurred.
+
+Workflow execution in the Governed archive uses the compiled graph,
+authoritative source/shards and schemas, plus `workflow-loop.py` /
+`workflow_loop.py`. The graph generator `scripts/workflow-graph.py` is a
+full-repository authoring and CI surface, not a packaged runtime dependency; it
+is intentionally omitted without weakening workflow execution or verification.
+The generated human graph view and its authoring protocol remain repository
+documentation as well; packaged execution consumes the typed graph artifacts,
+not those prose projections. The complete context-planning,
+context-resolution, and runtime-controller guides likewise remain in the
+authoring repository. Packages retain small deterministic pointer files so
+local links stay closed, while Governed ships the closed schemas and executable
+runtimes. Distribution manifests and generic-host router sidecars use
+deterministic compact JSON so presentation whitespace does not consume
+capability-package ceilings.
 
 Build an explicit generic-host projection with:
 
@@ -110,6 +171,30 @@ An incompatible combination fails closed. Manifest 1.2 records the selected
 host profile and surfaces; read-only verification remains compatible with
 legacy manifest 1.0 and physical-profile manifest 1.1.
 
+### Bot roster deployment (Grok Bot / Hermes Bot Mode)
+
+Named-bot hosts consume a fifth, separately generated surface — never a
+committed tree and never a `build-distribution.py` payload:
+
+```bash
+python3 scripts/generate-bot-projections.py --output /private/path/aaron-bot-roster
+```
+
+That command derives the 8-bot roster (7 discipline bots plus
+`aaron-chief`, which owns the 8 protocol skills and the routing table)
+from `references/system-catalog.json`, covering the 120 skills exactly once. It
+writes 8 self-contained Hermes profile-distribution bundles (`distribution.yaml`,
+generated `SOUL.md`, Portable-Lite-projected `skills/`, static reference
+closure, hash-bound manifest) plus the Grok Bot cards, per-bot enable lists,
+and setup checklist. Degradation is identical in spirit to Portable Lite and is
+stamped into every bundle: no connectors, `mcp.json`, cron, hooks, or
+deterministic runtimes; auditors return `NOT_SCORED`; registry and
+durable-memory work is propose-only with owner-run acceptance; links to skills
+owned by another bot redirect to the bundle boundary and hand off by name.
+Deployment steps, host caveats (including Grok Bot's shared cloud computer),
+and the owner-run smoke backlog live in
+[agent-compatibility.md](agent-compatibility.md#named-bot-roster-deployment-grok-bot--hermes-bot-mode).
+
 Build the complete release-asset set with one command. The builder exports the
 exact Git object into a private directory, builds all three runtime profiles
 plus the Portable Lite projection from that export, creates four canonical
@@ -121,8 +206,8 @@ python3 scripts/build-release-assets.py \
   --source-repo /path/to/aaron-marketing-skills \
   --source-repository aaron-he-zhu/aaron-marketing-skills \
   --source-commit <exact-40-hex-release-commit> \
-  --version 19.2.0 \
-  --output /private/path/v19.2.0-release-assets
+  --version 20.1.0 \
+  --output /private/path/v20.1.0-release-assets
 ```
 
 Build and strictly validate the standalone Agent Plugins projection during
@@ -163,8 +248,8 @@ Verify an existing payload without rebuilding it with
 The manifest also binds `profile`, `capability_ceiling`, resolved capabilities,
 the catalog and profile-definition hashes, package budget, and optional pinned
 repository/commit provenance. `build-release-assets.py` emits the fixed
-`aaron-marketing-skills-19.2.0-{lite,pro,governed}.tar.gz` runtime archives,
-`aaron-marketing-skills-19.2.0-agent-plugin-v1-lite.tar.gz`, `SHA256SUMS`, and
+`aaron-marketing-skills-20.1.0-{lite,pro,governed}.tar.gz` runtime archives,
+`aaron-marketing-skills-20.1.0-agent-plugin-v1-lite.tar.gz`, `SHA256SUMS`, and
 the machine-readable `release-assets.json` ledger defined by
 [`release-assets.schema.json`](../references/release-assets.schema.json).
 Archive paths are sorted under a fixed root; timestamps and owner fields are
@@ -194,26 +279,27 @@ Every release-time **live** mutation entrypoint (`publish-clawhub.sh`,
 `publish-skillhub.sh`, `publish-package.sh`, `publish-registries.sh`,
 `sync-about.sh`, and `sync-family.sh`) requires a completely clean tree,
 successfully refreshes `origin/main`, and proves HEAD is reachable from it.
-For v19 and later it also validates the private engineering receipt together
-with its exact maturity report and original raw semantic-evidence chain,
-immutable final tag, non-draft GitHub Release, exact six downloaded release
-assets, and a successful owner-run release-validation workflow on the same
-commit. These private inputs are read locally and never uploaded. The
-registry parent passes a commit/receipt-bound gate token to its children so this
-expensive read-only verification runs once without weakening direct
-per-publisher calls.
+For v19 and later it also validates the immutable final tag (must resolve to
+HEAD), non-draft GitHub Release, exact six downloaded release assets, and a
+successful owner-run release-validation workflow on the same commit. Live
+publishers do not require `AARON_RELEASE_RECEIPT`,
+`AARON_RELEASE_MATURITY_REPORT`, or `AARON_RELEASE_EVIDENCE_ROOT`. Those
+private inputs remain required only for `create-github-release.py --live` and
+are never uploaded. The registry parent passes a commit-bound gate token to its
+children so this expensive read-only verification runs once without weakening
+direct per-publisher calls.
 Receipt issuance and `create-github-release.py --live` always enforce the
-24-hour current-freshness gate. A later publisher resume first proves the
-immutable final tag, non-draft Release, exact six downloaded assets, and owner
-workflow, and only then internally selects the explicit
-`--post-release-continuation` verifier mode. That mode relaxes only the
+24-hour current-freshness gate. The verifier's `--post-release-continuation`
+mode remains available for owner-local receipt revalidation after that
+immutable final Release exists. That mode relaxes only the
 wall-clock-since-issuance check: issuance-time 24-hour freshness plus every
 receipt, report, raw-chain, tool, policy, source, commit, and version binding
 still must pass. Continuation is bounded by the committed semantic policy
-(`maximum_age_days`, currently 30); it is not a release-creation option or an
-independent authorization flag. If that policy window expires, collect fresh
-provider evidence against the same immutable release commit and issue a new
-private report/receipt before resuming.
+(`maximum_age_days`, currently 30 days); it is not a release-creation option or
+an independent authorization flag. Live publishers do not invoke that mode. If
+that policy window expires, collect fresh provider evidence against the same
+immutable release commit and issue a new private report/receipt before calling
+`create-github-release.py --live` again.
 The origin itself must be a canonical `github.com` HTTPS, SSH, or scp URL;
 lookalike hosts, local paths, non-HTTPS web URLs, and Git `insteadOf` rewrites
 fail closed. The fetch uses that already-validated literal URL rather than
@@ -298,7 +384,7 @@ frozen tree as the release candidate. Issue the private engineering receipt
 against that exact clean commit:
 
 ```bash
-RC_NAME="19.2.0-rc.1"
+RC_NAME="20.1.0-rc.1"
 python3 scripts/issue-engineering-release-receipt.py \
   --root "$PWD" \
   --semantic-evidence-run-id "<fresh-current-source-run-uuid>" \
@@ -316,8 +402,9 @@ bytes and binds the current
 issuer/verifier/checker/rubric/policy bytes, real execution, distinct judge,
 complete 24-case smoke cohort, all five 100/100 maturity dimensions, and
 P19/P20/H20. Keep both outputs private and never overwrite them; export
-the complete three-part verification bundle before any live release or
-distribution command:
+the complete three-part verification bundle before `create-github-release.py --live`.
+Later live publishers (`sync-about.sh`, `sync-family.sh`, `publish-*.sh`) do not
+read that bundle:
 
 ```bash
 export AARON_RELEASE_RECEIPT="/private/path/v19-engineering-release-receipt.json"
@@ -325,7 +412,7 @@ export AARON_RELEASE_MATURITY_REPORT="/private/path/v19-engineering-maturity-rep
 export AARON_RELEASE_EVIDENCE_ROOT="/absolute/private/project-root"
 python3 scripts/verify-release-receipt.py "$AARON_RELEASE_RECEIPT" \
   --source-commit "$(git rev-parse --verify 'HEAD^{commit}')" \
-  --release-version 19.2.0 \
+  --release-version 20.1.0 \
   --required-gate engineering-validation-v19 \
   --maturity-report "$AARON_RELEASE_MATURITY_REPORT" \
   --evidence-root "$AARON_RELEASE_EVIDENCE_ROOT"
@@ -358,8 +445,8 @@ Keep this material private under the same no-PII, pseudonymous, owner-attested
 rules and verify it separately:
 
 ```bash
-RELEASE_COMMIT="<exact-40-hex-v19-release-commit>"
-RC_NAME="19.2.0-rc.1"
+RELEASE_COMMIT="<exact-40-hex-release-commit>"
+RC_NAME="20.1.0-rc.1"
 python3 scripts/verify-profile-outcomes.py \
   /private/path/v19-governed-promotion-outcomes.json \
   --stage governed-promotion \
@@ -383,13 +470,15 @@ package.
 
 ## Release-time distribution (the full push→distribution runbook, in order)
 
-Validated end-to-end at v18.0.0 (2026-07-13/14). Every step is resumable: a killed
+The ritual below is current. The first end-to-end validation of this sequence
+was at **v18.0.0 (2026-07-13/14)** and is a **historical** measurement, not the
+current release identity. Every step is resumable: a killed
 session loses at most one in-flight skill — re-run the same command.
 
 1. **Gate**: refresh/rebase deliberately, freeze one clean RC commit, pass the exact 120/120 version and complete local validation gates, run the current-source real-provider engineering-maturity gate, retain the original raw evidence root, issue the private maturity report plus engineering release receipt, and build two byte-identical release-asset sets against that exact commit.
 2. **Push and remote validation**: push the exact RC ref → require its ordinary PR CI → owner-dispatch release validation for that already-pushed ref/commit → integrate through the reviewed default-branch path without changing the RC tree. The release-validation workflow rejects a missing or differently resolved remote ref. The RC commit must remain reachable from refreshed `origin/main`; do not squash or rebase it during integration.
-3. **Release**: preview with `python3 scripts/create-github-release.py`, then run `python3 scripts/create-github-release.py --live --receipt "$AARON_RELEASE_RECEIPT" --maturity-report "$AARON_RELEASE_MATURITY_REPORT" --evidence-root "$AARON_RELEASE_EVIDENCE_ROOT" --asset-dir /private/path/v19.2.0-release-assets`. The owner-run command rapidly revalidates the private three-part evidence bundle and original semantic chain, then rechecks the exact six assets, green release workflow, clean/main-reachable source, annotated tag, `VERSIONS.md` notes, and downloaded GitHub assets. It never uploads the private inputs, resumes a same-commit tag safely, and treats an existing release as read-only; it never moves a tag or replaces assets.
-4. **About**: `bash scripts/sync-about.sh` → review → `--live` — projects `.github/repo-about.json` onto the GitHub sidebar. *This step was silently skipped at v18.0.0 and the About kept advertising the previous release's framework names — it is part of the ritual, not an extra.*
+3. **Release**: preview with `python3 scripts/create-github-release.py`, then run `python3 scripts/create-github-release.py --live --receipt "$AARON_RELEASE_RECEIPT" --maturity-report "$AARON_RELEASE_MATURITY_REPORT" --evidence-root "$AARON_RELEASE_EVIDENCE_ROOT" --asset-dir /private/path/v20.1.0-release-assets`. The owner-run command rapidly revalidates the private three-part evidence bundle and original semantic chain, then rechecks the exact six assets, green release workflow, clean/main-reachable source, annotated tag, `VERSIONS.md` notes, and downloaded GitHub assets. It never uploads the private inputs, resumes a same-commit tag safely, and treats an existing release as read-only; it never moves a tag or replaces assets.
+4. **About**: `bash scripts/sync-about.sh` → review → `--live` — projects `.github/repo-about.json` onto the GitHub sidebar. *Historical note from v18.0.0: this step was silently skipped then and the About kept advertising the previous release's framework names — it is part of the ritual, not an extra.*
 5. **Family prerequisites** (only when the release renamed/reshaped a family repo): rename the mirror first, then manually reconcile any `ids`-mode mirror's content (README + standard file + CHANGELOG + CITATION) — `ids` targets are verify-only and never auto-pushed.
 6. **Family**: `bash scripts/sync-family.sh` → review → `--live` → re-run the dry-run until all 15 report ✓.
 7. **Package**: `bash scripts/publish-package.sh --from-build` → review → `bash scripts/publish-package.sh --from-build --live`. This publishes the Governed-ceiling package whose fresh logical default remains Lite. On a transport error after upload the script accepts success only when `package inspect --json` returns the exact source repository/commit and the remotely served distribution manifest has the attempted build's `files_sha256`; an older CLI without those fields fails closed.
@@ -430,18 +519,21 @@ Report that state explicitly and resume after the window rolls; do not call the
 release fully distributed until `registry-status.sh`, the package, About, family
 repos, and all six release assets agree.
 
-> **SkillHub quota (measured, v18.0.0)**: ~**100 publishes per 24h rolling window,
+> **SkillHub quota (historical measurement from v18.0.0; not the current release identity)**: ~**100 publishes per 24h rolling window,
 > account-wide**. Past it, every skill returns 发布频率过高 and *retries keep the
 > window hot* — never grind retries against it. `publish-registries.sh` therefore
 > stops at `--skillhub-budget` (default 90), retries a rate-limit once, defers the
 > skill, and aborts the pass after 2 consecutive deferrals. A 120-skill full
 > re-release is by design a **two-day publish**: ~90 on day one, the rest after
-> the window rolls. Deferred runs exit 8, not 1. The resumed publisher may reuse
-> the original private evidence bundle after 24 hours only because it first
-> re-proves the immutable final Release gates and remains inside the committed
-> semantic-policy window (currently 30 days). Past that window, rerun the
-> real-provider smoke against the same release commit and issue a new report and
-> receipt.
+> the window rolls. Deferred runs exit 8, not 1. The resumed publisher may
+> continue after 24 hours because it re-proves the immutable final Release
+> gates (tag resolves to HEAD, non-draft release, assets, and green owner
+> workflow) and does not require the private `AARON_RELEASE_*` bundle. The
+> verifier `--post-release-continuation` mode remains available for owner-local
+> receipt revalidation inside the committed semantic-policy window (currently 30 days).
+> Past that window, rerun the real-provider smoke against the same
+> immutable release commit and issue a new report and receipt before creating
+> another GitHub release.
 
 ## Gotchas (learned the hard way)
 

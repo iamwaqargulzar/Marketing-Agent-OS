@@ -11,7 +11,7 @@
           "end_char": 34,
           "path": "ad/orchestrate/ad-test-designer/SKILL.md",
           "section": "Skill Contract/Done when",
-          "sha256": "e12303cbd54a45be94fdee0b7dd390ad91aeec4d5065966db0f029066da1c79b",
+          "sha256": "7160f23c77de20dfa546d2ca1fc45488f36af686eb9c9758fc72f597c4d84104",
           "span_basis": "field-text",
           "start_char": 0
         },
@@ -26,7 +26,7 @@
           "end_char": 80,
           "path": "ad/orchestrate/ad-test-designer/SKILL.md",
           "section": "Skill Contract/Done when",
-          "sha256": "e12303cbd54a45be94fdee0b7dd390ad91aeec4d5065966db0f029066da1c79b",
+          "sha256": "7160f23c77de20dfa546d2ca1fc45488f36af686eb9c9758fc72f597c4d84104",
           "span_basis": "field-text",
           "start_char": 36
         },
@@ -38,14 +38,14 @@
         "extraction_status": "classified",
         "requirement": "required",
         "source": {
-          "end_char": 180,
+          "end_char": 167,
           "path": "ad/orchestrate/ad-test-designer/SKILL.md",
           "section": "Skill Contract/Done when",
-          "sha256": "e12303cbd54a45be94fdee0b7dd390ad91aeec4d5065966db0f029066da1c79b",
+          "sha256": "7160f23c77de20dfa546d2ca1fc45488f36af686eb9c9758fc72f597c4d84104",
           "span_basis": "field-text",
           "start_char": 82
         },
-        "text": "baseline, MDE, alpha, power, multiplicity/sequential policy, duration, and guardrails are declared"
+        "text": "the control, candidate, variant hash, signal spec, and measurement contract are bound"
       },
       {
         "clause_id": "done-04",
@@ -53,22 +53,52 @@
         "extraction_status": "classified",
         "requirement": "required",
         "source": {
-          "end_char": 354,
+          "end_char": 267,
           "path": "ad/orchestrate/ad-test-designer/SKILL.md",
           "section": "Skill Contract/Done when",
-          "sha256": "e12303cbd54a45be94fdee0b7dd390ad91aeec4d5065966db0f029066da1c79b",
+          "sha256": "7160f23c77de20dfa546d2ca1fc45488f36af686eb9c9758fc72f597c4d84104",
           "span_basis": "field-text",
-          "start_char": 182
+          "start_char": 169
         },
-        "text": "and a read-out reports effect/interval/statistical/practical flags with `Calculated` provenance. Without a precommitted action rule and owner, return `decision: UNDECIDED`."
+        "text": "baseline, MDE, alpha, power, multiplicity/sequential policy, duration, and guardrails are declared"
+      },
+      {
+        "clause_id": "done-05",
+        "condition_kind": "success",
+        "extraction_status": "classified",
+        "requirement": "required",
+        "source": {
+          "end_char": 433,
+          "path": "ad/orchestrate/ad-test-designer/SKILL.md",
+          "section": "Skill Contract/Done when",
+          "sha256": "7160f23c77de20dfa546d2ca1fc45488f36af686eb9c9758fc72f597c4d84104",
+          "span_basis": "field-text",
+          "start_char": 269
+        },
+        "text": "and a read-out reports effect/interval/statistical/practical flags with `Calculated` provenance against the same binding. A mismatch returns `NEEDS_INPUT/UNDECIDED`"
+      },
+      {
+        "clause_id": "done-06",
+        "condition_kind": "success",
+        "extraction_status": "classified",
+        "requirement": "required",
+        "source": {
+          "end_char": 510,
+          "path": "ad/orchestrate/ad-test-designer/SKILL.md",
+          "section": "Skill Contract/Done when",
+          "sha256": "7160f23c77de20dfa546d2ca1fc45488f36af686eb9c9758fc72f597c4d84104",
+          "span_basis": "field-text",
+          "start_char": 435
+        },
+        "text": "without a precommitted action rule and owner, return `decision: UNDECIDED`."
       }
     ],
-    "done_when": "a falsifiable hypothesis is stated; the matrix isolates one variable per variant; baseline, MDE, alpha, power, multiplicity/sequential policy, duration, and guardrails are declared; and a read-out reports effect/interval/statistical/practical flags with `Calculated` provenance. Without a precommitted action rule and owner, return `decision: UNDECIDED`.",
+    "done_when": "a falsifiable hypothesis is stated; the matrix isolates one variable per variant; the control, candidate, variant hash, signal spec, and measurement contract are bound; baseline, MDE, alpha, power, multiplicity/sequential policy, duration, and guardrails are declared; and a read-out reports effect/interval/statistical/practical flags with `Calculated` provenance against the same binding. A mismatch returns `NEEDS_INPUT/UNDECIDED`; without a precommitted action rule and owner, return `decision: UNDECIDED`.",
     "extraction_status": "classified",
     "source": {
       "path": "ad/orchestrate/ad-test-designer/SKILL.md",
       "section": "Skill Contract/Done when",
-      "sha256": "e12303cbd54a45be94fdee0b7dd390ad91aeec4d5065966db0f029066da1c79b"
+      "sha256": "7160f23c77de20dfa546d2ca1fc45488f36af686eb9c9758fc72f597c4d84104"
     }
   },
   "context_hints": {
@@ -77,15 +107,22 @@
         "path": "CONNECTORS.md",
         "reason_code": "authored-reference",
         "requirement": "optional",
-        "sha256": "5d552b77c4e55838122185895bf39fb90135b3d33de485d8a862ee510f7271ff",
+        "sha256": "82551243ae14adb3b28cc21b3122b0ec12fd4d25abb9124678c198af12455c63",
         "source_line": 33
       },
       {
         "path": "SECURITY.md",
         "reason_code": "authored-reference",
         "requirement": "optional",
-        "sha256": "ed302bd3d6734c72a85f4b2df79a4f6d86cdc2d424387bc36bb9087d826f4c82",
+        "sha256": "5600d9d70c61e34e09dfedc0d21c28994fa2aacbbab2b8802c800a61da047f09",
         "source_line": 47
+      },
+      {
+        "path": "ad/orchestrate/ad-test-designer/references/measurement-control.md",
+        "reason_code": "authored-reference",
+        "requirement": "optional",
+        "sha256": "8adc01c733b8e9e3d86e55737edadb4bb8a71d56dae4470f6f7c8249338fcc2c",
+        "source_line": 61
       },
       {
         "path": "ad/orchestrate/ad-test-designer/references/test-design-guide.md",
@@ -98,7 +135,7 @@
         "path": "references/measurement-protocol.md",
         "reason_code": "authored-reference",
         "requirement": "optional",
-        "sha256": "6b802eebfd10a8ab7957f31777ee32e7cf6cdd42072aebe9e1038e985c8c9d75",
+        "sha256": "968a81503e7e9a3ebd748481daa1143d0d60c975511632dd32a553b2325aa030",
         "source_line": 60
       },
       {
@@ -112,13 +149,18 @@
         "path": "references/skill-contract.md",
         "reason_code": "authored-reference",
         "requirement": "optional",
-        "sha256": "54c83f016ae66079e735e058ce5829523eb53ad370999eb4c8efa5180979253e",
+        "sha256": "fe1e93a2bf475ba3cf915aa0274080b98cea259514e8c873266231929c884b4c",
         "source_line": 29
       }
     ],
     "project_paths": []
   },
   "contract_id": "skill:ad-test-designer",
+  "control_requirements": [
+    "artifact-binding",
+    "evidence-observation",
+    "measurement-contract"
+  ],
   "handoff_contract": {
     "extraction_status": "partially-classified",
     "items": [
@@ -131,7 +173,7 @@
           "end_char": 309,
           "path": "ad/orchestrate/ad-test-designer/SKILL.md",
           "section": "Next Best Skill",
-          "sha256": "e12303cbd54a45be94fdee0b7dd390ad91aeec4d5065966db0f029066da1c79b",
+          "sha256": "7160f23c77de20dfa546d2ca1fc45488f36af686eb9c9758fc72f597c4d84104",
           "span_basis": "field-text",
           "start_char": 0
         },
@@ -150,7 +192,7 @@
           "end_char": 368,
           "path": "ad/orchestrate/ad-test-designer/SKILL.md",
           "section": "Next Best Skill",
-          "sha256": "e12303cbd54a45be94fdee0b7dd390ad91aeec4d5065966db0f029066da1c79b",
+          "sha256": "7160f23c77de20dfa546d2ca1fc45488f36af686eb9c9758fc72f597c4d84104",
           "span_basis": "field-text",
           "start_char": 311
         },
@@ -163,7 +205,7 @@
     "summary_ref": {
       "path": "ad/orchestrate/ad-test-designer/SKILL.md",
       "section": "Skill Contract/Handoff Summary",
-      "sha256": "e12303cbd54a45be94fdee0b7dd390ad91aeec4d5065966db0f029066da1c79b"
+      "sha256": "7160f23c77de20dfa546d2ca1fc45488f36af686eb9c9758fc72f597c4d84104"
     },
     "summary_source": "skill-section",
     "target_skills": [
@@ -177,26 +219,26 @@
     "name": "ad-test-designer",
     "path": "ad/orchestrate/ad-test-designer/SKILL.md",
     "phase": "orchestrate",
-    "sha256": "e12303cbd54a45be94fdee0b7dd390ad91aeec4d5065966db0f029066da1c79b",
-    "version": "19.2.0"
+    "sha256": "7160f23c77de20dfa546d2ca1fc45488f36af686eb9c9758fc72f597c4d84104",
+    "version": "20.1.0"
   },
   "input_contract": {
     "argument_hint": "<what to test / results CSV> [profile: direct-response|prospecting|incremental-profit] [baseline] [alpha/power/MDE]",
     "clauses": [
       {
         "clause_id": "read-01",
-        "extraction_status": "unclassified",
-        "kind": "unclassified",
+        "extraction_status": "partially-classified",
+        "kind": "evidence-input",
         "requirement": "unclassified",
         "source": {
-          "end_char": 133,
+          "end_char": 248,
           "path": "ad/orchestrate/ad-test-designer/SKILL.md",
           "section": "Skill Contract/Reads",
-          "sha256": "e12303cbd54a45be94fdee0b7dd390ad91aeec4d5065966db0f029066da1c79b",
+          "sha256": "7160f23c77de20dfa546d2ca1fc45488f36af686eb9c9758fc72f597c4d84104",
           "span_basis": "field-text",
           "start_char": 0
         },
-        "text": "what the user wants to test, the ROAS profile (`direct-response|prospecting|incremental-profit`), baseline CVR/CTR and traffic volume"
+        "text": "what the user wants to test, the ROAS profile (`direct-response|prospecting|incremental-profit`), baseline CVR/CTR and traffic volume, stable control/candidate refs, the exact creative or landing artifact hash, and the measurement-contract ref/hash"
       },
       {
         "clause_id": "read-02",
@@ -204,22 +246,22 @@
         "kind": "unclassified",
         "requirement": "unclassified",
         "source": {
-          "end_char": 239,
+          "end_char": 380,
           "path": "ad/orchestrate/ad-test-designer/SKILL.md",
           "section": "Skill Contract/Reads",
-          "sha256": "e12303cbd54a45be94fdee0b7dd390ad91aeec4d5065966db0f029066da1c79b",
+          "sha256": "7160f23c77de20dfa546d2ca1fc45488f36af686eb9c9758fc72f597c4d84104",
           "span_basis": "field-text",
-          "start_char": 135
+          "start_char": 250
         },
-        "text": "for a read-out, the user's own exported results CSV (variant, sessions/impressions, conversions/clicks)."
+        "text": "for a read-out, the user's own exported results CSV (variant, sessions/impressions, conversions/clicks) plus the original binding."
       }
     ],
-    "extraction_status": "unclassified",
-    "reads": "what the user wants to test, the ROAS profile (`direct-response|prospecting|incremental-profit`), baseline CVR/CTR and traffic volume; for a read-out, the user's own exported results CSV (variant, sessions/impressions, conversions/clicks).",
+    "extraction_status": "partially-classified",
+    "reads": "what the user wants to test, the ROAS profile (`direct-response|prospecting|incremental-profit`), baseline CVR/CTR and traffic volume, stable control/candidate refs, the exact creative or landing artifact hash, and the measurement-contract ref/hash; for a read-out, the user's own exported results CSV (variant, sessions/impressions, conversions/clicks) plus the original binding.",
     "source": {
       "path": "ad/orchestrate/ad-test-designer/SKILL.md",
       "section": "Skill Contract/Reads",
-      "sha256": "e12303cbd54a45be94fdee0b7dd390ad91aeec4d5065966db0f029066da1c79b"
+      "sha256": "7160f23c77de20dfa546d2ca1fc45488f36af686eb9c9758fc72f597c4d84104"
     }
   },
   "output_contract": {
@@ -234,7 +276,7 @@
           "end_char": 71,
           "path": "ad/orchestrate/ad-test-designer/SKILL.md",
           "section": "Skill Contract/Writes",
-          "sha256": "e12303cbd54a45be94fdee0b7dd390ad91aeec4d5065966db0f029066da1c79b",
+          "sha256": "7160f23c77de20dfa546d2ca1fc45488f36af686eb9c9758fc72f597c4d84104",
           "span_basis": "field-text",
           "start_char": 0
         },
@@ -245,23 +287,27 @@
     "source": {
       "path": "ad/orchestrate/ad-test-designer/SKILL.md",
       "section": "Skill Contract",
-      "sha256": "e12303cbd54a45be94fdee0b7dd390ad91aeec4d5065966db0f029066da1c79b"
+      "sha256": "7160f23c77de20dfa546d2ca1fc45488f36af686eb9c9758fc72f597c4d84104"
     },
-    "summary": "a test design (hypothesis, variant matrix, primary/secondary/guardrail metrics, sample-size + duration + power plan)",
+    "summary": "a test design (hypothesis, variant matrix, immutable test/variant/measurement binding, primary/secondary/guardrail metrics, sample-size + duration + power plan)",
     "summary_source": "expected-output",
     "writes": "a user-facing test-design or read-out doc plus a `### Handoff Summary`."
   },
   "provenance": {
+    "control_bindings": {
+      "path": "references/control-bindings.json",
+      "sha256": "70fbf645a095d87676bc77522dd6838a0f9dceb2214cc4c64823f39ecf6bd0f1"
+    },
     "generator": "generate-skill-contracts-v1",
     "shared_contract": {
       "path": "references/skill-contract.md",
       "section": "Skill Contract",
-      "sha256": "54c83f016ae66079e735e058ce5829523eb53ad370999eb4c8efa5180979253e"
+      "sha256": "fe1e93a2bf475ba3cf915aa0274080b98cea259514e8c873266231929c884b4c"
     },
     "system_catalog": {
       "path": "references/system-catalog.json",
-      "sha256": "bbe1d063d75c079dd0761f50904f1ab64faa8d8adcc9f25cd3fffb5ac0a3ff7c",
-      "version": "19.2.0"
+      "sha256": "ac5a3d42ccdc98e396c48ead96e8a99e1ba88cf101f9f57d6afd2f6394165f6f",
+      "version": "20.1.0"
     }
   },
   "routing_contract": {
@@ -270,7 +316,7 @@
     "source": {
       "path": "ad/orchestrate/ad-test-designer/SKILL.md",
       "section": "frontmatter",
-      "sha256": "e12303cbd54a45be94fdee0b7dd390ad91aeec4d5065966db0f029066da1c79b"
+      "sha256": "7160f23c77de20dfa546d2ca1fc45488f36af686eb9c9758fc72f597c4d84104"
     },
     "trigger_phrases": [
       "design an A/B test",

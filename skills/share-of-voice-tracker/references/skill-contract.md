@@ -11,6 +11,10 @@
 7. Handoffs carry status, objective, findings/evidence, assumptions, open loops and at most three next skills.
 8. Stop routing when authority is missing, a material strategic fork needs the user, evidence is insufficient, or the next step has an external side effect.
 
+## Cross-skill action control
+
+For work that crosses skills, spans multiple turns, or can produce a persistent or external side effect, keep proposal, approval, execution, receipt, and measurement as separate facts. Bind approval to the exact action scope and payload; changed content requires a new revision and fresh approval. Require an idempotency key for execution, and mark an action complete only from a matching receipt. A `SHIP` gate, plan, command, queued item, or visible result is not itself authorization or proof of execution.
+
 ## Handoff status
 
 - `DONE` — objective completed with adequate evidence.

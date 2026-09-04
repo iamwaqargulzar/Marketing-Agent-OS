@@ -186,7 +186,7 @@ python3 -m unittest discover -s tests -v
 npx --yes skills@1.5.22 add . --list --full-depth
 ```
 
-The current release passes 14 tests, validates all 236 skills with zero doctor errors or warnings, and records every release entry in [`SHA256SUMS.json`](SHA256SUMS.json). The included GitHub Actions workflow is configured to repeat validation on Linux, macOS, and Windows when repository runners are available.
+The current release passes 15 tests, validates all 236 skills with zero doctor errors or warnings, and records every release entry in [`SHA256SUMS.json`](SHA256SUMS.json). The included GitHub Actions workflow is configured to repeat validation on Linux, macOS, and Windows when repository runners are available.
 
 ## Frequently asked questions
 

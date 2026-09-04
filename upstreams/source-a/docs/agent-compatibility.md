@@ -23,7 +23,7 @@ provenance, and capability boundary](agent-plugins-v1.md).
 | **Any other agent** (global) | `npx skills add aaron-he-zhu/aaron-marketing-skills -g` | same, user-wide |
 | **Single skill** | `npx skills add aaron-he-zhu/aaron-marketing-skills -s keyword-research` | one skill folder |
 | **Force one agent** | `… -a codex` / `-a cursor` / `-a opencode` … | one host only |
-| **Agent Plugins v1 · Portable Lite** | Download `aaron-marketing-skills-19.2.0-agent-plugin-v1-lite.tar.gz` from the [v19.2.0 release](https://github.com/aaron-he-zhu/aaron-marketing-skills/releases/tag/v19.2.0), unpack it, and select the extracted plugin directory in the client | 120 strict static Skills; no `mcp.json`, commands, hooks, connectors, or repository runtime |
+| **Agent Plugins v1 · Portable Lite** | Download `aaron-marketing-skills-20.1.0-agent-plugin-v1-lite.tar.gz` from the [v20.1.0 release](https://github.com/aaron-he-zhu/aaron-marketing-skills/releases/tag/v20.1.0), unpack it, and select the extracted plugin directory in the client | 120 strict static Skills; no `mcp.json`, commands, hooks, connectors, or repository runtime |
 
 `npx skills` auto-detects which agents are installed and symlinks each skill into the right directories (canonical copy in `.agents/skills/`, per-agent symlinks). Use `--copy` where symlinks are unsupported, `npx skills update` to pull new versions, `npx skills remove` to uninstall.
 
@@ -85,13 +85,14 @@ OpenClaw also installs without ClawHub: `npx skills add aaron-he-zhu/aaron-marke
 
 ## Hermes Agent install routes
 
-Hermes pulls from multiple hubs; three routes work for this bundle, in order of preference:
+Hermes pulls from multiple hubs; four routes work for this bundle, in order of preference:
 
 1. **skills.sh source** (works today, full skill folders): `hermes skills install skills-sh/aaron-he-zhu/aaron-marketing-skills/<skill-name>` — e.g. `…/keyword-research`; browse with `hermes skills search seo --source skills-sh`.
 2. **ClawHub source** (after the owner publishes, see above): `hermes skills search marketing --source clawhub`.
 3. **Pinned direct URL** (single file, no `references/` bundled — prefer routes 1–2): `hermes skills install https://raw.githubusercontent.com/aaron-he-zhu/aaron-marketing-skills/<release-tag>/<discipline>/<phase>/<skill>/SKILL.md`. Pin a release tag; do not use a mutable branch for an execution contract.
+4. **Local bulk via `skills.external_dirs`** (all 120, no hub): unpack the Portable Lite release archive anywhere local and point `skills.external_dirs` in the Hermes config at its `skills/` directory — Hermes discovers the 120 flat `skills/<name>/` folders with their bundled reference closure. External dirs sit at the lowest skill-precedence tier, so project and profile skills shadow them cleanly.
 
-**Tap caveat**: `hermes skills tap add` assumes one `skills/` root per repo (one `path` override in `~/.hermes/.hub/taps.json`), which this multi-discipline layout deliberately doesn't have — use the skills.sh source instead; it resolves the same folders. Installed skills surface as slash commands (`/keyword-research …`) and are security-scanned at `community` trust on install. Every skill's `metadata.hermes` carries `tags`/`category` so `hermes skills browse` filters cleanly.
+**Tap caveat**: `hermes skills tap add` takes a GitHub repository source and assumes one `skills/` root per repo (one `path` override in `~/.hermes/.hub/taps.json`) — it accepts neither local paths nor this multi-discipline layout. Use the skills.sh source (same folders) or route 4 for local bulk installs; a downstream mirror repository with a flat `skills/` root would enable `tap add`, but that mirror is an optional owner-published artifact and is never committed here. Installed skills surface as slash commands (`/keyword-research …`) and are security-scanned at `community` trust on install. Every skill's `metadata.hermes` carries `tags`/`category` so `hermes skills browse` filters cleanly.
 
 ## SkillHub.cn (中文 Skills 社区)
 
@@ -127,7 +128,9 @@ Paths below are each host's **native** skill directories (docs verified 2026-07;
 | **OpenCode** ✦ | `.opencode/skills/`, `.claude/skills/` | `~/.config/opencode/skills/`, `~/.claude/skills/`, `~/.agents/skills/` | Unknown frontmatter ignored; per-skill permissions in `opencode.json`. |
 | **Cursor** ✦ | `.cursor/skills/` | `~/.cursor/skills/`, `~/.agents/skills/` | Rules/commands converge on skills (`/migrate-to-skills`). |
 | **OpenClaw** ✦ | `<ws>/skills/`, `<ws>/.agents/skills/` | `~/.agents/skills/`, `~/.openclaw/skills/` | Parser reads single-line keys only — every skill's `metadata` is therefore a single-line JSON object (fully parsed, incl. `metadata.openclaw` emoji/homepage). Registry: [ClawHub](#clawhub-openclaws-registry). |
-| **Hermes Agent** | — (config `skills.external_dirs`) | `~/.hermes/skills/` | Three install routes — [see below](#hermes-agent-install-routes). `metadata.hermes` carries tags/category for `hermes skills browse`. Skills double as slash commands (`/keyword-research`). Recommends ≤60-char descriptions; ours are longer by design (trigger-phrase routing) and load fine. |
+| **Hermes Agent** | — (config `skills.external_dirs`) | `~/.hermes/skills/` | Four install routes — [see below](#hermes-agent-install-routes). `metadata.hermes` carries tags/category for `hermes skills browse`. Skills double as slash commands (`/keyword-research`). Recommends ≤60-char descriptions; ours are longer by design (trigger-phrase routing) and load fine. Named-bot deployment (one profile per bot): [see below](#named-bot-roster-deployment-grok-bot--hermes-bot-mode). |
+| **Grok Build** ✦ (docs 2026-08) | `.grok/skills/` | `~/.grok/skills/`, `~/.agents/skills/` | xAI's coding agent. Reads `SKILL.md` natively; unknown frontmatter keys are ignored, so the extended metadata is inert. The global `npx skills add … -g` route serves it via `~/.agents/skills/`. |
+| **Grok Bot** (docs 2026-08) | — (no filesystem install surface) | — | xAI's managed named bots on a shared cloud computer. Skills arrive per bot via Settings → Plugins or by saving written instructions in chat — [see below](#named-bot-roster-deployment-grok-bot--hermes-bot-mode). Not a `npx skills` target. |
 | **Gemini CLI** ✦ | `.gemini/skills/` | `~/.gemini/skills/`, `~/.agents/skills/` | `.agents/` outranks `.gemini/` at the same tier; `/skills list\|enable\|disable`. |
 | **GitHub Copilot CLI** ✦ | `.github/skills/`, `.claude/skills/` | `~/.copilot/skills/`, `~/.agents/skills/` | Same skills work in Copilot cloud agent + code review; `gh skill` adds provenance frontmatter. |
 | **Amp** ✦ | `.claude/skills/` | `~/.agents/skills/`, `~/.claude/skills/`, `~/.config/amp/skills/` | — |
@@ -136,6 +139,94 @@ Paths below are each host's **native** skill directories (docs verified 2026-07;
 | **Cline** | `.cline/skills/`, `.clinerules/skills/`, `.claude/skills/` | `~/.cline/skills/` | Docs don't list `.agents/skills/` — use `-a cline` so the installer places the agent dir. |
 | **Roo Code** ✦ | `.roo/skills/` | `~/.roo/skills/`, `~/.agents/skills/` | Per-mode variants (`skills-<mode>/`); `.roo/` outranks `.agents/`. |
 | **50+ more** ✦ | see [installer table](https://github.com/vercel-labs/skills#supported-agents) | | Cline-likes, Warp, Zed, Kilo, Kiro, Trae, Qoder, OpenHands, Droid, Junie, … |
+
+## Named-bot roster deployment (Grok Bot / Hermes Bot Mode)
+
+Hosts with **named, persistent bots** (xAI's Grok Bot; Hermes Agent's Bot
+Mode, where a bot is an isolated profile) deploy this bundle as an
+**8-bot roster** instead of one flat skill pile: seven discipline specialists
+(`aaron-narrative`, `aaron-seo-geo`, `aaron-social`, `aaron-email`,
+`aaron-ad`, `aaron-influencer`, `aaron-launch`) plus `aaron-chief`,
+which routes cross-discipline goals and owns the 8 protocol skills. Together
+the bots cover the 120 canonical skills exactly once; the roster derives
+entirely from [`references/system-catalog.json`](../references/system-catalog.json) —
+there is no second hand-maintained inventory.
+
+```bash
+python3 scripts/generate-bot-projections.py --output /private/path/aaron-bot-roster
+```
+
+Operator steps (generate → Hermes `profile install` vs Grok semi-manual
+cards): **[AI Staff install](ai-staff-install.md)**. Long-form narrative
+belongs on the [docs hub / AI Staff](https://aaronmarketing.ai/docs/ai-staff)
+(placeholder hub path). This section keeps host caveats and the smoke split.
+
+The generator writes, into a private directory **outside the repository**
+(outputs are release/deployment artifacts and are never committed):
+
+- `hermes/<bot>/` — one installable [Hermes profile distribution](https://hermes-agent.nousresearch.com/docs/user-guide/profile-distributions)
+  per bot: `distribution.yaml`, a generated `SOUL.md` (persona, phase-grouped
+  skill index, handoff protocol, inlined non-reducible red lines),
+  `skills/<name>/` folders projected with the same link-rewriting and
+  static-reference closure as Portable Lite, the bundled
+  `references/policy-kernel.md`, and a hash-bound `distribution-manifest.json`.
+  Publish a bundle as a git repository and `hermes profile install <url> --alias`.
+- `grok/` — `bot-cards.md` (name/title/description per bot; the description
+  doubles as Grok's cross-bot routing signal), `enable-lists.md` (exact
+  per-bot skill enablement), and `setup-checklist.md`. Grok Bot has no bulk
+  import: bots are created manually from the cards, and skills install via
+  Settings → Plugins or the officially supported fallback of saving a skill
+  from written instructions pasted in chat.
+
+Deployment boundaries, in both hosts:
+
+- Links to a skill owned by another bot are redirected to the bundle's
+  `PORTABILITY.md` boundary; cross-bot work is handed off **by name**
+  (`@aaron-chief` first) with a visited set and at most three
+  automatic handoffs.
+- Bundles are Tier-1 and static: no connectors, `mcp.json`, cron, hooks, or
+  deterministic runtimes. Auditors return `NOT_SCORED` instead of
+  hand-calculating verdicts; registry and durable-memory work is
+  propose-only, with canonical acceptance remaining an owner-run step.
+- Grok Bot specifics: bots on one account share **one persistent cloud
+  computer** — files, browser sessions, and logins are visible to every bot,
+  so bot names are not security boundaries. Grok Bot runs on macOS, Windows,
+  and iOS at launch (no Linux desktop, Android, or iPad).
+- The matching typed host profiles (`hermes-bot-host`, `grok-bot-host`) live
+  in the dedicated **roster-projection-only** catalog
+  [`references/bot-roster-profiles.json`](../references/bot-roster-profiles.json)
+  (schema-locked to `routing_surface: named-bot-roster`,
+  `compatible_distributions: ["bot-roster"]`, `context_assembly: excluded`).
+  They are deliberately kept out of
+  [`references/host-capability-profiles.json`](../references/host-capability-profiles.json),
+  so the certified context/prompt assembly chain and its hash-pinned host
+  catalog stay untouched; each generated bundle manifest binds the selected
+  profile definition by SHA-256.
+
+### Named-bot / Grok smoke backlog
+
+Two layers. Automated smoke never flips an owner-run row and never claims a
+public template publish, vendor contact, or verified client install.
+
+**Automated (CI / local, hermetic):**
+`python3 scripts/smoke-bot-projections.py` generates into a temp directory and
+asserts roster completeness — 8 bots, exact catalog skill partition, Hermes
+bundle shape, Grok artifacts present, hash-bound manifests, no secret/state
+paths. Wired into the validate workflow baseline. This is **not** a host
+install smoke.
+
+**Owner-run (still Pending):** same contract as the Agent Plugins backlog
+above. A `Pending` row blocks only the *verified* host claim, never the
+generated artifact, and only the owner flips a row after recording the
+evidence. Connector attach (Option C) is deferred.
+
+| Surface | Status | Who runs it | Required evidence before marking verified |
+|---|---|---|---|
+| Generator roster contract | **Automated** | CI `scripts/smoke-bot-projections.py` | 8 bots; exact 120-skill partition; `hermes/` + `grok/` artifacts; SHA-256 manifests; no `.env` / `auth.json` / `memories/` / `sessions/`. |
+| Grok Build (filesystem skills) | Pending | Owner-run | Client version + OS; skills placed in `.grok/skills/` or `~/.agents/skills/`; discovery confirmed; one skill invoked; unknown frontmatter keys ignored without error. |
+| Grok Bot (managed bots) | Pending | Owner-run | App version + platform; one bot created from `bot-cards.md`; one skill saved from written instructions; per-bot enable list applied; a send/publish dry-run stopped at the approval boundary. |
+| Hermes Bot Mode (profile distributions) | Pending | Owner-run | `hermes --version` + OS; one generated bundle installed via `hermes profile install`; bundle SHA-256 recorded; bundled skill count discovered (16, or 8 for `aaron-chief`); one skill invoked as a slash command; no MCP server registered. |
+| Hermes `skills.external_dirs` (local bulk) | Pending | Owner-run | `hermes --version` + OS; unpacked Portable Lite SHA-256; 120/120 discovery from the external dir; one skill invoked; profile-over-external shadowing observed as documented. |
 
 ## Frontmatter portability
 
@@ -154,6 +245,36 @@ for the compatibility channels that use them; Portable Lite grants no host-tool
 preapproval.
 
 ## What degrades outside the Claude Code plugin
+
+### Cross-discipline control artifacts
+
+Every host keeps the authored discipline rules for evidence observations,
+measurement contracts, action intents/receipts, and cycle retros. Machine
+verification is narrower than that semantic portability:
+
+| Install/runtime surface | Static shape reference | Bindings + semantic validator | Required claim |
+|---|---|---|---|
+| Governed physical archive with Governed explicitly selected | Yes | Yes | `VERIFIED` only for the exact artifact checks that passed; selected-ancestry/current-head claims still require the run runtime |
+| Lite or Pro physical archive | May be absent | No | `NOT_VERIFIED` |
+| Agent Plugins v1 Portable Lite or named-bot bundle | May include `control-artifact.schema.json` through static-reference closure | No scripts, bindings, controller, or run runtime | `NOT_VERIFIED` |
+| Standalone one-folder skill | Skill-local guidance only | No | `NOT_VERIFIED` |
+
+`NOT_VERIFIED` means the host must not claim selected ancestry, a unique current
+head, a verified action receipt, consumed permission, compare-and-swap success,
+or persisted control state. In Governed mode, successful validation is observed
+through the existing `artifact_validated` event; selected ancestry, current-head
+checks, checkpoints, and recovery remain properties of the existing run
+runtime. Neither the validator nor an intent/receipt grants permission or
+registry authority. `action-intent.permission_ref` is provenance only, and the
+actual executor must re-check current exact user/host authority before a real
+send, publish, launch, spend, upload, account mutation, or deletion.
+
+On the Governed surface, a bare control reference is only an immutable
+`opaque:<id>`. A project-relative artifact must use `{ref, sha256, version}`;
+validation checks the anchored bytes, embedded version, and direct-PII/sensitive
+fields in the referenced text. URLs, domains, and search queries inside that
+versioned evidence are business data rather than PII by default. This closure
+is unavailable on every `NOT_VERIFIED` surface.
 
 ### Generic shared-root router sidecar
 
@@ -202,6 +323,7 @@ A standalone install bundles **only each skill's folder** (its `SKILL.md` + own 
 | Shared resource | Standalone behavior |
 |-----------------|---------------------|
 | Repo-root `references/` (auditor runbook, typed catalogs, benchmarks, skill contract, state model) | Relative root links are unavailable, but every auditor folder includes a generated immutable `references/auditor-runtime.md` containing all item identities and human benchmark anchors plus the selected framework's typed profiles, applicability, veto, missingness, and observation vocabulary. The root runbook, full schemas, and benchmark remain repository/plugin maintenance sources and are not falsely presented as separate standalone files. The fallback never fetches a mutable branch, guesses missing policy, calculates a score, or claims a gate verdict. Non-gate skills inline their essential rules. |
+| Cross-discipline control schema, bindings, and validator | Standalone keeps its authored procedure but has no root bindings or semantic validator. Return `NOT_VERIFIED`; do not claim selected ancestry, a unique current head, a verified receipt, permission consumption, compare-and-swap success, or persistence. Portable Lite may carry the schema as static shape guidance, but has the same machine-verification boundary. |
 | Deterministic repo-root runtimes (`rubric-score.py`, `validate-audit-artifact.py`, `context-resolver.py`, `registry-events.py`, `run-events.py`, `audit-loop.py`, `audit-trends.py`) | Not bundled. In a Claude Code plugin install, commands resolve them through `${CLAUDE_PLUGIN_ROOT}`; in a full clone they fall back to the Git repository root, following the [root runtime invocation contract](../references/runtime-invocation.md). In **every** form, agent sessions are limited to `propose`/`suppress` and preparing owner request files — canonical acceptance (`owner-append`/`safety-append`) is an owner-run terminal step outside agent sessions, per the [Owner Ritual](../references/registry-event-protocol.md); once canonical events exist, agent sessions read the owner-installed projections rather than replaying. Run evidence, context manifests, and audit-loop steps are separate non-authoritative metadata and cannot widen that boundary; loop owner approval advances bookkeeping only and is never external-mutation authority. The runtime, not prose or a host-supplied field, derives selected-ancestry loop closure: event-first missing-step recovery requires the same original request, sibling loops stay isolated, successful closure is strict, and a failed/aborted unresolved closure preserves failure evidence without claiming convergence. A standalone one-folder install must fail closed: auditors return `NOT_SCORED` instead of hand-calculating or claiming a gate verdict, registry skills may prepare a proposal but cannot append/project/claim canonical truth, and a host cannot claim a resolver-verified context manifest, session tree, save point, envelope, or converged loop without the corresponding runtime. Install the plugin or use a full clone for those operations. Semantic eval profiles, generated prompt contracts, and the opt-in real Codex adapter are repository-maintenance assets and are intentionally absent from user distributions. |
 | `scripts/connectors/*.py` (keyless data helpers) | Not bundled. Every skill is designed Tier-1: it runs on user-provided data with no connector. Clone the repo to use the connectors. |
 | The 8 `/aaron-marketing:*` commands | Claude Code plugin only. Ordinary per-Skill installs route from the 120 descriptions. A complete generic shared-root build may instead register the generated eight-facade sidecar described above; standalone one-folder installs remain direct-skill. |

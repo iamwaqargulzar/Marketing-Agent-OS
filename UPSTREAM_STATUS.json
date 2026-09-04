@@ -3,13 +3,13 @@
   "schema_version": 1,
   "sources": {
     "source-a": {
-      "commit": "388172e65e58f7487e22dcf436349b6003d64d0d",
+      "commit": "b08683918e2bab70502f3d65ab0ae2f32beff2c6",
       "declared_names": 120,
       "missing_from_normalized_layer": [],
       "skill_files": 120,
       "snapshot_matches_lock": true,
       "snapshot_path": "upstreams/source-a",
-      "tracked_entries": 1018,
+      "tracked_entries": 1061,
       "unique_skill_names": 120
     },
     "source-b": {

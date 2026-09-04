@@ -40,6 +40,14 @@ python3 scripts/reconcile_upstreams.py --write
 
 The command fails if a snapshot no longer matches its lock or any declared upstream skill name is absent from `skills/`. For every source diff, either update an existing normalized skill, add a portable skill, or record why the change does not affect the installable surface.
 
+When an upstream adds orchestration or execution controls, preserve the useful invariant without importing a vendor-specific runtime blindly. Prefer the portable control-artifact contract for cross-skill or side-effecting workflows, and validate machine artifacts with:
+
+```bash
+python3 scripts/validate_control_artifact.py path/to/control-artifact.json
+```
+
+Treat routing changes as behavior changes: compare new trigger language with `catalog.json`, verify every declared upstream name remains covered, and add a focused regression test when a changed boundary could misroute common requests.
+
 Synchronize `catalog.json` and `skills/marketing-os/references/skill-index.json` after adding or changing skills. Keep source-specific identities out of product-facing files except provenance and legally required material.
 
 ## 5. Validate and record

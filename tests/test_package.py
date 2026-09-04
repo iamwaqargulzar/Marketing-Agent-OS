@@ -187,6 +187,52 @@ class PackageTests(unittest.TestCase):
         )
         self.assertNotEqual(invalid.returncode, 0)
 
+    def test_control_artifact_validation(self):
+        artifact = {
+            "action": {
+                "payload_sha256": "a" * 64,
+                "scope": "publish one approved repository release",
+                "type": "publish",
+            },
+            "artifact_id": "release:1.2.0",
+            "authority": {
+                "granted_at": "2026-09-04T10:00:00Z",
+                "granted_by": "repository owner",
+                "required": True,
+                "scope": "publish one approved repository release",
+                "status": "granted",
+            },
+            "created_at": "2026-09-04T09:00:00Z",
+            "idempotency_key": "release:1.2.0:publish",
+            "inputs": [{"evidence_label": "measured", "ref": "test-report"}],
+            "objective": "Publish the validated release",
+            "owner": "release operator",
+            "revision": 1,
+            "schema_version": "1.0",
+            "state": "approved",
+            "updated_at": "2026-09-04T10:00:00Z",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "control.json"
+            path.write_text(
+                json.dumps(artifact, indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+            result = run_script("validate_control_artifact.py", path)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertTrue(json.loads(result.stdout)["valid"])
+
+            artifact["authority"]["status"] = "pending"
+            del artifact["authority"]["granted_at"]
+            del artifact["authority"]["granted_by"]
+            path.write_text(
+                json.dumps(artifact, indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+            result = run_script("validate_control_artifact.py", path)
+            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+            self.assertFalse(json.loads(result.stdout)["valid"])
+
     def test_fetch_page_blocks_private_network_by_default(self):
         result = run_script("fetch_page.py", "http://127.0.0.1:9", "--json")
         self.assertNotEqual(result.returncode, 0)
