@@ -4,10 +4,10 @@
 
 [![Release](https://img.shields.io/github/v/release/iamwaqargulzar/Marketing-Agent-OS?display_name=tag)](https://github.com/iamwaqargulzar/Marketing-Agent-OS/releases/latest)
 [![License](https://img.shields.io/github/license/iamwaqargulzar/Marketing-Agent-OS)](LICENSE)
-[![Agent Skills](https://img.shields.io/badge/Agent%20Skills-235-6f42c1)](catalog.json)
+[![Agent Skills](https://img.shields.io/badge/Agent%20Skills-236-6f42c1)](catalog.json)
 [![Platforms](https://img.shields.io/badge/platforms-Linux%20%7C%20macOS%20%7C%20Windows-167d3e)](docs/COMPATIBILITY.md)
 
-Marketing Agent OS is an open-source collection of 235 portable AI agent skills for marketing, SEO, generative engine optimization (GEO), answer engine optimization (AEO), content, CRO, paid media, lifecycle, social, analytics, and growth. It works across major AI coding agents while preserving reproducible upstream provenance and safety controls.
+Marketing Agent OS is an open-source collection of 236 portable AI agent skills for marketing, SEO, generative engine optimization (GEO), answer engine optimization (AEO), content, CRO, paid media, lifecycle, social, analytics, and growth. It works across major AI coding agents while preserving reproducible upstream provenance and safety controls.
 
 > Use one governed marketing skill library across Codex, Claude Code, OpenCode, Pi, Amp, Cursor, Gemini CLI, GitHub Copilot, and dozens of other Agent Skills-compatible harnesses.
 
@@ -15,7 +15,7 @@ Marketing Agent OS is an open-source collection of 235 portable AI agent skills 
 
 | Capability | Verified project fact |
 |---|---|
-| Installable skills | 235 uniquely named Agent Skills |
+| Installable skills | 236 uniquely named Agent Skills |
 | Marketing coverage | SEO, GEO/AEO, content, CRO, paid, lifecycle, social, research, analytics, sales, and RevOps |
 | Operating systems | Linux, macOS, and Windows |
 | Built-in installer targets | 14 direct harness targets |
@@ -71,7 +71,7 @@ npx skills add iamwaqargulzar/Marketing-Agent-OS \
   --agent codex claude-code opencode pi amp
 ```
 
-Installing all 235 skills into every harness creates many copies and may crowd skill discovery. Start focused, then add specialists as needed.
+Installing all 236 skills into every harness creates many copies and may crowd skill discovery. Start focused, then add specialists as needed.
 
 ### Clone and use the cross-platform installer
 
@@ -135,7 +135,7 @@ The built-in installer also supports Cline, Roo, Windsurf, OpenClaw, and Hermes.
 ```mermaid
 flowchart LR
     A["Four pinned upstream repositories"] --> B["Audit and reconciliation"]
-    B --> C["235 normalized Marketing Agent OS skills"]
+    B --> C["236 normalized Marketing Agent OS skills"]
     C --> D["Universal .agents/skills"]
     C --> E["Host-native skill directories"]
     C --> F["Claude Code plugin"]
@@ -186,13 +186,13 @@ python3 -m unittest discover -s tests -v
 npx --yes skills@1.5.22 add . --list --full-depth
 ```
 
-The current release passes 14 tests, validates all 235 skills with zero doctor errors or warnings, and records every release entry in [`SHA256SUMS.json`](SHA256SUMS.json). The included GitHub Actions workflow is configured to repeat validation on Linux, macOS, and Windows when repository runners are available.
+The current release passes 14 tests, validates all 236 skills with zero doctor errors or warnings, and records every release entry in [`SHA256SUMS.json`](SHA256SUMS.json). The included GitHub Actions workflow is configured to repeat validation on Linux, macOS, and Windows when repository runners are available.
 
 ## Frequently asked questions
 
 ### What is Marketing Agent OS?
 
-Marketing Agent OS is a portable open-source library of 235 AI agent skills for marketing work. It combines marketing strategy, SEO, GEO, AEO, content, CRO, paid acquisition, lifecycle, social, analytics, sales, and RevOps workflows in one governed package that can be installed across major AI coding agents.
+Marketing Agent OS is a portable open-source library of 236 AI agent skills for marketing work. It combines marketing strategy, SEO, GEO, AEO, content, CRO, paid acquisition, lifecycle, social, analytics, sales, and RevOps workflows in one governed package that can be installed across major AI coding agents.
 
 ### Does Marketing Agent OS work with Codex, Claude Code, OpenCode, Pi, and Amp?
 
@@ -206,9 +206,9 @@ No. SEO and AI-search optimization are deep parts of the project, but the librar
 
 SEO improves visibility in conventional search results. GEO improves the likelihood that generative AI systems can retrieve, understand, and cite content. AEO structures useful answers for answer engines and direct-response search experiences. Marketing Agent OS includes connected workflows for all three disciplines.
 
-### Are all 235 skills loaded at once?
+### Are all 236 skills loaded at once?
 
-Not necessarily. The repository contains 235 skills, but selective installation is recommended. Install a small router and the specialists you use most, then expand the set when a task requires more coverage.
+Not necessarily. The repository contains 236 skills, but selective installation is recommended. Install a small router and the specialists you use most, then expand the set when a task requires more coverage.
 
 ### How are upstream changes handled?
 

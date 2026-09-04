@@ -1,6 +1,6 @@
 # Marketing Agent OS
 
-> Marketing Agent OS is an open-source, cross-platform collection of 235 governed AI agent skills for marketing, SEO, generative engine optimization (GEO), answer engine optimization (AEO), content, CRO, paid media, lifecycle, social, analytics, growth, sales, and RevOps.
+> Marketing Agent OS is an open-source, cross-platform collection of 236 governed AI agent skills for marketing, SEO, generative engine optimization (GEO), answer engine optimization (AEO), content, CRO, paid media, lifecycle, social, analytics, growth, sales, and RevOps.
 
 Canonical repository: https://github.com/iamwaqargulzar/Marketing-Agent-OS
 License: Apache-2.0 for the wrapper and normalized layer; retained third-party licenses apply to pinned source snapshots.
@@ -10,7 +10,7 @@ Last verified: 2026-08-11
 ## Start here
 
 - [Project overview](https://github.com/iamwaqargulzar/Marketing-Agent-OS/blob/main/README.md): Definition, verified facts, features, installation, compatibility, FAQs, and governance.
-- [Skill catalog](https://github.com/iamwaqargulzar/Marketing-Agent-OS/blob/main/catalog.json): Machine-readable inventory of all 235 normalized skills.
+- [Skill catalog](https://github.com/iamwaqargulzar/Marketing-Agent-OS/blob/main/catalog.json): Machine-readable inventory of all 236 normalized skills.
 - [Installation guide](https://github.com/iamwaqargulzar/Marketing-Agent-OS/blob/main/INSTALL.md): Linux, macOS, Windows, project, user, native, universal, and selective installation.
 - [Compatibility matrix](https://github.com/iamwaqargulzar/Marketing-Agent-OS/blob/main/docs/COMPATIBILITY.md): Harness paths, validation status, and support boundaries.
 - [Architecture](https://github.com/iamwaqargulzar/Marketing-Agent-OS/blob/main/docs/ARCHITECTURE.md): Runtime, source, distribution, and integrity layers.
@@ -37,10 +37,10 @@ Windows PowerShell:
 
 ## Key facts
 
-- 235 unique normalized Agent Skills.
+- 236 unique normalized Agent Skills.
 - 14 direct installer targets.
 - Linux, macOS, and Windows support.
-- Agent Skills CLI 1.5.22 discovered all 235 skills and projected a selected skill across 76 registered agent definitions.
+- Agent Skills CLI 1.5.22 discovered all 236 skills and projected a selected skill across 76 registered agent definitions.
 - OpenCode 1.18.15 discovered the package from native and universal paths.
 - Four complete upstream snapshots are pinned by commit and tree hash.
 - Upstream snapshots are provenance inputs and are never installed into harness skill directories.

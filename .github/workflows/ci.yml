@@ -40,7 +40,7 @@ jobs:
         run: |
           set -o pipefail
           npx --yes skills@1.5.22 add . --list --full-depth 2>&1 | tee /tmp/skills-discovery.txt
-          grep -q "Found 235 skills" /tmp/skills-discovery.txt
+          grep -q "Found 236 skills" /tmp/skills-discovery.txt
       - name: Verify major-harness projections
         shell: bash
         run: |

@@ -23,8 +23,8 @@ The upstream snapshots contain 1,897 tracked entries and 218 `SKILL.md` files re
 
 ## Verified state
 
-- 235 normalized skills pass the local metadata validator.
-- Portable package discovery reports all 235 skills through the Agent Skills CLI.
+- 236 normalized skills pass the local metadata validator.
+- Portable package discovery reports all 236 skills through the Agent Skills CLI.
 - Agent Skills CLI 1.5.22 projected a selected skill across all 76 registered agent definitions (55 unique directories).
 - OpenCode 1.18.15 discovered the selected skill from both its native and universal project paths.
 - Every pinned upstream snapshot matches its lock hash.

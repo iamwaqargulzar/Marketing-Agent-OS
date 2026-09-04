@@ -4,7 +4,7 @@ Marketing Agent OS separates source preservation from runtime distribution.
 
 ## Installable layer
 
-`skills/` contains 235 uniquely named, portable Agent Skills. Every skill uses a constrained frontmatter contract, and `catalog.json` is the canonical discovery inventory. Shared references and deterministic helper scripts are maintained at the repository root and validated against copies embedded in skills.
+`skills/` contains 236 uniquely named, portable Agent Skills. Every skill uses a constrained frontmatter contract, and `catalog.json` is the canonical discovery inventory. Shared references and deterministic helper scripts are maintained at the repository root and validated against copies embedded in skills.
 
 `agents/`, `schema/`, `tools/`, `references/`, and `assets/` provide specialist prompts, structured-data templates, optional connector contracts, governance rules, and reusable context. The root `.claude-plugin/` files expose the same installable layer as a Claude Code plugin without duplicating the payload.
 

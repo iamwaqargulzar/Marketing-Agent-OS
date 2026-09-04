@@ -1,5 +1,5 @@
 {
-  "normalized_skill_count": 235,
+  "normalized_skill_count": 236,
   "schema_version": 1,
   "sources": {
     "source-a": {
@@ -33,14 +33,14 @@
       "unique_skill_names": 16
     },
     "source-d": {
-      "commit": "7868cb9251fad80a73d26e488a5ad5f6c4a9f335",
-      "declared_names": 49,
+      "commit": "5cd4a7eae3a9a7b5d2aceb0613f7d1f7c4b65968",
+      "declared_names": 50,
       "missing_from_normalized_layer": [],
-      "skill_files": 49,
+      "skill_files": 50,
       "snapshot_matches_lock": true,
       "snapshot_path": "upstreams/source-d",
-      "tracked_entries": 429,
-      "unique_skill_names": 49
+      "tracked_entries": 465,
+      "unique_skill_names": 50
     }
   }
 }

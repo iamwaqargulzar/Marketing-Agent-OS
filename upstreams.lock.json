@@ -30,12 +30,12 @@
       "url": "https://github.com/zubair-trabzada/geo-seo-claude.git"
     },
     "source-d": {
-      "commit": "7868cb9251fad80a73d26e488a5ad5f6c4a9f335",
-      "file_count": 429,
+      "commit": "5cd4a7eae3a9a7b5d2aceb0613f7d1f7c4b65968",
+      "file_count": 465,
       "license": "MIT",
       "path": "upstreams/source-d",
       "repository": "coreyhaines31/marketingskills",
-      "tree_sha256": "756c38c166d01df50db906fe59bdc8290a3228adc69f8ed51b1e920d7089dc1c",
+      "tree_sha256": "fb77afa162cb0e884042315ba144e0e8a79a81793654786a46e5a1f2e255f7c9",
       "url": "https://github.com/coreyhaines31/marketingskills.git"
     }
   }

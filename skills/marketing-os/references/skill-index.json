@@ -693,6 +693,16 @@
       "phase": "govern"
     },
     {
+      "name": "events",
+      "description": "Plan and evaluate event marketing across hosted events, webinars, sponsorships, speaking, trade shows, dinners, workshops, and conferences. Use for event selection, audience fit, promotion, meeting strategy, follow-up, content reuse, pipeline measurement, or event ROI. For launch-only moments use `launch`; for ongoing communities use `community-marketing`.",
+      "domain": "event-marketing",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
       "name": "fatigue-frequency-manager",
       "description": "Use when the user asks to \"is my ad fatiguing\", \"why is CTR dropping at scale\", or \"should I rotate creative / widen the audience\"; reads frequency, CTR and CVR decay against an early-flight baseline and returns Rotate-creative / Widen-audience / Hold triggers with a per-ad-set fatigue read. Not for building the replacement creative — use ad-creative-builder; not for the RQS score or vetoes — use ad-account-auditor. 广告疲劳检测/频次管理/换素材还是扩人群",
       "domain": "paid-measurement",
