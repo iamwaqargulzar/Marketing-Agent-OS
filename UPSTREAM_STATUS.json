@@ -13,13 +13,13 @@
       "unique_skill_names": 120
     },
     "source-b": {
-      "commit": "09d37c7b66ed3ca9c6efbdb765a805a6c76a8f01",
+      "commit": "a1480c7e590b16001bd9dc1627eacdcd44d580f9",
       "declared_names": 33,
       "missing_from_normalized_layer": [],
       "skill_files": 33,
       "snapshot_matches_lock": true,
       "snapshot_path": "upstreams/source-b",
-      "tracked_entries": 379,
+      "tracked_entries": 383,
       "unique_skill_names": 31
     },
     "source-c": {

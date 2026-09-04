@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Refreshed source C to `9484cf0920da04448cf89ea7d710cffeddbbdcab`; the upstream change affects star-history chart assets only and does not change normalized skill behavior.
+- Refreshed source B to its v2.2.5 verification commit, `a1480c7e590b16001bd9dc1627eacdcd44d580f9`. Reviewed Windows uninstall, portability, rendered-page, JSON-LD, Google guidance, and dependency changes; source-specific runtime dependencies remain isolated from the standard-library Marketing Agent OS installer.
 
 ## 1.1.0 — 2026-08-11
 
