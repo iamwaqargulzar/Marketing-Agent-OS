@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Refreshed source C to `9484cf0920da04448cf89ea7d710cffeddbbdcab`; the upstream change affects star-history chart assets only and does not change normalized skill behavior.
+
 ## 1.1.0 — 2026-08-11
 
 - Renamed the product and package to Marketing Agent OS.

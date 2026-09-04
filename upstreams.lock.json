@@ -1,5 +1,5 @@
 {
-  "audited_on": "2026-08-11",
+  "audited_on": "2026-09-04",
   "schema_version": 1,
   "sources": {
     "source-a": {
@@ -21,12 +21,12 @@
       "url": "https://github.com/AgriciDaniel/claude-seo.git"
     },
     "source-c": {
-      "commit": "03fd44d02412889705aa01a635c585c4fa3b1584",
+      "commit": "9484cf0920da04448cf89ea7d710cffeddbbdcab",
       "file_count": 71,
       "license": "MIT",
       "path": "upstreams/source-c",
       "repository": "zubair-trabzada/geo-seo-claude",
-      "tree_sha256": "8838ef15b1e2d644a61569470adb53e17d11d2da9dcb19ce38a991508f586995",
+      "tree_sha256": "3138c8c293f1cf9b39ffdae7bb14d88dede53c48c11c2d75b16ac0e25855524b",
       "url": "https://github.com/zubair-trabzada/geo-seo-claude.git"
     },
     "source-d": {

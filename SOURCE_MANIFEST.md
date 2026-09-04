@@ -9,13 +9,13 @@ This package was designed after a capability-level audit of four public reposito
 
 ## Audited revisions
 
-The package was checked against these upstream revisions on 2026-08-11:
+The package was checked against these upstream revisions. The snapshot date reflects the latest completed reconciliation cycle.
 
 | Repository | Commit |
 |---|---|
 | `aaron-marketing-skills` | `388172e65e58f7487e22dcf436349b6003d64d0d` |
 | `claude-seo` | `09d37c7b66ed3ca9c6efbdb765a805a6c76a8f01` |
-| `geo-seo-claude` | `03fd44d02412889705aa01a635c585c4fa3b1584` |
+| `geo-seo-claude` | `9484cf0920da04448cf89ea7d710cffeddbbdcab` |
 | `marketingskills` | `7868cb9251fad80a73d26e488a5ad5f6c4a9f335` |
 
 ## Scope and structure
