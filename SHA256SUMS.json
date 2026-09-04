@@ -1574,7 +1574,7 @@
   "skills/voice-dossier-builder/references/product-context-schema.md": "02f8eb8a3fd46265dd6d47e07b1c9a24e4676104c94668b26e3c6df09e1e6674",
   "skills/voice-dossier-builder/references/routing-policy.md": "3e1199905f532671387cc3a4a4baa9c9bb5d505e31634e1c7f894de38091586d",
   "skills/voice-dossier-builder/references/skill-contract.md": "377bd3d9d8c39f373a1ab4e24421d84c3d1903108048986c60ee5a6d84374a48",
-  "tests/test_package.py": "329e479d9ee0ff7760ebbf135ebf083ed18659cfde9e53071fdb9b7b0938e8c9",
+  "tests/test_package.py": "ecf5d4295e29808c163a600e6fb8569d7b4a67e748fe7b3950a6661dfb81a4aa",
   "tools/REGISTRY.md": "0f7d3d7c40ae4fe25c043f00ec14ecd4c53035349f215f468563b99c7c48f42c",
   "tools/integrations/ahrefs.md": "061cbf191645fc645349d934ecb2952000960e4db49a44f4a79701db6f16026c",
   "tools/integrations/apollo.md": "3a88779d9637528f07481ce6198de390d5a5a4cdc0e67a61db1a564b099fedfd",

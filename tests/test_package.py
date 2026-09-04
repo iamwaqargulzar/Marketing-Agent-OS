@@ -30,7 +30,14 @@ class PackageTests(unittest.TestCase):
         folders = [path.parent.name for path in (ROOT / "skills").glob("*/SKILL.md")]
         self.assertEqual(set(names), set(folders))
         self.assertEqual(len(names), len(set(names)))
-        self.assertEqual(catalog, json.loads((ROOT / "skills/marketing-os/references/skill-index.json").read_text()))
+        self.assertEqual(
+            catalog,
+            json.loads(
+                (ROOT / "skills/marketing-os/references/skill-index.json").read_text(
+                    encoding="utf-8"
+                )
+            ),
+        )
 
     def test_doctor(self):
         result = run_script("doctor.py")
@@ -93,7 +100,7 @@ class PackageTests(unittest.TestCase):
                 self.assertEqual(result.returncode, 2)
                 self.assertIn("Unknown skill", result.stderr)
 
-    @unittest.skipUnless(shutil.which("bash"), "Bash unavailable")
+    @unittest.skipUnless(os.name != "nt" and shutil.which("bash"), "Bash unavailable")
     def test_shell_wrapper(self):
         with tempfile.TemporaryDirectory() as directory:
             result = subprocess.run(
@@ -214,9 +221,10 @@ class PackageTests(unittest.TestCase):
         }
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "control.json"
-            path.write_text(
-                json.dumps(artifact, indent=2, sort_keys=True) + "\n",
-                encoding="utf-8",
+            path.write_bytes(
+                (json.dumps(artifact, indent=2, sort_keys=True) + "\n").encode(
+                    "utf-8"
+                )
             )
             result = run_script("validate_control_artifact.py", path)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
@@ -225,9 +233,10 @@ class PackageTests(unittest.TestCase):
             artifact["authority"]["status"] = "pending"
             del artifact["authority"]["granted_at"]
             del artifact["authority"]["granted_by"]
-            path.write_text(
-                json.dumps(artifact, indent=2, sort_keys=True) + "\n",
-                encoding="utf-8",
+            path.write_bytes(
+                (json.dumps(artifact, indent=2, sort_keys=True) + "\n").encode(
+                    "utf-8"
+                )
             )
             result = run_script("validate_control_artifact.py", path)
             self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
