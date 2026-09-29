@@ -30,6 +30,7 @@ Use this skill for **ai seo**. Start from the user’s concrete objective and av
 4. Use `scripts/citability_scorer.py`, `scripts/llmstxt_generator.py` and `scripts/brand_scanner.py` when deterministic checks help.
 5. When platform behavior or eligibility can change, verify current first-party documentation before making implementation claims.
 6. Report observations separately from hypotheses and label confidence.
+7. When recommending page formats or interpreting citation changes, read `references/format-volatility.md`; do not generalize a dated change from one answer engine to every platform.
 
 ## Domain Checklist
 
@@ -66,6 +67,7 @@ Prefer first-party/project evidence, then direct public sources, then reputable 
 - `references/routing-policy.md` — precedence and conflict resolution
 - `references/product-context-schema.md` — shared marketing context
 - `references/connectors.md` — optional data/tool integrations
+- `references/format-volatility.md` — platform-specific format selection and repeated-run measurement
 
 ## Next Best Skill
 

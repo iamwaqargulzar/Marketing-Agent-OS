@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refreshed source D to v2.11.1 commit `5b2c0007766c6a1cf1d53fd8fc73e979e0821022` and added portable AI-citation format-volatility guidance to `ai-seo`, keeping platform-specific observations time-bound and measurement-based.
+
 ## 1.2.0 — 2026-09-04
 
 - Fixed release-manifest path normalization on Windows and made ANSI-colored package-discovery output safe to verify in CI.

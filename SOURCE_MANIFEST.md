@@ -16,7 +16,7 @@ The package was checked against these upstream revisions. The snapshot date refl
 | `aaron-marketing-skills` | `b08683918e2bab70502f3d65ab0ae2f32beff2c6` |
 | `claude-seo` | `a1480c7e590b16001bd9dc1627eacdcd44d580f9` |
 | `geo-seo-claude` | `9484cf0920da04448cf89ea7d710cffeddbbdcab` |
-| `marketingskills` | `5cd4a7eae3a9a7b5d2aceb0613f7d1f7c4b65968` |
+| `marketingskills` | `5b2c0007766c6a1cf1d53fd8fc73e979e0821022` |
 
 ## Scope and structure
 

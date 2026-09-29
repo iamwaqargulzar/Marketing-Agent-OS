@@ -33,13 +33,13 @@
       "unique_skill_names": 16
     },
     "source-d": {
-      "commit": "5cd4a7eae3a9a7b5d2aceb0613f7d1f7c4b65968",
+      "commit": "5b2c0007766c6a1cf1d53fd8fc73e979e0821022",
       "declared_names": 50,
       "missing_from_normalized_layer": [],
       "skill_files": 50,
       "snapshot_matches_lock": true,
       "snapshot_path": "upstreams/source-d",
-      "tracked_entries": 465,
+      "tracked_entries": 466,
       "unique_skill_names": 50
     }
   }

@@ -1,5 +1,5 @@
 {
-  "audited_on": "2026-09-04",
+  "audited_on": "2026-09-29",
   "schema_version": 1,
   "sources": {
     "source-a": {
@@ -30,12 +30,12 @@
       "url": "https://github.com/zubair-trabzada/geo-seo-claude.git"
     },
     "source-d": {
-      "commit": "5cd4a7eae3a9a7b5d2aceb0613f7d1f7c4b65968",
-      "file_count": 465,
+      "commit": "5b2c0007766c6a1cf1d53fd8fc73e979e0821022",
+      "file_count": 466,
       "license": "MIT",
       "path": "upstreams/source-d",
       "repository": "coreyhaines31/marketingskills",
-      "tree_sha256": "fb77afa162cb0e884042315ba144e0e8a79a81793654786a46e5a1f2e255f7c9",
+      "tree_sha256": "3cc4c90816f8c2b4d77b5e5c91ef39e4fffca5fbf0307fa5bfcd01255faa8399",
       "url": "https://github.com/coreyhaines31/marketingskills.git"
     }
   }
