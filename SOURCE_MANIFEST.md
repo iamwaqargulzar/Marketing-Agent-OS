@@ -13,7 +13,7 @@ The package was checked against these upstream revisions. The snapshot date refl
 
 | Repository | Commit |
 |---|---|
-| `aaron-marketing-skills` | `b08683918e2bab70502f3d65ab0ae2f32beff2c6` |
+| `aaron-marketing-skills` | `f695301db323d6f6c9c34e399d01a7c76445c992` |
 | `claude-seo` | `a1480c7e590b16001bd9dc1627eacdcd44d580f9` |
 | `geo-seo-claude` | `36c4c65c84662dd8aa11f9d462c7f791662c9983` |
 | `marketingskills` | `5b2c0007766c6a1cf1d53fd8fc73e979e0821022` |

@@ -3,12 +3,12 @@
   "schema_version": 1,
   "sources": {
     "source-a": {
-      "commit": "b08683918e2bab70502f3d65ab0ae2f32beff2c6",
-      "file_count": 1061,
+      "commit": "f695301db323d6f6c9c34e399d01a7c76445c992",
+      "file_count": 1089,
       "license": "Apache-2.0",
       "path": "upstreams/source-a",
       "repository": "aaron-he-zhu/aaron-marketing-skills",
-      "tree_sha256": "3b82fe43610978a9b96c85d91e42ceb7bacaadfc50c504ac7ad103bbfe82caaf",
+      "tree_sha256": "59a5af6a057141f6fef309e1a0c7bf1bca162be1665a39b33beb0c49374ec569",
       "url": "https://github.com/aaron-he-zhu/aaron-marketing-skills.git"
     },
     "source-b": {
