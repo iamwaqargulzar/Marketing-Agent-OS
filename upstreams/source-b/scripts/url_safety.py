@@ -46,6 +46,18 @@ is_safe_ip(ip_str) -> bool
 URLSafetyError
     ValueError subclass raised by the strict validator and pinning helpers.
 
+Local targets
+=============
+``CLAUDE_SEO_LOCAL_TARGETS`` is an opt-in, comma-separated allowlist of
+``host`` or ``host:port`` entries (for example
+``localhost:3000,127.0.0.1:8080,100.101.102.103``) that lets an operator
+audit a dev server, a staging host, or a machine reached over Tailscale.
+It is consulted **only** for the first, top-level URL handed to
+``validate_url`` / ``validate_url_strict``. Redirect targets, embedded
+subresources, and browser-issued requests never consult it, and cloud
+metadata endpoints are refused even when listed. Unset, the policy is
+exactly what it is without the feature.
+
 Threading
 =========
 The DNS pinning helper is a critical section guarded by a non-blocking
@@ -73,6 +85,7 @@ in SECURITY.md.
 from __future__ import annotations
 
 import ipaddress
+import os
 import re
 import socket
 import threading
@@ -99,6 +112,8 @@ __all__ = [
     "safe_requests_head",
     "safe_requests_session",
     "make_safe_playwright_route_handler",
+    "DEFAULT_USER_AGENT",
+    "DEFAULT_REQUEST_HEADERS",
 ]
 
 
@@ -180,26 +195,185 @@ def _reject_authority_confusion(url: str, parsed) -> None:
         raise URLSafetyError("URL fragment/userinfo confusion refused")
 
 
+# RFC 6598 shared address space (carrier-grade NAT). Not in ``is_private``
+# on any supported Python, yet never publicly routable: Alibaba Cloud serves
+# its instance metadata at 100.100.100.200, and Tailscale/WireGuard meshes
+# hand out 100.64/10 addresses for internal services.
+_SHARED_ADDRESS_SPACE = ipaddress.ip_network("100.64.0.0/10")
+
+
 def is_safe_ip(ip_str: str) -> bool:
     """Return True iff ``ip_str`` is a public unicast address.
 
-    Handles IPv4-mapped IPv6 (``::ffff:127.0.0.1`` correctly returns False
-    because Python 3.9+'s ``ipaddress`` propagates ``is_loopback`` /
-    ``is_private`` through IPv4-mapped form). IPv6 unique-local
-    (``fc00::/7``) and link-local (``fe80::/10``) are also rejected.
+    IPv4-mapped IPv6 (``::ffff:127.0.0.1``) is unwrapped and judged as the
+    embedded IPv4 address, so every IPv4 rule below applies to it too.
+    IPv6 unique-local (``fc00::/7``) and link-local (``fe80::/10``) are
+    also rejected.
     """
     try:
         ip = ipaddress.ip_address(ip_str)
     except ValueError:
         return False
+    if ip.version == 6 and ip.ipv4_mapped is not None:
+        ip = ip.ipv4_mapped
     return not (
         ip.is_private
+        or (ip.version == 4 and ip in _SHARED_ADDRESS_SPACE)
         or ip.is_loopback
         or ip.is_reserved
         or ip.is_link_local
         or ip.is_multicast
         or ip.is_unspecified
     )
+
+
+# ---------------------------------------------------------------------------
+# CLAUDE_SEO_LOCAL_TARGETS: an explicit, top-level-only allowlist
+# ---------------------------------------------------------------------------
+#
+# Auditing a site before it is deployed, or a staging host reached over
+# Tailscale, means pointing claude-seo at a non-public address. The default
+# policy refuses that, correctly: this toolkit follows URLs found on pages it
+# crawls, so a blanket "allow private" switch is an SSRF hole with a friendly
+# name.
+#
+# The allowlist is therefore narrow by construction:
+#
+#   * It is consulted for the FIRST, top-level URL only, in ``validate_url``
+#     and ``validate_url_strict``. Redirect targets, embedded subresources,
+#     and browser-issued requests never reach it: those go through
+#     ``is_safe_ip`` and ``_BLOCKED_HOSTNAMES``, which this module keeps
+#     free of any environment dependency.
+#   * A host must be named. There is no range, wildcard, or "all private".
+#   * ``host:port`` matches that port only. A bare ``host`` matches any port.
+#   * Cloud metadata endpoints are refused even when listed. This is the
+#     trapdoor every "allow local" flag falls through: 169.254.169.254 is
+#     link-local, 100.100.100.200 sits inside the Tailscale range this
+#     allowlist exists to permit, and fd00:ec2::254 is unique-local rather
+#     than link-local, so no single address predicate catches all three.
+_LOCAL_TARGETS_ENV = "CLAUDE_SEO_LOCAL_TARGETS"
+
+
+# Hostnames and literals no allowlist entry can ever unblock.
+_NEVER_ALLOWLISTABLE_HOSTNAMES: frozenset[str] = frozenset(
+    {
+        "metadata",
+        "metadata.goog",
+        "metadata.google.internal",
+        "metadata.azure.com",
+        "metadata.ec2.internal",
+        "metadata.oraclecloud.com",
+        "169.254.169.254",  # AWS, Azure, GCP, Oracle, Alibaba metadata IPv4
+        "100.100.100.200",  # Alibaba metadata, inside RFC 6598
+        "fd00:ec2::254",    # AWS IMDS IPv6
+        "0.0.0.0",
+    }
+)
+
+
+def _is_allowlistable_ip(ip_str: str) -> bool:
+    """True when an explicit allowlist entry may reach ``ip_str``.
+
+    Loopback, RFC 1918, and RFC 6598 (Tailscale) are the ranges an operator
+    can opt into. Link-local stays refused in both families: that is where
+    the IMDS endpoints live, and Python's ``is_private`` reports
+    169.254.0.0/16 as private, so a plain "loopback or private" carve-out
+    would hand back 169.254.169.254. Multicast, unspecified, and reserved
+    are refused for the same reason: nothing an SEO audit legitimately
+    targets lives there.
+    """
+    try:
+        ip = ipaddress.ip_address(ip_str)
+    except ValueError:
+        return False
+    if ip.version == 6 and ip.ipv4_mapped is not None:
+        ip = ip.ipv4_mapped
+    if str(ip) in _NEVER_ALLOWLISTABLE_HOSTNAMES:
+        return False
+    if ip.is_link_local or ip.is_multicast or ip.is_unspecified:
+        return False
+    if ip.is_loopback:
+        # Checked before is_reserved: IPv6 ::/8 is reserved and contains ::1.
+        return True
+    return not ip.is_reserved
+
+
+def _parse_local_target(entry: str) -> Optional[tuple[str, Optional[int]]]:
+    """Parse one ``host`` or ``host:port`` entry into ``(host, port|None)``.
+
+    Returns ``None`` for anything unparseable, so a typo in the environment
+    variable widens nothing.
+    """
+    entry = entry.strip()
+    if not entry:
+        return None
+    # A bare IPv6 literal has more than one colon and no brackets; urlparse
+    # would read its last group as a port.
+    if entry.count(":") > 1 and "[" not in entry:
+        candidate, port = entry, None
+    else:
+        try:
+            parsed = urlparse(f"//{entry}")
+            candidate, port = parsed.hostname, parsed.port
+        except ValueError:
+            return None
+        if not candidate:
+            return None
+    try:
+        return normalize_hostname(candidate), port
+    except URLSafetyError:
+        return None
+
+
+def _local_targets() -> tuple[tuple[str, Optional[int]], ...]:
+    """The parsed contents of ``CLAUDE_SEO_LOCAL_TARGETS``.
+
+    Read on every call rather than cached: the variable is operator
+    configuration, and a cached empty tuple from import time would make the
+    setting silently inert in a long-lived process.
+    """
+    raw = os.environ.get(_LOCAL_TARGETS_ENV, "")
+    if not raw.strip():
+        return ()
+    parsed = (_parse_local_target(part) for part in raw.split(","))
+    return tuple(entry for entry in parsed if entry is not None)
+
+
+def _is_allowlisted_local_target(hostname: str, port: Optional[int]) -> bool:
+    """True when ``hostname``/``port`` is named in ``CLAUDE_SEO_LOCAL_TARGETS``.
+
+    ``hostname`` must already be normalized. Metadata endpoints are refused
+    before the list is even read.
+    """
+    if hostname in _NEVER_ALLOWLISTABLE_HOSTNAMES:
+        return False
+    if not _is_allowlistable_ip(hostname) and _looks_like_ip(hostname):
+        return False
+    for entry_host, entry_port in _local_targets():
+        if entry_host != hostname:
+            continue
+        if entry_port is None or entry_port == port:
+            return True
+    return False
+
+
+def _looks_like_ip(hostname: str) -> bool:
+    try:
+        ipaddress.ip_address(hostname)
+    except ValueError:
+        return False
+    return True
+
+
+def _url_port(parsed) -> Optional[int]:
+    """The URL's effective port, or ``None`` if the authority names a bad one."""
+    try:
+        explicit = parsed.port
+    except ValueError:
+        return None
+    if explicit is not None:
+        return explicit
+    return 443 if parsed.scheme == "https" else 80
 
 
 def normalize_hostname(hostname: str) -> str:
@@ -227,7 +401,7 @@ def normalize_hostname(hostname: str) -> str:
         raise URLSafetyError("Empty hostname")
 
     h = hostname.lower().strip()
-    # Strip a single trailing dot — FQDN form is semantically identical to
+    # Strip a single trailing dot: FQDN form is semantically identical to
     # the bare form for the purposes of resolution and policy.
     if h.endswith(".") and not h.endswith(".."):
         h = h[:-1]
@@ -261,7 +435,7 @@ def validate_url(url: str) -> bool:
         - Normalization itself fails (malformed obfuscated input)
     Returns True for any other well-formed http(s) URL with a
     public-looking hostname. Use ``validate_url_strict`` whenever the
-    caller will open a socket — only the strict form catches a DNS
+    caller will open a socket; only the strict form catches a DNS
     record that resolves to a non-public IP at connect time.
     """
     try:
@@ -274,13 +448,20 @@ def validate_url(url: str) -> bool:
         hostname = normalize_hostname(parsed.hostname)
     except URLSafetyError:
         return False
-    if hostname in _BLOCKED_HOSTNAMES:
+    # An unparseable port matches no allowlist entry, but is otherwise left
+    # to the caller and to validate_url_strict: this function is a parse-time
+    # check and its answer for such URLs is unchanged.
+    port = _url_port(parsed)
+    allowlisted = port is not None and _is_allowlisted_local_target(hostname, port)
+    if hostname in _BLOCKED_HOSTNAMES and not allowlisted:
         return False
     try:
         ipaddress.ip_address(hostname)
     except ValueError:
-        return True  # Hostname is a name, not a literal — OK at parse time.
-    return is_safe_ip(hostname)
+        return True  # Hostname is a name, not a literal: OK at parse time.
+    if is_safe_ip(hostname):
+        return True
+    return allowlisted and _is_allowlistable_ip(hostname)
 
 
 def validate_url_strict(url: str) -> tuple[str, str]:
@@ -305,7 +486,14 @@ def validate_url_strict(url: str) -> tuple[str, str]:
         raise URLSafetyError("URL has no hostname")
 
     hostname = normalize_hostname(parsed.hostname)
-    if hostname in _BLOCKED_HOSTNAMES:
+    port = _url_port(parsed)
+    if port is None:
+        raise URLSafetyError(f"Invalid port in URL authority: {url!r}")
+
+    # The CLAUDE_SEO_LOCAL_TARGETS allowlist is read here and nowhere the
+    # request chain can reach later, which is what keeps it top-level only.
+    allowlisted = _is_allowlisted_local_target(hostname, port)
+    if hostname in _BLOCKED_HOSTNAMES and not allowlisted:
         raise URLSafetyError(f"Blocked hostname: {hostname}")
 
     # If the hostname is an IP literal, validate it directly without DNS.
@@ -315,11 +503,12 @@ def validate_url_strict(url: str) -> tuple[str, str]:
         literal = None
 
     if literal is not None:
-        if not is_safe_ip(hostname):
+        if not is_safe_ip(hostname) and not (
+            allowlisted and _is_allowlistable_ip(hostname)
+        ):
             raise URLSafetyError(f"Blocked IP literal: {hostname}")
         return url, str(literal)
 
-    port = parsed.port or (443 if parsed.scheme == "https" else 80)
     try:
         addrinfo = socket.getaddrinfo(
             hostname,
@@ -335,14 +524,118 @@ def validate_url_strict(url: str) -> tuple[str, str]:
         raise URLSafetyError(f"No A records for {hostname}")
 
     for ip_str in resolved_ips:
-        if not is_safe_ip(ip_str):
-            raise URLSafetyError(
-                f"DNS rebinding refused: {hostname} resolves to "
-                f"non-public IP {ip_str}"
-            )
+        if is_safe_ip(ip_str):
+            continue
+        if allowlisted and _is_allowlistable_ip(ip_str):
+            continue  # Named in CLAUDE_SEO_LOCAL_TARGETS; see that block.
+        raise URLSafetyError(
+            f"DNS rebinding refused: {hostname} resolves to "
+            f"non-public IP {ip_str}"
+        )
 
     pinned = resolved_ips[0]
     return url, pinned
+
+
+def _proxy_hosts(url: str, proxies: Optional[dict] = None) -> frozenset:
+    """Hostnames ``requests`` will connect to instead of ``url``'s host.
+
+    Mirrors the proxy selection ``requests`` performs for a plain call:
+    environment proxies (``HTTPS_PROXY`` and friends, honouring ``NO_PROXY``)
+    overridden by an explicit ``proxies`` mapping. Returns the empty set when
+    the request goes direct.
+    """
+    merged = dict(requests.utils.get_environ_proxies(url))
+    if proxies:
+        merged.update(proxies)
+    proxy = requests.utils.select_proxy(url, merged)
+    if not proxy:
+        return frozenset()
+    host = urlparse(requests.utils.prepend_scheme_if_needed(proxy, "http")).hostname
+    return frozenset({host.lower()}) if host else frozenset()
+
+
+def _assert_proxy_host_is_public(host: str) -> str:
+    """Resolve one configured proxy host and refuse it unless it is public.
+
+    The exemption in :func:`_pin_dns` removes a proxy host from the
+    fall-through validation, so without this check anything the environment
+    can set (``HTTPS_PROXY``, ``ALL_PROXY``, a stray ``.bashrc`` export, a
+    hostile devcontainer image) would become an unvalidated egress target.
+    ``HTTPS_PROXY=http://169.254.169.254:3128`` would turn every audit into a
+    cloud-metadata read.
+
+    The proxy therefore goes through exactly the same policy as an audit
+    target: the hostname blocklist, then :func:`is_safe_ip` on every resolved
+    address across both families. Loopback, RFC 1918, RFC 6598, link-local,
+    and the metadata endpoints are refused with a message that names the
+    address, rather than being silently exempted.
+
+    Returns the normalized hostname. Raises ``URLSafetyError`` otherwise.
+    """
+    normalized = normalize_hostname(host)
+    hint = (
+        "Point the proxy environment variable at a publicly routable "
+        "address, or unset it."
+    )
+    if normalized in _BLOCKED_HOSTNAMES:
+        raise URLSafetyError(
+            f"Refusing configured HTTP proxy {host!r}: blocked hostname "
+            f"{normalized}. {hint}"
+        )
+
+    try:
+        literal = ipaddress.ip_address(normalized)
+    except ValueError:
+        literal = None
+
+    if literal is not None:
+        if not is_safe_ip(normalized):
+            raise URLSafetyError(
+                f"Refusing configured HTTP proxy {host!r}: non-public "
+                f"address {normalized}. {hint}"
+            )
+        return normalized
+
+    try:
+        addrinfo = socket.getaddrinfo(
+            normalized,
+            None,
+            family=socket.AF_UNSPEC,
+            type=socket.SOCK_STREAM,
+        )
+    except (socket.gaierror, UnicodeError) as exc:
+        raise URLSafetyError(
+            f"Refusing configured HTTP proxy {host!r}: DNS resolution "
+            f"failed ({exc}). {hint}"
+        ) from exc
+
+    resolved_ips = sorted({info[4][0] for info in addrinfo if info[4]})
+    if not resolved_ips:
+        raise URLSafetyError(
+            f"Refusing configured HTTP proxy {host!r}: no address records. "
+            f"{hint}"
+        )
+    for ip_str in resolved_ips:
+        if not is_safe_ip(ip_str):
+            raise URLSafetyError(
+                f"Refusing configured HTTP proxy {host!r}: it resolves to "
+                f"non-public IP {ip_str}. {hint}"
+            )
+    return normalized
+
+
+def _validated_proxy_hosts(url: str, proxies: Optional[dict] = None) -> frozenset:
+    """The proxy hosts to exempt from the pinned scope, each policy-checked.
+
+    Thin wrapper over :func:`_proxy_hosts` and
+    :func:`_assert_proxy_host_is_public`. Must be called *before* entering
+    :func:`_pin_dns`, so the resolution it performs goes through the real
+    resolver rather than the patched one.
+    """
+    return frozenset(
+        _assert_proxy_host_is_public(host) for host in _proxy_hosts(url, proxies)
+    )
 
 
 # A single non-blocking lock guards the global getaddrinfo monkey-patch.
@@ -353,14 +646,29 @@ _dns_patch_lock = threading.Lock()
 
 
 @contextmanager
-def _pin_dns(hostname: str, pinned_ip: str, port: int) -> Iterator[None]:
+def _pin_dns(
+    hostname: str,
+    pinned_ip: str,
+    port: int,
+    exempt_hosts: frozenset = frozenset(),
+) -> Iterator[None]:
     """
     Temporarily override ``socket.getaddrinfo`` so the named host resolves
     only to ``pinned_ip``, AND every other hostname looked up during the
     pinned scope has its resolved IPs validated against
     :func:`is_safe_ip`. Non-public resolutions raise ``socket.gaierror``,
-    which ``requests`` surfaces as ``ConnectionError`` — the caller's
+    which ``requests`` surfaces as ``ConnectionError``: the caller's
     existing error path.
+
+    ``exempt_hosts`` are resolved by the real resolver without the
+    fall-through check. It carries the configured HTTP proxy, if any: the
+    proxy is the process's own egress, and requests must resolve it to open
+    the tunnel, which the fall-through check otherwise refused. Callers pass
+    :func:`_validated_proxy_hosts`, which has already put that host through
+    the hostname blocklist and :func:`is_safe_ip`, so a proxy on loopback or
+    at a metadata address never reaches this set. Behind a CONNECT proxy the
+    target is resolved by the proxy, and :func:`validate_url_strict`'s
+    pre-flight check remains the guard for it.
 
     The fall-through validation is the v2 fix for redirect-target DNS
     rebinding: ``requests.Session.get(allow_redirects=True)`` may follow
@@ -398,6 +706,25 @@ def _pin_dns(hostname: str, pinned_ip: str, port: int) -> Iterator[None]:
                 f"IPv4 host {host}",
             )
 
+        if host and host.lower() in exempt_hosts:
+            result = original_getaddrinfo(host, requested_port, *args, **kwargs)
+            # An exempt entry that is an IP literal cannot change between the
+            # pre-flight validation and this lookup. A DNS name can (rebinding),
+            # so its answer is re-checked here; an exempt proxy that now resolves
+            # to a non-public address is refused rather than trusted.
+            try:
+                ipaddress.ip_address(host.strip("[]"))
+            except ValueError:
+                for info in result:
+                    sockaddr = info[4]
+                    if sockaddr and not is_safe_ip(sockaddr[0]):
+                        raise socket.gaierror(
+                            socket.EAI_FAIL,
+                            f"url_safety: exempt proxy host {host} resolved to "
+                            f"non-public IP {sockaddr[0]} after validation",
+                        )
+            return result
+
         # Branch 2: every OTHER hostname (redirect target, embedded
         # subresource, library bookkeeping) gets resolved by the real
         # resolver, then each returned record is checked. A single
@@ -424,6 +751,108 @@ def _pin_dns(hostname: str, pinned_ip: str, port: int) -> Iterator[None]:
         _dns_patch_lock.release()
 
 
+# The browser-like default User-Agent for every raw-HTTP fetch in claude-seo.
+# ``fetch_page.py`` has carried these defaults since v1.2.1 (issue #9); they
+# live here now because ``url_safety`` is the lower layer, so this module is
+# the one place to change them. ``fetch_page.py`` imports them back.
+DEFAULT_USER_AGENT = (
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/150.0.7871.114 Safari/537.36 ClaudeSEO/2.0"
+)
+
+# Without these, ``requests`` announces itself as
+# ``User-Agent: python-requests/x.y.z``, which many managed WAFs and CDNs
+# answer with 403/406 and SSR frameworks answer with the empty client-side
+# shell. Callers do not see an exception in that case, they analyse the error
+# page or the shell as if it were the real document.
+#
+# Accept-Language is deliberately absent. Announcing ``en-US`` makes a
+# multi-locale site serve its English variant, which silently corrupts every
+# hreflang, international, and localized-content audit. A caller that wants a
+# specific locale passes it in ``headers=``; anything else lets the site
+# choose, which is what an auditor wants to observe.
+#
+# Any header here can be overridden by passing ``headers=``.
+DEFAULT_REQUEST_HEADERS = {
+    "User-Agent": DEFAULT_USER_AGENT,
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Encoding": "gzip, deflate",
+    "Connection": "keep-alive",
+}
+
+
+_CONTENT_TYPE_CHARSET_RE = re.compile(r"charset\s*=\s*['\"]?([^;,'\"\s>]+)", re.IGNORECASE)
+_META_CHARSET_RE = re.compile(
+    r"<meta[^>]+charset\s*=\s*['\"]?([^;,'\"\s/>]+)",
+    re.IGNORECASE,
+)
+_BOMS = (
+    (b"\xef\xbb\xbf", "utf-8-sig"),
+    (b"\xff\xfe", "utf-16-le"),
+    (b"\xfe\xff", "utf-16-be"),
+)
+
+
+def _decode_bytes(raw: bytes, encoding: str) -> str:
+    try:
+        return raw.decode(encoding, errors="replace")
+    except LookupError:
+        return raw.decode("utf-8", errors="replace")
+
+
+def _extract_charset_from_content_type(content_type: str) -> str | None:
+    match = _CONTENT_TYPE_CHARSET_RE.search(content_type or "")
+    return match.group(1).strip() if match else None
+
+
+def _extract_meta_charset(raw: bytes) -> str | None:
+    head = raw[:4096].decode("ascii", errors="ignore")
+    match = _META_CHARSET_RE.search(head)
+    return match.group(1).strip() if match else None
+
+
+def decode_response_text(response) -> str:
+    """Decode a response body deterministically: BOM, then the Content-Type
+    charset, then ``<meta charset>``, then UTF-8.
+
+    Use this instead of ``response.text``. ``requests`` falls back to
+    ISO-8859-1 for text/* responses without a charset, which garbles UTF-8
+    pages (issue #314). Reading ``response.content`` consumes a streamed body,
+    so streamed callers should decode the bytes they already read.
+    """
+    content_type = response.headers.get("Content-Type", "") if response.headers else ""
+    return decode_body(response.content or b"", content_type)
+
+
+def decode_body(raw: bytes, content_type: str = "") -> str:
+    """Decode already-read bytes with the same rules as ``decode_response_text``.
+
+    For streamed responses, whose ``.content`` must not be read again.
+    """
+    raw = raw or b""
+    for marker, encoding in _BOMS:
+        if raw.startswith(marker):
+            return _decode_bytes(raw[len(marker):], encoding.replace("-sig", ""))
+
+    charset = _extract_charset_from_content_type(content_type)
+    if charset:
+        return _decode_bytes(raw, charset)
+
+    charset = _extract_meta_charset(raw)
+    if charset:
+        return _decode_bytes(raw, charset)
+
+    return raw.decode("utf-8", errors="replace")
+
+
+def _with_default_headers(kwargs: dict) -> dict:
+    """Fill in DEFAULT_REQUEST_HEADERS for header keys the caller did not set."""
+    headers = dict(DEFAULT_REQUEST_HEADERS)
+    headers.update(kwargs.get("headers") or {})
+    kwargs["headers"] = headers
+    return kwargs
+
+
 def safe_requests_get(
     url: str,
     *,
@@ -434,13 +863,17 @@ def safe_requests_get(
     ``requests.get`` with DNS-rebinding protection.
 
     The request's hostname is pinned to a pre-validated IP for the
-    duration of the call. Standard ``requests`` semantics otherwise.
+    duration of the call. Standard ``requests`` semantics otherwise,
+    except that browser-like default headers are supplied for any header
+    the caller did not set (see ``DEFAULT_REQUEST_HEADERS``).
     """
     norm_url, pinned_ip = validate_url_strict(url)
     parsed = urlparse(norm_url)
     port = parsed.port or (443 if parsed.scheme == "https" else 80)
     assert parsed.hostname is not None  # validate_url_strict guarantees this
-    with _pin_dns(parsed.hostname, pinned_ip, port):
+    kwargs = _with_default_headers(kwargs)
+    exempt = _validated_proxy_hosts(norm_url, kwargs.get("proxies"))
+    with _pin_dns(parsed.hostname, pinned_ip, port, exempt_hosts=exempt):
         return requests.get(norm_url, timeout=timeout, **kwargs)
 
 
@@ -454,13 +887,17 @@ def safe_requests_head(
     ``requests.head`` with DNS-rebinding protection.
 
     The request's hostname is pinned to a pre-validated IP for the
-    duration of the call. Standard ``requests`` semantics otherwise.
+    duration of the call. Standard ``requests`` semantics otherwise,
+    except that browser-like default headers are supplied for any header
+    the caller did not set (see ``DEFAULT_REQUEST_HEADERS``).
     """
     norm_url, pinned_ip = validate_url_strict(url)
     parsed = urlparse(norm_url)
     port = parsed.port or (443 if parsed.scheme == "https" else 80)
     assert parsed.hostname is not None
-    with _pin_dns(parsed.hostname, pinned_ip, port):
+    kwargs = _with_default_headers(kwargs)
+    exempt = _validated_proxy_hosts(norm_url, kwargs.get("proxies"))
+    with _pin_dns(parsed.hostname, pinned_ip, port, exempt_hosts=exempt):
         return requests.head(norm_url, timeout=timeout, **kwargs)
 
 
@@ -476,7 +913,8 @@ def safe_requests_session(url: str) -> Iterator[requests.Session]:
     port = parsed.port or (443 if parsed.scheme == "https" else 80)
     assert parsed.hostname is not None
     session = requests.Session()
-    with _pin_dns(parsed.hostname, pinned_ip, port):
+    exempt = _validated_proxy_hosts(norm_url, session.proxies)
+    with _pin_dns(parsed.hostname, pinned_ip, port, exempt_hosts=exempt):
         try:
             yield session
         finally:
@@ -517,7 +955,7 @@ def make_safe_playwright_route_handler(
 
             parsed = urlparse(request.url)
             if parsed.scheme not in ("http", "https"):
-                # data:, blob:, chrome-extension:, etc. — no DNS involved.
+                # data:, blob:, chrome-extension:, etc.: no DNS involved.
                 route.continue_()
                 return
             host = parsed.hostname

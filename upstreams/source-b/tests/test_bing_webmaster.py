@@ -12,6 +12,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
+pytest.importorskip("requests")
 import bing_webmaster as bing  # noqa: E402
 
 

@@ -14,14 +14,19 @@ deferred to manual smoke tests.
 
 from __future__ import annotations
 
+import json
 import os
 import sys
+from types import SimpleNamespace
 from unittest.mock import patch
+
+import pytest
 
 _SCRIPTS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "scripts")
 if _SCRIPTS not in sys.path:
     sys.path.insert(0, _SCRIPTS)
 
+pytest.importorskip("requests")
 import indexnow_submit  # noqa: E402
 import lcp_subparts  # noqa: E402
 import preload_check  # noqa: E402
@@ -170,3 +175,42 @@ def test_unlighthouse_reports_missing_node(monkeypatch) -> None:
     result = unlighthouse_run.run("https://example.com/")
     assert result["ok"] is False
     assert "npx" in result["error"].lower() or "node" in result["error"].lower()
+
+
+# ---------------------------------------------------------------------------
+# preload_check exit status (issue #281): success is 0, gating is opt-in
+# ---------------------------------------------------------------------------
+
+_PLAIN_HTML = "<html><head></head><body><p>nothing to preload</p></body></html>"
+
+
+def _run_preload_main(monkeypatch, capsys, *argv: str) -> tuple[int, str]:
+    response = SimpleNamespace(url="https://example.com/", text=_PLAIN_HTML,
+                               content=_PLAIN_HTML.encode("utf-8"), headers={})
+    monkeypatch.setattr(preload_check, "safe_requests_get", lambda *a, **k: response)
+    monkeypatch.setattr(sys, "argv", ["preload_check.py", "https://example.com/", *argv])
+    code = preload_check.main()
+    return code, capsys.readouterr().out
+
+
+def test_preload_main_exits_zero_on_a_low_score(monkeypatch, capsys) -> None:
+    score = preload_check.analyse(_PLAIN_HTML, {})["score"]
+    assert score < 75  # the old hard-coded gate would have exited 1 here
+    code, out = _run_preload_main(monkeypatch, capsys, "--json")
+    assert code == 0
+    assert json.loads(out)["score"] == score
+
+
+def test_preload_main_fail_under_gates_on_the_score(monkeypatch, capsys) -> None:
+    score = preload_check.analyse(_PLAIN_HTML, {})["score"]
+    assert _run_preload_main(monkeypatch, capsys, "--fail-under", str(score + 1))[0] == 1
+    assert _run_preload_main(monkeypatch, capsys, "--fail-under", str(score))[0] == 0
+
+
+def test_preload_main_still_exits_two_on_url_safety_error(monkeypatch, capsys) -> None:
+    def refuse(*a, **k):
+        raise preload_check.URLSafetyError("blocked")
+
+    monkeypatch.setattr(preload_check, "safe_requests_get", refuse)
+    monkeypatch.setattr(sys, "argv", ["preload_check.py", "http://127.0.0.1/"])
+    assert preload_check.main() == 2

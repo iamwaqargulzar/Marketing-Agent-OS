@@ -1,4 +1,4 @@
-# Claude SEO — Ahrefs extension installer (Windows / PowerShell).
+# Claude SEO - Ahrefs extension installer (Windows / PowerShell).
 # Mirrors extensions/ahrefs/install.sh.
 [CmdletBinding()]
 param()
@@ -10,11 +10,13 @@ function Test-Cmd($name) {
     return $?
 }
 
-if (-not (Test-Cmd python)) { throw "Python 3 is required." }
-if (-not (Test-Cmd npx))    { throw "Node 18+ / npx is required." }
+if (-not (Test-Cmd npx)) { throw "Node 18+ / npx is required." }
 
 $SkillDir = Join-Path $HOME ".claude/skills"
-$SettingsJson = Join-Path $HOME ".claude/settings.json"
+# MCP servers live in ~/.claude.json (the file `claude mcp add` writes).
+# NOT ~/.claude/settings.json - `mcpServers` is not a key Claude Code reads
+# there, so entries written to settings.json silently never load.
+$McpConfigJson = Join-Path $HOME ".claude.json"
 
 if (-not (Test-Path (Join-Path $SkillDir "seo"))) {
     throw "claude-seo base plugin not installed."
@@ -29,33 +31,31 @@ $SkillTarget = Join-Path $SkillDir "seo-ahrefs"
 New-Item -ItemType Directory -Path $SkillTarget -Force | Out-Null
 Copy-Item -Path (Join-Path $SourceDir "skills/seo-ahrefs/SKILL.md") `
           -Destination (Join-Path $SkillTarget "SKILL.md") -Force
-Write-Host "✓ Installed skill: $SkillTarget"
+Write-Host "[OK] Installed skill: $SkillTarget"
 
 # Pre-warm.
 & npx --yes --package=@ahrefs/mcp@0.0.11 mcp --help *> $null
 
-# Merge settings.json.
-$pyScript = @"
-import json, os, sys, tempfile
-path, token = sys.argv[1], sys.argv[2]
-data = {}
-if os.path.exists(path):
-    try:
-        data = json.load(open(path))
-    except Exception:
-        data = {}
-data.setdefault('mcpServers', {})['ahrefs'] = {
-    'command': 'npx',
-    'args': ['--yes', '--package=@ahrefs/mcp@0.0.11', 'mcp'],
-    'env': {'AHREFS_API_TOKEN': token},
-}
-fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path) or '.', prefix='.settings.', suffix='.json')
-with os.fdopen(fd, 'w') as fh:
-    json.dump(data, fh, indent=2)
-os.replace(tmp, path)
-print(f'Wrote mcpServers.ahrefs to {path}')
-"@
-$pyScript | python - $SettingsJson $Plain
+# Merge ~/.claude.json.
+$settingsContent = if (Test-Path $McpConfigJson) { Get-Content $McpConfigJson -Raw | ConvertFrom-Json } else { [pscustomobject]@{} }
+if (-not $settingsContent.mcpServers) { $settingsContent | Add-Member -NotePropertyName mcpServers -NotePropertyValue ([pscustomobject]@{}) -Force }
+$settingsContent.mcpServers | Add-Member -NotePropertyName 'ahrefs' -NotePropertyValue @{
+    command = 'npx'
+    args = @('--yes', '--package=@ahrefs/mcp@0.0.11', 'mcp')
+    env = @{ AHREFS_API_TOKEN = $Plain }
+} -Force
+# Write atomically: stage to a temp file in the same directory, then swap
+# it into place, so a crash mid-write never leaves ~/.claude.json truncated
+# or half-written (it is shared with Claude Code and other installers).
+# -Depth 100 (not the ConvertTo-Json default of 2) so an existing
+# ~/.claude.json with deeply nested config round-trips intact.
+$TempConfigJson = Join-Path (Split-Path -Parent $McpConfigJson) ".claude.json.$([guid]::NewGuid().ToString('N')).tmp"
+$jsonText = $settingsContent | ConvertTo-Json -Depth 100
+# Write without a byte-order mark: on Windows PowerShell 5.1, Set-Content -Encoding UTF8
+# emits a BOM and Node's JSON.parse rejects it, which would make ~/.claude.json unreadable.
+[System.IO.File]::WriteAllText($TempConfigJson, $jsonText, (New-Object System.Text.UTF8Encoding $false))
+Move-Item -Path $TempConfigJson -Destination $McpConfigJson -Force
+Write-Host "Wrote mcpServers.ahrefs to $McpConfigJson"
 
 Write-Host ""
 Write-Host "Done. Open a new Claude Code session and run /seo ahrefs metrics <url>."

@@ -63,7 +63,10 @@ def test_graph_members_inherit_context_but_still_require_type(tmp_path: Path) ->
         "@context": "https://schema.org",
         "@graph": [{"name": "Missing type"}],
     }
-    result = _run_payload(tmp_path, payload, capture_output=True, text=True)
+    # The hook forces UTF-8 on its own stdout (_configure_utf8); decode with the
+    # same codec, not the locale default, which is cp1252 on Windows and cannot
+    # represent the emoji markers.
+    result = _run_payload(tmp_path, payload, capture_output=True, encoding="utf-8")
     assert result.returncode == 1
     assert "Missing @type" in result.stdout
     assert "Missing @context" not in result.stdout
@@ -82,7 +85,7 @@ def test_non_object_graph_members_are_reported_without_crashing(tmp_path: Path) 
         "@context": "https://schema.org",
         "@graph": ["not-a-node", 42],
     }
-    result = _run_payload(tmp_path, payload, capture_output=True, text=True)
+    result = _run_payload(tmp_path, payload, capture_output=True, encoding="utf-8")
     assert result.returncode == 1
     assert "@graph member 1 must be an object" in result.stdout
     assert "@graph member 2 must be an object" in result.stdout
@@ -93,7 +96,7 @@ def test_graph_must_be_a_list(tmp_path: Path) -> None:
         "@context": "https://schema.org",
         "@graph": {"@type": "Organization"},
     }
-    result = _run_payload(tmp_path, payload, capture_output=True, text=True)
+    result = _run_payload(tmp_path, payload, capture_output=True, encoding="utf-8")
     assert result.returncode == 1
     assert "@graph must be a list" in result.stdout
 

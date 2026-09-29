@@ -17,7 +17,9 @@ def _text(path: Path) -> str:
 
 def _runtime_extension_scripts(text: str) -> set[str]:
     return set(
-        re.findall(r"claude-seo run --extension banana ([A-Za-z0-9_]+\.py)", text)
+        re.findall(
+            r"claude-seo[\"']? run --extension banana ([A-Za-z0-9_]+\.py)", text
+        )
     )
 
 
@@ -49,7 +51,8 @@ def test_standalone_installer_copies_scripts_beside_skill_file():
     installer = _text(EXTENSION / "install.sh")
     assert 'mkdir -p "${SKILL_DIR}/scripts" "${SKILL_DIR}/references"' in installer
     assert 'cp "${SOURCE_DIR}/scripts/"*.py "${SKILL_DIR}/scripts/"' in installer
-    assert '"$HOME/.claude/skills/seo/bin/claude-seo" run' in installer
+    assert '"$HOME/.claude/skills/seo/scripts/claude-seo" run' in installer
+    assert '"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run' in installer
 
 
 def test_top_level_installer_keeps_extension_scripts_under_core_extension_tree():

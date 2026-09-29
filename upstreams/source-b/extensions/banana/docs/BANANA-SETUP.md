@@ -13,7 +13,7 @@
 ## MCP Server Configuration
 
 The installer configures this automatically. If you need to set it up manually,
-add to `~/.claude/settings.json`:
+add to `~/.claude.json`:
 
 ```json
 {
@@ -31,27 +31,27 @@ add to `~/.claude/settings.json`:
 
 Scripted setup helper:
 ```bash
-claude-seo run --extension banana setup_mcp.py --key YOUR_KEY
+"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run --extension banana setup_mcp.py --key YOUR_KEY
 ```
 
 ## Verifying Installation
 
 Run the validation script:
 ```bash
-claude-seo run --extension banana validate_setup.py
+"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run --extension banana validate_setup.py
 ```
 
 Or check manually:
 1. `ls ~/.claude/skills/seo-image-gen/SKILL.md`:skill file exists
 2. `ls ~/.claude/agents/seo-image-gen.md`:agent file exists
-3. `grep nanobanana ~/.claude/settings.json`:MCP configured
+3. `grep nanobanana ~/.claude.json`:MCP configured
 
 ## Common Issues
 
 ### "MCP tools not available"
 - Restart Claude Code after installing the extension
 - Verify your API key is valid at [aistudio.google.com](https://aistudio.google.com)
-- Check `~/.claude/settings.json` has the nanobanana-mcp entry
+- Check `~/.claude.json` has the nanobanana-mcp entry
 
 ### "Rate limited (429)"
 - Check current free-tier limits in Google AI Studio
@@ -62,7 +62,7 @@ Or check manually:
 - The safety filter flagged your prompt (often a false positive)
 - Claude will suggest rephrased alternatives automatically
 - Common triggers: certain color descriptions, implied scenarios
-- See `references/prompt-engineering.md` Safety Rephrase section
+- See `references/prompt-adaptation-safety.md` (Safety Filter Rephrase Strategies)
 
 ### "Node.js version too old"
 - Requires Node.js 20+

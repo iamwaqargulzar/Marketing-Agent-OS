@@ -14,7 +14,8 @@ reference-graph checks that no other tool covers:
    ``scripts/presets.py`` invocations before the 2026-07 full review).
 4. Routing tables in ``skills/seo/SKILL.md`` and ``docs/COMMANDS.md`` agree with each
    other and with the skill directories on disk.
-5. ``agents/<name>.md`` path mentions exist (``seo-newagent`` doc example whitelisted).
+5. ``agents/<name>.md`` path mentions exist in ``agents/`` or in any
+   ``extensions/<ext>/agents/`` tree (``seo-newagent`` doc example whitelisted).
 6. ``skills/seo-flow/references/flow-prompts.lock`` SHA-256 integrity.
 7. Orphan-file candidates (tracked files whose basename is mentioned nowhere else);
    reported as warnings, never errors.
@@ -177,7 +178,11 @@ def check_runtime_invocations(texts):
         r"\b(?:python3|python|py\s+-3)\s+[^\n`]*?scripts/[A-Za-z0-9_./-]+\.py"
     )
     raw_path = re.compile(r"(?<![\w/])scripts/([A-Za-z0-9_]+\.py)\b")
-    runtime = re.compile(r"\bclaude-seo\s+run(?:\s+--extension\s+[a-z0-9-]+)?\s+([A-Za-z0-9_-]+\.py)")
+    # The canonical form is "${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run <script>,
+    # so the closing quote may sit between the launcher name and the subcommand.
+    runtime = re.compile(
+        r"claude-seo[\"']?\s+run(?:\s+--extension\s+[a-z0-9-]+)?\s+([A-Za-z0-9_-]+\.py)"
+    )
     for f in carriers:
         content = read(f)
         for match in bare.finditer(content):
@@ -185,7 +190,7 @@ def check_runtime_invocations(texts):
         for script in sorted(set(raw_path.findall(content))):
             errors.append(
                 f"{f}: unsupported raw script path scripts/{script}; "
-                f"use claude-seo run {script}"
+                f'use "${{CLAUDE_PLUGIN_ROOT}}/scripts/claude-seo" run {script}'
             )
         for script in sorted(set(runtime.findall(content))):
             if not os.path.isfile(os.path.join(REPO, "scripts", script)) and not any(
@@ -217,17 +222,42 @@ def check_routing(files):
 
 
 def check_agent_refs(files, texts):
+    """``agents/<name>.md`` mentions must resolve to a real agent file.
+
+    Path-aware, like the script-reference check: an agent resolves against the
+    repo-root ``agents/`` tree, and additionally against any extension's own
+    ``extensions/<ext>/agents/`` tree. Extension-supplied agents
+    (``seo-matomo``) ship only inside their extension and are copied into
+    ``~/.claude/agents/`` at install time, so a mention of them is live, not
+    dead. Extensions whose agent is mirrored into the core tree
+    (``seo-dataforseo``, ``seo-image-gen``) resolve either way.
+    """
     agents = {os.path.basename(f)[:-3] for f in files
               if f.startswith("agents/") and f.endswith(".md")}
+    ext_agents = {os.path.basename(f)[:-3] for f in files
+                  if re.match(r'extensions/[^/]+/agents/[a-z0-9-]+\.md$', f)}
+    known = agents | ext_agents
     pat = re.compile(r'agents/([a-z0-9-]+)\.md')
     errors = []
     for f in texts:
-        if f.startswith("agents/"):
+        if f.startswith("agents/") or f in SELF_DOC:
             continue
         for m in sorted(set(pat.findall(read(f)))):
-            if m not in agents and m not in DOC_EXAMPLE_AGENTS:
+            if m not in known and m not in DOC_EXAMPLE_AGENTS:
                 errors.append(f"{f}: dead agent ref agents/{m}.md")
     return errors
+
+
+def _normalise_newlines(data):
+    """Hash lock inputs as LF text so a CRLF checkout matches the baseline.
+
+    The lock is written from LF content (sync_flow.py hashes the fetched text
+    directly). Git for Windows defaults to core.autocrlf=true, which checks the
+    same files out with CRLF, so a byte-for-byte hash flagged every locked file
+    as tampered on a stock Windows clone. Only CRLF is folded; any other change
+    still fails the check.
+    """
+    return data.replace(b"\r\n", b"\n")
 
 
 def check_flow_lock(files):
@@ -246,7 +276,7 @@ def check_flow_lock(files):
             errors.append(f"flow lock: missing {rel}")
             continue
         with open(full, "rb") as fh:
-            got = hashlib.sha256(fh.read()).hexdigest()
+            got = hashlib.sha256(_normalise_newlines(fh.read())).hexdigest()
         if got != want:
             errors.append(f"flow lock: hash mismatch {rel}")
     extra = {f for f in files

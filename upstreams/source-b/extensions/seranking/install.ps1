@@ -1,4 +1,4 @@
-# Claude SEO — SE Ranking extension installer (Windows / PowerShell).
+# Claude SEO - SE Ranking extension installer (Windows / PowerShell).
 $ErrorActionPreference = "Stop"
 
 if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
@@ -24,16 +24,21 @@ Copy-Item -Path (Join-Path $SourceDir "skills/seo-seranking/SKILL.md") `
 
 $pyScript = @"
 import json, os, sys, tempfile
-path, key = sys.argv[1], sys.argv[2]
+path, key = sys.argv[1], os.environ['CLAUDE_SEO_SECRET']
 data = {}
 if os.path.exists(path):
     try: data = json.load(open(path))
-    except: data = {}
+    except ValueError: sys.exit('x ' + path + ' is not valid JSON. Nothing was changed; fix it and rerun.')
 data.setdefault('env', {})['SERANKING_API_KEY'] = key
 fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path) or '.', prefix='.settings.', suffix='.json')
 with os.fdopen(fd, 'w') as fh:
     json.dump(data, fh, indent=2)
 os.replace(tmp, path)
 "@
-$pyScript | python - $SettingsJson $Plain
+$env:CLAUDE_SEO_SECRET = $Plain
+try {
+    $pyScript | python - $SettingsJson
+    # A native command's non-zero exit does not throw, even with Stop.
+    if ($LASTEXITCODE -ne 0) { throw "Nothing was saved (python exited $LASTEXITCODE). See the message above." }
+} finally { Remove-Item Env:CLAUDE_SEO_SECRET -ErrorAction SilentlyContinue }
 Write-Host "Done. Try: /seo seranking ai-visibility brandname"

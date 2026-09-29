@@ -99,6 +99,7 @@ def run_pagespeed(
     result = {
         "url": url,
         "strategy": strategy,
+        "lighthouse_version": None,
         "lighthouse_scores": {},
         "lab_metrics": {},
         "field_metrics": {},
@@ -154,8 +155,16 @@ def run_pagespeed(
 
     # Lighthouse scores
     lr = data.get("lighthouseResult", {})
+    # Record which Lighthouse build PSI ran, so reports can cite it instead of
+    # assuming the latest stable release.
+    result["lighthouse_version"] = lr.get("lighthouseVersion")
     for cat_key, cat_data in lr.get("categories", {}).items():
-        result["lighthouse_scores"][cat_key] = round(cat_data.get("score", 0) * 100)
+        # Lighthouse emits score: null for categories it could not evaluate
+        # (scoreDisplayMode "error"/"notApplicable"). Skip them rather than
+        # multiplying None, and rather than reporting a misleading 0/100.
+        cat_score = cat_data.get("score")
+        if cat_score is not None:
+            result["lighthouse_scores"][cat_key] = round(cat_score * 100)
 
     # Lab metrics from Lighthouse audits
     audits = lr.get("audits", {})

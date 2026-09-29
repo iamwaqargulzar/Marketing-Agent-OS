@@ -58,8 +58,8 @@ Dependencies belong in the managed runtime. For a plugin install, run:
 
 For a manual install, run:
 ```bash
-~/.claude/skills/seo/bin/claude-seo doctor
-~/.claude/skills/seo/bin/claude-seo setup
+~/.claude/skills/seo/scripts/claude-seo doctor
+~/.claude/skills/seo/scripts/claude-seo setup
 ```
 
 Do not install individual packages, use `pip --user`, or create a PATH shim.

@@ -5,6 +5,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import os
+import re
 import signal
 import subprocess
 from pathlib import Path
@@ -223,3 +224,138 @@ def test_run_propagates_child_signal(tmp_path: Path, monkeypatch: pytest.MonkeyP
     )
     assert rc == 128 + signal.SIGTERM
     assert delivered == [(os.getpid(), signal.SIGTERM)]
+
+
+# Scripts run without an --extension flag are dispatched straight from the
+# core scripts/ directory, so they must be listed in ALLOWED_CORE_SCRIPTS or
+# `claude-seo run` refuses them at runtime, even though the SKILL.md/agent
+# instructions look correct. This regression was caught by hand for
+# keywordseverywhere_api.py (SKILL.md wired it up, ALLOWED_CORE_SCRIPTS did
+# not list it) -- this test makes sure the next one doesn't ship silently.
+_RUN_INVOCATION = re.compile(r'run\s+([A-Za-z0-9_]+\.py)(?!["\']?\s*--extension)')
+_EXTENSION_FLAG = re.compile(r'run\s+[A-Za-z0-9_]+\.py[^\n]*--extension\b')
+
+
+def _instruction_files() -> list[Path]:
+    files: list[Path] = []
+    for pattern in ("skills/**/SKILL.md", "agents/*.md"):
+        files.extend(sorted(ROOT.glob(pattern)))
+    return files
+
+
+def test_every_skill_invoked_script_is_runtime_allowlisted() -> None:
+    missing: list[str] = []
+    for path in _instruction_files():
+        text = path.read_text(encoding="utf-8")
+        rel = path.relative_to(ROOT).as_posix()
+        for line in text.splitlines():
+            if _EXTENSION_FLAG.search(line):
+                # Extension scripts are dispatched via extensions/<name>/scripts/
+                # and are not, and should not be, in ALLOWED_CORE_SCRIPTS.
+                continue
+            for match in _RUN_INVOCATION.finditer(line):
+                script = match.group(1)
+                if script not in runtime.ALLOWED_CORE_SCRIPTS:
+                    missing.append(f"{rel}: {script}")
+    assert not missing, (
+        "scripts invoked from SKILL.md/agent instructions but missing from "
+        "ALLOWED_CORE_SCRIPTS in scripts/runtime.py (claude-seo run would "
+        "refuse them): " + "; ".join(missing)
+    )
+
+def test_failed_stage_reports_child_diagnostics(monkeypatch: pytest.MonkeyPatch) -> None:
+    stderr = "\n".join(
+        [
+            "Looking in links: /tmp/tmp8b58vt29",
+            "ERROR: Could not install packages due to an OSError: [WinError 206] "
+            "Der Dateiname oder die Erweiterung ist zu lang",
+            "",
+        ]
+    )
+    monkeypatch.setattr(
+        runtime.subprocess,
+        "run",
+        lambda argv, **kwargs: subprocess.CompletedProcess(argv, 1, "", stderr),
+    )
+    with pytest.raises(RuntimeError) as excinfo:
+        runtime._run_checked(["python", "-m", "venv", "x"], env={}, stage="virtual environment creation")
+    message = str(excinfo.value)
+    assert message.startswith("virtual environment creation failed with exit code 1")
+    assert "[WinError 206]" in message
+
+
+def test_failed_stage_falls_back_to_stdout_and_bounds_the_tail(monkeypatch: pytest.MonkeyPatch) -> None:
+    stdout = "\n".join(f"line {index}" for index in range(40))
+    monkeypatch.setattr(
+        runtime.subprocess,
+        "run",
+        lambda argv, **kwargs: subprocess.CompletedProcess(argv, 2, stdout, ""),
+    )
+    with pytest.raises(RuntimeError) as excinfo:
+        runtime._run_checked(["pip"], env={}, stage="dependency installation")
+    message = str(excinfo.value)
+    assert "line 39" in message
+    assert "line 10" in message
+    assert "line 9" not in message
+
+
+def test_successful_stage_returns_the_completed_process(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(
+        runtime.subprocess,
+        "run",
+        lambda argv, **kwargs: subprocess.CompletedProcess(argv, 0, "ok", "warning noise"),
+    )
+    assert runtime._run_checked(["pip"], env={}, stage="dependency installation").stdout == "ok"
+
+
+def test_redaction_covers_repr_quoted_home(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(runtime.Path, "home", classmethod(lambda cls: Path(r"C:\Users\someone")))
+    quoted = repr(r"C:\Users\someone\.claude\skills\seo\.venv.next-1\Scripts\python.exe")
+    nested = repr(f"sys.path = [{quoted}]")
+    redacted = runtime._redact(
+        f"Command '[{quoted}, '-c', {nested}]' returned non-zero exit status 1.\n"
+        "Looking in links: c:\\users\\someone\\AppData\\Local\\Temp\\tmp1"
+    )
+    assert "someone" not in redacted
+    assert redacted.count("<home>") == 3
+
+
+def test_browser_setup_warning_is_redacted(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    # _run_checked now embeds the child's own stderr tail (#300), so a failed
+    # Chromium install can carry the home directory (playwright's cache path,
+    # a download URL, ...). That message is printed as a non-fatal warning
+    # rather than routed through the fatal-error handler, so it must be
+    # redacted at its own print site instead of relying on the one at the
+    # bottom of command_setup.
+    root = _fixture_root(tmp_path)
+    data = tmp_path / "data"
+    data.mkdir(parents=True, exist_ok=True)
+    (data / "runtime-state.json").write_text(
+        json.dumps(runtime._expected(root)), encoding="utf-8"
+    )
+    monkeypatch.setenv("CLAUDE_PLUGIN_DATA", str(data))
+    monkeypatch.setattr(runtime, "_root", lambda: root)
+    fake_home = tmp_path / "home" / "someone"
+    monkeypatch.setattr(runtime.Path, "home", classmethod(lambda cls: fake_home))
+
+    def fake_checked(argv: list[str], *, env: dict[str, str], stage: str) -> subprocess.CompletedProcess[str]:
+        if stage == "virtual environment creation":
+            staged = Path(argv[-1])
+            staged_python = runtime._venv_python(staged)
+            staged_python.parent.mkdir(parents=True)
+            staged_python.write_text("new", encoding="utf-8")
+        if stage == "Chromium installation":
+            raise RuntimeError(
+                "Chromium installation failed with exit code 1\n"
+                f"  Failed to download to {fake_home}/.cache/ms-playwright/chromium"
+            )
+        return subprocess.CompletedProcess(argv, 0, "", "")
+
+    monkeypatch.setattr(runtime, "_run_checked", fake_checked)
+    rc = runtime.command_setup(SimpleNamespace(skip_browser=False))
+    assert rc == 10
+    captured = capsys.readouterr()
+    assert str(fake_home) not in captured.err
+    assert "<home>" in captured.err

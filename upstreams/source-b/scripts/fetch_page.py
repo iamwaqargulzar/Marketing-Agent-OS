@@ -9,6 +9,7 @@ SPA-aware fetching.
 Usage:
     python fetch_page.py https://example.com
     python fetch_page.py https://example.com --output page.html
+    python fetch_page.py https://example.com --json
     python fetch_page.py https://example.com --render auto    # SPA-aware
     python fetch_page.py https://example.com --render always  # force render
 """
@@ -16,8 +17,8 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import json
 import os
-import re
 import sys
 from typing import Optional
 
@@ -30,12 +31,19 @@ except ImportError:
 _SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
 if _SCRIPTS_DIR not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
-from url_safety import URLSafetyError, safe_requests_session, validate_url_strict  # noqa: E402
-
-DEFAULT_USER_AGENT = (
-    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-    "(KHTML, like Gecko) Chrome/150.0.7871.114 Safari/537.36 ClaudeSEO/2.0"
+from url_safety import (  # noqa: E402
+    DEFAULT_REQUEST_HEADERS,
+    URLSafetyError,
+    decode_response_text,
+    safe_requests_session,
+    validate_url_strict,
 )
+from url_safety import DEFAULT_USER_AGENT as DEFAULT_USER_AGENT  # noqa: E402,F401
+
+# DEFAULT_USER_AGENT and the header block now live in url_safety, the lower
+# layer that both this script and the safe_requests_* helpers go through, so
+# there is one place to change them. The name is re-exported above because
+# fetch_page.DEFAULT_USER_AGENT was the public spelling before v2.3.0.
 
 # Googlebot UA for prerender/dynamic rendering detection.
 # Prerender services (Prerender.io, Rendertron) serve fully rendered HTML to
@@ -46,61 +54,14 @@ GOOGLEBOT_USER_AGENT = (
     "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
 )
 
-DEFAULT_HEADERS = {
-    "User-Agent": DEFAULT_USER_AGENT,
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "Accept-Language": "en-US,en;q=0.5",
-    "Accept-Encoding": "gzip, deflate",
-    "Connection": "keep-alive",
-}
+# One source of truth with the safe_requests_* helpers. Accept-Language is
+# absent by design: announcing en-US makes multi-locale sites serve their
+# English variant, which corrupts hreflang and international audits.
+DEFAULT_HEADERS = dict(DEFAULT_REQUEST_HEADERS)
 
-_CONTENT_TYPE_CHARSET_RE = re.compile(r"charset\s*=\s*['\"]?([^;,'\"\s>]+)", re.IGNORECASE)
-_META_CHARSET_RE = re.compile(
-    r"<meta[^>]+charset\s*=\s*['\"]?([^;,'\"\s/>]+)",
-    re.IGNORECASE,
-)
-_BOMS = (
-    (b"\xef\xbb\xbf", "utf-8-sig"),
-    (b"\xff\xfe", "utf-16-le"),
-    (b"\xfe\xff", "utf-16-be"),
-)
-
-
-def _decode_bytes(raw: bytes, encoding: str) -> str:
-    try:
-        return raw.decode(encoding, errors="replace")
-    except LookupError:
-        return raw.decode("utf-8", errors="replace")
-
-
-def _extract_charset_from_content_type(content_type: str) -> str | None:
-    match = _CONTENT_TYPE_CHARSET_RE.search(content_type or "")
-    return match.group(1).strip() if match else None
-
-
-def _extract_meta_charset(raw: bytes) -> str | None:
-    head = raw[:4096].decode("ascii", errors="ignore")
-    match = _META_CHARSET_RE.search(head)
-    return match.group(1).strip() if match else None
-
-
-def _decode_response_content(response) -> str:
-    """Decode HTTP bytes deterministically for stable SEO snapshots."""
-    raw = response.content or b""
-    for marker, encoding in _BOMS:
-        if raw.startswith(marker):
-            return _decode_bytes(raw, encoding)
-
-    content_type = response.headers.get("Content-Type", "") if response.headers else ""
-    charset = _extract_charset_from_content_type(content_type)
-    if charset:
-        return _decode_bytes(raw, charset)
-
-    charset = _extract_meta_charset(raw)
-    if charset:
-        return _decode_bytes(raw, charset)
-
-    return raw.decode("utf-8", errors="replace")
+# Response decoding lives in url_safety (decode_response_text) so every script
+# that fetches through the safe helpers decodes the same way (issue #314).
+_decode_response_content = decode_response_text
 
 
 def fetch_page(
@@ -195,10 +156,84 @@ def fetch_page(
     return result
 
 
+def _non_negative_int(value: str) -> int:
+    parsed = int(value)
+    if parsed < 0:
+        raise argparse.ArgumentTypeError("must be zero or greater")
+    return parsed
+
+
+def _as_render_result(result: dict, *, mode_used: str) -> dict:
+    """Map a raw ``fetch_page()`` result onto the ``render_page()`` contract.
+
+    ``render_page._json_summary`` is written against the render_page result
+    shape. Normalizing the raw-fetch result onto that same shape before
+    calling it (rather than dumping the raw dict as-is) means ``--json``
+    emits an identical key set whether or not ``--render`` was used, and the
+    raw path gets ``--max-text`` truncation for free.
+    """
+    redirect_chain = result.get("redirect_details")
+    if not redirect_chain:
+        redirect_chain = [
+            {"url": u, "status_code": None} for u in result.get("redirect_chain") or []
+        ]
+    return {
+        "url": result.get("url"),
+        "status_code": result.get("status_code"),
+        "content": result.get("content"),
+        "raw_content": result.get("content"),
+        "is_spa": None,
+        "extracted_text": None,
+        "publication_date": None,
+        "accessibility_tree": None,
+        "accessibility_error": None,
+        "accessibility_partial": False,
+        "headers": result.get("headers", {}),
+        "redirect_chain": redirect_chain,
+        "console_errors": [],
+        "render_diagnostics": [],
+        "render_engine": None,
+        "render_ms": None,
+        "mode_used": mode_used,
+        "error": result.get("error"),
+    }
+
+
+def _emit_json(result: dict, output: Optional[str], *, max_text: int = 0) -> None:
+    """Emit a fetch result as JSON via ``render_page._json_summary``.
+
+    Both the raw and rendered fetch paths are normalized onto the render_page
+    result contract before this is called, so the emitted JSON has an
+    identical key set (and honours ``--max-text``) regardless of ``--render``.
+    """
+    from render_page import _json_summary
+
+    output_written = False
+    if output and not result.get("error"):
+        with open(output, "w", encoding="utf-8") as f:
+            f.write(result.get("content") or "")
+        output_written = True
+    summary = _json_summary(result, max_text=max_text)
+    summary["output_written"] = output_written
+    print(json.dumps(summary, indent=2, default=str))
+    sys.exit(1 if result.get("error") else 0)
+
+
 def main():
     parser = argparse.ArgumentParser(description="Fetch a web page for SEO analysis")
     parser.add_argument("url", help="URL to fetch")
     parser.add_argument("--output", "-o", help="Output file path")
+    parser.add_argument("--json", action="store_true", help="Emit full fetch result as JSON")
+    parser.add_argument(
+        "--max-text",
+        type=_non_negative_int,
+        default=0,
+        help=(
+            "maximum characters returned for each JSON content field "
+            "(content, raw_content, extracted_text); 0 keeps full text "
+            "(default: 0). Only applies with --json."
+        ),
+    )
     parser.add_argument("--timeout", "-t", type=int, default=30, help="Timeout in seconds")
     parser.add_argument("--no-redirects", action="store_true", help="Don't follow redirects")
     parser.add_argument("--user-agent", help="Custom User-Agent string")
@@ -237,6 +272,8 @@ def main():
             timeout_ms=args.timeout * 1000,
             user_agent=ua,
         )
+        if args.json:
+            _emit_json(rendered, args.output, max_text=args.max_text)
         if rendered["error"]:
             print(f"Error: {rendered['error']}", file=sys.stderr)
             sys.exit(1)
@@ -260,6 +297,13 @@ def main():
         follow_redirects=not args.no_redirects,
         user_agent=ua,
     )
+
+    if args.json:
+        _emit_json(
+            _as_render_result(result, mode_used="raw"),
+            args.output,
+            max_text=args.max_text,
+        )
 
     if result["error"]:
         print(f"Error: {result['error']}", file=sys.stderr)

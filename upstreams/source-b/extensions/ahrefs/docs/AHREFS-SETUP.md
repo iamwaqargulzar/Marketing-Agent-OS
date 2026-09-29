@@ -13,12 +13,14 @@ live Ahrefs data.
 
 The installer:
 
-1. Verifies Python 3 + Node 18+ are on `$PATH`.
+1. Verifies Node 18+ is on `$PATH` (the `.sh` installer also verifies Python 3,
+   used only for its `~/.claude.json` merge script; the `.ps1` installer
+   merges natively with `ConvertTo-Json` and needs no Python).
 2. Prompts for your Ahrefs API token (input is hidden).
 3. Pre-warms the `@ahrefs/mcp@0.0.11` npm package via `npx --yes` so the first
    MCP call doesn't spend 10+ seconds downloading.
 4. Copies `skills/seo-ahrefs/SKILL.md` into `~/.claude/skills/seo-ahrefs/`.
-5. Atomically writes `mcpServers.ahrefs` into `~/.claude/settings.json`
+5. Atomically writes `mcpServers.ahrefs` into `~/.claude.json`
    with your token in the `env` block. The settings file is `chmod 0o600`
    after the merge (same hardening as the OAuth token).
 
@@ -39,9 +41,9 @@ Re-run the installer to pre-warm or run `npx --yes --package=@ahrefs/mcp@0.0.11 
 ./extensions/ahrefs/install.sh   # re-runs the prompt; overwrites the env entry
 ```
 
-The Python merge script is idempotent — re-running only replaces the
+The Python merge script is idempotent: re-running only replaces the
 `mcpServers.ahrefs.env.AHREFS_API_TOKEN` value, leaving the rest of
-`settings.json` intact.
+`~/.claude.json` intact.
 
 ## Uninstall
 
@@ -53,8 +55,8 @@ The Python merge script is idempotent — re-running only replaces the
 
 Ahrefs charges per "unit". A unit covers most read endpoints (domain
 metrics, backlink data) at 1 unit each; bulk endpoints cost more. The
-`claude-seo run dataforseo_costs.py` cost tracker shipped with claude-seo
-generalises across vendors — see the DataForSEO extension's
+`"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run dataforseo_costs.py` cost tracker shipped with claude-seo
+generalises across vendors; see the DataForSEO extension's
 `references/cost-tiers.md` for the budget-preset pattern to mirror when
 wiring Ahrefs accounting.
 

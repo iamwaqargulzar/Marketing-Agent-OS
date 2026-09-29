@@ -4,14 +4,15 @@
 
 This repository contains **Claude SEO**, a Tier 4 Claude Code skill for comprehensive
 SEO analysis across all industries. It follows the Agent Skills open standard and the
-3-layer architecture (directive, orchestration, execution). 25 sub-skills (21 core +
-1 orchestrator + 1 framework integration + 2 extension mirrors), 18 sub-agents (15 core +
+3-layer architecture (directive, orchestration, execution). 26 sub-skills (22 core +
+1 orchestrator + 1 framework integration + 2 extension mirrors), 19 sub-agents (16 core +
 1 framework integration + 2 extension mirrors), and an extensible reference
 system cover technical SEO, content quality,
 schema markup, image optimization, sitemap architecture, AI search optimization,
 local SEO (GBP, citations, reviews, map pack), maps intelligence, semantic topic
 clustering, search experience optimization (SXO), SEO drift monitoring, e-commerce
-SEO, and international SEO with cultural adaptation profiles.
+SEO, and international SEO with cultural adaptation profiles. Matomo is available
+as an optional extension for self-hosted analytics.
 
 ## Architecture
 
@@ -21,9 +22,9 @@ claude-seo/
   CONTRIBUTORS.md                    # Community credits (Pro Hub Challenge)
   AGENTS.md                          # Multi-platform agent instructions (Cursor, Antigravity)
   .claude-plugin/
-    plugin.json                    # Plugin manifest (v2.2.5)
+    plugin.json                    # Plugin manifest (v2.4.1)
     marketplace.json               # Marketplace catalog for distribution
-  skills/                            # 25 sub-skills (auto-discovered)
+  skills/                            # 26 sub-skills (auto-discovered)
     seo/                           # Main orchestrator skill
       SKILL.md                     # Entry point, routing table, core rules
       references/                  # On-demand knowledge files (13 files)
@@ -36,6 +37,9 @@ claude-seo/
     seo-sitemap/SKILL.md         # XML sitemap analysis/generation
     seo-images/SKILL.md          # Image optimization analysis
     seo-geo/SKILL.md             # AI search / GEO optimization
+    seo-agentic/                 # Agent readiness (Lighthouse Agentic Browsing, WebMCP)
+      SKILL.md
+      references/                # Lighthouse category, access policy, discovery, WebMCP, vendor matrix
     seo-local/SKILL.md           # Local SEO (GBP, citations, reviews, map pack)
     seo-maps/SKILL.md            # Maps intelligence (geo-grid, GBP audit, reviews, competitors)
     seo-plan/SKILL.md            # Strategic SEO planning
@@ -64,7 +68,7 @@ claude-seo/
     seo-image-gen/              # AI image generation for SEO assets (extension mirror)
       SKILL.md
       references/                # Image gen reference files (7 files)
-  agents/                          # 18 subagents (auto-discovered)
+  agents/                          # 19 subagents (auto-discovered)
     seo-technical.md             # Crawlability, indexability, security
     seo-content.md               # E-E-A-T, readability, thin content
     seo-schema.md                # Structured data validation
@@ -72,6 +76,7 @@ claude-seo/
     seo-performance.md           # Core Web Vitals, page speed
     seo-visual.md                # Screenshots, mobile rendering
     seo-geo.md                   # AI crawler access, GEO, citability
+    seo-agentic.md               # Agent readiness, Lighthouse Agentic Browsing
     seo-local.md                 # GBP, NAP, citations, reviews, local schema
     seo-maps.md                  # Geo-grid, GBP audit, reviews, competitor radius
     seo-google.md                # Google API analyst (CrUX, GSC, GA4)
@@ -85,7 +90,7 @@ claude-seo/
     seo-flow.md                  # FLOW framework integration
   hooks/                           # Quality gate hooks
     hooks.json                   # PostToolUse schema validation
-  scripts/                         # 53 Python execution scripts
+  scripts/                         # 60 Python execution scripts
     google_auth.py               # Credential management (OAuth, SA, API key, 4-tier detection)
     backlinks_auth.py            # Backlink API credential management (Moz, Bing)
     moz_api.py                   # Moz Link Explorer API (DA/PA, spam, domains, anchors)
@@ -98,6 +103,9 @@ claude-seo/
     gsc_inspect.py               # URL Inspection (single + batch)
     indexing_notify.py           # Indexing API v3 (URL_UPDATED/URL_DELETED)
     ga4_report.py                # GA4 organic traffic reports
+    matomo_auth.py               # Matomo credential management (extension)
+    matomo_report.py             # Matomo Reporting API client (extension)
+    keywordseverywhere_api.py    # Keywords Everywhere (Open PageRank) backlinks fallback
     google_report.py             # PDF/HTML report generator (WeasyPrint + matplotlib)
     youtube_search.py            # YouTube Data API v3
     nlp_analyze.py               # Cloud Natural Language API
@@ -119,7 +127,11 @@ claude-seo/
     lcp_subparts.py              # LCP subparts breakdown via CrUX API
     preload_check.py             # Speculation Rules / bfcache / prerender / preload detector
     agent_ux_check.py            # Agent-friendly page auditor
+    agentic_check.py             # Agent-readiness HTTP auditor (robots, llms.txt, Markdown, ARD, well-known, WebMCP)
+    agentic_fix.py               # Agent-readiness fix drafter (robots Content-Signal, llms.txt, ai-catalog, WebMCP)
+    lighthouse_agentic.py        # Lighthouse Agentic Browsing fraction reader (PSI or saved JSON)
     content_quality.py           # QRG-aligned content quality detector
+    metadata_template.py         # Templated title/description detector (title echo + stock CTA)
     content_humanize.py          # AI-pattern remover (rewrites AI-typical phrasing)
     content_verify.py            # Claim extractor + citation-gap detector
     schema_generate.py           # JSON-LD generators for high-leverage v2 schema types
@@ -137,7 +149,8 @@ claude-seo/
     consistency_check.py         # Reference-graph gate: dead refs, routing, lock, orphans
     release_sign.py              # SHA-256 manifest generator for release signing
     verify_release.py            # Verify checkout integrity against a release manifest
-    mobile_analysis.py           # Mobile rendering analysis (gitignored, dev-only)
+    sitemap_discovery.py         # Sitemap discovery (robots.txt, common paths)
+    runtime.py                   # Managed runtime behind the claude-seo launcher
   schema/                          # Schema.org JSON-LD templates
   extensions/                      # Optional add-on install helpers
     dataforseo/                  # DataForSEO MCP install scripts
@@ -165,6 +178,7 @@ claude-seo/
 | `/seo sitemap generate` | Create new sitemap with industry templates |
 | `/seo images <url>` | Image optimization |
 | `/seo geo <url>` | AI search optimization (GEO) |
+| `/seo agentic <url>` | Agent readiness (Lighthouse Agentic Browsing, AI agent access, WebMCP) |
 | `/seo local <url>` | Local SEO (GBP, citations, reviews) |
 | `/seo maps [command]` | Maps intelligence (geo-grid, GBP audit, competitors) |
 | `/seo backlinks <url>` | Backlink profile analysis |
@@ -194,7 +208,7 @@ claude-seo/
 - Scripts must have docstrings, CLI interface, and JSON output
 - Follow kebab-case naming for all skill directories
 - Agents invoked via Agent tool, never via Bash
-- Bundled tools run through `claude-seo run`; plugin state uses `CLAUDE_PLUGIN_DATA`
+- Bundled tools run through `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run`; plugin state uses `CLAUDE_PLUGIN_DATA`
 - Manual Python dependencies install into `~/.claude/skills/seo/.venv/`
 - Test with `python3 -m pytest tests/` after changes (if applicable)
 
@@ -209,7 +223,7 @@ claude-seo/
 ## Report Generation Rules
 
 - **All SEO reports must use `scripts/google_report.py`** as the canonical report generator
-- **Dependencies**: `matplotlib>=3.8.0` (charts) + `weasyprint>=61.0` (HTML-to-PDF), both in `requirements.txt`
+- **Dependencies**: `matplotlib>=3.8.0` (charts) + `weasyprint>=70.0` (HTML-to-PDF), both in `requirements.txt`
 - **Format**: A4 PDF via WeasyPrint + matplotlib charts at 200 DPI
 - **Style**: Clean white title page with navy (#1e3a5f) accent, Times New Roman body font
 - **Color palette**: Navy #1e3a5f (headers), dark gold #b8860b (accents), forest green #2d6a4f (pass), warm amber #d4740e (warnings), deep red #c53030 (fail), warm cream #faf9f7 (backgrounds)
@@ -232,14 +246,15 @@ Part of the Claude Code skill family:
 
 1. **Progressive Disclosure**: Metadata always loaded, instructions on activation, resources on demand
 2. **Industry Detection**: Auto-detect SaaS, e-commerce, local, publisher, agency
-3. **Parallel Execution**: Full audits spawn up to 15 subagents simultaneously
+3. **Parallel Execution**: Full audits spawn up to 17 subagents simultaneously
 4. **Extension System**: DataForSEO, Firecrawl, Banana, Ahrefs, SE Ranking, Profound, Bing Webmaster, and Unlighthouse extensions
 
 ## Repository Topology (public + private)
 
-This project is mirrored across two GitHub remotes that share git history.
-Both originate from the same local checkout; neither is a GitHub fork of
-the other (different orgs, no parent/child relationship in the GitHub UI).
+This project is mirrored across two GitHub remotes with shared historical
+ancestry. Reviewed back-ports, private-only research, and marketplace branding
+mean their release commits can have different SHAs. Neither repository is a
+GitHub fork of the other.
 
 | Remote | URL | Visibility | Role |
 |---|---|---|---|
@@ -253,17 +268,15 @@ Daily development:
 - `git push aimh <branch>` to publish work-in-progress to the private repo
   (Dependabot, Actions, and CI run there).
 
-Promoting to public on release:
-1. Merge `v2` into local `main` when ready to release (fast-forward).
-2. Tag the release locally (`git tag -a vX.Y.Z`).
-3. Push the tag and main to **both** remotes in this order:
-   - First: `git push aimh main && git push aimh vX.Y.Z`
-   - Then: `git push origin vX.Y.Z && git push origin main`
-   - The "tag before merge" sequence (see `feedback_push_caution` memory)
-     applies on `origin` to avoid the `curl|bash` outage window where
-     users pull a tag that doesn't yet point at code on `main`.
-4. `gh release create vX.Y.Z --repo AgriciDaniel/claude-seo` (public-only).
-5. `/release-blog` to publish the release post.
+Promoting reviewed release changes:
+1. Use an isolated clean worktree from the target repository branch.
+2. Fast-forward only when ancestry proves it is safe. Otherwise cherry-pick
+   the exact reviewed commits with `-x` and resolve only documented divergence.
+3. Run the full validation suite and compare the private/public release trees.
+4. Create an annotated repository-specific tag after validation.
+5. Push private changes first. Push public changes only with explicit release
+   authorization, with the public tag available before the installer moves.
+6. Create the GitHub Release and release post on the public repository only.
 
 ### Safety rules
 
@@ -271,12 +284,10 @@ Promoting to public on release:
   pushes are user-authorized per-release.
 - **`aimh` accepts day-to-day pushes.** No release-gate ceremony required
   for the private remote.
-- **Tags push to private first.** Historical pre-release illustration: v2.0.0
-  once lived on `aimh` before `origin`. Before the authorized v2.2.5 release,
-  released tags through v2.2.4 are on both remotes. Verify v2.2.5 on both
-  remotes after publication.
-- **History stays shared.** Never rewrite history on either remote with
-  force-push unless explicitly authorized for that specific operation.
+- **v2.2.5 is tagged on both repositories.** Each tag points to that
+  repository's reviewed release commit.
+- **Never force-sync the histories.** Preserve reviewed divergence and never
+  rewrite either remote without explicit per-operation authorization.
 
 ### Verifying the topology
 
@@ -284,9 +295,10 @@ Promoting to public on release:
 # Both remotes configured
 git remote -v        # expects: origin (public) + aimh (private)
 
-# Both share main HEAD
+# Compare heads and then audit the documented divergence. Equal SHAs are not
+# expected after repository-specific back-ports.
 git ls-remote --heads aimh main
-git ls-remote --heads origin main   # origin = aimh/main + 1 public-branding commit (intentional; see docs/WORKFLOW-public-private.md)
+git ls-remote --heads origin main
 ```
 
 Full workflow reference: `docs/WORKFLOW-public-private.md`.

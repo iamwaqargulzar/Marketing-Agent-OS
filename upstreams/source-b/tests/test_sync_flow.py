@@ -2,15 +2,27 @@
 
 import importlib.util as _ilu
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
+
+import pytest
 
 REPO_ROOT = Path(__file__).parents[1]
 SCRIPT = REPO_ROOT / "scripts" / "sync_flow.py"
 REF_DIR = REPO_ROOT / "skills" / "seo-flow" / "references"
 
+# The dry run calls the live GitHub API. Unauthenticated parallel runs hit 429
+# and 403 rate limits, so these tests only run when explicitly enabled; CI sets
+# the flag together with GH_TOKEN.
+network = pytest.mark.skipif(
+    not os.environ.get("CLAUDE_SEO_NETWORK_TESTS"),
+    reason="live GitHub API call; set CLAUDE_SEO_NETWORK_TESTS=1 to run",
+)
 
+
+@network
 def test_dry_run_exits_zero():
     result = subprocess.run(
         [sys.executable, str(SCRIPT), "--dry-run"],
@@ -19,6 +31,7 @@ def test_dry_run_exits_zero():
     assert result.returncode == 0, f"Dry run failed:\n{result.stderr}"
 
 
+@network
 def test_dry_run_produces_valid_json():
     result = subprocess.run(
         [sys.executable, str(SCRIPT), "--dry-run"],
@@ -31,6 +44,7 @@ def test_dry_run_produces_valid_json():
     assert "unchanged" in data, "JSON missing 'unchanged' key"
 
 
+@network
 def test_dry_run_does_not_write_files():
     files_before = set(REF_DIR.rglob("*.md"))
     subprocess.run(

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Claude SEO — Ahrefs extension installer.
+# Claude SEO: Ahrefs extension installer.
 #
-# Wires the official @ahrefs/mcp server into ~/.claude/settings.json and
+# Wires the official @ahrefs/mcp server into ~/.claude.json and
 # copies the seo-ahrefs mirror skill into ~/.claude/skills/.
 #
 # Prereq: an Ahrefs API token. Get one at https://ahrefs.com/api.
@@ -9,10 +9,13 @@ set -euo pipefail
 
 main() {
     SKILL_DIR="${HOME}/.claude/skills"
-    SETTINGS_JSON="${HOME}/.claude/settings.json"
+    # MCP servers live in ~/.claude.json (the file `claude mcp add` writes).
+    # NOT ~/.claude/settings.json - `mcpServers` is not a key Claude Code reads
+    # there, so entries written to settings.json silently never load.
+    MCP_CONFIG_JSON="${HOME}/.claude.json"
 
     echo "════════════════════════════════════════"
-    echo "║   Claude SEO — Ahrefs extension      ║"
+    echo "║   Claude SEO: Ahrefs extension       ║"
     echo "════════════════════════════════════════"
 
     command -v python3 >/dev/null 2>&1 || {
@@ -46,22 +49,24 @@ main() {
     cp "${SOURCE_DIR}/skills/seo-ahrefs/SKILL.md" "${SKILL_DIR}/seo-ahrefs/SKILL.md"
     echo "✓ Installed skill: ${SKILL_DIR}/seo-ahrefs/SKILL.md"
 
-    # Merge MCP config into ~/.claude/settings.json atomically.
-    mkdir -p "$(dirname "${SETTINGS_JSON}")"
-    python3 - "${SETTINGS_JSON}" "${AHREFS_TOKEN}" <<'PY'
+    # Merge MCP config into ~/.claude.json atomically.
+    mkdir -p "$(dirname "${MCP_CONFIG_JSON}")"
+    CLAUDE_SEO_SECRET="${AHREFS_TOKEN}" python3 - "${MCP_CONFIG_JSON}" <<'PY'
 import json
 import os
 import sys
 import tempfile
 
-path, token = sys.argv[1], sys.argv[2]
+# The token arrives in the environment, not argv: argv is visible to other
+# local users through ps, the environment is not.
+path, token = sys.argv[1], os.environ["CLAUDE_SEO_SECRET"]
 data = {}
 if os.path.exists(path):
     try:
         with open(path) as fh:
             data = json.load(fh)
     except json.JSONDecodeError:
-        data = {}
+        sys.exit(f"✗ {path} is not valid JSON. Nothing was changed; fix it and rerun.")
 data.setdefault("mcpServers", {})["ahrefs"] = {
     "command": "npx",
     "args": ["--yes", "--package=@ahrefs/mcp@0.0.11", "mcp"],

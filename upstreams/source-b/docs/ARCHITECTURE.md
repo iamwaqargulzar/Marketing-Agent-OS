@@ -6,7 +6,7 @@ Claude SEO follows Anthropic's official Claude Code skill specification with a m
 
 ## Directory Structure
 
-The plugin ships 25 sub-skills (21 core + 1 orchestrator + 1 framework integration + 2 extension mirrors) and 18 sub-agents (15 core + 1 framework integration + 2 extension mirrors).
+The plugin ships 26 sub-skills (22 core + 1 orchestrator + 1 framework integration + 2 extension mirrors) and 19 sub-agents (16 core + 1 framework integration + 2 extension mirrors).
 
 ```
 ~/.claude/plugins/.../claude-seo/
@@ -24,6 +24,7 @@ The plugin ships 25 sub-skills (21 core + 1 orchestrator + 1 framework integrati
 │   ├── seo-sitemap/            # XML sitemap analysis and generation
 │   ├── seo-images/             # Image optimization analysis
 │   ├── seo-geo/                # AI search optimization (GEO)
+│   ├── seo-agentic/            # Agent readiness (Lighthouse Agentic Browsing, WebMCP)
 │   ├── seo-local/              # Local SEO (GBP, citations, reviews)
 │   ├── seo-maps/               # Maps intelligence (geo-grid, GBP audit)
 │   ├── seo-backlinks/          # Backlink profile analysis
@@ -48,6 +49,7 @@ The plugin ships 25 sub-skills (21 core + 1 orchestrator + 1 framework integrati
     ├── seo-performance.md      # Core Web Vitals
     ├── seo-visual.md           # Screenshots, mobile rendering
     ├── seo-geo.md              # AI crawler access, citability
+    ├── seo-agentic.md          # Agent readiness, Lighthouse Agentic Browsing
     ├── seo-local.md            # GBP signals, NAP, reviews
     ├── seo-maps.md             # Geo-grid, competitor radius mapping
     ├── seo-backlinks.md        # Moz, Bing Webmaster, Common Crawl
@@ -224,10 +226,22 @@ User Request (e.g., /seo page)
 
 ### Managed Python runtime
 
-Bundled tools are dispatched through `bin/claude-seo` and
+Bundled tools are dispatched through `scripts/claude-seo` and
 `scripts/runtime.py`, never through a working-directory-relative Python command.
 The launcher resolves Python 3.10 or newer, while the standard-library runtime
 provides three operations: `run`, `setup`, and read-only `doctor`.
+
+The launcher lives in `scripts/` beside `runtime.py`, which it resolves as a
+sibling. A top-level `bin/` directory is not allowed: the claude.ai-hosted
+marketplace rejects such a plugin with `marketplace_sync_bin_directory_not_allowed`.
+Skills and agents therefore call the launcher by its plugin-relative path,
+`"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run <script.py>`, which Claude Code
+expands in skill body content, in `allowed-tools` Bash rules, and as an
+environment variable for hook processes. The quoting keeps the command correct
+when the plugin root contains spaces. Manual installers (`install.sh`,
+`install.ps1`) copy the launcher to `~/.claude/skills/seo/scripts/claude-seo`
+and rewrite that canonical token to the absolute path in every Markdown file
+they install, because a manual install has no plugin root.
 
 Plugin environments live under persistent `CLAUDE_PLUGIN_DATA`. Manual installs
 keep the compatible `~/.claude/skills/seo/.venv` location. A state marker records

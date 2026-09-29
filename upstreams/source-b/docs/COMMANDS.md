@@ -4,6 +4,30 @@
 
 All Claude SEO commands start with `/seo` followed by a subcommand.
 
+## Page-fetching script
+
+Use `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run fetch_page.py https://example.com --json` for structured
+retrieval. Both the raw path (default, `--render never`) and the rendered path
+(`--render auto` or `--render always`) emit JSON through the same
+`render_page._json_summary` contract, so the two share one key set: `url`,
+`status_code`, `content`, `raw_content`, `is_spa`, `extracted_text`,
+`publication_date`, `accessibility_tree`, `accessibility_error`,
+`accessibility_partial`, `headers`, `redirect_chain`, `console_errors`,
+`render_diagnostics`, `render_engine`, `render_ms`, `mode_used`, `error`,
+`structured_data`, and `truncation`. The raw path fills renderer-only fields
+(`is_spa`, `extracted_text`, `render_engine`, ...) with `None`/empty defaults.
+Fetch errors still emit JSON and exit 1; successful fetches exit 0. HTTP status
+codes are reported without changing this behavior.
+
+Pass `--max-text N` to cap the `content`, `raw_content`, and `extracted_text`
+fields at N characters each; `truncation.fields` reports the original and
+returned character counts per field. `--max-text 0` (default) keeps full text.
+
+Combine `--json --output page.html` to save successful HTML while keeping JSON
+on stdout. `output_written` indicates whether HTML was saved. On fetch errors,
+the output file is left untouched. Without `--json`, existing text output is
+unchanged.
+
 ## Command List
 
 ### `/seo setup`
@@ -29,7 +53,7 @@ Full website SEO audit with parallel analysis.
 **What it does:**
 1. Crawls up to 500 pages
 2. Detects business type
-3. Delegates to up to 15 specialist subagents in parallel (8 always-on + 7 conditional)
+3. Delegates to up to 17 specialist subagents in parallel (9 always-on + 8 conditional)
 4. Generates SEO Health Score (0-100)
 5. Creates prioritized action plan
 
@@ -150,6 +174,28 @@ AI Overviews / Generative Engine Optimization.
 - Entity clarity (definitions, context)
 - Authority signals (credentials, sources)
 - Structured data support
+
+---
+
+### `/seo agentic [audit|fix|lighthouse|refresh] <url>`
+
+Agent readiness: how well AI agents that browse and act for people can read and use the site.
+
+**Examples:**
+```
+/seo agentic https://example.com
+/seo agentic lighthouse https://example.com
+/seo agentic fix https://example.com
+```
+
+**What it analyzes:**
+- Lighthouse Agentic Browsing result as Lighthouse computes it (X of N, N/A and informative audits excluded)
+- Accessibility tree for agents (the 33 axe rules Lighthouse uses, plus the local Agent-UX heuristic)
+- robots.txt groups per AI purpose (training, search, user-triggered) and Content-Signal
+- llms.txt, Markdown delivery (`Accept: text/markdown`, `.md` alternates), ai-catalog.json, `/.well-known` files
+- WebMCP tools and form annotations, labelled as a W3C Community Group draft
+
+`fix` drafts robots.txt Content-Signal lines, llms.txt, ai-catalog.json and WebMCP scaffolds for review; nothing is deployed.
 
 ---
 
@@ -574,7 +620,7 @@ Live SEO data via DataForSEO MCP server (extension). 23 data commands across 9 A
 **SERP Analysis:**
 ```
 /seo dataforseo serp <keyword>              # Google organic results (also Bing/Yahoo)
-/seo dataforseo serp-images <keyword>       # Google Images SERP results
+/seo dataforseo serp-images <keyword>       # Image elements in the organic SERP (no Images tool on the pinned server)
 /seo dataforseo serp-youtube <keyword>      # YouTube search results
 /seo dataforseo youtube <video_id>          # YouTube video deep analysis
 ```
@@ -652,6 +698,27 @@ Bing Webmaster Tools + IndexNow (extension). **Prerequisites:** Bing extension i
 
 ---
 
+### `/seo matomo [command] [site-id]`
+
+Matomo Reporting API (extension). **Prerequisites:** Matomo extension installed (`./extensions/matomo/install.sh`), which writes the instance URL, API token, and optional default site ID to `~/.config/claude-seo/matomo.json` (0600). `MATOMO_URL`, `MATOMO_API_TOKEN`, and `MATOMO_SITE_ID` in the environment override the file. Works against self-hosted Matomo or Matomo Cloud; an instance on a private address must be named in `CLAUDE_SEO_LOCAL_TARGETS`.
+
+Use as a GA4 alternative or supplement when you want full data ownership, no Google dependency, or privacy-first analytics.
+```
+/seo matomo check                  # Probe credentials and confirm Matomo version
+/seo matomo organic [site-id]      # Organic traffic trend (28d) + top landing pages
+/seo matomo top-pages              # Top organic landing pages only
+/seo matomo device                 # Visits by device type
+/seo matomo country                # Visits by country
+/seo matomo referrers              # Channel + search-engine breakdown
+/seo matomo keywords               # Organic search keywords (often "(not provided)")
+```
+
+All commands accept `--days` (default 28), `--limit` (default 50),
+`--site-id`, and `--json`. The audit orchestrator spawns the
+`seo-matomo` agent automatically when credentials are present.
+
+---
+
 ### `/seo profound [command] <brand>`
 
 LLM brand-citation tracking via Profound (extension). **Prerequisites:** Profound extension installed.
@@ -701,6 +768,7 @@ Multi-page Lighthouse audit via Unlighthouse (extension, MIT, no API quota). **P
 | `/seo sitemap generate` | Create new sitemap with industry templates |
 | `/seo images <url>` | Image optimization |
 | `/seo geo <url>` | AI search optimization (GEO) |
+| `/seo agentic <url>` | Agent readiness (Lighthouse Agentic Browsing, AI agent access, WebMCP) |
 | `/seo local <url>` | Local SEO (GBP, citations, reviews) |
 | `/seo maps [command]` | Maps intelligence (geo-grid, GBP audit, competitors) |
 | `/seo backlinks <url>` | Backlink profile analysis |
@@ -721,4 +789,5 @@ Multi-page Lighthouse audit via Unlighthouse (extension, MIT, no API quota). **P
 | `/seo seranking [command]` | AI Share-of-Voice across ChatGPT, Gemini, Perplexity, AI Overviews, AI Mode (extension) |
 | `/seo profound [command]` | LLM citation tracking with time-series data (extension) |
 | `/seo bing [command] <url>` | Bing Webmaster Tools + IndexNow URL submission (extension) |
+| `/seo matomo [command] [args]` | Matomo Reporting API: GA4 alternative or complement (extension) |
 | `/seo unlighthouse <url>` | Multi-page Lighthouse runner, runs locally (extension) |

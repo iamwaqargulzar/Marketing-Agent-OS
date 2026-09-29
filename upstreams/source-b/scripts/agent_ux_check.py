@@ -3,7 +3,7 @@
 Agent-friendly page auditor.
 
 Scores a page against the checklist in
-``skills/seo-technical/references/agent-friendly-pages.md`` — the
+``skills/seo-agentic/references/agent-friendly-pages.md``, the
 web.dev-sourced criteria Google's AI optimization guide references for
 agent UX. Findings cover the three channels agents use:
 
@@ -21,7 +21,8 @@ NOTE: this score is a local 0-100 heuristic and is **distinct** from
 Google's Lighthouse "Agentic Browsing" category, which reports a
 **fractional pass-ratio (X of N), not a 0-100 score** (Chrome 150+).
 Do not present this heuristic as the official Lighthouse agentic score.
-See ``skills/seo-technical/references/agent-friendly-pages.md``.
+Use ``lighthouse_agentic.py`` for the real fraction; see
+``skills/seo-agentic/references/lighthouse-agentic-category.md``.
 
 Implementation
 ==============
@@ -100,7 +101,7 @@ def analyze_html(html: str) -> dict:
         "inputs_without_label": 0,
     }
 
-    # Inputs without ARIA labels — first cut, then check label[for] coverage.
+    # Inputs without ARIA labels: first cut, then check label[for] coverage.
     aria_less = _INPUT_WITHOUT_LABEL_RE.findall(html)
     findings["inputs_without_aria"] = len(aria_less)
 
@@ -225,6 +226,12 @@ def audit(url: str, *, timeout_ms: int = 15000) -> dict:
         "issues": [],
     }
     if page.get("error"):
+        # Without a renderer (for example no Chromium) the score stays
+        # unavailable, but the HTML semantics checks still run on raw HTML.
+        raw = render_page(url, mode="never", timeout_ms=timeout_ms, extract_content=False)
+        if not raw.get("error") and _has_meaningful_body(raw.get("content") or ""):
+            report["html_findings"] = analyze_html(raw.get("content") or "")
+            report["html_only_fallback"] = True
         return report
     html = page.get("content") or ""
     if not _has_meaningful_body(html):
@@ -262,6 +269,9 @@ def _cli() -> None:
     report = audit(args.url, timeout_ms=args.timeout_ms)
     if args.json:
         print(json.dumps(report, indent=2))
+        if report["score"] is None:
+            print(f"Agent-UX score unavailable: {report.get('render_error') or 'no renderer'}",
+                  file=sys.stderr)
         sys.exit(0 if report["score"] is not None else 1)
 
     if report["render_error"]:

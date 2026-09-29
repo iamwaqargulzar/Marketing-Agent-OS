@@ -12,13 +12,14 @@ import sys
 from types import SimpleNamespace
 from unittest.mock import patch
 
-import requests
+import pytest
 
 _SCRIPTS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "scripts")
 _REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if _SCRIPTS not in sys.path:
     sys.path.insert(0, _SCRIPTS)
 
+requests = pytest.importorskip("requests")
 import crux_history  # noqa: E402
 import google_auth  # noqa: E402
 import lcp_subparts  # noqa: E402

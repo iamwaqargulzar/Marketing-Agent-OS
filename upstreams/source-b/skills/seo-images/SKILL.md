@@ -12,7 +12,7 @@ argument-hint: "[url]"
 license: MIT
 metadata:
   author: AgriciDaniel
-  version: "2.2.5"
+  version: "2.4.1"
   category: seo
 ---
 
@@ -71,7 +71,7 @@ Use progressive enhancement with the most efficient format first:
 </picture>
 ```
 
-The browser will use the first supported format. Current browser support: AVIF 93.8%, WebP 95.3%.
+The browser will use the first supported format. Global browser support (caniuse.com, checked 2026-09-28): AVIF about 95.4%, WebP about 96.8%. Re-check caniuse before quoting.
 
 #### JPEG XL: Emerging Format
 
@@ -106,7 +106,7 @@ Third-party reporting and Wikipedia describe a Rust-based JPEG XL decoder as shi
 
 #### Detected lazy-loader methods (`lazy_method` field)
 
-`claude-seo run parse_html.py` classifies each image's lazy-loading mechanism via the
+`"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run parse_html.py` classifies each image's lazy-loading mechanism via the
 `lazy_method` field on every image entry. Five values:
 
 | `lazy_method` | Signal detected | Common stack |
@@ -201,10 +201,12 @@ When DataForSEO MCP is available, enhance the image audit with competitive data.
 
 ### `/seo images serp <keyword>`
 
-Cross-reference on-page images with Google Images SERP rankings.
+Cross-reference on-page images with the image results visible in the Google SERP.
 
 **Workflow:**
-1. Fetch Google Images results via `serp_google_images_live_advanced` (depth=100)
+1. The pinned DataForSEO MCP server (2.8.10) has no Google Images SERP tool.
+   Use the `images` element of `serp_organic_live_advanced` (depth=100) when the
+   SERP has one, and say plainly when no image SERP data is available
 2. Extract: top domains, image types, alt text patterns
 3. Output competitor image SERP landscape
 
@@ -321,13 +323,13 @@ https://support.google.com/merchants/answer/14743464
 
 ```bash
 # Audit a directory for the IPTC label (counts: missing, ai, captured, etc.)
-claude-seo run iptc_ai_label.py audit ./images/ --json
+"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run iptc_ai_label.py audit ./images/ --json
 
 # Audit a single image
-claude-seo run iptc_ai_label.py audit ./hero.webp --json
+"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run iptc_ai_label.py audit ./hero.webp --json
 
 # Inject the AI label into an image
-claude-seo run iptc_ai_label.py inject ./ai-hero.webp \
+"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run iptc_ai_label.py inject ./ai-hero.webp \
     --source-type trainedAlgorithmicMedia
 
 # Other vocabulary values:

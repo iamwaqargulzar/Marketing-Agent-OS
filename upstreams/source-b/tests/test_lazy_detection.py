@@ -9,10 +9,16 @@ alone reports "not lazy-loaded" when the page is heavily lazy-loaded.
 import sys
 from pathlib import Path
 
+import pytest
+
 # Make scripts/ importable without requiring it to be a package
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+pytest.importorskip("bs4")
+# parse_html.py also unconditionally imports url_safety, which itself
+# hard-requires requests.
+pytest.importorskip("requests")
 from bs4 import BeautifulSoup  # noqa: E402
 from parse_html import _detect_lazy_method, parse_html  # noqa: E402
 

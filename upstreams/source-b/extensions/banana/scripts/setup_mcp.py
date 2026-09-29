@@ -2,7 +2,7 @@
 """
 Setup script for Claude Banana MCP server in Claude Code.
 
-Configures @ycse/nanobanana-mcp in Claude Code's settings.json
+Configures @ycse/nanobanana-mcp in Claude Code's ~/.claude.json
 with the user's Google AI API key.
 
 Usage:
@@ -16,15 +16,16 @@ Usage:
 import json
 import os
 import sys
+import tempfile
 from pathlib import Path
 
-SETTINGS_PATH = Path.home() / ".claude" / "settings.json"
+SETTINGS_PATH = Path.home() / ".claude.json"
 MCP_NAME = "nanobanana-mcp"
 MCP_PACKAGE = "@ycse/nanobanana-mcp@1.1.1"
 
 
 def load_settings() -> dict:
-    """Load Claude Code settings.json."""
+    """Load Claude Code ~/.claude.json."""
     if not SETTINGS_PATH.exists():
         return {}
     with open(SETTINGS_PATH, "r") as f:
@@ -32,10 +33,28 @@ def load_settings() -> dict:
 
 
 def save_settings(settings: dict) -> None:
-    """Save Claude Code settings.json."""
+    """Save Claude Code ~/.claude.json atomically.
+
+    ~/.claude.json is shared with Claude Code itself and other installers, so
+    a write is staged to a temp file in the same directory and swapped into
+    place with ``os.replace`` (atomic on POSIX and Windows). This avoids a
+    reader ever observing a truncated or partially written file, and avoids
+    corrupting the file if this process is interrupted mid-write.
+    """
     SETTINGS_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with open(SETTINGS_PATH, "w") as f:
-        json.dump(settings, f, indent=2)
+    fd, tmp_path = tempfile.mkstemp(
+        prefix=".claude.json.", suffix=".tmp", dir=str(SETTINGS_PATH.parent)
+    )
+    try:
+        with os.fdopen(fd, "w") as f:
+            json.dump(settings, f, indent=2)
+        os.replace(tmp_path, SETTINGS_PATH)
+    except BaseException:
+        try:
+            os.unlink(tmp_path)
+        except OSError:
+            pass
+        raise
     print(f"Settings saved to {SETTINGS_PATH}")
 
 
@@ -46,7 +65,7 @@ def check_setup() -> bool:
     if MCP_NAME in servers:
         env = servers[MCP_NAME].get("env", {})
         key = env.get("GOOGLE_AI_API_KEY", "")
-        masked = key[:8] + "..." + key[-4:] if len(key) > 12 else "(not set)"
+        masked = "..." + key[-4:] if len(key) > 12 else "(not set)"
         print(f"MCP server '{MCP_NAME}' is configured.")
         print(f"  Package: {MCP_PACKAGE}")
         print(f"  API Key: {masked}")

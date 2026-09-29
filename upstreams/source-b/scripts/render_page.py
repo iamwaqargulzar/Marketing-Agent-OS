@@ -105,6 +105,7 @@ if _SCRIPTS_DIR not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
 from url_safety import (  # noqa: E402  (sys.path massage above is intentional)
     URLSafetyError,
+    decode_response_text,
     make_safe_playwright_route_handler,
     safe_requests_get,
     validate_url_strict,
@@ -455,10 +456,10 @@ def render_page(
         result["error"] = f"url_safety: {exc}"
         return result
 
-    # Step 1 — raw fetch (always; needed for SPA detection and as a baseline).
+    # Step 1: raw fetch (always; needed for SPA detection and as a baseline).
     try:
         resp = safe_requests_get(norm_url, timeout=30, allow_redirects=True)
-        result["raw_content"] = resp.text
+        result["raw_content"] = decode_response_text(resp)
         if resp.history:
             result["redirect_chain"] = [
                 {"url": r.url, "status_code": r.status_code} for r in resp.history
@@ -481,12 +482,22 @@ def render_page(
         result["content"] = result["raw_content"]
     else:
         result["mode_used"] = "rendered"
+
+        def _keep_raw_on_render_failure() -> None:
+            # The render failed, but the raw fetch succeeded: keep its status,
+            # headers and URL so callers still see what the server answered.
+            result["url"] = final_raw_url
+            result["status_code"] = raw_status
+            result["headers"] = raw_headers
+            result["raw_fallback_available"] = True
+
         if sync_playwright is None:
             result["error"] = (
                 "playwright is required for rendered mode. "
                 "Install: pip install -r requirements.txt "
                 "&& playwright install chromium"
             )
+            _keep_raw_on_render_failure()
             return result
 
         vp = VIEWPORTS[viewport]
@@ -563,11 +574,12 @@ def render_page(
                 browser.close()
         except Exception as exc:
             result["error"] = f"playwright error: {exc}"
+            _keep_raw_on_render_failure()
             return result
         finally:
             result["render_ms"] = (time.monotonic() - start) * 1000.0
 
-    # Step 2 — content extraction (works on either raw or rendered HTML).
+    # Step 2: content extraction (works on either raw or rendered HTML).
     if extract_content and result["content"]:
         if trafilatura is not None:
             try:

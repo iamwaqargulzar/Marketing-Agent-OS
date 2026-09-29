@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Claude SEO — SE Ranking extension installer.
+# Claude SEO: SE Ranking extension installer.
 #
 # SE Ranking's strength for v2: AI Share-of-Voice tracking across
 # ChatGPT, Gemini, Perplexity, AI Overviews, and AI Mode. The gap
@@ -14,7 +14,7 @@ main() {
     SETTINGS_JSON="${HOME}/.claude/settings.json"
 
     echo "════════════════════════════════════════"
-    echo "║ Claude SEO — SE Ranking extension    ║"
+    echo "║ Claude SEO: SE Ranking extension     ║"
     echo "════════════════════════════════════════"
 
     command -v python3 >/dev/null 2>&1 || { echo "✗ Python 3 required."; exit 1; }
@@ -35,13 +35,13 @@ main() {
     echo "✓ Installed skill: ${SKILL_DIR}/seo-seranking/SKILL.md"
 
     mkdir -p "$(dirname "${SETTINGS_JSON}")"
-    python3 - "${SETTINGS_JSON}" "${SR_KEY}" <<'PY'
+    CLAUDE_SEO_SECRET="${SR_KEY}" python3 - "${SETTINGS_JSON}" <<'PY'
 import json, os, sys, tempfile
-path, key = sys.argv[1], sys.argv[2]
+path, key = sys.argv[1], os.environ["CLAUDE_SEO_SECRET"]
 data = {}
 if os.path.exists(path):
     try: data = json.load(open(path))
-    except json.JSONDecodeError: data = {}
+    except json.JSONDecodeError: sys.exit(f"✗ {path} is not valid JSON. Nothing was changed; fix it and rerun.")
 data.setdefault("env", {})["SERANKING_API_KEY"] = key
 fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path) or ".", prefix=".settings.", suffix=".json")
 with os.fdopen(fd, "w") as fh:

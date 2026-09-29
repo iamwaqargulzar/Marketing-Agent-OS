@@ -53,6 +53,9 @@ jobs:
         run: pip install -r requirements.txt pytest
 
       - name: Run pytest
+        env:
+          CLAUDE_SEO_NETWORK_TESTS: "1"
+          GH_TOKEN: ${{ github.token }}
         run: pytest tests/ -v
 
   secret-scan:
@@ -96,24 +99,39 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install pytest
-        # These three modules need nothing beyond pytest -- verified on a clean
-        # virtualenv. Keeping the install minimal keeps the job from failing for
-        # reasons that have nothing to do with portability.
-        run: pip install pytest
+      - name: Install runtime + test deps
+        run: pip install -r requirements.txt pytest
 
-      - name: Run the platform-sensitive suites
-        # Deliberately not `pytest tests/`. The full suite has 15 tests that
-        # assert POSIX semantics directly -- the executable bit via os.access
-        # X_OK in test_parasite_risk_and_extensions.py and
-        # test_runtime_installers.py, and chmod 0o600/0o644 token permissions in
-        # test_url_safety.py -- which cannot hold on Windows. The three modules
-        # below are the ones written to be platform-neutral, so they are the
-        # ones worth running here. Widening this list means teaching those 15
-        # tests to skip on non-POSIX first.
-        run: >
-          pytest
-          tests/test_portability.py
-          tests/test_cross_platform_hooks.py
-          tests/test_drift_portability.py
-          -v
+      - name: Run pytest
+        # The whole suite, not a hand-picked subset. The tests that assert
+        # POSIX mode bits (the executable bit, chmod 0o600/0o644) skip on
+        # Windows via os.name; everything else must hold on every platform.
+        env:
+          CLAUDE_SEO_NETWORK_TESTS: "1"
+          GH_TOKEN: ${{ github.token }}
+        run: pytest tests/ -v
+
+  dep-audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.10"
+
+      - name: Install pip-audit
+        run: pip install pip-audit
+
+      - name: Audit requirements.txt against the PyPI advisory database
+        # requirements.txt documents CVE floors per dependency in comments, but
+        # nothing verified them; this closes that loop. Because the pins are
+        # bounded ranges rather than exact versions, pip-audit resolves the
+        # newest allowed release, so a newly published advisory can turn this
+        # job red without a commit to the repo. That is the intended signal:
+        # it means a floor in requirements.txt needs raising. To land an
+        # unavoidable advisory in the meantime, add
+        # `--ignore-vuln GHSA-xxxx-xxxx-xxxx` with a comment naming the reason.
+        run: pip-audit -r requirements.txt --progress-spinner off

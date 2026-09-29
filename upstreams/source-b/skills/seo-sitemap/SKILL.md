@@ -9,7 +9,7 @@ argument-hint: "[url or generate]"
 license: MIT
 metadata:
   author: AgriciDaniel
-  version: "2.2.5"
+  version: "2.4.1"
   category: seo
 ---
 
@@ -20,7 +20,7 @@ metadata:
 Discover candidates before reporting a sitemap missing:
 
 ```bash
-claude-seo run sitemap_discovery.py <url> --json
+"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run sitemap_discovery.py <url> --json
 ```
 
 The helper reads every bounded `Sitemap:` declaration in robots.txt, validates

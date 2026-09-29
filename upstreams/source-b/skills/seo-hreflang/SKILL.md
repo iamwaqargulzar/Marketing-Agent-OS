@@ -10,7 +10,7 @@ argument-hint: "[url]"
 license: MIT
 metadata:
   author: AgriciDaniel
-  version: "2.2.5"
+  version: "2.4.1"
   category: seo
 ---
 
@@ -70,6 +70,23 @@ XML sitemap implementations.
 - The Search Console **International Targeting report and the manual
   country-targeting setting were removed in 2022**, do **not** recommend setting
   country targeting in GSC; hreflang is the remaining lever.
+
+### 5c. Region-specific Search units (EEA, South Africa, Türkiye)
+- Google documents Search experiences that exist only in certain regions
+  (documentation added 2026-09-08; https://developers.google.com/search/docs/appearance/aggregator-features):
+  - **EEA only:** aggregator units and supplier units (hotels, flights, ground
+    transportation, products, and since 2026-09-18 local businesses), the
+    ecosystem carousel, and job-site features.
+  - **Türkiye:** places-site features (hotels, local businesses).
+  - **South Africa:** a badge and refinement chip for travel, products, car
+    hire, food delivery and ground transportation.
+  - **Structured data carousels** in all three, with different query types.
+  Eligibility and participation are documented per unit; they are not ranking
+  signals.
+- When a site serves those regions with hreflang variants, note in the report
+  whether the business is an aggregator or a direct supplier and point to the
+  regional documentation, so the client is not surprised by a different result
+  layout in those markets.
 
 ### 6. Canonical URL Alignment
 - Hreflang tags must only appear on canonical URLs
@@ -260,6 +277,7 @@ Load on-demand as needed (do NOT load all at startup):
 - `references/cultural-profiles.md`: DACH, Francophone, Hispanic, Japanese cultural adaptation profiles
 - `references/locale-formats.md`: Number, date, currency, address, phone format tables per locale
 - `references/content-parity.md`: Content parity audit methodology and scoring
+- `references/machine-translation-qa.md`: Flags unreviewed machine translation, which Google's spam policy treats as scaled content abuse
 
 ## Error Handling
 

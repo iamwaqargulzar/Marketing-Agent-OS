@@ -30,6 +30,7 @@ _SCRIPTS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 if _SCRIPTS not in sys.path:
     sys.path.insert(0, _SCRIPTS)
 
+pytest.importorskip("requests")
 import render_page  # noqa: E402
 
 # ---------------------------------------------------------------------------
@@ -283,7 +284,8 @@ def test_render_page_never_mode_against_example_com() -> None:
 
 def _fake_response(text: str, status: int = 200, url: str = "https://x.example/"):
     return SimpleNamespace(
-        text=text, status_code=status, headers={"Content-Type": "text/html"},
+        text=text, content=text.encode("utf-8"), status_code=status,
+        headers={"Content-Type": "text/html"},
         url=url, history=[],
     )
 

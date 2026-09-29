@@ -14,7 +14,7 @@ license: MIT
 compatibility: "DataForSEO MCP for Tier 1+, Google Maps API for Tier 2"
 metadata:
   author: AgriciDaniel
-  version: "2.2.5"
+  version: "2.4.1"
   category: seo
 ---
 
@@ -104,10 +104,11 @@ Audits the 25 fields that affect Google Business Profile quality and ranking.
 
 > **AI & 2026 context (third-party reported):** **Ask Maps**, reported by AP News
 > as a Gemini conversational Maps feature launched 2026-03-12 (iOS/Android,
-> US + India). **AI Mode** (1B+ MAU, reported from Google I/O 2026 keynote coverage; not confirmed on a Google-owned source)
+> US + India). **AI Mode** (1B+ monthly users, stated by Google at I/O 2026)
 > increasingly surfaces 1-2 business local AI interfaces in third-party terminology, and **agentic
-> booking/calling** for local services (home repair, beauty, pet care) rolls out
-> to all US users summer 2026 (Google can call businesses on the user's behalf).
+> booking/calling** for local services (home repair, beauty, pet care) was
+> announced at I/O 2026 for a summer US rollout (Google can call businesses on the
+> user's behalf); confirm current availability before promising it.
 > New 2026 GBP API additions: review media URLs, recurring local-post scheduling,
 > review reply-state/moderation, and invitation Place ID. Source:
 > blog.google/products-and-platforms/products/search/search-io-2026/ ·
@@ -140,7 +141,7 @@ Cross-platform review analysis: velocity, sentiment, rating distribution, fake d
 
 1. Fetch Google reviews via DataForSEO Reviews API (sort by newest)
 2. Calculate review velocity: reviews per month over last 6 months
-3. Check 18-day rule (Sterling Sky): any 3-week gap = ranking risk
+3. Check review gaps: long gaps are a ranking risk (a Sterling Sky 2025 case example dropped after 18 days without reviews; not a fixed threshold)
 4. Analyze rating distribution: healthy = bell curve skewed to 5-star
 5. Calculate owner response rate: responses / total reviews
 6. Fetch Tripadvisor and Trustpilot reviews (if available)
@@ -226,6 +227,7 @@ Load on-demand as needed (do NOT load all at startup):
 - `../seo/references/maps-gbp-checklist.md`: 25-field GBP audit with industry weights
 - `../seo/references/local-seo-signals.md`: Ranking factors, review benchmarks (shared)
 - `../seo/references/local-schema-types.md`: LocalBusiness subtypes by industry (shared)
+- `../seo/references/local-schema-multilocation.md`: Multi-location schema pattern (shared)
 
 ---
 
@@ -264,5 +266,5 @@ Generate `MAPS-ANALYSIS-{domain}.md` with:
 | Business not found in Maps SERP | Try My Business Info with keyword. If still not found, report "Business not found in Google Maps for this location." |
 | Geocoding fails (Nominatim) | Ask user to provide coordinates or a more specific address. |
 | API rate limit hit | Report the limit. Suggest waiting or using standard (queued) method instead of live. |
-| No reviews found | Report zero review state. Recommend review generation strategy with 18-day cadence target. |
+| No reviews found | Report zero review state. Recommend a review generation strategy with a steady cadence (no gaps longer than about 2 to 3 weeks). |
 | Multi-location detected | Ask user which location to analyze, or offer batch mode with per-location cost estimate. |

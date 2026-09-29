@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## 1.3.0 — 2026-09-29
+
+- Refreshed source B to v2.4.1 commit `ff87fcee0734845d3f59128c8c905799ee2298da`. Added portable `seo-agentic` and `seo-matomo` skills; reviewed its current Google facts, hostile-input hardening, installer security, URL-safety, rendering, schema, analytics, and dependency changes while keeping its source-specific Python runtime and credential installers isolated from the dependency-free core.
 - Refreshed source A to `f695301db323d6f6c9c34e399d01a7c76445c992`. Its new skill-dashboard and runtime-control refinements are preserved in the audited snapshot; no normalized runtime was added because that dashboard depends on source-specific memory, run-envelope, and roster artifacts not used by the portable package.
 - Refreshed source C to `36c4c65c84662dd8aa11f9d462c7f791662c9983`. Reviewed its installer, fetcher, dependency, report-template, and chart changes; these remain isolated in the audited source snapshot because the normalized installer and reporting tools are independently maintained.
 - Refreshed source D to v2.11.1 commit `5b2c0007766c6a1cf1d53fd8fc73e979e0821022` and added portable AI-citation format-volatility guidance to `ai-seo`, keeping platform-specific observations time-bound and measurement-based.

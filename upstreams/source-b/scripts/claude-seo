@@ -3,8 +3,12 @@ set -euo pipefail
 
 # Stable entry point for bundled Python tools. The launcher uses only shell
 # built-ins until a usable Python 3 interpreter has been identified.
+#
+# It lives in scripts/ rather than bin/ because hosted marketplaces reject any
+# plugin that ships a top-level bin/ directory. Skills, agents, and hooks call
+# it as "${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo"; runtime.py is a sibling.
 launcher_dir="$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
-runtime="${launcher_dir}/../scripts/runtime.py"
+runtime="${launcher_dir}/runtime.py"
 
 if [[ ! -f "${runtime}" ]]; then
     echo "Claude SEO runtime is missing. Reinstall Claude SEO." >&2

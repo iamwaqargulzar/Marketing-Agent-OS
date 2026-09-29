@@ -294,7 +294,7 @@ class PackageTests(unittest.TestCase):
         result = run_script("reconcile_upstreams.py")
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         report = json.loads(result.stdout)
-        self.assertEqual(report["normalized_skill_count"], 236)
+        self.assertEqual(report["normalized_skill_count"], 238)
         self.assertTrue(
             all(source["snapshot_matches_lock"] for source in report["sources"].values())
         )

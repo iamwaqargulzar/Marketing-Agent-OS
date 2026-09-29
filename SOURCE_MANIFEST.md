@@ -14,7 +14,7 @@ The package was checked against these upstream revisions. The snapshot date refl
 | Repository | Commit |
 |---|---|
 | `aaron-marketing-skills` | `f695301db323d6f6c9c34e399d01a7c76445c992` |
-| `claude-seo` | `a1480c7e590b16001bd9dc1627eacdcd44d580f9` |
+| `claude-seo` | `ff87fcee0734845d3f59128c8c905799ee2298da` |
 | `geo-seo-claude` | `36c4c65c84662dd8aa11f9d462c7f791662c9983` |
 | `marketingskills` | `5b2c0007766c6a1cf1d53fd8fc73e979e0821022` |
 
@@ -34,4 +34,4 @@ The updater never merges upstream files directly into `skills/`. This separation
 | `source-c` | `geo-seo-claude` |
 | `source-d` | `marketingskills` |
 
-See `docs/MAINTENANCE.md` for the update workflow, `docs/UPSTREAM_REVIEW-2026-09-04.md` for the latest review decisions, and `UPSTREAM_STATUS.json` for the inventory reconciliation.
+See `docs/MAINTENANCE.md` for the update workflow, `docs/UPSTREAM_REVIEW-2026-09-29.md` for the latest review decisions, and `UPSTREAM_STATUS.json` for the inventory reconciliation.

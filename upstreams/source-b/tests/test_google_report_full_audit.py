@@ -154,3 +154,70 @@ def test_full_audit_html_includes_summary_categories_and_roadmap(tmp_path: Path)
     assert "Action Plan" in html
     assert "Phase 1: Indexing Fixes" in html
     assert "Content Quality" in html
+
+
+# --- unsevered ("Info"-prefix) findings -------------------------------------
+#
+# summary.top_findings and category.findings are documented as plain arrays
+# (seo-audit/SKILL.md), so the common case is a list of strings. Both
+# _build_executive_summary and _build_full_audit_categories must render a
+# plain-string finding without inventing an "Info" severity, while a dict
+# finding that carries an explicit severity keeps its prefix/badge.
+
+
+def test_executive_summary_plain_string_finding_has_no_info_prefix() -> None:
+    data = {
+        "summary": {
+            "health_score": 70,
+            "top_findings": ["Thin service pages"],
+        }
+    }
+
+    html = google_report._build_executive_summary("example.com", "2026-01-01", data, "full")
+
+    assert "Thin service pages" in html
+    assert "Info:" not in html
+
+
+def test_executive_summary_dict_finding_keeps_explicit_severity() -> None:
+    data = {
+        "summary": {
+            "health_score": 70,
+            "top_findings": [{"title": "Canonical mismatch", "severity": "Critical"}],
+        }
+    }
+
+    html = google_report._build_executive_summary("example.com", "2026-01-01", data, "full")
+
+    assert "<strong>Critical:</strong> Canonical mismatch" in html
+
+
+def test_full_audit_categories_plain_string_finding_has_no_info_badge() -> None:
+    data = {
+        "categories": [
+            {
+                "name": "Technical SEO",
+                "findings": ["Thin service pages"],
+            }
+        ]
+    }
+
+    html = google_report._build_full_audit_categories(data)
+
+    assert "<h4>Thin service pages</h4>" in html
+    assert "Info" not in html
+
+
+def test_full_audit_categories_dict_finding_keeps_explicit_severity() -> None:
+    data = {
+        "categories": [
+            {
+                "name": "Technical SEO",
+                "findings": [{"title": "Canonical mismatch", "severity": "Critical"}],
+            }
+        ]
+    }
+
+    html = google_report._build_full_audit_categories(data)
+
+    assert '<h4>Canonical mismatch <span class="status-warn">Critical</span></h4>' in html

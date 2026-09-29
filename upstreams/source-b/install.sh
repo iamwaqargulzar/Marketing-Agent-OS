@@ -12,7 +12,7 @@ main() {
     # This default MUST be bumped on every release. CI guard
     # (tests/test_manifest_consistency.py) enforces this matches plugin.json.
     # Override: CLAUDE_SEO_TAG=main bash install.sh
-    REPO_TAG="${CLAUDE_SEO_TAG:-v2.2.5}"
+    REPO_TAG="${CLAUDE_SEO_TAG:-v2.4.1}"
 
     echo "════════════════════════════════════════"
     echo "║   Claude SEO - Installer             ║"
@@ -79,12 +79,13 @@ main() {
         cp -r "${TEMP_DIR}/claude-seo/scripts/"* "${SKILL_DIR}/scripts/"
     fi
 
-    # Copy the stable runtime launcher. Manual installs use its explicit path;
-    # plugin installs expose the repository bin/ directory automatically.
-    if [ -f "${TEMP_DIR}/claude-seo/bin/claude-seo" ]; then
-        mkdir -p "${SKILL_DIR}/bin"
-        cp "${TEMP_DIR}/claude-seo/bin/claude-seo" "${SKILL_DIR}/bin/claude-seo"
-        chmod +x "${SKILL_DIR}/bin/claude-seo"
+    # Copy the stable runtime launcher. It ships in scripts/ (never a top-level
+    # bin/, which hosted marketplaces reject) and resolves runtime.py as a
+    # sibling, so the manual layout below already matches the repository layout.
+    if [ -f "${TEMP_DIR}/claude-seo/scripts/claude-seo" ]; then
+        mkdir -p "${SKILL_DIR}/scripts"
+        cp "${TEMP_DIR}/claude-seo/scripts/claude-seo" "${SKILL_DIR}/scripts/claude-seo"
+        chmod +x "${SKILL_DIR}/scripts/claude-seo"
     fi
 
     # Copy hooks
@@ -134,14 +135,22 @@ main() {
     cp "${TEMP_DIR}/claude-seo/requirements.txt" "${SKILL_DIR}/requirements.txt" 2>/dev/null || true
     cp "${TEMP_DIR}/claude-seo/.claude-plugin/plugin.json" "${SKILL_DIR}/runtime-plugin.json" 2>/dev/null || true
 
-    # Manual installs cannot rely on plugin bin/ PATH injection. Rewrite only
-    # exact files copied from this checkout during this install.
+    # Manual installs have no ${CLAUDE_PLUGIN_ROOT}, so rewrite the canonical
+    # launcher token to the absolute installed path. Rewrite only exact files
+    # copied from this checkout during this install. The substitution is
+    # idempotent: it consumes the plugin-root token, so a second pass matches
+    # nothing. In a POSIX basic regular expression "$" is literal unless it ends
+    # the expression, so ${CLAUDE_PLUGIN_ROOT} needs no escaping here.
+    # Reference paths are opened with the Read tool, which does not expand
+    # variables, so ${CLAUDE_PLUGIN_ROOT}/skills/ becomes the absolute path.
+    skills_root_esc=$(printf '%s' "${HOME}/.claude/skills/" | sed 's/[#&\\]/\\&/g')
     rewrite_doc() {
         local doc="$1" temp_doc
         temp_doc="${doc}.claude-seo-tmp"
-        sed -e 's#claude-seo run#"$HOME/.claude/skills/seo/bin/claude-seo" run#g' \
-            -e 's#claude-seo setup#"$HOME/.claude/skills/seo/bin/claude-seo" setup#g' \
-            -e 's#claude-seo doctor#"$HOME/.claude/skills/seo/bin/claude-seo" doctor#g' \
+        sed -e "s#\${CLAUDE_PLUGIN_ROOT}/skills/#${skills_root_esc}#g" \
+            -e 's#"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run#"$HOME/.claude/skills/seo/scripts/claude-seo" run#g' \
+            -e 's#"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" setup#"$HOME/.claude/skills/seo/scripts/claude-seo" setup#g' \
+            -e 's#"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" doctor#"$HOME/.claude/skills/seo/scripts/claude-seo" doctor#g' \
             "${doc}" > "${temp_doc}"
         mv "${temp_doc}" "${doc}"
     }
@@ -180,7 +189,7 @@ main() {
 
     echo "→ Creating isolated Python runtime..."
     set +e
-    "${SKILL_DIR}/bin/claude-seo" setup
+    "${SKILL_DIR}/scripts/claude-seo" setup
     runtime_status=$?
     set -e
     if [ "${runtime_status}" -ne 0 ] && [ "${runtime_status}" -ne 10 ]; then

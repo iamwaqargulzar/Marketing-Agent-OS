@@ -30,18 +30,30 @@ When merging data from multiple sources, apply confidence weights to each metric
 weighted_score = Σ(source_score × confidence × factor_weight) / Σ(confidence × factor_weight)
 ```
 
-When only Common Crawl is available, cap the maximum health score at 70/100 and note
-"limited to domain-level metrics" in the report.
+**When only Common Crawl is available, do not produce a health score at all.**
+Not a capped one, not an "approximate" one. Common Crawl supplies domain-level
+rank and presence signals only -- it carries none of the referring-domain quality,
+anchor, or toxicity data a health score claims to summarise, so any number derived
+from it reads as "this profile is weak" when the truth is "we have no data."
+
+Report `Not Assessed` in place of the score, surface the rank/presence data that
+Common Crawl *does* support as low-confidence findings, and note "limited to
+domain-level metrics" in the report. The same applies to any finding written with
+`source: not-assessed`.
+
+This is enforced, not advisory: `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run validate_backlink_report.py` fails
+a report (`status: FAIL`) that carries a number in either case. See the
+`seo-backlinks` skill's "MUST NOT: score what you did not measure" section.
 
 ## Source Details
 
 ### Moz API (Tier 1)
 - **Endpoint:** `https://api.moz.com/jsonrpc` (JSON-RPC 2.0)
-- **Free tier:** 2,500 rows/month, 1 request per 10 seconds (verify current limits at https://moz.com/products/api — free tier limits may change)
+- **Free tier:** 2,500 rows/month, 1 request per 10 seconds (verify current limits at https://moz.com/products/api: free tier limits may change)
 - **Signup:** https://moz.com/products/api (credit card required, not charged)
 - **Data:** Domain Authority (0-100), Page Authority, Spam Score (1-17%), link counts,
   referring domains, anchor text distribution
-- **Command:** `claude-seo run moz_api.py`
+- **Command:** `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run moz_api.py`
 - **Commands:** `metrics`, `domains`, `anchors`, `pages`
 - **Blind spots:** No link velocity, no toxic link patterns beyond Spam Score,
   3-day update lag, smaller index than Ahrefs/Semrush
@@ -54,7 +66,7 @@ When only Common Crawl is available, cap the maximum health score at 70/100 and 
   are accessible to the same API account
 - **Data:** Inbound-link source URL, target URL, anchor text, sampled link
   counts, and referring-domain comparison totals
-- **Command:** `claude-seo run bing_webmaster.py`
+- **Command:** `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run bing_webmaster.py`
 - **Commands:** `links`, `counts`, `compare` (comparison requires both
   properties to be registered to the same API account)
 - **Blind spots:** Only Bing-indexed pages (~15% of web), verified sites only,
@@ -65,7 +77,7 @@ When only Common Crawl is available, cap the maximum health score at 70/100 and 
 - **Releases:** Quarterly (e.g., cc-main-2025-18)
 - **No auth needed:** Public data, free to download
 - **Data:** Domain-level in-degree, PageRank, harmonic centrality, referring domains
-- **Command:** `claude-seo run commoncrawl_graph.py`
+- **Command:** `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run commoncrawl_graph.py`
 - **Cache:** `~/.cache/claude-seo/commoncrawl/` (90-day TTL)
 - **Blind spots:** No anchor text, no page-level data, monthly/quarterly freshness,
   domain-level only (e.g., "nytimes.com links to example.com" but not which page)
@@ -73,7 +85,7 @@ When only Common Crawl is available, cap the maximum health score at 70/100 and 
 ### Verification Crawler (Always Available)
 - **No auth needed:** Uses existing fetch_page.py + parse_html.py
 - **Data:** Binary verification (link exists/lost/moved), anchor text, rel attributes
-- **Command:** `claude-seo run verify_backlinks.py`
+- **Command:** `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run verify_backlinks.py`
 - **Input:** JSON file with `[{"source_url": "..."}]` entries
 - **Polite crawling:** 1-second delay between requests to same domain
 - **Best for:** Checking if known backlinks still exist, monitoring link health

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Claude SEO — Bing Webmaster + IndexNow extension installer.
+# Claude SEO: Bing Webmaster + IndexNow extension installer.
 #
 # Wires the existing scripts/bing_webmaster.py and indexnow_submit.py into
 # a discoverable seo-bing skill and stores the Bing Webmaster Tools API
@@ -14,7 +14,7 @@ main() {
     SETTINGS_JSON="${HOME}/.claude/settings.json"
 
     echo "════════════════════════════════════════"
-    echo "║ Claude SEO — Bing Webmaster + IndexNow║"
+    echo "║ Claude SEO: Bing Webmaster + IndexNow ║"
     echo "════════════════════════════════════════"
 
     command -v python3 >/dev/null 2>&1 || { echo "✗ Python 3 required."; exit 1; }
@@ -34,13 +34,16 @@ main() {
     mkdir -p "${SKILL_DIR}/seo-bing"
     cp "${SOURCE_DIR}/skills/seo-bing/SKILL.md" "${SKILL_DIR}/seo-bing/SKILL.md"
 
-    python3 - "${SETTINGS_JSON}" "${BING_KEY}" "${INDEXNOW_KEY}" "${INDEXNOW_LOC}" <<'PY'
+    CLAUDE_SEO_SECRET="${BING_KEY}" CLAUDE_SEO_INDEXNOW_KEY="${INDEXNOW_KEY}" python3 - "${SETTINGS_JSON}" "${INDEXNOW_LOC}" <<'PY'
 import json, os, sys, tempfile
-path, bing, idx_key, idx_loc = sys.argv[1:5]
+path = sys.argv[1]
+idx_loc = sys.argv[2] if len(sys.argv) > 2 else ""
+bing = os.environ.get("CLAUDE_SEO_SECRET", "")
+idx_key = os.environ.get("CLAUDE_SEO_INDEXNOW_KEY", "")
 data = {}
 if os.path.exists(path):
     try: data = json.load(open(path))
-    except json.JSONDecodeError: data = {}
+    except json.JSONDecodeError: sys.exit(f"✗ {path} is not valid JSON. Nothing was changed; fix it and rerun.")
 env = data.setdefault("env", {})
 if bing: env["BING_WEBMASTER_API_KEY"] = bing
 if idx_key: env["INDEXNOW_KEY"] = idx_key
@@ -52,8 +55,9 @@ print(f"✓ Wrote Bing + IndexNow env to {path}")
 PY
 
     echo
-    echo "Done. Verify your IndexNow key is published:"
-    echo "  claude-seo run indexnow_submit.py --host example.com \\"
+    echo "Done. Verify your IndexNow key is published (manual install path shown;"
+    echo "plugin installs use \"\${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo\" instead):"
+    echo "  \"\$HOME/.claude/skills/seo/scripts/claude-seo\" run indexnow_submit.py --host example.com \\"
     echo "    --key \$INDEXNOW_KEY --key-location \$INDEXNOW_KEY_LOCATION --verify-only"
 }
 main "$@"

@@ -10,11 +10,14 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pytest
+
 _REPO = Path(__file__).resolve().parents[1]
 _SCRIPTS = _REPO / "scripts"
 if str(_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS))
 
+pytest.importorskip("requests")
 import gbp_deprecation_lint as gbp  # noqa: E402
 
 # ---------------------------------------------------------------------------

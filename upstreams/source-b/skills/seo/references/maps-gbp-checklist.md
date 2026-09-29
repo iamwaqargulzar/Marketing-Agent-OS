@@ -1,4 +1,4 @@
-<!-- Updated: 2026-03-23 -->
+<!-- Updated: 2026-09-23 -->
 # GBP Profile Completeness Checklist (Via API)
 
 This checklist scores a Google Business Profile using data retrieved from
@@ -67,7 +67,7 @@ Total possible: 50 points. Normalize to 0-100 scale: `(score / 50) * 100`
 | 22 | **Cover photo** | 2 | On-brand, high-resolution cover image |
 | 23 | **Videos** | 2 | At least 1 video uploaded |
 | 24 | **Owner responses** | 2 | Responding to reviews (target: 80%+ response rate) |
-| 25 | **Q&A engagement** | 2 | GBP Q&A active where available; website FAQ content supports coverage |
+| 25 | **Q&A engagement** | 2 | Score only when public Q&A still shows for the listing; otherwise mark N/A and check website FAQ coverage instead. Google's Q&A API was discontinued 2025-11-03 |
 
 **Subtotal: 18 points (9 fields)**
 
@@ -147,4 +147,4 @@ This ensures consistent scoring regardless of which industry multipliers are act
 | Attributes | `attributes` (grouped by type) |
 | Popular times | `popular_times` |
 | Posts | My Business Updates API |
-| Verified status | Not directly exposed — infer from profile completeness + Maps SERP presence, or flag as "Unknown (manual check required)" |
+| Verified status | Not directly exposed: infer from profile completeness + Maps SERP presence, or flag as "Unknown (manual check required)" |

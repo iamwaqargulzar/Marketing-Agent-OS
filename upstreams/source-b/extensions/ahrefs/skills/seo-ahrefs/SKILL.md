@@ -2,7 +2,7 @@
 name: seo-ahrefs
 description: Ahrefs API analyst (extension). Reads referring domains, backlinks, organic keywords, and content explorer data via the tested @ahrefs/mcp@0.0.11 server. Pairs with seo-backlinks for multi-source confidence weighting.
 metadata:
-  version: "2.2.5"
+  version: "2.4.1"
 compatibility: "Tested with @ahrefs/mcp@0.0.11 (installed by extensions/ahrefs/install.sh)."
 ---
 
@@ -46,7 +46,7 @@ provide the install command above.
 
 Ahrefs API usage is metered per unit. Before running a batch (>= 50 URLs):
 
-1. Estimate cost with `claude-seo run dataforseo_costs.py` (the cost-tracker module is generic and supports Ahrefs unit accounting).
+1. Estimate cost with `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run dataforseo_costs.py` (the cost-tracker module is generic and supports Ahrefs unit accounting).
 2. Surface the estimate to the orchestrator.
 3. Log actual cost after each call.
 

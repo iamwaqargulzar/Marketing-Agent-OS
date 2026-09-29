@@ -6,7 +6,7 @@
 |----------|----------|-----------|-------|
 | **SERP** | `serp_*_live_advanced` | $0.002 | Per 100 results |
 | **SERP** | `serp_*_live_regular` | $0.001 | Lightweight |
-| **SERP Images** | `serp_google_images_live_*` | $0.002 | 5x with site:/filetype: operators |
+| **SERP Images** | Google Images SERP (no tool for it on the pinned MCP server 2.8.10) | $0.002 | 5x with site:/filetype: operators |
 | **Keywords** | `kw_data_google_ads_search_volume` | $0.05 | Per batch of keywords |
 | **Keywords** | `kw_data_google_trends_explore` | $0.01 | Per query |
 | **Labs** | `dataforseo_labs_*_keyword_*` | $0.05 | Ideas, suggestions, related |
@@ -31,7 +31,7 @@
 | **Aggressive** | $50.00 | $2.00 | threshold | Agency bulk work |
 | **Unlimited** | $999.00 | -- | none | Trusted pipelines |
 
-Configure with: `claude-seo run dataforseo_costs.py config --mode threshold --threshold 0.50 --daily-limit 10.00`
+Configure with: `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run dataforseo_costs.py config --mode threshold --threshold 0.50 --daily-limit 10.00`
 
 ## Cost Reduction Tips
 
@@ -39,16 +39,16 @@ Configure with: `claude-seo run dataforseo_costs.py config --mode threshold --th
 - Batch keywords into single `search_volume` calls instead of individual SERP lookups
 - Use `standard` task queue instead of `live` for non-urgent analysis (60-80% savings)
 - Avoid `site:` and `filetype:` operators in image SERP queries (5x cost multiplier)
-- Cache session results — don't re-fetch the same keyword/domain within a session
+- Cache session results: don't re-fetch the same keyword/domain within a session
 
 ## Approval Flow
 
 Before any DataForSEO MCP call:
-1. Run `claude-seo run dataforseo_costs.py check <endpoint> [--count N]`
+1. Run `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run dataforseo_costs.py check <endpoint> [--count N]`
 2. If `status: "approved"` → proceed
 3. If `status: "needs_approval"` → show cost to user, ask to confirm
 4. If `status: "blocked"` → inform user daily limit would be exceeded
-5. After call completes, log: `claude-seo run dataforseo_costs.py log <endpoint> <cost>`
+5. After call completes, log: `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run dataforseo_costs.py log <endpoint> <cost>`
 
 ## Warn Endpoints
 

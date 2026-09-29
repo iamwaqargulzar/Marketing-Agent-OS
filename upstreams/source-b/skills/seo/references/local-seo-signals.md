@@ -1,5 +1,5 @@
-<!-- Updated: 2026-03-23 -->
-# Local SEO Ranking Signals & Benchmarks (March 2026)
+<!-- Updated: 2026-09-23 -->
+# Local SEO Ranking Signals & Benchmarks (September 2026)
 
 ## Source Key
 
@@ -96,7 +96,7 @@ XGBoost regression model, explains 92-93% of variance. (Study)
 
 - Google blocked/removed **240M+ policy-violating reviews** in 2024 (Confirmed, 40% increase over 2023)
 - Review deletion rates up **600%+** Jan-Jul 2025; 38% of deleted were 5-star (Study, GMBapi.com)
-- FTC Consumer Review Rule effective Oct 21, 2024: penalties up to **$53,088/violation** (Confirmed, US law)
+- FTC Consumer Review Rule effective Oct 21, 2024: penalties up to **$53,088/violation** (Confirmed, US law; unchanged for 2026 because the 2026 inflation adjustment was cancelled, Federal Register 2026-09-15)
 - **Review gating prohibited** by both Google (fake engagement policy) and FTC (Confirmed)
 
 ---
@@ -135,14 +135,15 @@ BBB, YellowPages, Manta, Superpages, Foursquare, Nextdoor
 
 | Feature | Date | Replacement |
 |---------|------|------------|
-| GBP Messaging/Chat | Removed | None |
+| GBP Messaging/Chat | Jul 31, 2024 | None |
 | Call History/Tracking | Jul 31, 2024 | None |
 | GBP-hosted websites | Historically reported; unverified in this run | Recheck live primary source before advising redirects |
 | School reviews/ratings | Apr 30, 2025 | None |
+| Q&A (API; public Q&A being phased out) | API discontinued Nov 3, 2025 | Put FAQs on the website; answer questions in reviews and the description |
 
 ### Active Features
 
-Q&A section (active where available; category/region limited), Posts (with scheduling), Services menu, Attributes (including identity: Women-led, Eco-friendly), Photos/Video, Local Lists (Local Gems, Trending, Top List), AI-generated "Suggest Description", Google Verified badge (replaced Guaranteed/Screened Oct 2025)
+Posts (with scheduling), Services menu, Attributes (including identity: Women-led, Eco-friendly), Photos/Video, Local Lists (Local Gems, Trending, Top List), AI-generated "Suggest Description", Google Verified badge (replaced Guaranteed/Screened Oct 2025)
 
 ### Key GBP Insights
 
@@ -156,68 +157,21 @@ Q&A section (active where available; category/region limited), Posts (with sched
 
 | Update | Date | Impact | Source |
 |--------|------|--------|--------|
-| March 2025 Core | Mar 13-27 | Emphasized E-E-A-T, penalized thin/AI content | Confirmed |
-| June 2025 Core | Jun-Jul 17 | General quality focus | Confirmed |
-| August 2025 Spam | Aug 26-Sep 22 | Targeted keyword stuffing, fake reviews, PBNs. Local Pack often stable | Confirmed |
-| December 2025 Core | Dec 11-29 | Broad core update (rollout confirmed; "impact" is third-party interpretation — Google gave only generic guidance) | Dates confirmed |
+| March 2025 Core | Mar 13-27 | Third-party reports: E-E-A-T emphasis, thin/AI content losses | Dates confirmed |
+| June 2025 Core | Jun 30-Jul 17 | General quality focus (third-party reading) | Dates confirmed |
+| August 2025 Spam | Aug 26-Sep 22 | Google named no target; third-party reports cite keyword stuffing, fake reviews, PBNs, with the Local Pack often stable | Dates confirmed |
+| December 2025 Core | Dec 11-29 | Broad core update (rollout confirmed; "impact" is third-party interpretation; Google gave only generic guidance) | Dates confirmed |
 | February 2026 Discover Update | Feb 5-27 | Discover-only; favored original/in-depth/local content, reduced clickbait | Dates confirmed |
 | March 2026 Spam | Mar 24 (~19.5h) | Fast spam refresh; no local-specific guidance | Dates confirmed |
 | March 2026 Core | Mar 27-Apr 8 | First core update of 2026 | Dates confirmed |
 | May 2026 Core | May 21-Jun 2 | Second core update of 2026 | Dates confirmed |
 | June 2026 Spam | Jun 24-26 | Normal spam update, all languages | Dates confirmed |
+| August 2026 Spam | Aug 18-21 | Normal spam update | Dates confirmed |
+| September 2026 Spam | Sep 24, active on Sep 28 (up to two weeks) | Normal spam update; Google named no target | Dates confirmed |
 | "Diversity Update" | 2025 | Harder to rank in both map pack AND organic simultaneously | Study (Sterling Sky) |
 
-> **Note:** core-update *rollout dates* are Google-confirmed (Search Status Dashboard); the **"Impact" descriptions are third-party interpretation** — Google's only on-record statement for broad core updates is generic ("better surface relevant, satisfying content from all types of sites"). Do not present impact framing as Google fact.
+> **Note:** core-update *rollout dates* are Google-confirmed (Search Status Dashboard); the **"Impact" descriptions are third-party interpretation**; Google's only on-record statement for broad core updates is generic ("better surface relevant, satisfying content from all types of sites"). Do not present impact framing as Google fact.
 
 ---
 
-## Voice Search & Assistants
-
-- 58% of voice searches are for local business information (Study, BusinessDasher)
-- Voice queries typically 4-7 words, phrased as complete questions (Consensus)
-- 80%+ of Google Assistant voice answers come from top 3 search results (Study)
-
-| Voice Assistant | Primary Data Source |
-|-----------------|-------------------|
-| Google Assistant | GBP (transitioning to Gemini) |
-| Siri (Apple) | Apple Business (formerly Apple Business Connect) + Yelp |
-| Alexa (Amazon) | Bing Places + Yelp + aggregators |
-
----
-
-## AI Search Impact on Local
-
-| Metric | Value | Source |
-|--------|-------|--------|
-| ChatGPT/AI for local recommendations | 45% of users (up from 6%) | BrightLocal LCRS 2026 |
-| ChatGPT conversion rate | 15.9% | Seer Interactive |
-| Google organic conversion rate | 1.76% | Seer Interactive |
-| AI Overviews on local searches | Up to 68% | Whitespark Q2 2025 |
-| AI Overview CTR reduction for pos 1 | -58% | Ahrefs, Feb 2026 |
-| Brand cited in AIO = organic CTR boost | +35% | Seer Interactive |
-| ChatGPT traffic vs Google for local | ~2% | Sterling Sky, Feb 2026 |
-| Top 5 AI visibility factors: 3 are citation-related | -- | Whitespark 2026 |
-
-**ChatGPT sources**: Bing web index (primary), Yelp, TripAdvisor, BBB, Reddit. Does NOT access GBP directly. (Study, Search Engine Land)
-
-**Perplexity sources**: Authority-first. 40% more from high-authority sites. Averages 21.87 citations per question. (Study, Qwairy)
-
----
-
-## Local Pack Structure
-
-- Standard: **3 results** (universal)
-- New: Curated Local Lists (Local Gems, Trending) around position 4 (SOCi, Nov 2025)
-- Sterling Sky observed mobile US local packs showing only 1-2 businesses and 32% fewer businesses; do not present "AI-powered local pack" as an official Google feature name
-- Local pack ads grew from ~1% to **22%** of tracked mobile keywords in 12 months (Sterling Sky/Places Scout)
-- Zero-click rate for local-intent searches: up to **78%** on mobile (Similarweb)
-
----
-
-## Proximity & Search Behavior
-
-- 46% of all Google searches seek local information (Study)
-- 76% of mobile "near me" searches lead to visit within 24 hours (Confirmed, Google)
-- 900% increase in "near me" searches over two years (Confirmed/Study, Google)
-- Proximity varies: urban 1-2 miles, rural 5-10+ miles, specialty/niche = wider (Consensus)
-- Google uses dynamic weighting per query: "emergency plumber near me" = proximity-dominant; "best plastic surgeon" = prominence-dominant (Consensus)
+Voice search, AI search impact on local, Local Pack structure and proximity: `local-search-behavior.md`.

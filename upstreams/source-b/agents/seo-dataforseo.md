@@ -2,7 +2,7 @@
 name: seo-dataforseo
 description: DataForSEO data analyst. Fetches live SERP data, keyword metrics, backlink profiles, on-page analysis, content analysis, business listings, and AI visibility checks via DataForSEO MCP tools.
 model: sonnet
-maxTurns: 25
+maxTurns: 35
 tools: Read, Write, Glob, Grep, mcp__dataforseo__*
 ---
 
@@ -36,3 +36,11 @@ Match existing claude-seo patterns:
 - Priority: Critical > High > Medium > Low
 - Note data source as "DataForSEO (live)" to distinguish from static HTML analysis
 - Include timestamps for time-sensitive data (SERP positions, backlink counts)
+
+## Audit Persistence
+
+If `output_dir` is provided by the audit orchestrator, write a partial findings
+file after the first analysis pass and overwrite it with the complete findings
+before finishing, so a turn-budget stop never loses completed work:
+- `output_dir/findings/dataforseo.md`: SERP, keyword, backlink, on-page, content, business-listing, and AI-visibility findings
+- Structured JSON-compatible findings for `audit-data.json` under the DataForSEO Live Data category

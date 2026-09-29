@@ -7,7 +7,7 @@ license: MIT
 compatibility: "Requires nanobanana MCP server"
 metadata:
   author: AgriciDaniel
-  version: "2.2.5"
+  version: "2.4.1"
   category: seo
 ---
 
@@ -83,7 +83,7 @@ For every generation request:
 
 If the user mentions a brand or has SEO presets configured:
 ```bash
-claude-seo run --extension banana presets.py list
+"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run --extension banana presets.py list
 ```
 Load matching preset and apply as defaults. Also check `${CLAUDE_SKILL_DIR}/references/seo-image-presets.md`
 for SEO-specific preset templates.
@@ -121,7 +121,7 @@ After every successful generation, guide the user on:
 
 Image generation costs money. Be transparent:
 - Show estimated cost before generating (especially for batch)
-- Log every generation: `claude-seo run --extension banana cost_tracker.py log --model MODEL --resolution RES --prompt "brief"`
+- Log every generation: `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run --extension banana cost_tracker.py log --model MODEL --resolution RES --prompt "brief"`
 - Run `cost_tracker.py summary` if user asks about usage
 
 Pricing is not hard-coded. Check current Google pricing at
@@ -141,12 +141,12 @@ https://ai.google.dev/gemini-api/docs/pricing, store dated values in
 
 | Error | Resolution |
 |-------|-----------|
-| MCP not configured | Run `./extensions/banana/install.sh` or `claude-seo run --extension banana setup_mcp.py --key YOUR_KEY` |
+| MCP not configured | Run `./extensions/banana/install.sh` or `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run --extension banana setup_mcp.py --key YOUR_KEY` |
 | API key invalid | New key at https://aistudio.google.com/apikey |
 | Rate limited (429) | Wait 60s, retry. Check current free-tier limits before batch operations |
-| `IMAGE_SAFETY` | Rephrase prompt - see `references/prompt-engineering.md` Safety section |
-| MCP unavailable | Fall back: `claude-seo run --extension banana generate.py --prompt "..." --aspect-ratio "16:9" --model "$NANOBANANA_MODEL"` |
-| CSV batch input | Plan first: `claude-seo run --extension banana batch.py --csv requests.csv --model "$NANOBANANA_MODEL"` |
+| `IMAGE_SAFETY` | Rephrase prompt - see `references/prompt-adaptation-safety.md` |
+| MCP unavailable | Fall back: `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run --extension banana generate.py --prompt "..." --aspect-ratio "16:9" --model "$NANOBANANA_MODEL"` |
+| CSV batch input | Plan first: `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run --extension banana batch.py --csv requests.csv --model "$NANOBANANA_MODEL"` |
 | Extension not installed | Show install instructions: `./extensions/banana/install.sh` |
 
 ## Cross-Skill Integration
@@ -158,7 +158,9 @@ https://ai.google.dev/gemini-api/docs/pricing, store dated values in
 ## Reference Documentation
 
 Load on-demand. Do NOT load all at startup:
-- `${CLAUDE_SKILL_DIR}/references/prompt-engineering.md`:6-component system, domain modes, templates
+- `${CLAUDE_SKILL_DIR}/references/prompt-engineering.md`: 6-component system, domain modes, advanced techniques
+- `${CLAUDE_SKILL_DIR}/references/prompt-templates.md`: ready-to-use templates by use case
+- `${CLAUDE_SKILL_DIR}/references/prompt-adaptation-safety.md`: model adaptation rules, common mistakes, safety-filter rephrasing
 - `${CLAUDE_SKILL_DIR}/references/gemini-models.md`:Model specs, rate limits, capabilities
 - `${CLAUDE_SKILL_DIR}/references/mcp-tools.md`:MCP tool parameters and responses
 - `${CLAUDE_SKILL_DIR}/references/post-processing.md`:ImageMagick/FFmpeg pipeline recipes

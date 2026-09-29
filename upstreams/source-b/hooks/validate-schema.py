@@ -49,6 +49,58 @@ BRACKET_PLACEHOLDERS = (
 )
 BARE_PLACEHOLDER_RE = re.compile(r"\bREPLACE(?:_[A-Z]+)*\b")
 
+# Match every <script ...>...</script> pair, then filter on the type attribute.
+# The previous pattern required ``type`` to be the first and only attribute, so
+# blocks carrying a CSP ``nonce``, an ``id`` or ``data-*`` attributes, or an
+# unquoted type value were skipped without validation.
+#
+# The attribute group is a small tokenizer, not a plain ``[^>]*``: it consumes a
+# double-quoted value, a single-quoted value, or a run of characters that is
+# neither a quote nor ``>``. A ``[^>]*`` scan ends the tag at the first ``>`` it
+# sees, quoted or not, so an attribute value containing ``>`` (``data-cond="a>b"``,
+# a templated nonce) truncated the tag early and fed the remainder of the
+# attributes plus the real body to the JSON parser as garbage. Treating a quoted
+# span as atomic keeps an embedded ``>`` from ending the tag prematurely.
+# The fallback class excludes both quote characters: if it matched an
+# apostrophe, the alternation would be ambiguous and a tag with many
+# apostrophes and no closing tag would backtrack exponentially, hanging the
+# blocking hook.
+_ATTRS_RE = r'(?:"[^"]*"|\'[^\']*\'|[^"\'>])*'
+SCRIPT_TAG_RE = re.compile(
+    r"<script\b(" + _ATTRS_RE + r")>(.*?)</script\s*>", re.DOTALL | re.IGNORECASE
+)
+LD_JSON_TYPE_RE = re.compile(
+    r"""(?:^|\s)type\s*=\s*"""
+    r"""(?:"application/ld\+json"|'application/ld\+json'|application/ld\+json(?=\s|$))""",
+    re.IGNORECASE,
+)
+
+# Server- or client-side template expressions that render JSON-LD at runtime.
+# The hook runs on .jsx/.tsx/.vue/.svelte/.php/.ejs sources, where the script
+# body is frequently an expression rather than literal JSON. Those blocks cannot
+# be validated statically and must not be reported as invalid JSON.
+SERVER_TEMPLATE_RE = re.compile(
+    r"""^(?:
+        <\?(?:php\b|=)            # <?php ... ?> / <?= ... ?>
+      | <%                        # EJS / ERB
+    )""",
+    re.VERBOSE,
+)
+COMPONENT_EXPRESSION_RE = re.compile(
+    r"""^(?:
+        \{\{                      # Vue / Handlebars / Twig
+      | \{@html\b                 # Svelte
+      | \$\{                      # JS template literal
+      | \{\s*[A-Za-z_$][\w$.]*    # JSX expression: {schema} / {JSON.stringify(...)}
+    )""",
+    re.VERBOSE,
+)
+COMPONENT_EXTENSIONS = (".jsx", ".tsx", ".vue", ".svelte")
+
+SCHEMA_ORG_CONTEXTS = frozenset(
+    {"https://schema.org", "http://schema.org", "https://schema.org/", "http://schema.org/"}
+)
+
 
 def _configure_utf8() -> None:
     """Keep hook diagnostics printable on legacy Windows console encodings."""
@@ -58,17 +110,57 @@ def _configure_utf8() -> None:
             reconfigure(encoding="utf-8", errors="replace")
 
 
-def validate_jsonld(content: str) -> List[str]:
+def _extract_ld_json_blocks(content: str) -> List[str]:
+    """Return the bodies of every ``<script type="application/ld+json">`` block.
+
+    Attribute order, extra attributes (``nonce``, ``id``, ``data-*``), tag case
+    and unquoted type values are all accepted; only the type value is decisive.
+    """
+    blocks = []
+    for attributes, body in SCRIPT_TAG_RE.findall(content):
+        if LD_JSON_TYPE_RE.search(attributes):
+            blocks.append(body)
+    return blocks
+
+
+def _is_template_expression(block: str, filepath: str = "") -> bool:
+    """True when the script body is rendered at runtime rather than literal JSON.
+
+    Server-side markers (PHP, EJS) are never valid JSON and are skipped for
+    every file type. Component expressions (JSX, Vue, Svelte, template
+    literals) are only skipped in component sources, so a malformed object
+    literal in a plain ``.html`` file is still reported.
+    """
+    if SERVER_TEMPLATE_RE.match(block):
+        return True
+    if filepath.lower().endswith(COMPONENT_EXTENSIONS):
+        return bool(COMPONENT_EXPRESSION_RE.match(block))
+    return False
+
+
+def _is_schema_org_context(value: Any) -> bool:
+    """Accept the schema.org context in its string, list and object forms."""
+    if isinstance(value, str):
+        return value in SCHEMA_ORG_CONTEXTS
+    if isinstance(value, list):
+        return any(_is_schema_org_context(item) for item in value)
+    if isinstance(value, dict):
+        return _is_schema_org_context(value.get("@vocab"))
+    return False
+
+
+def validate_jsonld(content: str, filepath: str = "") -> List[str]:
     """Validate JSON-LD blocks in HTML content."""
     errors = []
-    pattern = r'<script\s+type=["\']application/ld\+json["\']\s*>(.*?)</script>'
-    blocks = re.findall(pattern, content, re.DOTALL | re.IGNORECASE)
+    blocks = _extract_ld_json_blocks(content)
 
     if not blocks:
         return []  # No schema found; not an error
 
     for i, block in enumerate(blocks, 1):
         block = block.strip()
+        if _is_template_expression(block, filepath):
+            continue  # Rendered at runtime; nothing to validate statically
         try:
             data = json.loads(block)
         except json.JSONDecodeError as e:
@@ -99,10 +191,7 @@ def _validate_schema_object(
     # Check @context
     if "@context" not in obj and not inherited_context:
         errors.append(f"{prefix}: Missing @context")
-    elif "@context" in obj and obj["@context"] not in (
-        "https://schema.org",
-        "http://schema.org",
-    ):
+    elif "@context" in obj and not _is_schema_org_context(obj["@context"]):
         errors.append(f"{prefix}: @context should be 'https://schema.org'")
 
     graph = obj.get("@graph")
@@ -214,7 +303,7 @@ def main():
     except (OSError, IOError):
         sys.exit(0)
 
-    errors = validate_jsonld(content)
+    errors = validate_jsonld(content, filepath)
 
     if not errors:
         sys.exit(0)

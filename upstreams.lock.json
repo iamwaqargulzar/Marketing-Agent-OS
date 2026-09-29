@@ -12,12 +12,12 @@
       "url": "https://github.com/aaron-he-zhu/aaron-marketing-skills.git"
     },
     "source-b": {
-      "commit": "a1480c7e590b16001bd9dc1627eacdcd44d580f9",
-      "file_count": 383,
+      "commit": "ff87fcee0734845d3f59128c8c905799ee2298da",
+      "file_count": 446,
       "license": "MIT",
       "path": "upstreams/source-b",
       "repository": "AgriciDaniel/claude-seo",
-      "tree_sha256": "41a8da865851bba5b88c50ab8c12ad64a0149926ae1e0616c5338e91754891eb",
+      "tree_sha256": "9b79458f5d5d01ca41f89df6d5cebbcbf9778768826f90b2eef300d7bf854044",
       "url": "https://github.com/AgriciDaniel/claude-seo.git"
     },
     "source-c": {

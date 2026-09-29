@@ -46,6 +46,12 @@ Result JSON::
       "score": 0..100,
       "recommendations": ["…"]
     }
+
+Exit status::
+
+    0  analysis completed (a low score is a finding, not a failed run)
+    1  score below ``--fail-under N`` (opt-in gate, off by default)
+    2  URL refused by url_safety
 """
 
 from __future__ import annotations
@@ -60,7 +66,7 @@ from typing import Optional
 _SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
 if _SCRIPTS_DIR not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
-from url_safety import URLSafetyError, safe_requests_get  # noqa: E402
+from url_safety import URLSafetyError, decode_response_text, safe_requests_get  # noqa: E402
 
 _SPECULATION_BLOCK_RE = re.compile(
     r'<script\b[^>]*\btype\s*=\s*["\']speculationrules["\'][^>]*>(?P<body>.*?)</script>',
@@ -195,6 +201,14 @@ def main() -> int:
     )
     parser.add_argument("url")
     parser.add_argument("--json", action="store_true")
+    parser.add_argument(
+        "--fail-under",
+        type=int,
+        default=None,
+        metavar="N",
+        help="Exit 1 if the score is below N. Off by default: a successful "
+             "run exits 0 whatever the score.",
+    )
     args = parser.parse_args()
 
     try:
@@ -203,7 +217,7 @@ def main() -> int:
         print(f"Error: url_safety: {exc}", file=sys.stderr)
         return 2
 
-    result = {"url": resp.url, **analyse(resp.text, dict(resp.headers))}
+    result = {"url": resp.url, **analyse(decode_response_text(resp), dict(resp.headers))}
 
     if args.json:
         json.dump(result, sys.stdout, indent=2)
@@ -228,7 +242,9 @@ def main() -> int:
             for r in result["recommendations"]:
                 print(f"  - {r}")
 
-    return 0 if result["score"] >= 75 else 1
+    if args.fail_under is not None and result["score"] < args.fail_under:
+        return 1
+    return 0
 
 
 if __name__ == "__main__":

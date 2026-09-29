@@ -18,10 +18,10 @@ Approach
      - ``years_registered``
      - ``last_significant_renewal`` (best-effort: last "updated:" date)
 4. Optional ``--topic`` flag accepts the current detected topic. If
-   the topic differs from what was registered for (heuristic — see
+   the topic differs from what was registered for (heuristic: see
    notes), flag as a potential expired-domain abuse risk.
 
-This script does NOT make the topical comparison itself — that requires
+This script does NOT make the topical comparison itself; that requires
 fetching the current site, classifying it, and comparing against the
 Wayback Machine's earliest snapshot. The expensive cross-reference is
 delegated to the ``seo-content`` skill which orchestrates it.
@@ -54,6 +54,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import shutil
 import socket
@@ -61,6 +62,11 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 from typing import Optional
+
+_SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
+if _SCRIPTS_DIR not in sys.path:
+    sys.path.insert(0, _SCRIPTS_DIR)
+from url_safety import URLSafetyError, validate_url_strict  # noqa: E402
 
 _DATE_LABELS = {
     "created": (
@@ -124,8 +130,23 @@ def _socket_whois(domain: str) -> Optional[str]:
         return iana_text
 
     referral = m.group(1).strip()
+
+    # The referral host is attacker-influenceable: WHOIS runs unencrypted on
+    # port 43, so anyone able to tamper with the IANA response can inject a
+    # `refer:` line pointing at an internal address, turning this fallback into
+    # a port-43 probe of the operator's private network. Resolve and validate
+    # it through the same guard every other outbound call uses, then connect to
+    # the pinned address so the answer cannot be re-pointed after the check.
+    # WHOIS is plaintext with no SNI, so dialling the IP directly is lossless.
     try:
-        with socket.create_connection((referral, 43), timeout=10) as sock:
+        _, pinned_ip = validate_url_strict(f"https://{referral}/")
+    except URLSafetyError:
+        # A referral we cannot vouch for is not worth following. IANA's own
+        # answer is still useful, so return that rather than nothing.
+        return iana_text
+
+    try:
+        with socket.create_connection((pinned_ip, 43), timeout=10) as sock:
             sock.sendall(f"{domain}\r\n".encode("ascii"))
             buf = b""
             while True:
@@ -182,7 +203,7 @@ def lookup(domain: str) -> dict:
             "expires": None,
             "registrar": None,
             "years_registered": None,
-            "notes": ["whois unavailable — install the 'whois' system package "
+            "notes": ["whois unavailable: install the 'whois' system package "
                       "or check egress on TCP/43"],
         }
 

@@ -1,6 +1,6 @@
 {
   "package": "marketing-agent-os",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "skills": [
     {
       "name": "ab-test-setup",
@@ -1823,6 +1823,16 @@
       "phase": null
     },
     {
+      "name": "seo-agentic",
+      "description": "Audit and improve a website's readiness for AI agents that browse, understand interfaces, complete forms, or perform user-authorized tasks. Use for agent accessibility, server-rendered content, AI access policy, Markdown/discovery surfaces, or optional browser-agent tools. For citation visibility use `ai-seo`; for commerce protocols use `seo-ecommerce`.",
+      "domain": "seo-agentic",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
       "name": "seo-ahrefs",
       "description": "Analyze live Ahrefs backlink, referring-domain, organic-keyword, and content data when an authorized Ahrefs connector is available. Use for Ahrefs-specific SEO evidence, not for estimates when no live connection exists.",
       "domain": "seo-geo",
@@ -2021,6 +2031,16 @@
         "source-b"
       ],
       "alias_of": "seo-audit",
+      "phase": null
+    },
+    {
+      "name": "seo-matomo",
+      "description": "Analyze Matomo analytics for SEO and marketing decisions using an authorized connector, Reporting API, or user export. Use for organic traffic, landing pages, referrers, devices, countries, goals, events, or GA4-to-Matomo reporting comparisons. Not for Search Console query/index data or changing Matomo configuration.",
+      "domain": "analytics",
+      "sources": [
+        "source-b"
+      ],
+      "alias_of": null,
       "phase": null
     },
     {

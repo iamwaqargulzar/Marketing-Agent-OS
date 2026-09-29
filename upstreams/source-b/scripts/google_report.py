@@ -1129,14 +1129,21 @@ def _build_full_audit_categories(data, section_num=2):
             lines.append('  <h4>Findings</h4>')
             for finding in findings:
                 title = escape(_finding_title(finding))
-                severity = escape(_finding_severity(finding))
                 desc = escape(_finding_description(finding))
                 recommendation = ""
                 if isinstance(finding, dict) and finding.get("recommendation"):
                     recommendation = escape(str(finding["recommendation"]))
-                severity_class = _rating_css_class(severity)
                 lines.append('  <div class="action-item medium">')
-                lines.append(f'    <h4>{title} <span class="{severity_class}">{severity}</span></h4>')
+                # Only label a severity when the finding actually carries one. Plain-string
+                # findings have no severity, and _finding_severity() falls back to "Info" --
+                # which would badge every entry as "Info" (see the executive-summary fix for
+                # the same shape). Dict-shaped findings with an explicit severity keep it.
+                if isinstance(finding, dict) and finding.get("severity"):
+                    severity = escape(str(finding["severity"]))
+                    severity_class = _rating_css_class(severity)
+                    lines.append(f'    <h4>{title} <span class="{severity_class}">{severity}</span></h4>')
+                else:
+                    lines.append(f'    <h4>{title}</h4>')
                 if desc:
                     lines.append(f'    <p>{desc}</p>')
                 if recommendation:
@@ -1268,9 +1275,15 @@ def _build_executive_summary(domain, timestamp, data, report_type):
     # Critical issues box
     issues = []
     for item in _coerce_items(summary.get("top_findings")):
-        severity = _finding_severity(item)
         title = _finding_title(item)
-        issues.append(f'<strong>{escape(severity)}:</strong> {escape(title)}')
+        # Only label a severity when the finding actually carries one. Plain-string
+        # top_findings (the shape documented in seo-audit/SKILL.md) have no severity, and
+        # _finding_severity() falls back to "Info" -- which rendered every entry in the
+        # "Critical Issues Found" box as "Info:", understating the whole section.
+        if isinstance(item, dict) and item.get("severity"):
+            issues.append(f'<strong>{escape(str(item["severity"]))}:</strong> {escape(title)}')
+        else:
+            issues.append(escape(title))
 
     failed_audits = mobile.get("failed_audits", [])
     if failed_audits:
@@ -1418,7 +1431,7 @@ def _build_cwv_section(psi_data, crux_data, chart_paths, history_data=None, sect
             cls = ("status-pass" if score_val and score_val >= 0.9
                    else ("status-warn" if score_val and score_val >= 0.5 else "status-fail"))
             label = metric_labels.get(k, k.replace("-", " ").title())
-            threshold = thresholds.get(k, "\u2014")
+            threshold = thresholds.get(k, "n/a")
             lines.append(f'      <tr><td>{label}</td><td>{v.get("display", "")}</td>'
                          f'<td class="{cls}">{score_pct}</td><td>{threshold}</td></tr>')
         lines.append('    </tbody>')
@@ -1961,7 +1974,7 @@ def _build_recommendations(data, section_num=5):
     lines.append('  <hr class="divider">')
     lines.append('  <h3>Implementation Roadmap</h3>')
     lines.append('  <div class="roadmap-phase">')
-    lines.append('    <h4>Week 1 &mdash; Quick Wins</h4>')
+    lines.append('    <h4>Week 1: Quick Wins</h4>')
     lines.append('    <ul>')
     if seo_failed:
         lines.append('      <li>Fix failing Lighthouse SEO checks</li>')
@@ -1975,7 +1988,7 @@ def _build_recommendations(data, section_num=5):
     lines.append('    </ul>')
     lines.append('  </div>')
     lines.append('  <div class="roadmap-phase">')
-    lines.append('    <h4>Week 2&ndash;3 &mdash; Performance &amp; Indexation</h4>')
+    lines.append('    <h4>Weeks 2 to 3: Performance &amp; Indexation</h4>')
     lines.append('    <ul>')
     if perf is not None and perf < 50:
         lines.append('      <li>Optimize Largest Contentful Paint and Total Blocking Time</li>')
@@ -1988,7 +2001,7 @@ def _build_recommendations(data, section_num=5):
     lines.append('    </ul>')
     lines.append('  </div>')
     lines.append('  <div class="roadmap-phase">')
-    lines.append('    <h4>Week 4 &mdash; Content &amp; Search Optimization</h4>')
+    lines.append('    <h4>Week 4: Content &amp; Search Optimization</h4>')
     lines.append('    <ul>')
     if qw:
         lines.append(f'      <li>Optimize {len(qw)} quick-win queries for top-3 rankings</li>')
@@ -2039,7 +2052,7 @@ def _build_methodology_footer(domain, timestamp, gsc_warning=""):
         f'  </table>\n'
         f'{warning_html}'
         f'  <p style="color: #94a3b8; font-size: 9pt; margin-top: 5mm;">\n'
-        f'    Report generated by Claude SEO &mdash; Google SEO Intelligence Skill &mdash; '
+        f'    Report generated by Claude SEO (Google SEO Intelligence Skill), '
         f'{timestamp}<br>\n'
         f'    Methodology based on Google Web Vitals thresholds, Search Console documentation, '
         f'and Lighthouse scoring algorithms.\n'

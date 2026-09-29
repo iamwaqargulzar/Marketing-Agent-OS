@@ -8,19 +8,19 @@ E-E-A-T = **E**xperience, **E**xpertise, **A**uthoritativeness, **T**rustworthin
 **Trust is the most important member of the family** (Google's own wording);
 Experience, Expertise, and Authoritativeness support the assessment of Trust.
 E-E-A-T is a **concept in the Quality Rater Guidelines**, not a direct ranking
-score — it informs the core ranking and helpful-content systems.
+score; it informs the core ranking and helpful-content systems.
 
 > **No "watershed" framing.** Google never characterized the December 2025 (or
 > any 2026) core update as "extending E-E-A-T to ALL competitive queries," and
 > never published per-industry traffic-drop percentages. Those figures and the
-> "watershed" narrative are third-party SEO-blog interpretation — do not assert
+> "watershed" narrative are third-party SEO-blog interpretation; do not assert
 > them as Google fact. Google's only on-record description of broad core updates
 > is generic ("a regular update designed to better surface relevant, satisfying
 > content … from all types of sites").
 
 > **Continuous core updates.** Google now documents (changelog 2025-12-09) that
 > it continually makes **smaller, unannounced core updates** between the major
-> ones — so content improvements can lift rankings without waiting for the next
+> ones, so content improvements can lift rankings without waiting for the next
 > major update. Treat helpful-content evaluation as always-on.
 
 ## YMYL (Your Money or Your Life)
@@ -137,10 +137,10 @@ Raters now formally evaluate whether content appears AI-generated:
 - Repetitive structure across multiple pages
 - No author attribution or expertise signals
 
-### Spam Policies (updated 2026-05-15)
+### Spam Policies (updated 2026-08-30)
 - **Expired domain abuse**: Buying expired domains for their backlinks
-- **Site reputation abuse**: Using a reputable site to host low-quality content (parasite SEO)
-- **Scaled content abuse**: Mass-producing content without value — Google's policy now **explicitly** names "using generative AI tools to generate many pages without adding value" (also covers automated transformations like synonymizing/translating).
+- **Site reputation abuse**: Using a reputable site to host low-quality content (parasite SEO). Enforcement differs by searcher region since 2026-08-30 (announced 2026-08-28): outside the EEA the pages may receive a manual action; for users within the EEA they may be categorized as separate from the main domain instead. Treat it as a policy risk everywhere, and do not promise a demotion-free outcome for EEA audiences either.
+- **Scaled content abuse**: Mass-producing content without value, Google's policy now **explicitly** names "using generative AI tools to generate many pages without adding value" (also covers automated transformations like synonymizing/translating).
 - **Back-button hijacking** (NEW, malicious practices): manipulating browser history (`history.pushState`/`replaceState`, including via third-party ad/library scripts) so users can't use the Back button. Announced 2026-04-13; **enforcement live since 2026-06-15** (manual actions + automated demotions).
 
 ### AI Overview Evaluation
@@ -166,45 +166,4 @@ The "Experience" dimension is a key differentiator, especially against scaled/AI
 
 ---
 
-## Overall Scoring Guide
-
-| Score | Description |
-|-------|-------------|
-| 90-100 | Exceptional E-E-A-T, authority site, recognized expert, full transparency |
-| 70-89 | Strong E-E-A-T, demonstrated expertise, good trust signals |
-| 50-69 | Moderate E-E-A-T, some signals, room for improvement |
-| 30-49 | Weak E-E-A-T, minimal signals, significant gaps |
-| 0-29 | Very low E-E-A-T, no visible signals, potential trust issues |
-
----
-
-## Improvement Recommendations by Score
-
-### 0-29 (Critical)
-1. Add contact information and about page
-2. Establish author identity with credentials
-3. Implement HTTPS
-4. Remove deceptive elements
-
-### 30-49 (Major)
-1. Add author bios with credentials
-2. Include first-hand experience content
-3. Get external citations/mentions
-4. Add customer testimonials
-
-### 50-69 (Moderate)
-1. Deepen content with original research
-2. Build topical authority through content clusters
-3. Pursue industry recognition
-4. Document processes and methodologies
-
-### 70-89 (Minor)
-1. Maintain freshness with regular updates
-2. Expand author presence across platforms
-3. Pursue speaking/publication opportunities
-4. Add video/multimedia demonstrating expertise
-
-### 90-100 (Maintenance)
-1. Continue publishing high-quality content
-2. Monitor and respond to reputation issues
-3. Keep credentials and certifications current
+Overall scoring guide and improvement recommendations by score: `eeat-scoring-guide.md`.

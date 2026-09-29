@@ -30,9 +30,9 @@ except ImportError:
 _SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
 if _SCRIPTS_DIR not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
-from url_safety import safe_requests_get  # noqa: E402, I001
+from url_safety import decode_response_text, safe_requests_get  # noqa: E402, I001
 
-# Lazy-loader detection — covers native + the major JS lazy-loaders found on
+# Lazy-loader detection: covers native + the major JS lazy-loaders found on
 # WordPress/WooCommerce sites (Perfmatters, EWWW Image Optimizer, generic
 # `data-src` patterns). Sites optimized by these plugins strip native
 # `loading="lazy"` and replace `src` with a placeholder, so a check on `loading`
@@ -43,6 +43,22 @@ _GENERIC_LAZY_ATTRS = ("data-src", "data-lazy-src", "data-original", "data-srcse
 _PERFMATTERS_CLASSES = {"perfmatters-lazy", "perfmatters-lazy-loaded"}
 _EWWW_CLASSES = {"lazyload-eio", "lazyloaded-eio"}
 _GENERIC_LAZY_CLASSES = {"lazyload", "lazyloaded", "lazy", "lazy-loaded"}
+
+
+def _has_rel_token(tag, token: str) -> bool:
+    """Case-insensitively check whether a tag's ``rel`` attribute carries ``token``.
+
+    bs4 treats ``rel`` as a multi-valued attribute for ``<a>`` and ``<link>``
+    tags, splitting it on whitespace into a list. Both the attribute *name*
+    (``REL=``) and the surrounding tag name are lower-cased by the underlying
+    HTML parser, but the attribute *value* is preserved verbatim, so
+    ``rel="Alternate"`` or ``rel="CANONICAL"`` never matched an exact,
+    lower-case comparison such as ``soup.find("link", rel="canonical")``.
+    """
+    rel = tag.get("rel", [])
+    if isinstance(rel, str):
+        rel = rel.split()
+    return any(isinstance(value, str) and value.lower() == token for value in rel or [])
 
 
 def _detect_lazy_method(img) -> str:
@@ -130,12 +146,16 @@ def parse_html(html: str, base_url: Optional[str] = None) -> dict:
             result["twitter_card"][name] = content
 
     # Canonical
-    canonical = soup.find("link", rel="canonical")
+    canonical = next(
+        (link for link in soup.find_all("link") if _has_rel_token(link, "canonical")), None
+    )
     if canonical:
         result["canonical"] = canonical.get("href")
 
     # Hreflang
-    for link in soup.find_all("link", rel="alternate"):
+    for link in soup.find_all("link"):
+        if not _has_rel_token(link, "alternate"):
+            continue
         hreflang = link.get("hreflang")
         if hreflang:
             result["hreflang"].append({
@@ -247,7 +267,7 @@ def main():
         html = sys.stdin.read()
         if not html and args.url:
             resp = safe_requests_get(args.url, timeout=30, allow_redirects=True)
-            html = resp.text
+            html = decode_response_text(resp)
             args.url = resp.url
 
     result = parse_html(html, args.url)

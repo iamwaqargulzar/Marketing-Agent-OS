@@ -1,16 +1,14 @@
 ---
 name: seo-page
 description: >
-  Deep single-page SEO analysis covering on-page elements, content quality,
-  technical meta tags, schema, images, and performance. Use when user says
-  "analyze this page", "check page SEO", "single URL", "check this page",
-  "page analysis", or provides a single URL for review.
+  Analyze one supplied URL across on-page, content, technical metadata, schema,
+  images, and performance. Use only for a single-page review.
 user-invocable: true
 argument-hint: "[url]"
 license: MIT
 metadata:
   author: AgriciDaniel
-  version: "2.2.5"
+  version: "2.4.1"
   category: seo
 ---
 
@@ -21,6 +19,13 @@ metadata:
 ### On-Page SEO
 - Title tag: 50-60 characters, includes primary keyword, unique
 - Meta description: 150-160 characters, compelling, includes keyword
+- Meta description is not a restatement of the title: run
+  `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run metadata_template.py --title "<title>" --description "<desc>" --json`
+  (heuristic, deterministic string comparison). A description that opens by
+  repeating its own title and closes on a stock CTA ("Try it free now.",
+  "Start free!") is templated metadata, the shape bulk generation jobs produce
+  site-wide, and duplicated or templated metadata is a documented
+  content-quality problem regardless of how original the body copy is
 - H1: exactly one, matches page intent, includes keyword
 - H2-H6: logical hierarchy (no skipped levels), descriptive
 - URL: short, descriptive, hyphenated, no parameters

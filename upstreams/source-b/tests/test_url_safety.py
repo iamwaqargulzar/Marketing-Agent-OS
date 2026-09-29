@@ -25,6 +25,7 @@ _SCRIPTS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 if _SCRIPTS not in sys.path:
     sys.path.insert(0, _SCRIPTS)
 
+pytest.importorskip("requests")
 import url_safety  # noqa: E402
 
 # ---------------------------------------------------------------------------
@@ -133,6 +134,13 @@ def test_validate_url_blocks_authority_confusion(url: str) -> None:
         ("172.16.0.1", False),
         ("127.0.0.1", False),
         ("169.254.169.254", False),  # AWS/GCP/Azure metadata
+        ("100.100.100.200", False),  # Alibaba Cloud metadata (RFC 6598 shared space)
+        ("100.64.0.0", False),  # RFC 6598 lower bound
+        ("100.127.255.255", False),  # RFC 6598 upper bound
+        ("100.128.0.1", True),  # first address past the /10 is public
+        ("::ffff:100.100.100.200", False),  # IPv4-mapped form of the above
+        ("::ffff:127.0.0.1", False),
+        ("::ffff:8.8.8.8", True),
         ("0.0.0.0", False),
         ("::1", False),
         ("fe80::1", False),  # IPv6 link-local
@@ -204,6 +212,8 @@ def test_validate_url_strict_accepts_ip_literal_public() -> None:
         "https://10.0.0.1/",
         "https://192.168.1.1/",
         "https://169.254.169.254/",
+        "http://100.100.100.200/latest/meta-data/",
+        "http://[::ffff:100.100.100.200]/latest/meta-data/",
         "https://0.0.0.0/",
     ],
 )
@@ -312,8 +322,9 @@ def test_safe_requests_head_uses_strict_validation_and_dns_pin() -> None:
     response = SimpleNamespace(status_code=200)
 
     @contextmanager
-    def fake_pin(hostname: str, pinned_ip: str, port: int):
+    def fake_pin(hostname: str, pinned_ip: str, port: int, exempt_hosts=frozenset()):
         captured["pin"] = (hostname, pinned_ip, port)
+        captured["exempt"] = exempt_hosts
         yield
 
     with patch.object(
@@ -340,9 +351,100 @@ def test_safe_requests_head_uses_strict_validation_and_dns_pin() -> None:
         "https://safe.example/path",
         timeout=7,
         allow_redirects=True,
+        headers=url_safety.DEFAULT_REQUEST_HEADERS,
     )
     assert captured["pin"] == ("safe.example", "1.1.1.1", 443)
     assert result is response
+
+
+def test_default_headers_are_browser_like() -> None:
+    headers = url_safety.DEFAULT_REQUEST_HEADERS
+    assert "python-requests" not in headers["User-Agent"]
+    assert headers["User-Agent"].startswith("Mozilla/5.0")
+    assert "Accept" in headers
+
+
+def test_default_headers_are_the_same_object_fetch_page_uses() -> None:
+    """One source of truth: fetch_page.py's raw-HTTP defaults are url_safety's,
+    so the two fetch paths cannot drift into announcing different clients."""
+    import fetch_page  # noqa: WPS433
+
+    assert fetch_page.DEFAULT_HEADERS == url_safety.DEFAULT_REQUEST_HEADERS
+    assert fetch_page.DEFAULT_USER_AGENT == url_safety.DEFAULT_USER_AGENT
+    assert (
+        url_safety.DEFAULT_REQUEST_HEADERS["User-Agent"]
+        == url_safety.DEFAULT_USER_AGENT
+    )
+
+
+def test_default_headers_do_not_announce_a_language() -> None:
+    """Announcing en-US makes a multi-locale site serve its English variant,
+    which silently corrupts every hreflang and international audit."""
+    assert "Accept-Language" not in url_safety.DEFAULT_REQUEST_HEADERS
+    assert "Accept-Language" not in url_safety._with_default_headers({})["headers"]
+
+
+def test_with_default_headers_fills_unset_headers() -> None:
+    assert url_safety._with_default_headers({})["headers"] == (
+        url_safety.DEFAULT_REQUEST_HEADERS
+    )
+    assert url_safety._with_default_headers({"headers": None})["headers"] == (
+        url_safety.DEFAULT_REQUEST_HEADERS
+    )
+
+
+def test_with_default_headers_lets_caller_override() -> None:
+    # fetch_page.py --user-agent (Googlebot cloaking checks) must still win.
+    merged = url_safety._with_default_headers(
+        {"headers": {"User-Agent": "Googlebot/2.1"}}
+    )["headers"]
+    assert merged["User-Agent"] == "Googlebot/2.1"
+    # Headers the caller did not set are still filled in.
+    assert merged["Accept"] == url_safety.DEFAULT_REQUEST_HEADERS["Accept"]
+
+
+def _capture_safe_get_headers(**kwargs) -> dict:
+    """Run safe_requests_get with validation and pinning stubbed out, and
+    return the headers mapping that reached requests.get."""
+    @contextmanager
+    def fake_pin(hostname: str, pinned_ip: str, port: int, exempt_hosts=frozenset()):
+        yield
+
+    with patch.object(
+        url_safety,
+        "validate_url_strict",
+        return_value=("https://safe.example/", "1.1.1.1"),
+    ), patch.object(
+        url_safety, "_pin_dns", side_effect=fake_pin
+    ), patch.object(
+        url_safety, "_validated_proxy_hosts", return_value=frozenset()
+    ), patch.object(
+        url_safety.requests, "get", return_value=SimpleNamespace(status_code=200)
+    ) as request_get:
+        url_safety.safe_requests_get("https://safe.example/", **kwargs)
+    return request_get.call_args.kwargs["headers"]
+
+
+def test_safe_requests_get_sends_no_accept_language_by_default() -> None:
+    headers = _capture_safe_get_headers()
+    assert "Accept-Language" not in headers
+    assert headers["User-Agent"] == url_safety.DEFAULT_USER_AGENT
+
+
+def test_safe_requests_get_preserves_a_caller_supplied_accept_language() -> None:
+    headers = _capture_safe_get_headers(headers={"Accept-Language": "de-DE,de;q=0.9"})
+    assert headers["Accept-Language"] == "de-DE,de;q=0.9"
+    # The rest of the defaults are still filled in.
+    assert headers["Accept"] == url_safety.DEFAULT_REQUEST_HEADERS["Accept"]
+
+
+def test_with_default_headers_preserves_other_kwargs_and_constant() -> None:
+    before = dict(url_safety.DEFAULT_REQUEST_HEADERS)
+    kwargs = url_safety._with_default_headers({"stream": True, "allow_redirects": False})
+    assert kwargs["stream"] is True
+    assert kwargs["allow_redirects"] is False
+    url_safety._with_default_headers({"headers": {"User-Agent": "mutating/1.0"}})
+    assert url_safety.DEFAULT_REQUEST_HEADERS == before
 
 
 def test_pin_dns_restores_getaddrinfo_on_exception() -> None:
@@ -502,6 +604,9 @@ def test_route_handler_continues_when_both_ipv4_and_ipv6_public() -> None:
 # ---------------------------------------------------------------------------
 
 
+@pytest.mark.skipif(
+    os.name != "posix", reason="asserts POSIX mode bits, which Windows does not represent"
+)
 def test_save_oauth_token_writes_0o600(tmp_path, monkeypatch) -> None:
     """_save_oauth_token must produce a 0o600 file regardless of whether
     the path existed beforehand or what the umask is."""
@@ -519,6 +624,9 @@ def test_save_oauth_token_writes_0o600(tmp_path, monkeypatch) -> None:
         os.umask(old_umask)
 
 
+@pytest.mark.skipif(
+    os.name != "posix", reason="asserts POSIX mode bits, which Windows does not represent"
+)
 def test_save_oauth_token_remediates_legacy_0o644(tmp_path, monkeypatch) -> None:
     """A pre-existing 0o644 token (v1.9.x default) is locked down on save."""
     import google_auth  # noqa: WPS433
@@ -575,13 +683,18 @@ def test_save_oauth_token_ignores_fchmod_oserror(tmp_path, monkeypatch) -> None:
     def unsupported_fchmod(_fd, _mode):
         raise OSError("unsupported")
 
-    monkeypatch.setattr(google_auth.os, "fchmod", unsupported_fchmod)
+    # os.fchmod only exists on Windows from Python 3.13; install the stub
+    # either way so the OSError path is exercised on every platform.
+    monkeypatch.setattr(google_auth.os, "fchmod", unsupported_fchmod, raising=False)
     google_auth._save_oauth_token({"access_token": "portable"})
     assert json.loads(target.read_text(encoding="utf-8")) == {
         "access_token": "portable"
     }
 
 
+@pytest.mark.skipif(
+    os.name != "posix", reason="asserts POSIX mode bits, which Windows does not represent"
+)
 def test_load_oauth_token_remediates_legacy_0o644(tmp_path, monkeypatch) -> None:
     """_load_oauth_token chmods the file before reading, so the next read
     by any other process sees 0o600 even without a re-save."""
@@ -596,3 +709,428 @@ def test_load_oauth_token_remediates_legacy_0o644(tmp_path, monkeypatch) -> None
     data = google_auth._load_oauth_token()
     assert data == {"access_token": "x"}
     assert target.stat().st_mode & 0o777 == 0o600
+
+
+# ---------------------------------------------------------------------------
+# Configured HTTP proxy (issue #280): the proxy host must resolve
+# ---------------------------------------------------------------------------
+
+
+def _addrinfo(ip: str, port: int) -> list:
+    return [(socket.AF_INET, socket.SOCK_STREAM, 6, "", (ip, port))]
+
+
+def _system_proxies(monkeypatch, mapping: dict) -> None:
+    """Pin what ``requests`` sees as the environment's proxies. Going through
+    the real ``getproxies`` would pick up the developer's own HTTPS_PROXY, or
+    the Windows registry proxy, and make these tests machine-dependent."""
+    monkeypatch.setattr(url_safety.requests.utils, "getproxies", lambda: dict(mapping))
+
+
+def test_proxy_hosts_reads_environment_and_honours_no_proxy(monkeypatch) -> None:
+    _system_proxies(monkeypatch, {"https": "http://127.0.0.1:3128"})
+    monkeypatch.setenv("NO_PROXY", "direct.example")
+    assert url_safety._proxy_hosts("https://example.com/") == frozenset({"127.0.0.1"})
+    assert url_safety._proxy_hosts("https://direct.example/") == frozenset()
+    assert url_safety._proxy_hosts("http://example.com/") == frozenset()
+
+
+def test_proxy_hosts_prefers_explicit_proxies_mapping(monkeypatch) -> None:
+    _system_proxies(monkeypatch, {"https": "http://127.0.0.1:3128"})
+    explicit = {"https": "proxy.corp.example:8080"}
+    assert url_safety._proxy_hosts("https://example.com/", explicit) == frozenset(
+        {"proxy.corp.example"}
+    )
+
+
+def test_proxy_hosts_is_empty_without_a_proxy(monkeypatch) -> None:
+    _system_proxies(monkeypatch, {})
+    assert url_safety._proxy_hosts("https://example.com/") == frozenset()
+
+
+def test_pin_dns_lets_the_exempt_proxy_host_resolve_to_loopback() -> None:
+    """The primitive honours whatever exempt set it is handed. Callers reach it
+    through _validated_proxy_hosts, which refuses a loopback proxy before it can
+    ever land in that set; this test pins the low-level contract only."""
+    original_getaddrinfo = socket.getaddrinfo
+
+    def fake_getaddrinfo(host, port, *args, **kwargs):
+        if host == "127.0.0.1":
+            return _addrinfo("127.0.0.1", port or 3128)
+        return original_getaddrinfo(host, port, *args, **kwargs)
+
+    with patch.object(url_safety.socket, "getaddrinfo", side_effect=fake_getaddrinfo):
+        # Without the exemption the loopback proxy is refused (the #280 symptom).
+        with url_safety._pin_dns("pinned.example", "8.8.8.8", 443):
+            with pytest.raises(socket.gaierror, match="non-public IP"):
+                socket.getaddrinfo("127.0.0.1", 3128)
+        with url_safety._pin_dns(
+            "pinned.example", "8.8.8.8", 443, exempt_hosts=frozenset({"127.0.0.1"})
+        ):
+            assert socket.getaddrinfo("127.0.0.1", 3128)[0][4][0] == "127.0.0.1"
+
+
+def test_pin_dns_exemption_does_not_leak_to_other_hosts() -> None:
+    """Only the proxy host is exempt; a redirect target on loopback still fails."""
+    original_getaddrinfo = socket.getaddrinfo
+
+    def fake_getaddrinfo(host, port, *args, **kwargs):
+        if host == "redirected.example":
+            return _addrinfo("127.0.0.1", port or 80)
+        return original_getaddrinfo(host, port, *args, **kwargs)
+
+    with patch.object(url_safety.socket, "getaddrinfo", side_effect=fake_getaddrinfo):
+        with url_safety._pin_dns(
+            "pinned.example", "8.8.8.8", 443, exempt_hosts=frozenset({"127.0.0.1"})
+        ):
+            with pytest.raises(socket.gaierror, match="non-public IP"):
+                socket.getaddrinfo("redirected.example", 80)
+
+
+def _fake_resolver(mapping: dict):
+    """getaddrinfo stand-in resolving only the named hosts, refusing the rest.
+
+    Refusing everything else keeps these tests from touching the developer's
+    real resolver, which would make them slow and network-dependent.
+    """
+    def fake_getaddrinfo(host, port, *args, **kwargs):
+        if host in mapping:
+            return _addrinfo(mapping[host], port or 0)
+        raise socket.gaierror(socket.EAI_NONAME, f"unmocked host {host!r}")
+
+    return fake_getaddrinfo
+
+
+def test_assert_proxy_host_is_public_accepts_a_public_proxy() -> None:
+    resolver = _fake_resolver({"proxy.corp.example": "8.8.4.4"})
+    with patch.object(url_safety.socket, "getaddrinfo", side_effect=resolver):
+        assert (
+            url_safety._assert_proxy_host_is_public("Proxy.Corp.Example")
+            == "proxy.corp.example"
+        )
+
+
+@pytest.mark.parametrize(
+    "proxy_host",
+    [
+        "127.0.0.1",          # loopback
+        "10.0.0.5",           # RFC 1918
+        "192.168.1.10",       # RFC 1918
+        "169.254.169.254",    # cloud metadata / link-local
+        "100.100.100.200",    # RFC 6598, Alibaba metadata
+        "metadata.google.internal",
+        "localhost",
+    ],
+)
+def test_assert_proxy_host_is_public_refuses_non_public_proxies(proxy_host) -> None:
+    """A proxy is exempt from the pinned scope, so it gets the same policy as
+    an audit target. Anything the environment can point at the local network
+    or a metadata endpoint must be refused, not exempted."""
+    with pytest.raises(url_safety.URLSafetyError, match="Refusing configured HTTP proxy"):
+        url_safety._assert_proxy_host_is_public(proxy_host)
+
+
+def test_assert_proxy_host_is_public_refuses_a_proxy_that_resolves_private() -> None:
+    """The literal is public-looking; only resolution reveals the private IP."""
+    resolver = _fake_resolver({"proxy.evil.example": "10.1.2.3"})
+    with patch.object(url_safety.socket, "getaddrinfo", side_effect=resolver):
+        with pytest.raises(url_safety.URLSafetyError, match="non-public IP 10.1.2.3"):
+            url_safety._assert_proxy_host_is_public("proxy.evil.example")
+
+
+def test_validated_proxy_hosts_is_empty_without_a_proxy(monkeypatch) -> None:
+    _system_proxies(monkeypatch, {})
+    assert url_safety._validated_proxy_hosts("https://example.com/") == frozenset()
+
+
+def _run_safe_get_with_proxy(monkeypatch, proxy_url: str, resolves: dict):
+    """Drive safe_requests_get with a pinned environment proxy, capturing the
+    exempt set handed to _pin_dns. Returns that captured dict."""
+    captured: dict = {}
+    _system_proxies(monkeypatch, {"https": proxy_url})
+    monkeypatch.delenv("NO_PROXY", raising=False)
+    monkeypatch.delenv("no_proxy", raising=False)
+
+    @contextmanager
+    def fake_pin(hostname: str, pinned_ip: str, port: int, exempt_hosts=frozenset()):
+        captured["exempt"] = exempt_hosts
+        yield
+
+    with patch.object(
+        url_safety.socket, "getaddrinfo", side_effect=_fake_resolver(resolves)
+    ), patch.object(
+        url_safety, "_pin_dns", side_effect=fake_pin
+    ), patch.object(
+        url_safety.requests, "get", return_value=SimpleNamespace(status_code=200)
+    ):
+        captured["response"] = url_safety.safe_requests_get(
+            "https://example.com/", timeout=5
+        )
+    return captured
+
+
+def test_safe_requests_get_exempts_a_public_proxy(monkeypatch) -> None:
+    """Positive control: a proxy on a public address is still exempted, so the
+    #280 fix keeps working for a real corporate proxy."""
+    captured = _run_safe_get_with_proxy(
+        monkeypatch,
+        "http://proxy.corp.example:8080",
+        {"example.com": "93.184.216.34", "proxy.corp.example": "8.8.4.4"},
+    )
+    assert captured["exempt"] == frozenset({"proxy.corp.example"})
+    assert captured["response"].status_code == 200
+
+
+@pytest.mark.parametrize(
+    "proxy_url",
+    ["http://169.254.169.254:3128", "http://127.0.0.1:8080"],
+)
+def test_safe_requests_get_refuses_a_non_public_proxy(monkeypatch, proxy_url) -> None:
+    """Negative control: the exemption must never be granted to a proxy on
+    loopback or at a metadata address. Before this check, setting HTTPS_PROXY
+    was enough to read cloud metadata through every audit."""
+    _system_proxies(monkeypatch, {"https": proxy_url})
+    monkeypatch.delenv("NO_PROXY", raising=False)
+    monkeypatch.delenv("no_proxy", raising=False)
+
+    resolver = _fake_resolver({"example.com": "93.184.216.34"})
+    with patch.object(url_safety.socket, "getaddrinfo", side_effect=resolver):
+        with pytest.raises(
+            url_safety.URLSafetyError, match="Refusing configured HTTP proxy"
+        ):
+            url_safety.safe_requests_get("https://example.com/", timeout=5)
+
+
+def test_safe_requests_session_refuses_a_non_public_proxy(monkeypatch) -> None:
+    _system_proxies(monkeypatch, {"https": "http://127.0.0.1:8080"})
+    monkeypatch.delenv("NO_PROXY", raising=False)
+    monkeypatch.delenv("no_proxy", raising=False)
+
+    resolver = _fake_resolver({"example.com": "93.184.216.34"})
+    with patch.object(url_safety.socket, "getaddrinfo", side_effect=resolver):
+        with pytest.raises(
+            url_safety.URLSafetyError, match="Refusing configured HTTP proxy"
+        ):
+            with url_safety.safe_requests_session("https://example.com/"):
+                pass
+
+
+# ---------------------------------------------------------------------------
+# CLAUDE_SEO_LOCAL_TARGETS: explicit, top-level-only local allowlist
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture(autouse=True)
+def _clear_local_targets(monkeypatch):
+    """No test in this module inherits the developer's own allowlist."""
+    monkeypatch.delenv("CLAUDE_SEO_LOCAL_TARGETS", raising=False)
+
+
+def _loopback_resolver(host_ips: dict):
+    def fake_getaddrinfo(host, port, *args, **kwargs):
+        if host in host_ips:
+            return _addrinfo(host_ips[host], port or 0)
+        raise socket.gaierror(socket.EAI_NONAME, f"unmocked host {host!r}")
+
+    return fake_getaddrinfo
+
+
+def test_local_targets_unset_leaves_behaviour_unchanged(monkeypatch) -> None:
+    """The default policy must be byte-for-byte what it was before the flag."""
+    monkeypatch.delenv("CLAUDE_SEO_LOCAL_TARGETS", raising=False)
+    assert url_safety.validate_url("http://localhost:3000/") is False
+    assert url_safety.validate_url("http://127.0.0.1:8080/") is False
+    assert url_safety.validate_url("http://192.168.1.10/") is False
+    assert url_safety.validate_url("http://100.101.102.103/") is False
+    with pytest.raises(url_safety.URLSafetyError, match="Blocked hostname"):
+        url_safety.validate_url_strict("http://localhost:3000/")
+    with pytest.raises(url_safety.URLSafetyError, match="Blocked hostname"):
+        url_safety.validate_url_strict("http://127.0.0.1:8080/")
+    with pytest.raises(url_safety.URLSafetyError, match="Blocked IP literal"):
+        url_safety.validate_url_strict("http://192.168.1.10/")
+
+
+def test_empty_local_targets_is_the_same_as_unset(monkeypatch) -> None:
+    for value in ("", "   ", ",", " , "):
+        monkeypatch.setenv("CLAUDE_SEO_LOCAL_TARGETS", value)
+        assert url_safety.validate_url("http://localhost:3000/") is False
+
+
+def test_allowlisted_hostname_passes_at_top_level(monkeypatch) -> None:
+    monkeypatch.setenv("CLAUDE_SEO_LOCAL_TARGETS", "localhost:3000,127.0.0.1:8080")
+    assert url_safety.validate_url("http://localhost:3000/nl") is True
+
+    resolver = _loopback_resolver({"localhost": "127.0.0.1"})
+    with patch.object(url_safety.socket, "getaddrinfo", side_effect=resolver):
+        norm, pinned = url_safety.validate_url_strict("http://localhost:3000/nl")
+    assert norm == "http://localhost:3000/nl"
+    assert pinned == "127.0.0.1"
+
+
+def test_allowlisted_ip_literal_passes_at_top_level(monkeypatch) -> None:
+    monkeypatch.setenv("CLAUDE_SEO_LOCAL_TARGETS", "127.0.0.1:8080")
+    assert url_safety.validate_url("http://127.0.0.1:8080/") is True
+    assert url_safety.validate_url_strict("http://127.0.0.1:8080/") == (
+        "http://127.0.0.1:8080/",
+        "127.0.0.1",
+    )
+
+
+def test_bare_host_entry_matches_any_port_and_covers_tailscale(monkeypatch) -> None:
+    """RFC 6598 is the Tailscale range; a bare entry names the host only."""
+    monkeypatch.setenv("CLAUDE_SEO_LOCAL_TARGETS", "100.101.102.103")
+    assert url_safety.validate_url("http://100.101.102.103/") is True
+    assert url_safety.validate_url("https://100.101.102.103:8443/staging") is True
+    assert url_safety.validate_url_strict("http://100.101.102.103/")[1] == (
+        "100.101.102.103"
+    )
+
+
+def test_port_mismatch_is_refused(monkeypatch) -> None:
+    monkeypatch.setenv("CLAUDE_SEO_LOCAL_TARGETS", "localhost:3000")
+    assert url_safety.validate_url("http://localhost:3001/") is False
+    assert url_safety.validate_url("http://localhost/") is False  # implicit :80
+    with pytest.raises(url_safety.URLSafetyError, match="Blocked hostname"):
+        url_safety.validate_url_strict("http://localhost:3001/")
+
+
+def test_unlisted_host_is_refused(monkeypatch) -> None:
+    monkeypatch.setenv("CLAUDE_SEO_LOCAL_TARGETS", "localhost:3000")
+    assert url_safety.validate_url("http://127.0.0.1:3000/") is False
+    assert url_safety.validate_url("http://192.168.1.10:3000/") is False
+    with pytest.raises(url_safety.URLSafetyError, match="Blocked IP literal"):
+        url_safety.validate_url_strict("http://192.168.1.10:3000/")
+
+
+@pytest.mark.parametrize(
+    "target",
+    [
+        "169.254.169.254",
+        "metadata.google.internal",
+        "[fd00:ec2::254]",
+        "100.100.100.200",
+        "metadata.goog",
+        "metadata.azure.com",
+    ],
+)
+def test_metadata_endpoints_are_never_allowlistable(monkeypatch, target) -> None:
+    """Listing a metadata endpoint must not unblock it. This is the trapdoor
+    a naive 'allow loopback and private' carve-out falls through."""
+    host = target.strip("[]")
+    monkeypatch.setenv("CLAUDE_SEO_LOCAL_TARGETS", f"{host},{host}:80,{host}:3128")
+    assert url_safety.validate_url(f"http://{target}/latest/meta-data/") is False
+    with pytest.raises(url_safety.URLSafetyError):
+        url_safety.validate_url_strict(f"http://{target}/latest/meta-data/")
+
+
+def test_allowlist_does_not_unblock_link_local_resolution(monkeypatch) -> None:
+    """A listed name that resolves into 169.254/16 is still refused: the
+    allowlist forgives loopback, RFC 1918 and RFC 6598, never link-local."""
+    monkeypatch.setenv("CLAUDE_SEO_LOCAL_TARGETS", "sneaky.local:80")
+    resolver = _loopback_resolver({"sneaky.local": "169.254.169.254"})
+    with patch.object(url_safety.socket, "getaddrinfo", side_effect=resolver):
+        with pytest.raises(url_safety.URLSafetyError, match="DNS rebinding refused"):
+            url_safety.validate_url_strict("http://sneaky.local/")
+
+
+def test_allowlist_does_not_change_is_safe_ip(monkeypatch) -> None:
+    """is_safe_ip stays a pure predicate. Every fail-closed path downstream
+    (redirects, subresources) depends on it not reading the environment."""
+    monkeypatch.setenv("CLAUDE_SEO_LOCAL_TARGETS", "localhost:3000,127.0.0.1:8080")
+    assert url_safety.is_safe_ip("127.0.0.1") is False
+    assert url_safety.is_safe_ip("192.168.1.10") is False
+    assert url_safety.is_safe_ip("100.101.102.103") is False
+
+
+def test_allowlisted_host_is_refused_as_a_redirect_target(monkeypatch) -> None:
+    """The allowlist is consulted once, for the top-level URL. Inside the
+    pinned scope a 30x to the same host resolves through the fall-through
+    check, which does not read it."""
+    monkeypatch.setenv("CLAUDE_SEO_LOCAL_TARGETS", "localhost:3000")
+    resolver = _loopback_resolver({"localhost": "127.0.0.1"})
+    with patch.object(url_safety.socket, "getaddrinfo", side_effect=resolver):
+        with url_safety._pin_dns("audited.example", "93.184.216.34", 443):
+            with pytest.raises(socket.gaierror, match="non-public IP"):
+                socket.getaddrinfo("localhost", 3000)
+
+
+def test_allowlisted_host_is_refused_as_a_browser_subresource(monkeypatch) -> None:
+    """The Playwright route handler never reads the allowlist, so a rendered
+    page cannot pull a subresource off the allowlisted dev server."""
+    monkeypatch.setenv("CLAUDE_SEO_LOCAL_TARGETS", "localhost:3000,127.0.0.1:8080")
+    handler = url_safety.make_safe_playwright_route_handler()
+    resolver = _loopback_resolver({"localhost": "127.0.0.1"})
+    with patch.object(url_safety.socket, "getaddrinfo", side_effect=resolver):
+        route = _FakeRoute()
+        handler(route, _FakeRequest("http://localhost:3000/app.js", "script"))
+        assert route.action == "abort"
+        route = _FakeRoute()
+        handler(route, _FakeRequest("http://127.0.0.1:8080/app.js", "script"))
+        assert route.action == "abort"
+
+
+def test_local_target_entries_are_normalized(monkeypatch) -> None:
+    """Entries go through normalize_hostname, so case, a trailing dot, and
+    obfuscated IPv4 cannot be used to smuggle a second spelling past a
+    reviewer reading the environment variable."""
+    monkeypatch.setenv("CLAUDE_SEO_LOCAL_TARGETS", " LocalHost.:3000 , 2130706433:8080 ")
+    assert url_safety._local_targets() == (("localhost", 3000), ("127.0.0.1", 8080))
+    assert url_safety.validate_url("http://localhost:3000/") is True
+    assert url_safety.validate_url("http://127.0.0.1:8080/") is True
+
+
+def test_malformed_entries_are_dropped_not_widened(monkeypatch) -> None:
+    monkeypatch.setenv(
+        "CLAUDE_SEO_LOCAL_TARGETS", "localhost:notaport,,:8080,localhost:3000"
+    )
+    assert url_safety._local_targets() == (("localhost", 3000),)
+    assert url_safety.validate_url("http://localhost:3000/") is True
+    assert url_safety.validate_url("http://localhost:8080/") is False
+
+
+def test_ipv6_entries_parse_in_both_spellings(monkeypatch) -> None:
+    monkeypatch.setenv("CLAUDE_SEO_LOCAL_TARGETS", "[::1]:3000,fd00::1")
+    assert url_safety._local_targets() == (("::1", 3000), ("fd00::1", None))
+    assert url_safety.validate_url("http://[::1]:3000/") is True
+    assert url_safety.validate_url("http://[::1]:3001/") is False
+
+
+def test_allowlist_does_not_bypass_authority_confusion_checks(monkeypatch) -> None:
+    """The allowlist relaxes the address policy, nothing else."""
+    monkeypatch.setenv("CLAUDE_SEO_LOCAL_TARGETS", "localhost:3000")
+    assert url_safety.validate_url("http://user@localhost:3000/") is False
+    assert url_safety.validate_url("http://localhost:3000\\@evil.example/") is False
+    assert url_safety.validate_url("ftp://localhost:3000/") is False
+
+
+def test_pin_dns_rechecks_a_dns_named_exempt_proxy_at_resolve_time() -> None:
+    """A proxy validated as public must not be trusted if it later resolves to a
+    private or metadata address (DNS rebinding between validation and use)."""
+    original_getaddrinfo = socket.getaddrinfo
+
+    def rebinding_getaddrinfo(host, port, *args, **kwargs):
+        if host == "proxy.example":
+            return _addrinfo("169.254.169.254", port or 3128)
+        return original_getaddrinfo(host, port, *args, **kwargs)
+
+    with patch.object(url_safety.socket, "getaddrinfo", side_effect=rebinding_getaddrinfo):
+        with url_safety._pin_dns(
+            "pinned.example", "8.8.8.8", 443, exempt_hosts=frozenset({"proxy.example"})
+        ):
+            with pytest.raises(socket.gaierror, match="non-public IP"):
+                socket.getaddrinfo("proxy.example", 3128)
+
+
+def test_pin_dns_lets_a_dns_named_exempt_proxy_resolve_to_public() -> None:
+    original_getaddrinfo = socket.getaddrinfo
+
+    def public_getaddrinfo(host, port, *args, **kwargs):
+        if host == "proxy.example":
+            return _addrinfo("93.184.216.34", port or 3128)
+        return original_getaddrinfo(host, port, *args, **kwargs)
+
+    with patch.object(url_safety.socket, "getaddrinfo", side_effect=public_getaddrinfo):
+        with url_safety._pin_dns(
+            "pinned.example", "8.8.8.8", 443, exempt_hosts=frozenset({"proxy.example"})
+        ):
+            assert socket.getaddrinfo("proxy.example", 3128)[0][4][0] == "93.184.216.34"

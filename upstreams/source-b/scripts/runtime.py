@@ -2,8 +2,11 @@
 """Cross-platform runtime for Claude SEO's bundled Python scripts.
 
 This module deliberately uses only the Python standard library. It is launched
-by ``bin/claude-seo`` under a base Python, then dispatches work through the
-managed virtual environment created by ``setup``.
+by the sibling ``scripts/claude-seo`` launcher under a base Python, then
+dispatches work through the managed virtual environment created by ``setup``.
+Skills, agents, and hooks invoke that launcher as
+``"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo"``; the repository keeps no
+top-level ``bin/`` directory because hosted marketplaces reject one.
 """
 
 from __future__ import annotations
@@ -27,7 +30,7 @@ EXTENSION_NAME_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 MANUAL_EXTENSION_SKILLS = {"banana": "seo-image-gen"}
 ALLOWED_CORE_SCRIPTS = frozenset(
     {
-        "agent_ux_check.py", "analyze_visual.py", "backlinks_auth.py",
+        "agent_ux_check.py", "agentic_check.py", "agentic_fix.py", "analyze_visual.py", "backlinks_auth.py",
         "bing_webmaster.py", "capture_screenshot.py", "commoncrawl_graph.py",
         "content_humanize.py", "content_quality.py", "content_verify.py",
         "crux_history.py", "dataforseo_costs.py", "dataforseo_merchant.py",
@@ -36,7 +39,9 @@ ALLOWED_CORE_SCRIPTS = frozenset(
         "ga4_report.py", "gbp_deprecation_lint.py", "google_auth.py",
         "google_report.py", "gsc_inspect.py", "gsc_query.py", "indexing_notify.py",
         "indexnow_submit.py", "iptc_ai_label.py", "keyword_planner.py",
-        "lcp_subparts.py", "moz_api.py", "nlp_analyze.py", "pagespeed_check.py",
+        "keywordseverywhere_api.py",
+        "lcp_subparts.py", "lighthouse_agentic.py", "matomo_auth.py", "matomo_report.py", "metadata_template.py",
+        "moz_api.py", "nlp_analyze.py", "pagespeed_check.py",
         "parasite_risk.py", "parse_html.py", "preload_check.py", "render_page.py",
         "portability_check.py", "consistency_check.py",
         "schema_ecommerce_validate.py", "schema_generate.py", "seo_updates.py",
@@ -195,11 +200,25 @@ def _safe_env(status: dict[str, Any]) -> dict[str, str]:
     return env
 
 
+def _home_pattern(home: str) -> re.Pattern[str]:
+    # Child output quotes paths in repr form (doubled or quadrupled separators
+    # once nested) and Windows tools mix drive-letter case, so match the home
+    # directory by its segments rather than by the exact string.
+    parts = [re.escape(part) for part in re.split(r"[\\/]+", home) if part]
+    if not parts:
+        # A root home directory would otherwise redact every path separator.
+        return re.compile(r"(?!x)x")
+    pattern = r"[\\/]+".join(parts)
+    if home[:1] in ("\\", "/"):
+        pattern = r"[\\/]+" + pattern
+    return re.compile(pattern, re.IGNORECASE)
+
+
 def _redact(text: str) -> str:
     try:
         home = str(Path.home())
         if home:
-            text = text.replace(home, "<home>")
+            text = _home_pattern(home).sub("<home>", text)
     except RuntimeError:
         pass
     for pattern, replacement in REDACTIONS:
@@ -207,12 +226,22 @@ def _redact(text: str) -> str:
     return text
 
 
+def _tail(text: str, limit: int = 30, width: int = 400) -> str:
+    lines = [line.rstrip()[:width] for line in text.splitlines() if line.strip()]
+    return "\n".join(f"  {line}" for line in lines[-limit:])
+
+
 def _run_checked(
     argv: list[str], *, env: dict[str, str], stage: str
 ) -> subprocess.CompletedProcess[str]:
     result = subprocess.run(argv, env=env, capture_output=True, text=True, encoding="utf-8", errors="replace")
     if result.returncode:
-        raise RuntimeError(f"{stage} failed with exit code {result.returncode}")
+        # The child's own diagnostics (pip's OSError, a missing ensurepip,
+        # a proxy rejection) are the only thing that makes the failure
+        # actionable; the exit code alone is not.
+        detail = _tail(result.stderr or result.stdout)
+        message = f"{stage} failed with exit code {result.returncode}"
+        raise RuntimeError(f"{message}\n{detail}" if detail else message)
     return result
 
 
@@ -258,9 +287,21 @@ def command_setup(args: argparse.Namespace) -> int:
     had_previous = final_venv.exists()
     try:
         with SetupLock(data_dir / ".setup.lock"):
-            print("Creating isolated Claude SEO environment...")
-            _run_checked([sys.executable, "-m", "venv", str(staged)], env=env, stage="virtual environment creation")
+            print("Creating isolated Claude SEO environment...", flush=True)
+            # venv bootstraps pip itself but discards ensurepip's output, so a
+            # failing bootstrap would surface only as "ensurepip returned 1".
+            # Running it as its own stage keeps pip's diagnostics visible.
+            _run_checked(
+                [sys.executable, "-m", "venv", "--without-pip", str(staged)],
+                env=env,
+                stage="virtual environment creation",
+            )
             staged_python = _venv_python(staged)
+            _run_checked(
+                [str(staged_python), "-m", "ensurepip", "--upgrade", "--default-pip"],
+                env=env,
+                stage="pip bootstrap",
+            )
             _run_checked(
                 [str(staged_python), "-m", "pip", "install", "--disable-pip-version-check", "-r", str(root / "requirements.txt")],
                 env=env,
@@ -275,7 +316,7 @@ def command_setup(args: argparse.Namespace) -> int:
                     )
                     browser_ready = True
                 except RuntimeError as exc:
-                    print(f"Browser setup incomplete: {exc}", file=sys.stderr)
+                    print(f"Browser setup incomplete: {_redact(str(exc))}", file=sys.stderr)
             _run_checked(
                 [
                     str(staged_python),

@@ -11,7 +11,7 @@ argument-hint: "[url or plan]"
 license: MIT
 metadata:
   author: AgriciDaniel
-  version: "2.2.5"
+  version: "2.4.1"
   category: seo
 ---
 
@@ -84,7 +84,7 @@ Design templates that produce unique, valuable pages:
 
 Google's Scaled Content Abuse policy (introduced March 2024) saw major enforcement escalation in 2025:
 
-- **June 2025:** Wave of manual actions targeting websites with AI-generated content at scale
+- **June 2025:** Third-party reports described a wave of manual actions against sites publishing AI-generated content at scale (no Google announcement)
 - **August 2025:** Third-party/SEO-community reporting described stronger SpamBrain detection for AI-generated link schemes and content farms
 - **Result:** Google reported 45% reduction in low-quality, unoriginal content in search results post-March 2024 enforcement
 
@@ -93,7 +93,7 @@ Google's Scaled Content Abuse policy (introduced March 2024) saw major enforceme
 - **Human review:** Minimum 5-10% sample review of generated pages before publishing
 - **Progressive rollout:** Publish in batches of 50-100 pages. Monitor indexing and rankings for 2-4 weeks before expanding. Never publish 500+ programmatic pages simultaneously without explicit quality review.
 - **Standalone value test:** Each page should pass: "Would this page be worth publishing even if no other similar pages existed?"
-- **Site reputation abuse:** Google clarified site reputation abuse language on 2024-11-19; treat third-party/hosted programmatic content as a policy risk.
+- **Site reputation abuse:** Google clarified site reputation abuse language on 2024-11-19; treat third-party/hosted programmatic content as a policy risk. Since 2026-08-30 (announced 2026-08-28) enforcement depends on the searcher: manual actions apply outside the EEA, while for EEA users the third-party section may be categorized separately from the main domain. Report the risk for both audiences.
 
 > **Recommendation:** The WARNING gate at `<40% unique content` remains appropriate. Consider a HARD STOP at `<30%` unique content to prevent scaled content abuse risk.
 
@@ -115,6 +115,8 @@ Google's Scaled Content Abuse policy (introduced March 2024) saw major enforceme
 Unique content % = (words unique to this page) / (total words on page) × 100
 
 Measure against all other pages in the programmatic set. Shared headers, footers, and navigation are excluded from the calculation. Template boilerplate text IS included.
+
+**Metadata is scored separately.** This calculation covers body copy only, so a set that passes it can still carry one generated title/description shape on every URL. Run `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run metadata_template.py --pairs-file <file> --json` (heuristic, deterministic string comparison) over the whole set and treat a `site_risk` of `high` as a gate failure regardless of body uniqueness.
 
 ## Canonical Strategy
 

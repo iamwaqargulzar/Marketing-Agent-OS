@@ -1,20 +1,16 @@
 ---
 name: seo-cluster
 description: >
-  SERP-based semantic topic clustering for content architecture planning. Groups
-  keywords by actual Google SERP overlap (not text similarity), designs hub-and-spoke
-  content clusters with internal link matrices, and generates interactive
-  visualizations. Optionally executes content creation if claude-blog is installed.
-  Use when user says "topic cluster", "content cluster", "semantic clustering",
-  "pillar page", "hub and spoke", "content architecture", "keyword grouping",
-  or "cluster plan".
+  Cluster keywords by SERP overlap and design hub-and-spoke content architecture
+  with internal links. Use for planning only; use the blog-cluster command to
+  execute article production.
 user-invocable: true
 argument-hint: "<seed-keyword or url>"
 license: MIT
 metadata:
   author: AgriciDaniel
   original_author: "Lutfiya Miller (Pro Hub Challenge Winner)"
-  version: "2.2.5"
+  version: "2.4.1"
   category: seo
 ---
 
@@ -80,7 +76,7 @@ the full algorithm.
 - Skip pairs where both are long-tail variants of the same head term (assume same cluster)
 
 **DataForSEO integration:** If DataForSEO MCP is available, use `serp_organic_live_advanced`
-instead of WebSearch for SERP data. Run `claude-seo run dataforseo_costs.py check serp_organic_live_advanced --count N`
+instead of WebSearch for SERP data. Run `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run dataforseo_costs.py check serp_organic_live_advanced --count N`
 before each batch. If `"status": "needs_approval"`, show cost estimate and ask user.
 If `"status": "blocked"`, fall back to WebSearch.
 
@@ -312,7 +308,7 @@ After cluster planning or execution completes, offer:
 
 ## Security
 
-- All URLs fetched via `claude-seo run render_page.py <url> --mode auto` (SPA-aware SSRF protection via `url_safety`)
+- All URLs fetched via `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run render_page.py <url> --mode auto` (SPA-aware SSRF protection via `url_safety`)
 - No credentials stored or transmitted
 - Output files contain no PII or API keys
 - DataForSEO cost checks run before every API call

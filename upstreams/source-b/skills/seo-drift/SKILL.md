@@ -12,7 +12,7 @@ license: MIT
 metadata:
   author: AgriciDaniel
   original_author: "Dan Colta (Pro Hub Challenge)"
-  version: "2.2.5"
+  version: "2.4.1"
   category: seo
 ---
 
@@ -95,16 +95,16 @@ Captures the current state of a page and stores it.
 
 **Steps:**
 1. Validate URL (SSRF protection via `google_auth.validate_url()`)
-2. Fetch page via `claude-seo run fetch_page.py <URL>`
-3. Parse HTML via `claude-seo run parse_html.py <URL>`
-4. Optionally fetch CWV via `claude-seo run pagespeed_check.py <URL>` (use `--skip-cwv` to skip)
+2. Fetch page via `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run fetch_page.py <URL>`
+3. Parse HTML via `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run parse_html.py <URL>`
+4. Optionally fetch CWV via `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run pagespeed_check.py <URL>` (use `--skip-cwv` to skip)
 5. Hash HTML body and schema content (SHA-256)
 6. Store snapshot in SQLite
 
 **Execution:**
 ```bash
-claude-seo run drift_baseline.py <url>
-claude-seo run drift_baseline.py <url> --skip-cwv
+"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run drift_baseline.py <url>
+"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run drift_baseline.py <url> --skip-cwv
 ```
 
 **Output:** JSON with baseline ID, timestamp, URL, and summary of captured elements.
@@ -126,16 +126,16 @@ Fetches the current page state and diffs it against the most recent baseline.
 
 **Execution:**
 ```bash
-claude-seo run drift_compare.py <url>
-claude-seo run drift_compare.py <url> --baseline-id 5
-claude-seo run drift_compare.py <url> --skip-cwv
+"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run drift_compare.py <url>
+"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run drift_compare.py <url> --baseline-id 5
+"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run drift_compare.py <url> --skip-cwv
 ```
 
 **Output:** JSON with all triggered rules, old/new values, severity, and actions.
 
 After comparison, offer to generate an HTML report:
 ```bash
-claude-seo run drift_report.py <comparison_json_file> --output drift-report.html
+"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run drift_report.py <comparison_json_file> --output drift-report.html
 ```
 
 ---
@@ -146,8 +146,8 @@ Shows all baselines and comparisons for a URL.
 
 **Execution:**
 ```bash
-claude-seo run drift_history.py <url>
-claude-seo run drift_history.py <url> --limit 10
+"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run drift_history.py <url>
+"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run drift_history.py <url> --limit 10
 ```
 
 **Output:** JSON array of baselines (newest first) with timestamps and comparison summaries.
@@ -187,7 +187,7 @@ When drift is detected, recommend the appropriate specialized skill:
 
 ## Security
 
-- **All URL fetching** goes through `claude-seo run fetch_page.py`, which enforces SSRF protection
+- **All URL fetching** goes through `"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run fetch_page.py`, which enforces SSRF protection
   (blocks private IPs, loopback, reserved ranges, GCP metadata endpoints)
 - **No curl, no subprocess HTTP calls** -- only the project's validated fetch pipeline
 - **All SQLite queries** use parameterized placeholders (`?`), never string interpolation

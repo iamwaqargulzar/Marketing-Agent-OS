@@ -17,6 +17,9 @@ Usage::
     python scripts/seo_updates.py --kind core
     python scripts/seo_updates.py --json
     python scripts/seo_updates.py --unverified     # show 3rd-party claims awaiting check
+
+JSON output carries ``freshness`` (age in days, ``stale`` after 30 days). Text
+output prints a warning to stderr when the ledger is stale.
 """
 
 from __future__ import annotations
@@ -29,6 +32,36 @@ from pathlib import Path
 from typing import Iterable
 
 _DATA_FILE = Path(__file__).resolve().parents[1] / "data" / "google-updates.json"
+
+
+# Every kind the ledger schema accepts. tests/test_content_quality.py asserts the
+# ledger only uses these, and the CLI --kind filter accepts exactly the same set.
+KNOWN_KINDS = (
+    "core", "spam", "core+spam", "policy", "qrg", "product", "schema", "cwv",
+    "discover", "documentation",
+)
+
+
+STALE_AFTER_DAYS = 30
+_STATUS_URL = "https://status.search.google.com/"
+
+
+def freshness(last_verified: str | None, today: date | None = None,
+              max_age: int = STALE_AFTER_DAYS) -> dict:
+    """Return the ledger age and whether it is too old to trust for recent updates."""
+    today = today or date.today()
+    try:
+        verified = date.fromisoformat(str(last_verified))
+    except ValueError:
+        return {"age_days": None, "stale": True,
+                "warning": "last_verified is missing or not an ISO date."}
+    age = (today - verified).days
+    stale = age > max_age
+    warning = (f"Ledger last verified {age} days ago. Updates released since "
+               f"{verified.isoformat()} are missing; check {_STATUS_URL} before "
+               "attributing recent traffic changes.") if stale else None
+    return {"age_days": age, "stale": stale, "warning": warning}
+
 
 
 def _load() -> dict:
@@ -54,7 +87,12 @@ def _filter(
             since_date = date.fromisoformat(since)
         out = [u for u in out if date.fromisoformat(u["date"]) >= since_date]
     if kinds:
-        out = [u for u in out if u.get("kind") in kinds]
+        # A combined "core+spam" rollout is both a core and a spam update, so
+        # asking for either one must include it (e.g. March 2024).
+        wanted = set(kinds)
+        if wanted & {"core", "spam"}:
+            wanted.add("core+spam")
+        out = [u for u in out if u.get("kind") in wanted]
     out.sort(key=lambda u: u["date"], reverse=True)
     return out
 
@@ -70,7 +108,7 @@ def main() -> int:
     parser.add_argument(
         "--kind",
         action="append",
-        choices=("core", "spam", "core+spam", "policy", "qrg", "product", "schema", "cwv", "discover"),
+        choices=KNOWN_KINDS,
         help="Filter to one or more kinds (repeatable).",
     )
     parser.add_argument(
@@ -87,6 +125,9 @@ def main() -> int:
     args = parser.parse_args()
 
     data = _load()
+    fresh = freshness(data.get("last_verified"))
+    if fresh["stale"] and not args.json:
+        print(f"WARNING: {fresh['warning']}", file=sys.stderr)
 
     if args.unverified:
         result = {
@@ -120,6 +161,7 @@ def main() -> int:
             {
                 "source_of_truth": data["source_of_truth"],
                 "last_verified": data["last_verified"],
+                "freshness": fresh,
                 "filter": {"since": args.since, "kinds": list(kinds or [])},
                 "count": len(filtered),
                 "updates": filtered,

@@ -132,23 +132,18 @@ upgrade.
 | Assuming `aimh/main` and `origin/main` should have equal SHAs | Compare and explain the reviewed tree differences; never force-sync |
 | Confusing `aimh/v2` with `origin/v2` | `origin` should never have an unreleased `v2` branch |
 
-## State after v2.2.5 maintenance (2026-08-26)
+## State after v2.4.0 (2026-09-24)
 
-- The public v2.2.5 tag is `2384fdd`; reviewed post-release maintenance runs
-  through `3344796` before the documentation update that records this state.
-- The private v2.2.5 tag is `d76a8dd`; reviewed post-release maintenance runs
-  through `9f5dd20` before any matching documentation update.
-- Each repository has a repository-specific annotated `v2.2.5` tag.
-- Private `main` and `v2` include reviewed maintenance through `9f5dd20`.
-- Public `main` includes reviewed maintenance through `3344796` and has no
-  public `v2` branch.
-- The private sync preserves private-only research and the
-  `ai-marketing-hub-claude-seo` marketplace identity.
+- Public `main` and the annotated `v2.4.0` tag point to `e77e783`; the tag was
+  pushed before `main` moved, and all 12 checks passed on that commit.
+- Private `main` and `v2` point to `a11a4d3`, tagged `v2.4.0-private`.
+- Both trees differ only in the documented identity files.
+- v2.4.1 was cut from `e77e783` on `release/v2.4.1`.
 
 ## Email-privacy caveat (one-time)
 
 Two very old tags (`v1.2.0`, `v1.4.0`) could not be pushed to the
 private repo because the underlying commits use a private email address
 that GitHub now blocks. These tags remain available on `origin` only.
-Not a regression — those releases shipped on public and are reachable
+Not a regression: those releases shipped on public and are reachable
 there.
