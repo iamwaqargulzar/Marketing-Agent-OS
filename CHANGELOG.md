@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Refreshed source C to `36c4c65c84662dd8aa11f9d462c7f791662c9983`. Reviewed its installer, fetcher, dependency, report-template, and chart changes; these remain isolated in the audited source snapshot because the normalized installer and reporting tools are independently maintained.
 - Refreshed source D to v2.11.1 commit `5b2c0007766c6a1cf1d53fd8fc73e979e0821022` and added portable AI-citation format-volatility guidance to `ai-seo`, keeping platform-specific observations time-bound and measurement-based.
 
 ## 1.2.0 — 2026-09-04

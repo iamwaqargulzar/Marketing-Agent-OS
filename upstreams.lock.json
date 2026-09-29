@@ -21,12 +21,12 @@
       "url": "https://github.com/AgriciDaniel/claude-seo.git"
     },
     "source-c": {
-      "commit": "9484cf0920da04448cf89ea7d710cffeddbbdcab",
-      "file_count": 71,
+      "commit": "36c4c65c84662dd8aa11f9d462c7f791662c9983",
+      "file_count": 72,
       "license": "MIT",
       "path": "upstreams/source-c",
       "repository": "zubair-trabzada/geo-seo-claude",
-      "tree_sha256": "3138c8c293f1cf9b39ffdae7bb14d88dede53c48c11c2d75b16ac0e25855524b",
+      "tree_sha256": "9f011810873c471f27d28e5cab294e195340c10a01c5125559d1947d893da582",
       "url": "https://github.com/zubair-trabzada/geo-seo-claude.git"
     },
     "source-d": {
