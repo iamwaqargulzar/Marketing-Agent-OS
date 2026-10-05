@@ -9,7 +9,7 @@ Open-source programmatic video framework from HeyGen. Create videos from HTML/CS
 | API | - | Library, not a hosted service |
 | MCP | - | - |
 | CLI | Yes | `npx hyperframes render` |
-| SDK | Yes | Node.js/TypeScript package |
+| SDK | Yes | `@hyperframes/producer` for rendering from code; the `hyperframes` package itself is CLI-only |
 
 ## Why Hyperframes
 
@@ -21,133 +21,69 @@ Open-source programmatic video framework from HeyGen. Create videos from HTML/CS
 ## Install
 
 ```bash
-npm install hyperframes
+npx hyperframes <command>          # or: npm install -g hyperframes
 ```
 
-Requires: Node.js 22+, Chrome/Chromium (for rendering)
+Requires Node.js 22+ and FFmpeg. The `hyperframes` package is a **CLI only**; it has no importable API. For rendering from your own code, use `@hyperframes/producer` (below). Checked against v0.8.114, Oct 2026.
 
-## Quick Start
+## Quick Start (CLI)
 
-```typescript
-import { render } from "hyperframes";
-
-await render({
-  frames: [
-    {
-      html: `
-        <div style="display:flex; align-items:center; justify-content:center;
-                    height:100%; background:#000; color:#fff; font-family:system-ui;">
-          <h1 style="font-size:64px;">Welcome to Acme</h1>
-        </div>
-      `,
-      duration: 3,
-    },
-    {
-      html: `
-        <div style="display:flex; flex-direction:column; align-items:center;
-                    justify-content:center; height:100%; background:#000; color:#fff;
-                    font-family:system-ui;">
-          <h2 style="font-size:48px;">Ship faster with AI</h2>
-          <p style="font-size:24px; color:#888;">Try it free today</p>
-        </div>
-      `,
-      duration: 3,
-    },
-  ],
-  output: "intro.mp4",
-  width: 1080,
-  height: 1920, // 9:16 vertical
-  fps: 30,
-});
+```bash
+npx hyperframes init my-video        # scaffold a project from a template
+cd my-video
+npx hyperframes preview              # live preview in the Studio (localhost:3002)
+npx hyperframes render -o output.mp4 # render the project's index.html
+npx hyperframes render -c ./promo.html -o promo.mp4   # render a specific composition
+npx hyperframes lint .               # catch composition errors before rendering
 ```
 
-## Core Concepts
+## How a Composition Works
 
-### Frames
-
-Each frame is an HTML document rendered at a specific point in the timeline. Think of it as a slide with a duration.
-
-```typescript
-{
-  html: "<div>...</div>",  // Full HTML content
-  duration: 3,              // Seconds to display
-  css?: "body { ... }",     // Optional external CSS
-}
-```
-
-### Transitions
-
-CSS transitions and animations work between frames:
+A composition is an HTML file. The root element declares the canvas and total length, each visible element is a **clip** with its own start, duration, and track, and animation runs on a paused GSAP timeline that Hyperframes drives frame by frame. This is the shape of the package's own `blank` template:
 
 ```html
-<div style="animation: fadeIn 0.5s ease-in;">
-  <h1>Slide In</h1>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+<div id="root" data-composition-id="main"
+     data-start="0" data-duration="8" data-width="1080" data-height="1920">
+  <h1 id="title" class="clip" data-start="0" data-duration="4" data-track-index="0">Welcome to Acme</h1>
+  <p id="cta" class="clip" data-start="4" data-duration="4" data-track-index="0">Try it free</p>
 </div>
-<style>
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-</style>
+
+<script>
+  const tl = gsap.timeline({ paused: true });
+  tl.fromTo("#title", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6 }, 0);
+  tl.fromTo("#cta", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 4);
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+</script>
 ```
 
-### Data-Driven Videos
+- **Timing** lives in `data-start` and `data-duration` (seconds). `data-track-index` layers clips that overlap.
+- **Size** comes from `data-width` and `data-height` on the root; set the page's `html, body` to the same size in CSS.
+- **Animation** goes on the GSAP timeline, keyed to the same start times. Register it under the composition's id.
+- Run `npx hyperframes lint` after editing; it catches missing attributes and timing mistakes.
 
-Generate frames from data for batch production:
+## Rendering from Code
 
 ```typescript
-const features = ["Analytics", "Automation", "AI Insights"];
+import { createRenderJob, executeRenderJob } from "@hyperframes/producer";
 
-const frames = features.map((feature) => ({
-  html: `
-    <div style="display:flex; align-items:center; justify-content:center;
-                height:100%; background:linear-gradient(135deg, #667eea, #764ba2);
-                color:#fff; font-family:system-ui;">
-      <h1 style="font-size:56px;">${feature}</h1>
-    </div>
-  `,
-  duration: 2.5,
-}));
-
-await render({ frames, output: "features.mp4", width: 1080, height: 1920 });
+const job = createRenderJob({ fps: 30, quality: "standard" });
+await executeRenderJob(job, "./my-video", "./output.mp4");
 ```
 
-## Common Marketing Templates
+`createRenderJob` takes the render settings (`fps` and `quality` are required; `entryFile`, `format`, `variables`, and others are optional). `executeRenderJob` takes the job, the project directory, and the output path.
 
-### Product Announcement
+## Data-Driven Videos
 
-```typescript
-const frames = [
-  { html: hookSlide("Something new is here"), duration: 2 },
-  { html: featureSlide(title, description, screenshot), duration: 4 },
-  { html: ctaSlide("Try it free →", url), duration: 3 },
-];
-```
+For batch or personalized videos, generate one composition per row (a changelog entry, a customer, a metric), then render each:
 
-### Testimonial Video
+1. Keep one hand-built composition as the template.
+2. For each row, write a copy with the row's text, numbers, and images filled in, and the clip timings adjusted if the content length changes.
+3. Lint, then render each file with `npx hyperframes render -c <file> -o <name>.mp4` or `executeRenderJob` in a loop.
 
-```typescript
-const frames = [
-  { html: quoteSlide(testimonial.text), duration: 4 },
-  { html: attributionSlide(testimonial.author, testimonial.company), duration: 2 },
-  { html: ctaSlide("Join 1,000+ happy customers"), duration: 3 },
-];
-```
-
-### Stats/Metrics Video
-
-```typescript
-const metrics = [
-  { label: "Users", value: "10,000+" },
-  { label: "Uptime", value: "99.9%" },
-  { label: "NPS", value: "72" },
-];
-
-const frames = metrics.map(m => ({
-  html: metricSlide(m.label, m.value),
-  duration: 2.5,
-}));
-```
+Product announcements, changelog videos, testimonial cards, and stat reveals all fit this pattern: a short sequence of clips with text, an image or two, and one or two GSAP moves each.
 
 ## Aspect Ratios
 
@@ -164,7 +100,7 @@ const frames = metrics.map(m => ({
 |--------|-------------|----------|
 | Language | HTML/CSS/JS | React/TypeScript |
 | Agent compatibility | Better (plain HTML) | Good (needs React knowledge) |
-| Animation | CSS transitions/keyframes | Spring physics, interpolation |
+| Animation | GSAP timeline (plus CSS) | Spring physics, interpolation |
 | Cloud rendering | Not built-in | Lambda (AWS) |
 | License | Apache 2.0 (free) | Company license for commercial use |
 | Ecosystem | New, growing | Mature, large community |

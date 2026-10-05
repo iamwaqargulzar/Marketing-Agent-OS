@@ -13,10 +13,10 @@ The package was checked against these upstream revisions. The snapshot date refl
 
 | Repository | Commit |
 |---|---|
-| `aaron-marketing-skills` | `f695301db323d6f6c9c34e399d01a7c76445c992` |
-| `claude-seo` | `ff87fcee0734845d3f59128c8c905799ee2298da` |
-| `geo-seo-claude` | `36c4c65c84662dd8aa11f9d462c7f791662c9983` |
-| `marketingskills` | `5b2c0007766c6a1cf1d53fd8fc73e979e0821022` |
+| `aaron-marketing-skills` | `3f68ddad1f01a43a45e3a075ccff2d146644a4ad` |
+| `claude-seo` | `4b99de2f7de7e7d5247042e5fb5b4ea9368ef734` |
+| `geo-seo-claude` | `ea29bd291a0b52648ef92a80d84a2e1f89ef754b` |
+| `marketingskills` | `dda3841f0b294e01e93b1541486beefbfab0915e` |
 
 ## Scope and structure
 
@@ -34,4 +34,4 @@ The updater never merges upstream files directly into `skills/`. This separation
 | `source-c` | `geo-seo-claude` |
 | `source-d` | `marketingskills` |
 
-See `docs/MAINTENANCE.md` for the update workflow, `docs/UPSTREAM_REVIEW-2026-09-29.md` for the latest review decisions, and `UPSTREAM_STATUS.json` for the inventory reconciliation.
+See `docs/MAINTENANCE.md` for the update workflow, `docs/UPSTREAM_REVIEW-2026-10-05.md` for the latest review decisions, and `UPSTREAM_STATUS.json` for the inventory reconciliation.

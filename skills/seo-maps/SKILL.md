@@ -3,7 +3,7 @@ name: seo-maps
 description: "Compatibility skill for seo maps. Use when a user or upstream workflow invokes this name; route the task to `seo-audit` while preserving the requested scope and source-specific intent."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "seo-geo"
   provenance: "marketing-agent-os"
 ---
@@ -30,6 +30,7 @@ Use this skill for **seo maps**. Start from the user’s concrete objective and 
 2. Preserve any narrower intent implied by the compatibility name instead of broadening the task.
 3. Mention the canonical skill only when that helps the user understand routing; do not force migration.
 4. Return the same evidence labels, permission boundaries and handoff shape as canonical skills.
+5. For an authorized geo-grid comparison, keep business, keyword, coordinates, grid spacing, provider, locale/device, and collection date with each result. Persist a dated export only when requested; compare matching grids over time and separate missing observations from rank changes.
 
 ## Domain Checklist
 

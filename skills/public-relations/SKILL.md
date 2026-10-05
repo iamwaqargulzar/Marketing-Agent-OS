@@ -1,9 +1,9 @@
 ---
 name: public-relations
-description: "When the user wants help with public relations, earned media, press coverage, journalist outreach, or media strategy (not pull requests). Also use when the user mentions 'PR,' 'public relations,' 'press,' 'press release,' 'press coverage,' 'media outreach,' 'pitch a journalist,' 'get featured,' 'media list,' 'media kit,' 'press kit,' 'newsjacking,' 'news hijack,' 'HARO,' 'Qwoted,' 'Featured,' 'Help A Reporter,' 'reporter request,' 'tech press,' 'TechCrunch,' 'earned media,' 'thought leadership placement,' 'op-ed,' 'guest article,' 'press contacts,' or 'how do I get press.' Use this for earned media work — finding journalists, pitching stories, newsjacking, and responding to press requests. For startup/SaaS/AI directory submissions, see directory-submissions. For product launches, see launch. For social-media engagement, see social. For cold-email outreach to prospects, see cold-email."
+description: "Plan public relations, earned media, journalist outreach, press materials, or crisis communications. Use for media pitches, press releases, reporter requests, holding statements, reputation incidents, or a crisis response plan. For launch coordination use `launch`; for directory listings use `directory-submissions`; for prospect outreach use `cold-email`."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "gtm-sales"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,7 @@ Use this skill for **public relations**. Start from the user’s concrete object
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+8. For an incident or holding statement, read `references/crisis-communications.md`; establish verified facts, affected people, the response owner, and the next update before drafting.
 
 ## Domain Checklist
 
@@ -66,6 +67,7 @@ Prefer first-party/project evidence, then direct public sources, then reputable 
 - `references/routing-policy.md` — precedence and conflict resolution
 - `references/product-context-schema.md` — shared marketing context
 - `references/connectors.md` — optional data/tool integrations
+- `references/crisis-communications.md` — incident triage and factual holding statements
 
 ## Next Best Skill
 

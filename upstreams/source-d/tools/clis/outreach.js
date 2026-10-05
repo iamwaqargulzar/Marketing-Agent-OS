@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
+const rawArgs = process.argv.slice(2)
 const ACCESS_TOKEN = process.env.OUTREACH_ACCESS_TOKEN
 const BASE_URL = 'https://api.outreach.io/api/v2'
 
-if (!ACCESS_TOKEN) {
+if ((!ACCESS_TOKEN) && rawArgs.length > 0) {
   console.error(JSON.stringify({ error: 'OUTREACH_ACCESS_TOKEN environment variable required' }))
   process.exit(1)
 }
@@ -50,7 +51,7 @@ function parseArgs(args) {
   return result
 }
 
-const args = parseArgs(process.argv.slice(2))
+const args = parseArgs(rawArgs)
 const [cmd, sub, ...rest] = args._
 
 async function main() {
@@ -121,6 +122,9 @@ async function main() {
               },
             },
           }
+          if (args['mailbox-id']) {
+            body.data.relationships.mailbox = { data: { type: 'mailbox', id: args['mailbox-id'] } }
+          }
           result = await api('POST', '/sequenceStates', body)
           break
         }
@@ -164,7 +168,8 @@ async function main() {
       switch (sub) {
         case 'list': {
           const params = new URLSearchParams()
-          if (args.status) params.set('filter[status]', args.status)
+          const state = args.state || args.status
+          if (state) params.set('filter[state]', state)
           const qs = params.toString()
           result = await api('GET', `/tasks${qs ? '?' + qs : ''}`)
           break
@@ -188,7 +193,7 @@ async function main() {
             get: 'sequences get --id <id>',
           },
           'sequence-states': {
-            create: 'sequence-states create --sequence-id <id> --prospect-id <id>',
+            create: 'sequence-states create --sequence-id <id> --prospect-id <id> [--mailbox-id <sender_mailbox_id>]',
           },
           mailings: {
             list: 'mailings list [--sequence-id <id>]',
@@ -198,7 +203,7 @@ async function main() {
             get: 'accounts get --id <id>',
           },
           tasks: {
-            list: 'tasks list [--status <status>]',
+            list: 'tasks list [--state <pending|incomplete|complete>] (--status is an alias)',
           },
         }
       }

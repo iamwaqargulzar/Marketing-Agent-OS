@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
+const rawArgs = process.argv.slice(2)
 const LOGIN = process.env.DATAFORSEO_LOGIN
 const PASSWORD = process.env.DATAFORSEO_PASSWORD
 const BASE_URL = 'https://api.dataforseo.com/v3'
 
-if (!LOGIN || !PASSWORD) {
+if ((!LOGIN || !PASSWORD) && rawArgs.length > 0) {
   console.error(JSON.stringify({ error: 'DATAFORSEO_LOGIN and DATAFORSEO_PASSWORD environment variables required' }))
   process.exit(1)
 }
@@ -51,7 +52,7 @@ function parseArgs(args) {
   return result
 }
 
-const args = parseArgs(process.argv.slice(2))
+const args = parseArgs(rawArgs)
 const [cmd, sub, ...rest] = args._
 
 async function main() {
@@ -68,11 +69,24 @@ async function main() {
         case 'google': {
           const keyword = args.keyword
           if (!keyword) { result = { error: '--keyword required' }; break }
-          result = await api('POST', '/serp/google/organic/live/regular', [{
-            keyword,
-            location_name: location,
-            language_name: language,
-          }])
+          const task = { keyword }
+          if (args['location-code'] !== undefined) {
+            if (typeof args['location-code'] !== 'string' || !Number.isSafeInteger(locationCode) || locationCode <= 0) {
+              result = { error: '--location-code must be a positive integer' }; break
+            }
+            task.location_code = locationCode
+          } else {
+            task.location_name = location
+          }
+          if (args['language-code'] !== undefined) {
+            if (typeof args['language-code'] !== 'string' || !args['language-code'].trim()) {
+              result = { error: '--language-code requires a language code' }; break
+            }
+            task.language_code = languageCode
+          } else {
+            task.language_name = language
+          }
+          result = await api('POST', '/serp/google/organic/live/regular', [task])
           break
         }
         case 'locations':

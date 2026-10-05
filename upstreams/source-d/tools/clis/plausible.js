@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
+const rawArgs = process.argv.slice(2)
 const API_KEY = process.env.PLAUSIBLE_API_KEY
 const BASE_URL = process.env.PLAUSIBLE_BASE_URL || 'https://plausible.io'
 
-if (!API_KEY) {
+if ((!API_KEY) && rawArgs.length > 0) {
   console.error(JSON.stringify({ error: 'PLAUSIBLE_API_KEY environment variable required' }))
   process.exit(1)
 }
@@ -49,18 +50,32 @@ function parseArgs(args) {
   return result
 }
 
-const args = parseArgs(process.argv.slice(2))
+const args = parseArgs(rawArgs)
 const [cmd, sub, ...rest] = args._
+
+function statsDateRange(value) {
+  if (value === undefined) return '30d'
+  if (typeof value !== 'string') throw new Error('--date-range requires a preset or a JSON array of two date strings')
+  if (!value.trim().startsWith('[')) return value
+  let range
+  try { range = JSON.parse(value) } catch {
+    throw new Error('--date-range must be a valid JSON array of two date strings')
+  }
+  if (!Array.isArray(range) || range.length !== 2 || !range.every(date => typeof date === 'string' && date.trim())) {
+    throw new Error('--date-range must be a JSON array of two nonempty date strings')
+  }
+  return range
+}
 
 async function main() {
   let result
   const siteId = args['site-id']
-  const dateRange = args['date-range'] || '30d'
   const limit = args.limit ? Number(args.limit) : 100
 
   switch (cmd) {
     case 'stats':
       if (!siteId) { result = { error: '--site-id required (your domain, e.g. example.com)' }; break }
+      const dateRange = sub === 'realtime' ? undefined : statsDateRange(args['date-range'])
       switch (sub) {
         case 'aggregate': {
           const metrics = args.metrics?.split(',') || ['visitors', 'pageviews', 'bounce_rate', 'visit_duration']
@@ -234,7 +249,7 @@ async function main() {
           },
           sites: 'sites [list | get --site-id <domain> | create --domain <domain> | delete --site-id <domain>]',
           goals: 'goals [list | create --goal-type <event|page> --event-name <name> | delete --goal-id <id>] --site-id <domain>',
-          options: '--date-range <day|7d|30d|month|6mo|12mo|year> --limit <n>',
+          options: '--date-range <preset|JSON array [start,end]> --limit <n>',
           env: 'PLAUSIBLE_BASE_URL for self-hosted instances (default: https://plausible.io)',
         }
       }

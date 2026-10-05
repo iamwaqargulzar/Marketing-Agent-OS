@@ -14,7 +14,7 @@ license: MIT
 compatibility: "DataForSEO MCP for Tier 1+, Google Maps API for Tier 2"
 metadata:
   author: AgriciDaniel
-  version: "2.4.1"
+  version: "2.4.2"
   category: seo
 ---
 
@@ -84,6 +84,12 @@ variation across a geographic area. Requires DataForSEO.
 5. Find target business rank at each point
 6. Calculate SoLV: `(top_3_count / total_points) * 100`
 7. Render ASCII heatmap in output
+8. Save the grid for later comparison and for the seo-cockpit Maps view:
+   `{business-slug}-maps/geo-grid-{keyword-slug}-{YYYY-MM-DD}.json` with
+   `{"business", "keyword", "location", "date", "size", "radius_km", "solv",
+   "ranks": [[...], ...]}`, where `ranks` is row-major from north-west to
+   south-east and each cell is the business's rank at that point (an
+   integer), or `null` when it is not in the results
 
 ### Cost Warning (REQUIRED)
 

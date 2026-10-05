@@ -3,7 +3,7 @@ name: copywriting
 description: "Write or rewrite high-intent marketing copy grounded in product context, customer language, claims evidence, offer structure and conversion goals."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "content"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,7 @@ Use this skill for **copywriting**. Start from the user’s concrete objective a
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+8. Review the draft for formulaic contrast reveals, stacked negations, self-answered questions, stock openers, repeated sentence shapes, and vague benefits. Prefer supported facts, customer language, and a concrete CTA. Preserve the brand's chosen voice; do not invent proof while making the copy sound natural.
 
 ## Domain Checklist
 

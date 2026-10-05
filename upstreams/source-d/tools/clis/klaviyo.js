@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
+const rawArgs = process.argv.slice(2)
 const API_KEY = process.env.KLAVIYO_API_KEY
 const BASE_URL = 'https://a.klaviyo.com/api'
 const REVISION = '2024-10-15'
 
-if (!API_KEY) {
+if ((!API_KEY) && rawArgs.length > 0) {
   console.error(JSON.stringify({ error: 'KLAVIYO_API_KEY environment variable required' }))
   process.exit(1)
 }
@@ -52,7 +53,7 @@ function parseArgs(args) {
   return result
 }
 
-const args = parseArgs(process.argv.slice(2))
+const args = parseArgs(rawArgs)
 const [cmd, sub, ...rest] = args._
 
 async function main() {
@@ -183,11 +184,18 @@ async function main() {
           if (!metric) { result = { error: '--metric required (metric name)' }; break }
           if (!email) { result = { error: '--email required' }; break }
           const properties = {}
-          if (args.value) properties.value = Number(args.value)
+          let value
+          if (args.value !== undefined) {
+            if (typeof args.value !== 'string' || !args.value.trim() || !Number.isFinite(Number(args.value))) {
+              result = { error: '--value must be a finite number' }; break
+            }
+            value = Number(args.value)
+          }
           if (args.property) {
             const pairs = args.property.split(',')
             for (const pair of pairs) {
-              const [k, v] = pair.split(':')
+              const [k, ...valueParts] = pair.split(':')
+              const v = valueParts.join(':')
               if (k && v) properties[k] = v
             }
           }
@@ -198,6 +206,7 @@ async function main() {
                 metric: { data: { type: 'metric', attributes: { name: metric } } },
                 profile: { data: { type: 'profile', attributes: { email } } },
                 properties,
+                ...(value !== undefined ? { value } : {}),
                 time: new Date().toISOString(),
               }
             }

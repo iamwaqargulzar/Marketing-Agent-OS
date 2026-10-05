@@ -1,9 +1,9 @@
 ---
 name: sms
-description: "When the user wants to plan, build, or optimize SMS or MMS marketing — including welcome flows, abandoned cart texts, post-purchase, win-back, promotional sends, or transactional/auth SMS. Also use when the user mentions \"SMS marketing,\" \"text message campaigns,\" \"SMS sequence,\" \"SMS automation,\" \"abandoned cart text,\" \"post-purchase SMS,\" \"Klaviyo SMS,\" \"Postscript,\" \"Attentive,\" \"Twilio,\" \"A2P 10DLC,\" \"TCPA,\" \"SMS compliance,\" \"short code,\" \"toll-free SMS,\" \"MMS campaign,\" \"should I do SMS,\" or \"SMS vs email.\" For email sequences, see emails. For SMS copy framing, see copywriting. For opt-in popups that capture phone numbers, see popups."
+description: "Plan or improve SMS, MMS, and WhatsApp business messaging: consent, templates, customer-service windows, welcome/cart/post-purchase/win-back flows, transactional messages, deliverability, and measurement. Use for SMS campaigns, WhatsApp Business API, template planning, or click-to-WhatsApp journeys. For email use `emails`; for opt-in forms use `popups`."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "lifecycle"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,7 @@ Use this skill for **sms**. Start from the user’s concrete objective and avail
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+8. For WhatsApp, read `references/whatsapp.md`; verify current message eligibility and pricing by market, category, service window, and provider before recommending a send or budget.
 
 ## Domain Checklist
 
@@ -67,6 +68,7 @@ Prefer first-party/project evidence, then direct public sources, then reputable 
 - `references/routing-policy.md` — precedence and conflict resolution
 - `references/product-context-schema.md` — shared marketing context
 - `references/connectors.md` — optional data/tool integrations
+- `references/whatsapp.md` — templates, window eligibility, consent, and current pricing checks
 
 ## Next Best Skill
 

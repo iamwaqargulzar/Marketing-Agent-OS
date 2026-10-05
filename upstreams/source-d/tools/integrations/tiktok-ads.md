@@ -38,20 +38,14 @@ Access-Token: {access_token}
 ### Get campaign report
 
 ```bash
-POST https://business-api.tiktok.com/open_api/v1.3/report/integrated/get/
+GET https://business-api.tiktok.com/open_api/v1.3/report/integrated/get/?advertiser_id={advertiser_id}&report_type=BASIC&dimensions=["campaign_id"]&metrics=["spend","impressions","clicks","conversion"]&data_level=AUCTION_CAMPAIGN&start_date=2024-01-01&end_date=2024-01-31
 
 Access-Token: {access_token}
-
-{
-  "advertiser_id": "{advertiser_id}",
-  "report_type": "BASIC",
-  "dimensions": ["campaign_id"],
-  "metrics": ["spend", "impressions", "clicks", "conversion"],
-  "data_level": "AUCTION_CAMPAIGN",
-  "start_date": "2024-01-01",
-  "end_date": "2024-01-31"
-}
 ```
+
+Send report parameters in the query string. JSON-encode array values such as
+`dimensions` and `metrics`, then URL-encode the query values (the example shows
+decoded values for readability).
 
 ### Create campaign
 
@@ -86,10 +80,13 @@ Access-Token: {access_token}
 ### Get ad groups
 
 ```bash
-GET https://business-api.tiktok.com/open_api/v1.3/adgroup/get/?advertiser_id={advertiser_id}&campaign_ids=["{campaign_id}"]
+GET https://business-api.tiktok.com/open_api/v1.3/adgroup/get/?advertiser_id={advertiser_id}&filtering={"campaign_ids":["{campaign_id}"]}
 
 Access-Token: {access_token}
 ```
+
+Campaign IDs belong inside the JSON-encoded `filtering` query parameter.
+URL-encode that value before sending the request.
 
 ### Get audiences
 

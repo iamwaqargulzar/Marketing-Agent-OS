@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
+const rawArgs = process.argv.slice(2)
 const API_KEY = process.env.POSTMARK_API_KEY
 const BASE_URL = 'https://api.postmarkapp.com'
 
-if (!API_KEY) {
+if ((!API_KEY) && rawArgs.length > 0) {
   console.error(JSON.stringify({ error: 'POSTMARK_API_KEY environment variable required' }))
   process.exit(1)
 }
@@ -60,8 +61,15 @@ function parseArgs(args) {
   return result
 }
 
-const args = parseArgs(process.argv.slice(2))
+const args = parseArgs(rawArgs)
 const [cmd, sub, ...rest] = args._
+
+function booleanArg(name) {
+  const value = args[name]
+  if (value === true || value === 'true') return true
+  if (value === 'false') return false
+  throw new Error(`--${name} must be true or false (or a bare flag for true)`)
+}
 
 async function main() {
   let result
@@ -86,7 +94,7 @@ async function main() {
           if (!args.html && !args.text) body.TextBody = ''
           if (args.tag) body.Tag = args.tag
           if (args.stream) body.MessageStream = args.stream
-          if (args['track-opens']) body.TrackOpens = true
+          if (args['track-opens'] !== undefined) body.TrackOpens = booleanArg('track-opens')
           if (args['track-links']) body.TrackLinks = args['track-links']
           if (args.cc) body.Cc = args.cc
           if (args.bcc) body.Bcc = args.bcc
@@ -115,7 +123,8 @@ async function main() {
           if (args.model) {
             const pairs = args.model.split(',')
             for (const pair of pairs) {
-              const [k, v] = pair.split(':')
+              const [k, ...valueParts] = pair.split(':')
+              const v = valueParts.join(':')
               if (k && v) body.TemplateModel[k] = v
             }
           }
@@ -168,10 +177,11 @@ async function main() {
         case 'create': {
           const name = args.name
           if (!name) { result = { error: '--name required' }; break }
-          const body = {
-            Name: name,
-            Subject: args.subject || '',
+          if (args.type === 'Layout' && args.subject) {
+            result = { error: '--subject is not allowed for Layout templates' }; break
           }
+          const body = { Name: name }
+          if (args.type !== 'Layout') body.Subject = args.subject || ''
           if (args.html) body.HtmlBody = args.html
           if (args.text) body.TextBody = args.text
           if (args.alias) body.Alias = args.alias
@@ -355,13 +365,13 @@ async function main() {
         error: 'Unknown command',
         usage: {
           email: 'email [send --from <from> --to <to> --subject <subj> | send-template --from <from> --to <to> --template <id> | send-batch --from <from> --to <to1,to2> --subject <subj>]',
-          templates: 'templates [list | get --id <id> | create --name <name> | delete --id <id>]',
+          templates: 'templates [list | get --id <id> | create --name <name> [--type Standard|Layout] [--subject <subject> (Standard only)] | delete --id <id>]',
           bounces: 'bounces [list | get --id <id> | stats | activate --id <id>]',
           messages: 'messages [outbound | inbound | get --id <id>]',
           stats: 'stats [overview | sends | bounces | opens | clicks | spam]',
           server: 'server [get]',
           suppressions: 'suppressions [list | create --email <email> | delete --email <email>]',
-          options: '--tag <tag> --from <date> --to <date> --stream <stream-id>',
+          options: '--tag <tag> --from <date> --to <date> --stream <stream-id> --track-opens [true|false]',
         }
       }
   }

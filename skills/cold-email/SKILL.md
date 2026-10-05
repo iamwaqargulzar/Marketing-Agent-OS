@@ -3,7 +3,7 @@ name: cold-email
 description: "Write B2B cold outreach and follow-up sequences grounded in relevance, evidence, concise value, compliant sending practices and clear calls to action."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "lifecycle"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,7 @@ Use this skill for **cold email**. Start from the user’s concrete objective an
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+8. Use specific, sourced relevance and a low-friction next action. Remove formulaic praise, fake familiarity, stock openers, and repeated template shapes; do not manufacture a relationship, reply thread, or success evidence.
 
 ## Domain Checklist
 

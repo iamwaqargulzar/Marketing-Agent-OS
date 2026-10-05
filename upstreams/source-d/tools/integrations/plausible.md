@@ -175,3 +175,20 @@ GET https://plausible.io/api/v1/sites
 - programmatic-seo
 - cro
 - utm-tracking
+
+## Custom date ranges in the CLI
+
+Pass custom boundaries as a JSON array of two strings. For example:
+
+```bash
+node tools/clis/plausible.js stats aggregate --site-id example.com \
+  --date-range '["2026-09-01","2026-09-30"]'
+```
+
+ISO8601 timestamps are also supported, including their timezone offsets:
+`--date-range '["2026-09-01T12:00:00+02:00","2026-09-01T15:59:59+02:00"]'`.
+The CLI sends these values as an array without converting them to UTC. Existing
+presets (such as `7d`) and the default `30d` remain strings. Malformed arrays or
+arrays without exactly two nonempty strings fail before the stats request;
+Plausible validates the date values. See the
+[Stats API date_range contract](https://plausible.io/docs/stats-api).

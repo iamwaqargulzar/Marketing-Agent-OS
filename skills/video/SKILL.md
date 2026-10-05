@@ -1,9 +1,9 @@
 ---
 name: video
-description: "When the user wants to create, generate, or produce video content using AI tools or programmatic frameworks. Also use when the user mentions 'video production,' 'AI video,' 'Remotion,' 'Hyperframes,' 'HeyGen,' 'Synthesia,' 'Veo,' 'Sora,' 'Runway,' 'Kling,' 'Seedance,' 'Hailuo,' 'MiniMax,' 'Pika,' 'Hunyuan,' 'Wan,' 'video generation,' 'AI avatar,' 'talking head video,' 'programmatic video,' 'video template,' 'explainer video,' 'product demo video,' 'video pipeline,' 'copy this edit,' 'match this video style,' 'reverse-engineer this video,' 'edit like this reference,' or 'make me a video.' Use this for video creation, generation, and production workflows. For video content strategy and what to post, see social. For paid video ad creative, see ad-creative."
+description: "Create or edit marketing video, programmatic compositions, explainers, avatars, or repeatable product-demo recordings. Use for video production, AI video, Remotion, Hyperframes, in-app demos, scene timing, captions, or matching an edit style. For social strategy use `social`; for paid-ad concepts use `ad-creative`."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "content"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,7 @@ Use this skill for **video**. Start from the user’s concrete objective and ava
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+8. For a repeatable web-app demo or programmatic composition, read `references/production-workflows.md`; choose an installed or connected tool and verify its current render interface before writing executable examples.
 
 ## Domain Checklist
 
@@ -66,6 +67,7 @@ Prefer first-party/project evidence, then direct public sources, then reputable 
 - `references/routing-policy.md` — precedence and conflict resolution
 - `references/product-context-schema.md` — shared marketing context
 - `references/connectors.md` — optional data/tool integrations
+- `references/production-workflows.md` — product-demo recording and programmatic rendering
 
 ## Next Best Skill
 

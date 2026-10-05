@@ -39,22 +39,29 @@ Every CLI reads credentials from environment variables:
 | `activecampaign` | `ACTIVECAMPAIGN_API_KEY`, `ACTIVECAMPAIGN_API_URL` |
 | `adobe-analytics` | `ADOBE_ACCESS_TOKEN`, `ADOBE_CLIENT_ID`, `ADOBE_COMPANY_ID` |
 | `ahrefs` | `AHREFS_API_KEY` |
+| `airops` | `AIROPS_API_KEY`, `AIROPS_WORKSPACE_ID` |
 | `amplitude` | `AMPLITUDE_API_KEY`, `AMPLITUDE_SECRET_KEY` |
 | `apollo` | `APOLLO_API_KEY` |
 | `beehiiv` | `BEEHIIV_API_KEY` |
 | `brevo` | `BREVO_API_KEY` |
 | `buffer` | `BUFFER_API_KEY` |
 | `calendly` | `CALENDLY_API_KEY` |
+| `clay` | `CLAY_API_KEY` |
 | `clearbit` | `CLEARBIT_API_KEY` |
+| `close` | `CLOSE_API_KEY` |
+| `coupler` | `COUPLER_API_KEY` |
+| `crossbeam` | `CROSSBEAM_API_KEY` |
 | `customer-io` | `CUSTOMERIO_APP_KEY` (App API), `CUSTOMERIO_SITE_ID` + `CUSTOMERIO_API_KEY` (Track API) |
 | `dataforseo` | `DATAFORSEO_LOGIN`, `DATAFORSEO_PASSWORD` |
 | `demio` | `DEMIO_API_KEY`, `DEMIO_API_SECRET` |
 | `dub` | `DUB_API_KEY` |
 | `exa` | `EXA_API_KEY` |
+| `firecrawl` | `FIRECRAWL_API_KEY` |
 | `g2` | `G2_API_TOKEN` |
 | `ga4` | `GA4_ACCESS_TOKEN` |
 | `google-ads` | `GOOGLE_ADS_TOKEN`, `GOOGLE_ADS_DEVELOPER_TOKEN`, `GOOGLE_ADS_CUSTOMER_ID` |
 | `google-search-console` | `GSC_ACCESS_TOKEN` |
+| `github-prospects` | `GITHUB_TOKEN` |
 | `hotjar` | `HOTJAR_CLIENT_ID`, `HOTJAR_CLIENT_SECRET` |
 | `intercom` | `INTERCOM_API_KEY` |
 | `keywords-everywhere` | `KEYWORDS_EVERYWHERE_API_KEY` |
@@ -68,10 +75,13 @@ Every CLI reads credentials from environment variables:
 | `mixpanel` | `MIXPANEL_TOKEN` (ingestion), `MIXPANEL_API_KEY` + `MIXPANEL_SECRET` (query) |
 | `onesignal` | `ONESIGNAL_REST_API_KEY`, `ONESIGNAL_APP_ID` |
 | `optimizely` | `OPTIMIZELY_API_KEY` |
+| `outreach` | `OUTREACH_ACCESS_TOKEN` |
 | `paddle` | `PADDLE_API_KEY`, `PADDLE_SANDBOX` (optional) |
 | `partnerstack` | `PARTNERSTACK_PUBLIC_KEY`, `PARTNERSTACK_SECRET_KEY` |
+| `pendo` | `PENDO_INTEGRATION_KEY` |
 | `plausible` | `PLAUSIBLE_API_KEY`, `PLAUSIBLE_BASE_URL` (optional, for self-hosted) |
 | `postmark` | `POSTMARK_API_KEY` |
+| `rankparse` | `RANKPARSE_API_KEY` |
 | `resend` | `RESEND_API_KEY` |
 | `rewardful` | `REWARDFUL_API_KEY` |
 | `savvycal` | `SAVVYCAL_API_KEY` |
@@ -86,8 +96,11 @@ Every CLI reads credentials from environment variables:
 | `instantly` | `INSTANTLY_API_KEY` |
 | `lemlist` | `LEMLIST_API_KEY` |
 | `snov` | `SNOV_CLIENT_ID`, `SNOV_CLIENT_SECRET` |
+| `similarweb` | `SIMILARWEB_API_KEY` |
+| `supermetrics` | `SUPERMETRICS_API_KEY` |
 | `wistia` | `WISTIA_API_KEY` |
 | `zapier` | `ZAPIER_API_KEY` |
+| `zoominfo` | `ZOOMINFO_ACCESS_TOKEN` (or `ZOOMINFO_USERNAME` + `ZOOMINFO_PRIVATE_KEY`) |
 
 ## Security
 
@@ -138,22 +151,29 @@ DOMAINS=$(rewardful affiliates list | jq -r '.data[].email')
 | `activecampaign.js` | Email/CRM | [ActiveCampaign](https://activecampaign.com) |
 | `adobe-analytics.js` | Analytics | [Adobe Analytics](https://business.adobe.com/products/analytics) |
 | `ahrefs.js` | SEO | [Ahrefs](https://ahrefs.com) |
+| `airops.js` | AI Content | [AirOps](https://airops.com) |
 | `amplitude.js` | Analytics | [Amplitude](https://amplitude.com) |
 | `apollo.js` | Data Enrichment | [Apollo.io](https://apollo.io) |
 | `beehiiv.js` | Newsletter | [Beehiiv](https://beehiiv.com) |
-| `brevo.js` | Email/SMS | [Brevo](https://brevo.com) |
+| `brevo.js` | Email/SMS | [Brevo](https://www.brevo.com) |
 | `buffer.js` | Social | [Buffer](https://buffer.com) |
 | `calendly.js` | Scheduling | [Calendly](https://calendly.com) |
+| `clay.js` | Data Enrichment | [Clay](https://clay.com) |
 | `clearbit.js` | Data Enrichment | [Clearbit](https://clearbit.com) |
+| `close.js` | CRM | [Close](https://close.com) |
+| `coupler.js` | Data Aggregation | [Coupler](https://www.coupler.io) |
+| `crossbeam.js` | Partner Ecosystem | [Crossbeam](https://www.crossbeam.com) |
 | `customer-io.js` | Email | [Customer.io](https://customer.io) |
 | `dataforseo.js` | SEO | [DataForSEO](https://dataforseo.com) |
 | `demio.js` | Webinar | [Demio](https://demio.com) |
 | `dub.js` | Links | [Dub.co](https://dub.co) |
 | `exa.js` | AI Search | [Exa](https://exa.ai) |
+| `firecrawl.js` | Site Scraping & AI Search | [Firecrawl](https://firecrawl.dev) |
 | `g2.js` | Reviews | [G2](https://g2.com) |
 | `ga4.js` | Analytics | [Google Analytics 4](https://analytics.google.com) |
 | `google-ads.js` | Ads | [Google Ads](https://ads.google.com) |
 | `google-search-console.js` | SEO | [Google Search Console](https://search.google.com/search-console) |
+| `github-prospects.js` | Developer Intent / GitHub | [GitHub](https://github.com) |
 | `hotjar.js` | CRO | [Hotjar](https://hotjar.com) |
 | `hunter.js` | Email Outreach | [Hunter.io](https://hunter.io) |
 | `instantly.js` | Email Outreach | [Instantly.ai](https://instantly.ai) |
@@ -170,10 +190,13 @@ DOMAINS=$(rewardful affiliates list | jq -r '.data[].email')
 | `mixpanel.js` | Analytics | [Mixpanel](https://mixpanel.com) |
 | `onesignal.js` | Push | [OneSignal](https://onesignal.com) |
 | `optimizely.js` | A/B Testing | [Optimizely](https://optimizely.com) |
+| `outreach.js` | Sales Engagement | [Outreach](https://outreach.io) |
 | `paddle.js` | Payments | [Paddle](https://paddle.com) |
 | `partnerstack.js` | Affiliate | [PartnerStack](https://partnerstack.com) |
+| `pendo.js` | Product Analytics | [Pendo](https://pendo.io) |
 | `plausible.js` | Analytics | [Plausible](https://plausible.io) |
 | `postmark.js` | Email | [Postmark](https://postmarkapp.com) |
+| `rankparse.js` | SEO | [RankParse](https://rankparse.com) |
 | `resend.js` | Email | [Resend](https://resend.com) |
 | `rewardful.js` | Referral | [Rewardful](https://www.getrewardful.com) |
 | `savvycal.js` | Scheduling | [SavvyCal](https://savvycal.com) |
@@ -181,9 +204,12 @@ DOMAINS=$(rewardful affiliates list | jq -r '.data[].email')
 | `semrush.js` | SEO | [SEMrush](https://semrush.com) |
 | `sendgrid.js` | Email | [SendGrid](https://sendgrid.com) |
 | `snov.js` | Email Outreach | [Snov.io](https://snov.io) |
+| `similarweb.js` | Competitive Intelligence | [Similarweb](https://similarweb.com) |
+| `supermetrics.js` | Data Aggregation | [Supermetrics](https://supermetrics.com) |
 | `tiktok-ads.js` | Ads | [TikTok Ads](https://ads.tiktok.com) |
 | `tolt.js` | Referral | [Tolt](https://tolt.io) |
 | `trustpilot.js` | Reviews | [Trustpilot](https://trustpilot.com) |
 | `typeform.js` | Forms | [Typeform](https://typeform.com) |
 | `wistia.js` | Video | [Wistia](https://wistia.com) |
 | `zapier.js` | Automation | [Zapier](https://zapier.com) |
+| `zoominfo.js` | Data Enrichment | [ZoomInfo](https://zoominfo.com) |

@@ -3,7 +3,7 @@ name: seo-dataforseo
 description: "Compatibility skill for seo dataforseo. Use when a user or upstream workflow invokes this name; route the task to `seo` while preserving the requested scope and source-specific intent."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "seo-geo"
   provenance: "marketing-agent-os"
 ---
@@ -30,6 +30,7 @@ Use this skill for **seo dataforseo**. Start from the user’s concrete objectiv
 2. Preserve any narrower intent implied by the compatibility name instead of broadening the task.
 3. Mention the canonical skill only when that helps the user understand routing; do not force migration.
 4. Return the same evidence labels, permission boundaries and handoff shape as canonical skills.
+5. Before a paid provider call, verify current endpoint pricing, request volume, available credentials/connector, and the user's approved budget. Budget approval does not prove authentication is configured. Unknown pricing or ambiguous receipts require resolution before a charge or retry; report actual provider cost separately from an estimate.
 
 ## Domain Checklist
 

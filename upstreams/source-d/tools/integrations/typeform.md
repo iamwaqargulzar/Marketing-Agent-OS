@@ -57,12 +57,14 @@ POST https://api.typeform.com/forms
 ### Update a form
 
 ```bash
-PUT https://api.typeform.com/forms/{form_id}
+PATCH https://api.typeform.com/forms/{form_id}
 
-{
-  "title": "Updated Survey Title"
-}
+[
+  { "op": "replace", "path": "/title", "value": "Updated Survey Title" }
+]
 ```
+
+Use JSON Patch for a title-only change. `PUT` replaces the full form; omitted fields and their results are deleted. See [Typeform's partial-update contract](https://www.typeform.com/developers/create/reference/update-form-patch/).
 
 ### Delete a form
 

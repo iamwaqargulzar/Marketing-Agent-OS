@@ -17,8 +17,12 @@
 
 <a href="https://www.star-history.com/#zubair-trabzada/geo-seo-claude&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/star-history-dark.svg">
-    <img alt="Star History Chart" src="assets/star-history.svg">
+    <source
+      media="(prefers-color-scheme: dark)"
+      srcset="https://zubair-trabzada.github.io/geo-seo-claude/star-history-dark.svg">
+    <img
+      alt="Star History Chart"
+      src="https://zubair-trabzada.github.io/geo-seo-claude/star-history.svg">
   </picture>
 </a>
 
@@ -71,7 +75,7 @@ cd geo-seo-claude
 
 ### Requirements
 
-- Python 3.8+ (on Debian/Ubuntu also `python3-venv`)
+- Python 3.10+ (on Debian/Ubuntu also `python3-venv`)
 - Claude Code CLI
 - Git
 - Optional: [`uv`](https://docs.astral.sh/uv/) — if present, the installer uses it for a faster dependency install

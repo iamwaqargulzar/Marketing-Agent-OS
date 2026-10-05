@@ -3,7 +3,7 @@ name: ads
 description: "Plan and optimize paid media across search, social and other platforms, including account structure, targeting, bidding, measurement, budget and creative testing."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "paid-measurement"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,7 @@ Use this skill for **ads**. Start from the user’s concrete objective and avail
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+8. Before reading an account export or recommending pause/keep/scale, read `references/account-evidence.md`; reconcile report coverage, conversion definitions, lag, configuration changes, and brand/non-brand results.
 
 ## Domain Checklist
 
@@ -67,6 +68,7 @@ Prefer first-party/project evidence, then direct public sources, then reputable 
 - `references/routing-policy.md` — precedence and conflict resolution
 - `references/product-context-schema.md` — shared marketing context
 - `references/connectors.md` — optional data/tool integrations
+- `references/account-evidence.md` — report limits, samples, and decision-grade campaign evidence
 
 ## Next Best Skill
 

@@ -163,3 +163,15 @@ Request bodies are always JSON arrays (even for single requests).
 - programmatic-seo
 - content-strategy
 - competitors
+
+### CLI market selection
+
+For `serp google`, `--location-code` and `--language-code` select API codes
+instead of location/language names. Explicit codes take precedence over name
+flags; omitted flags retain United States and English. Preview the paid request
+with `--dry-run`:
+
+```bash
+node tools/clis/dataforseo.js serp google --keyword chaussures \
+  --location-code 2250 --language-code fr --dry-run
+```

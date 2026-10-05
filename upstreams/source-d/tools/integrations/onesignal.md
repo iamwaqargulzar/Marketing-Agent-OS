@@ -129,7 +129,7 @@ Headers:
 ### Get user by external ID
 
 ```bash
-GET https://api.onesignal.com/api/v1/apps/{APP_ID}/users/by/external_id/{external_id}
+GET https://api.onesignal.com/apps/{APP_ID}/users/by/external_id/{external_id}
 
 Headers:
   Authorization: Basic {REST_API_KEY}
@@ -138,7 +138,7 @@ Headers:
 ### Create a user
 
 ```bash
-POST https://api.onesignal.com/api/v1/apps/{APP_ID}/users
+POST https://api.onesignal.com/apps/{APP_ID}/users
 
 Headers:
   Authorization: Basic {REST_API_KEY}
@@ -149,7 +149,7 @@ Headers:
   "subscriptions": [
     { "type": "Email", "token": "user@example.com" }
   ],
-  "tags": { "plan": "pro", "signup_source": "organic" }
+  "properties": { "tags": { "plan": "pro", "signup_source": "organic" } }
 }
 ```
 

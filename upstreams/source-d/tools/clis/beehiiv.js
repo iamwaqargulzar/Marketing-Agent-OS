@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
+const rawArgs = process.argv.slice(2)
 const API_KEY = process.env.BEEHIIV_API_KEY
 const BASE_URL = 'https://api.beehiiv.com/v2'
 
-if (!API_KEY) {
+if ((!API_KEY) && rawArgs.length > 0) {
   console.error(JSON.stringify({ error: 'BEEHIIV_API_KEY environment variable required' }))
   process.exit(1)
 }
@@ -49,8 +50,15 @@ function parseArgs(args) {
   return result
 }
 
-const args = parseArgs(process.argv.slice(2))
+const args = parseArgs(rawArgs)
 const [cmd, sub, ...rest] = args._
+
+function booleanArg(name) {
+  const value = args[name]
+  if (value === true || value === 'true') return true
+  if (value === 'false') return false
+  throw new Error(`--${name} must be true or false (or a bare flag for true)`)
+}
 
 async function main() {
   let result
@@ -99,8 +107,8 @@ async function main() {
           const email = args.email
           if (!email) { result = { error: '--email required' }; break }
           const body = { email }
-          if (args['reactivate-existing']) body.reactivate_existing = true
-          if (args['send-welcome-email']) body.send_welcome_email = true
+          if (args['reactivate-existing'] !== undefined) body.reactivate_existing = booleanArg('reactivate-existing')
+          if (args['send-welcome-email'] !== undefined) body.send_welcome_email = booleanArg('send-welcome-email')
           if (args['utm-source']) body.utm_source = args['utm-source']
           if (args['utm-medium']) body.utm_medium = args['utm-medium']
           if (args['utm-campaign']) body.utm_campaign = args['utm-campaign']

@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
+const rawArgs = process.argv.slice(2)
 const API_KEY = process.env.SENDGRID_API_KEY
 const BASE_URL = 'https://api.sendgrid.com/v3'
 
-if (!API_KEY) {
+if ((!API_KEY) && rawArgs.length > 0) {
   console.error(JSON.stringify({ error: 'SENDGRID_API_KEY environment variable required' }))
   process.exit(1)
 }
@@ -48,7 +49,7 @@ function parseArgs(args) {
   return result
 }
 
-const args = parseArgs(process.argv.slice(2))
+const args = parseArgs(rawArgs)
 const [cmd, sub, ...rest] = args._
 
 async function main() {
@@ -56,14 +57,16 @@ async function main() {
 
   switch (cmd) {
     case 'send': {
-      if (!args.from || !args.to || !args.subject) { result = { error: '--from, --to, and --subject required' }; break }
+      if (!args.from || !args.to) { result = { error: '--from and --to required' }; break }
+      const dynamicTemplate = typeof args['template-id'] === 'string' && args['template-id'].startsWith('d-')
+      if (!args.subject && !dynamicTemplate) { result = { error: '--subject required unless using a dynamic template (--template-id d-...)' }; break }
       const body = {
         personalizations: [{
           to: args.to.split(',').map(e => ({ email: e.trim() })),
         }],
         from: { email: args.from },
-        subject: args.subject,
       }
+      if (args.subject) body.subject = args.subject
       if (args['template-id']) {
         body.template_id = args['template-id']
         if (args['template-data']) {
@@ -191,7 +194,7 @@ async function main() {
       result = {
         error: 'Unknown command',
         usage: {
-          send: 'send --from <email> --to <email> --subject <subject> --html <html> [--text <text>] [--template-id <id>] [--template-data <json>]',
+          send: 'send --from <email> --to <email> [--subject <subject>] [--html <html>] [--text <text>] [--template-id <id> (d-... supplies its own subject)] [--template-data <json>]',
           contacts: 'contacts [list|add|search] [--email <email>] [--first-name <name>] [--last-name <name>] [--list-ids <ids>] [--query <sgql>]',
           campaigns: 'campaigns [list|get] [id] [--limit <n>]',
           stats: 'stats get [--start-date <YYYY-MM-DD>] [--end-date <YYYY-MM-DD>]',

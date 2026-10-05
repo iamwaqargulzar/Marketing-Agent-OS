@@ -100,6 +100,8 @@ POST https://a.klaviyo.com/api/lists/{listId}/relationships/profiles/
 
 ### Track event
 
+The monetary event `value` belongs in `data.attributes`, alongside `properties`. Custom event properties do not set the metric's monetary value. See the [Create Event API](https://developers.klaviyo.com/en/v2024-10-15/reference/create_event).
+
 ```bash
 POST https://a.klaviyo.com/api/events/
 
@@ -119,8 +121,8 @@ POST https://a.klaviyo.com/api/events/
           "attributes": { "email": "user@example.com" }
         }
       },
+      "value": 99.99,
       "properties": {
-        "value": 99.99,
         "items": ["Product A"]
       },
       "time": "2025-01-15T10:00:00Z"

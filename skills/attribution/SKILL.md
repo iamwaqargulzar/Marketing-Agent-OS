@@ -3,7 +3,7 @@ name: attribution
 description: "Analyze channel and campaign contribution using explicit attribution assumptions, reconciliation across systems, incrementality where possible, and confidence labels."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "paid-measurement"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,9 @@ Use this skill for **attribution**. Start from the user’s concrete objective a
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+8. Separate conceptual attribution models from models currently supported by the user's platform. Verify settings, scope, conversion actions, lookback windows, and attribution/reporting dates before comparing credits. Do not recommend a retired model as an available GA4 or Google Ads setting.
+9. Treat data-driven or multi-touch credit as a model estimate; low-volume allocation and missing identity/consent data limit interpretation. Triangulate with first-party sales, customer-reported sources, experiments, and business economics; document conflicts instead of silently overriding the model.
+10. For booking or cross-domain journeys, verify which campaign parameters and identifiers actually reach the destination and CRM. Do not assume a link's UTM tags persist through every widget or integration.
 
 ## Domain Checklist
 

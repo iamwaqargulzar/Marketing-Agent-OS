@@ -82,6 +82,10 @@ def main() -> int:
         "robots_meta": None,
         "h1_count": len(re.findall(r"<h1\b", html, re.IGNORECASE)),
     }
+    if urllib.parse.urlsplit(final).path == "/robots.txt":
+        output["cloudflare_managed"] = bool(
+            re.search(r"^\s*#\s*begin cloudflare managed content\s*$", html, re.IGNORECASE | re.MULTILINE)
+        )
     match = re.search(
         r"<meta[^>]+name=[\"']description[\"'][^>]+content=[\"'](.*?)[\"']",
         html,

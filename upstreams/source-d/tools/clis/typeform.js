@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
+const rawArgs = process.argv.slice(2)
 const API_KEY = process.env.TYPEFORM_API_KEY
 const BASE_URL = 'https://api.typeform.com'
 
-if (!API_KEY) {
+if ((!API_KEY) && rawArgs.length > 0) {
   console.error(JSON.stringify({ error: 'TYPEFORM_API_KEY environment variable required' }))
   process.exit(1)
 }
@@ -49,7 +50,7 @@ function parseArgs(args) {
   return result
 }
 
-const args = parseArgs(process.argv.slice(2))
+const args = parseArgs(rawArgs)
 const [cmd, sub, ...rest] = args._
 
 async function main() {
@@ -88,9 +89,12 @@ async function main() {
         case 'update': {
           const id = args.id
           if (!id) { result = { error: '--id required (form ID)' }; break }
-          const body = {}
-          if (args.title) body.title = args.title
-          result = await api('PUT', `/forms/${id}`, body)
+          if (!args.title) { result = { error: '--title required' }; break }
+          // PUT replaces the entire form, deleting omitted fields and their results.
+          // Use Typeform's JSON Patch endpoint to rename without touching questions.
+          result = await api('PATCH', `/forms/${id}`, [
+            { op: 'replace', path: '/title', value: args.title },
+          ])
           break
         }
         case 'delete': {

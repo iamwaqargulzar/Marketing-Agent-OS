@@ -3,7 +3,7 @@ name: customer-research
 description: "Plan, analyze and synthesize customer research into pains, jobs, triggers, objections, language, segments and evidence-backed marketing implications."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "strategy"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,7 @@ Use this skill for **customer research**. Start from the user’s concrete objec
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+8. When findings feed market sizing, preserve segment counts, sample selection, source dates, and willingness-to-pay evidence; interviews do not establish a population total. Hand off to `marketing-plan` for triangulated TAM/SAM/SOM rather than inventing a market estimate.
 
 ## Domain Checklist
 

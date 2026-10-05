@@ -3,7 +3,7 @@ name: ai-seo
 description: "Optimize for AI search, answer engines, GEO/AEO/LLMO and conventional search together. Use for citability, AI crawler access, entity/brand evidence, llms.txt evaluation, platform readiness and AI-answer visibility."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "seo-geo"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,8 @@ Use this skill for **ai seo**. Start from the user’s concrete objective and av
 5. When platform behavior or eligibility can change, verify current first-party documentation before making implementation claims.
 6. Report observations separately from hypotheses and label confidence.
 7. When recommending page formats or interpreting citation changes, read `references/format-volatility.md`; do not generalize a dated change from one answer engine to every platform.
+8. For crawler access, read `references/crawler-policy.md`; decide search discovery, user retrieval, model training, and grounding separately. Inspect the live robots response for CDN-managed rules.
+9. For positioning, third-party consensus, or AI-answer sentiment, read `references/visibility-strategy.md`; distinguish a mention or citation from a favorable recommendation and measure buyer-relevant prompts.
 
 ## Domain Checklist
 
@@ -68,6 +70,8 @@ Prefer first-party/project evidence, then direct public sources, then reputable 
 - `references/product-context-schema.md` — shared marketing context
 - `references/connectors.md` — optional data/tool integrations
 - `references/format-volatility.md` — platform-specific format selection and repeated-run measurement
+- `references/crawler-policy.md` — crawler purposes and CDN-managed robots checks
+- `references/visibility-strategy.md` — positioning, recommendations, and platform-specific visibility
 
 ## Next Best Skill
 

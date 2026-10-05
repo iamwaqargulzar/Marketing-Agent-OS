@@ -1,9 +1,9 @@
 ---
 name: competitors
-description: "When the user wants to create competitor comparison or alternative pages for SEO and sales enablement. Also use when the user mentions 'alternative page,' 'vs page,' 'competitor comparison,' 'comparison page,' '[Product] vs [Product],' '[Product] alternative,' 'competitive landing pages,' 'how do we compare to X,' 'battle card,' or 'competitor teardown.' Use this for any content that positions your product against competitors. Covers four formats: singular alternative, plural alternatives, you vs competitor, and competitor vs competitor. For sales-specific competitor docs, see sales-enablement."
+description: "Create or audit competitor comparison and alternative pages. Use for vs pages, product alternatives, competitive landing pages, competitor teardowns, or stale/overclaimed competitive assets. For battlecards, live objections, and win-loss analysis use `sales-enablement`; for URL-based research use `competitor-profiling`."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "strategy"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,8 @@ Use this skill for **competitors**. Start from the user’s concrete objective a
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+8. Date and source competitor facts. A feature not observed is not proven absent, no public price is not free, and one snapshot cannot prove nothing changed. Separate observed facts, hypotheses, and recommendations; verify advantages using customer or deal evidence.
+9. For a competitive asset audit, inventory claims across comparison pages, decks, talk tracks, and battlecards; classify each as current, changed, unverifiable, or overclaimed, and draft sourced replacement wording. Route battlecard authoring and live deal objections to `sales-enablement`.
 
 ## Domain Checklist
 

@@ -30,6 +30,7 @@ class PackageTests(unittest.TestCase):
         folders = [path.parent.name for path in (ROOT / "skills").glob("*/SKILL.md")]
         self.assertEqual(set(names), set(folders))
         self.assertEqual(len(names), len(set(names)))
+        self.assertEqual(names, sorted(names))
         self.assertEqual(
             catalog,
             json.loads(
@@ -276,6 +277,39 @@ class PackageTests(unittest.TestCase):
                 "10",
             )
             self.assertNotEqual(limited.returncode, 0)
+        finally:
+            server.shutdown()
+            server.server_close()
+
+    def test_fetch_page_detects_cloudflare_managed_robots(self):
+        class Handler(http.server.BaseHTTPRequestHandler):
+            def do_GET(self):
+                self.send_response(200)
+                self.send_header("Content-Type", "text/plain; charset=utf-8")
+                self.end_headers()
+                content = "User-agent: *\nAllow: /\n"
+                if self.path != "/robots.txt?plain":
+                    content = "# BeGiN Cloudflare Managed content\n" + content
+                self.wfile.write(content.encode("utf-8"))
+
+            def log_message(self, *_):
+                pass
+
+        server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+        threading.Thread(target=server.serve_forever, daemon=True).start()
+        try:
+            for path, expected in (("/robots.txt", True), ("/robots.txt?plain", False), ("/", None)):
+                with self.subTest(path=path):
+                    result = run_script(
+                        "fetch_page.py", f"http://127.0.0.1:{server.server_port}{path}",
+                        "--allow-private", "--json",
+                    )
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    output = json.loads(result.stdout)
+                    if expected is None:
+                        self.assertNotIn("cloudflare_managed", output)
+                    else:
+                        self.assertIs(output["cloudflare_managed"], expected)
         finally:
             server.shutdown()
             server.server_close()

@@ -3,7 +3,7 @@ name: geo-crawlers
 description: "Compatibility skill for geo crawlers. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "seo-geo"
   provenance: "marketing-agent-os"
 ---
@@ -32,6 +32,7 @@ Use this skill for **geo crawlers**. Start from the user’s concrete objective 
 4. Use `scripts/citability_scorer.py`, `scripts/llmstxt_generator.py` and `scripts/brand_scanner.py` when deterministic checks help.
 5. When platform behavior or eligibility can change, verify current first-party documentation before making implementation claims.
 6. Report observations separately from hypotheses and label confidence.
+7. Preserve the crawler-specific scope when handing off to `ai-seo`: distinguish discovery, user retrieval, training, and grounding; inspect the live robots response for CDN-managed rules. A training restriction alone is not a citation failure.
 
 ## Domain Checklist
 

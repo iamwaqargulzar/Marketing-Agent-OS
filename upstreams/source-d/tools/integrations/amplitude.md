@@ -68,6 +68,17 @@ GET https://amplitude.com/api/2/export?start=20240101T00&end=20240131T23
 Authorization: Basic {base64(api_key:secret_key)}
 ```
 
+The Export API returns a ZIP archive. To keep stdout valid JSON without decoding
+binary bytes as text, `node tools/clis/amplitude.js export events` returns
+`{ "status": 200, "contentType": "application/zip", "encoding": "base64", "body": "..." }`.
+After saving that JSON as `export.json`, restore the archive with:
+
+```javascript
+const fs = require('node:fs')
+const result = JSON.parse(fs.readFileSync('export.json', 'utf8'))
+fs.writeFileSync('events.zip', Buffer.from(result.body, 'base64'))
+```
+
 ### Get retention data
 
 ```bash

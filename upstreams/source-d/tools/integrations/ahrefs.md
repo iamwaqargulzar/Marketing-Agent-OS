@@ -22,7 +22,7 @@ SEO toolset for backlink analysis, keyword research, and competitive research.
 ### Domain rating
 
 ```bash
-GET https://api.ahrefs.com/v3/site-explorer/domain-rating?target=example.com
+GET https://api.ahrefs.com/v3/site-explorer/domain-rating?target=example.com&date=2026-09-30
 
 Authorization: Bearer {api_token}
 ```
@@ -54,7 +54,7 @@ Authorization: Bearer {api_token}
 ### Organic keywords
 
 ```bash
-GET https://api.ahrefs.com/v3/site-explorer/organic-keywords?target=example.com&mode=domain&country=us&limit=100
+GET https://api.ahrefs.com/v3/site-explorer/organic-keywords?target=example.com&mode=domain&country=us&limit=100&date=2026-09-30&select=keyword
 
 Authorization: Bearer {api_token}
 ```
@@ -62,7 +62,7 @@ Authorization: Bearer {api_token}
 ### Top pages
 
 ```bash
-GET https://api.ahrefs.com/v3/site-explorer/top-pages?target=example.com&mode=domain&country=us&limit=50
+GET https://api.ahrefs.com/v3/site-explorer/top-pages?target=example.com&mode=domain&country=us&limit=50&date=2026-09-30&select=url
 
 Authorization: Bearer {api_token}
 ```
@@ -140,3 +140,15 @@ Authorization: Bearer {api_token}
 - seo-audit
 - content-strategy
 - competitors
+
+## Dated reports in the CLI
+
+`domain-rating get`, `keywords organic`, and `top-pages list` require an explicit
+`--date YYYY-MM-DD`. Organic keywords and top pages also require `--select` with
+the columns you want to request. The CLI validates the calendar date and rejects
+missing or empty column lists before making a request; it does not guess paid
+columns. Choose fields from the provider response schema:
+
+- [Domain rating](https://docs.ahrefs.com/en/api/reference/site-explorer/get-domain-rating)
+- [Organic keywords](https://docs.ahrefs.com/en/api/reference/site-explorer/get-organic-keywords)
+- [Top pages](https://docs.ahrefs.com/en/api/reference/site-explorer/get-top-pages)

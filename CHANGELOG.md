@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 1.4.0 — 2026-10-05
+
+- Refreshed all four pinned source snapshots: source A `3f68ddad`, source B v2.4.2 `4b99de2f`, source C `ea29bd29`, and source D v2.11.17 `dda3841f`. Retained licenses, notices, attribution, and exact snapshot hashes.
+- Added portable crawler-purpose and Cloudflare managed-robots guidance, AI citation/recommendation measurement, and positioning/consensus analysis. The bounded fetcher detects the Cloudflare marker in robots responses without treating training restrictions as citation failures.
+- Expanded existing skills with crisis communications, WhatsApp planning, triangulated market sizing, sourced battlecards/live objections/win-loss analysis, competitive asset audits, paid-account evidence, attribution checks, product-demo recording, creative review, directory vetting, and natural-copy editing.
+- Reviewed upstream Google sign-in, paid-call budgeting, schema hooks, provider CLI fixes, and dashboard/plugin packaging. Kept those source-specific runtimes isolated from the standard-library core; documented portable provider-access, budget, and geo-grid evidence rules.
+- Added a Cloudflare detection regression test and a sorted-catalog assertion. Updated release metadata and local review records; the installable inventory remains 238 skills.
+
 ## 1.3.0 — 2026-09-29
 
 - Refreshed source B to v2.4.1 commit `ff87fcee0734845d3f59128c8c905799ee2298da`. Added portable `seo-agentic` and `seo-matomo` skills; reviewed its current Google facts, hostile-input hardening, installer security, URL-safety, rendering, schema, analytics, and dependency changes while keeping its source-specific Python runtime and credential installers isolated from the dependency-free core.

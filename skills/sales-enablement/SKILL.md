@@ -1,9 +1,9 @@
 ---
 name: sales-enablement
-description: "Create sales enablement systems including one-pagers, decks, battlecards, objection handling, demo narratives and proof assets."
+description: "Create sales one-pagers, decks, battlecards, objection responses, demo narratives, and proof assets. Use for a live deal objection, competitive battle card, win-loss analysis, loss reasons, or defensible sales claims."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "gtm-sales"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,7 @@ Use this skill for **sales enablement**. Start from the user’s concrete object
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+8. For battlecards, live objections, or win-loss analysis, read `references/competitive-enablement.md`. Keep a deal-specific response separate from a reusable competitor-wide claim.
 
 ## Domain Checklist
 
@@ -66,6 +67,7 @@ Prefer first-party/project evidence, then direct public sources, then reputable 
 - `references/routing-policy.md` — precedence and conflict resolution
 - `references/product-context-schema.md` — shared marketing context
 - `references/connectors.md` — optional data/tool integrations
+- `references/competitive-enablement.md` — sourced battlecards, objections, and win-loss findings
 
 ## Next Best Skill
 

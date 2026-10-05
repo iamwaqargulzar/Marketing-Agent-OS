@@ -73,11 +73,18 @@ curl -s -X POST https://api.outreach.io/api/v2/sequenceStates \
       "type": "sequenceState",
       "relationships": {
         "prospect": { "data": { "type": "prospect", "id": 42 } },
-        "sequence": { "data": { "type": "sequence", "id": 7 } }
+        "sequence": { "data": { "type": "sequence", "id": 7 } },
+        "mailbox": { "data": { "type": "mailbox", "id": 9 } }
       }
     }
   }'
 ```
+
+For sequences with mailing steps, pass `--mailbox-id` to `sequence-states create`
+to select the sending mailbox. It is included as the `mailbox` relationship.
+Non-mail sequences can omit it. See
+[add prospects to sequences](https://developers.outreach.io/api/common-patterns).
+
 
 ### List Mailings for a Sequence
 
@@ -98,7 +105,7 @@ curl -s https://api.outreach.io/api/v2/accounts \
 ### List Tasks
 
 ```bash
-curl -s "https://api.outreach.io/api/v2/tasks?filter[status]=incomplete" \
+curl -s "https://api.outreach.io/api/v2/tasks?filter[state]=incomplete" \
   -H "Authorization: Bearer $OUTREACH_ACCESS_TOKEN" \
   -H "Content-Type: application/vnd.api+json"
 ```
@@ -145,7 +152,7 @@ curl -s "https://api.outreach.io/api/v2/tasks?filter[status]=incomplete" \
 - `filter[prospect][id]` - Filter by prospect ID
 
 ### Tasks
-- `filter[status]` - Filter by status (e.g., `incomplete`, `complete`)
+- `filter[state]` - Filter by state (e.g., `pending`, `incomplete`, `complete`)
 - `filter[taskType]` - Filter by type (e.g., `call`, `email`, `action_item`)
 
 ## When to Use
@@ -170,3 +177,7 @@ curl -s "https://api.outreach.io/api/v2/tasks?filter[status]=incomplete" \
 - revops
 - sales-enablement
 - emails
+
+The task filter is `state` (`pending`, `incomplete`, or `complete`). Use
+`tasks list --state incomplete`; the CLI retains `--status` as an alias.
+See [discover open tasks](https://developers.outreach.io/api/common-patterns).

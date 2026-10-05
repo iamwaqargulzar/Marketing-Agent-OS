@@ -1,26 +1,30 @@
 #!/usr/bin/env node
 
+const rawArgs = process.argv.slice(2)
 const TOKEN = process.env.GOOGLE_ADS_TOKEN
 const DEV_TOKEN = process.env.GOOGLE_ADS_DEVELOPER_TOKEN
 const CUSTOMER_ID = process.env.GOOGLE_ADS_CUSTOMER_ID
-const BASE_URL = 'https://googleads.googleapis.com/v14'
+const LOGIN_CUSTOMER_ID = process.env.GOOGLE_ADS_LOGIN_CUSTOMER_ID?.replace(/-/g, '')
+const BASE_URL = 'https://googleads.googleapis.com/v24'
 
-if (!TOKEN || !DEV_TOKEN || !CUSTOMER_ID) {
+if ((!TOKEN || !DEV_TOKEN || !CUSTOMER_ID) && rawArgs.length > 0) {
   console.error(JSON.stringify({ error: 'GOOGLE_ADS_TOKEN, GOOGLE_ADS_DEVELOPER_TOKEN, and GOOGLE_ADS_CUSTOMER_ID environment variables required' }))
   process.exit(1)
 }
 
 async function api(method, path, body) {
+  const headers = {
+    'Authorization': `Bearer ${TOKEN}`,
+    'developer-token': DEV_TOKEN,
+    'Content-Type': 'application/json',
+  }
+  if (LOGIN_CUSTOMER_ID) headers['login-customer-id'] = LOGIN_CUSTOMER_ID
   if (args['dry-run']) {
-    return { _dry_run: true, method, url: `${BASE_URL}${path}`, headers: { Authorization: '***', 'developer-token': '***', 'Content-Type': 'application/json' }, body: body || undefined }
+    return { _dry_run: true, method, url: `${BASE_URL}${path}`, headers: { ...headers, Authorization: '***', 'developer-token': '***' }, body: body || undefined }
   }
   const res = await fetch(`${BASE_URL}${path}`, {
     method,
-    headers: {
-      'Authorization': `Bearer ${TOKEN}`,
-      'developer-token': DEV_TOKEN,
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: body ? JSON.stringify(body) : undefined,
   })
   const text = await res.text()
@@ -35,6 +39,8 @@ async function gaql(query) {
   return api('POST', `/customers/${CUSTOMER_ID}/googleAds:searchStream`, { query })
 }
 
+const BOOLEAN_FLAGS = ['dry-run']
+
 function parseArgs(args) {
   const result = { _: [] }
   for (let i = 0; i < args.length; i++) {
@@ -42,7 +48,7 @@ function parseArgs(args) {
     if (arg.startsWith('--')) {
       const key = arg.slice(2)
       const next = args[i + 1]
-      if (next && !next.startsWith('--')) {
+      if (!BOOLEAN_FLAGS.includes(key) && next && !next.startsWith('--')) {
         result[key] = next
         i++
       } else {
@@ -55,16 +61,21 @@ function parseArgs(args) {
   return result
 }
 
-const args = parseArgs(process.argv.slice(2))
+const args = parseArgs(rawArgs)
 const [cmd, sub, ...rest] = args._
 
-function daysToDateRange(days) {
-  const d = parseInt(days) || 30
-  if (d === 7) return 'LAST_7_DAYS'
-  if (d === 14) return 'LAST_14_DAYS'
-  if (d === 30) return 'LAST_30_DAYS'
-  if (d === 90) return 'LAST_90_DAYS'
-  return `LAST_${d}_DAYS`
+// Computed ranges use this machine's calendar date; Google evaluates them in the account's time zone.
+function dateFilter(days) {
+  const d = days === undefined ? 30 : typeof days === 'string' ? Number(days) : NaN
+  if (!Number.isInteger(d) || d < 1 || d > 3650) throw new Error('--days must be a whole number from 1 to 3650')
+  if ([7, 14, 30].includes(d)) return `segments.date DURING LAST_${d}_DAYS`
+  const pad = (n) => String(n).padStart(2, '0')
+  const fmt = (date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+  const end = new Date()
+  end.setDate(end.getDate() - 1)
+  const start = new Date(end)
+  start.setDate(start.getDate() - (d - 1))
+  return `segments.date BETWEEN '${fmt(start)}' AND '${fmt(end)}'`
 }
 
 async function main() {
@@ -85,8 +96,8 @@ async function main() {
           result = await gaql('SELECT campaign.id, campaign.name, campaign.status, campaign_budget.amount_micros FROM campaign ORDER BY campaign.id')
           break
         case 'performance': {
-          const dateRange = daysToDateRange(args.days)
-          result = await gaql(`SELECT campaign.name, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions FROM campaign WHERE segments.date DURING ${dateRange}`)
+          const dateWhere = dateFilter(args.days)
+          result = await gaql(`SELECT campaign.name, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions FROM campaign WHERE ${dateWhere}`)
           break
         }
         case 'pause': {
@@ -123,9 +134,9 @@ async function main() {
     case 'adgroups':
       switch (sub) {
         case 'performance': {
-          const dateRange = daysToDateRange(args.days)
+          const dateWhere = dateFilter(args.days)
           const limit = args.limit ? ` LIMIT ${args.limit}` : ''
-          result = await gaql(`SELECT ad_group.name, metrics.impressions, metrics.clicks, metrics.conversions FROM ad_group WHERE segments.date DURING ${dateRange}${limit}`)
+          result = await gaql(`SELECT ad_group.name, metrics.impressions, metrics.clicks, metrics.conversions FROM ad_group WHERE ${dateWhere}${limit}`)
           break
         }
         default:
@@ -136,9 +147,9 @@ async function main() {
     case 'keywords':
       switch (sub) {
         case 'performance': {
-          const dateRange = daysToDateRange(args.days)
+          const dateWhere = dateFilter(args.days)
           const limit = args.limit || '50'
-          result = await gaql(`SELECT ad_group_criterion.keyword.text, metrics.impressions, metrics.clicks, metrics.average_cpc FROM keyword_view WHERE segments.date DURING ${dateRange} ORDER BY metrics.clicks DESC LIMIT ${limit}`)
+          result = await gaql(`SELECT ad_group_criterion.keyword.text, metrics.impressions, metrics.clicks, metrics.average_cpc FROM keyword_view WHERE ${dateWhere} ORDER BY metrics.clicks DESC LIMIT ${limit}`)
           break
         }
         default:

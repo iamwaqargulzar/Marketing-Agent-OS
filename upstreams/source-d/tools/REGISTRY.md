@@ -88,7 +88,7 @@ Anyone — including tool makers and partners — may contribute content that na
 | snov | Email Outreach | ✓ | - | [✓](clis/snov.js) | - | [snov.md](integrations/snov.md) |
 | truelist | Email Verification | ✓ | ✓ | - | ✓ | [truelist.md](integrations/truelist.md) |
 | github | Developer Intent | ✓ | - | [✓](clis/github-prospects.js) | ✓ | [github.md](integrations/github.md) |
-| firecrawl | Site Scraping | ✓ | ✓ | - | ✓ | [firecrawl.md](integrations/firecrawl.md) |
+| firecrawl | Site Scraping & AI Search | ✓ | ✓ | [✓](clis/firecrawl.js) | ✓ | [firecrawl.md](integrations/firecrawl.md) |
 | browserbase | Site Scraping | ✓ | ✓ | - | ✓ | [browserbase.md](integrations/browserbase.md) |
 | lemlist | Email Outreach | ✓ | - | [✓](clis/lemlist.js) | - | [lemlist.md](integrations/lemlist.md) |
 | instantly | Email Outreach | ✓ | - | [✓](clis/instantly.js) | - | [instantly.md](integrations/instantly.md) |
@@ -131,6 +131,7 @@ Anyone — including tool makers and partners — may contribute content that na
 | strapi | Headless CMS | ✓ | - | ✓ | ✓ | [strapi.md](integrations/strapi.md) |
 | composio | Integration Layer | ✓ | ✓ | ✓ | ✓ | [composio.md](integrations/composio.md) |
 | cogny | Integration Layer | - | ✓ | - | - | [cogny.md](integrations/cogny.md) |
+| glasser | Integration Layer | ✓ | ✓ | ✓ | - | [glasser.md](integrations/glasser.md) |
 
 ---
 
@@ -588,6 +589,16 @@ Use Composio when you need MCP access to OAuth-heavy tools. Prefer native MCP se
 - **Pricing**: Solo plan starts at $9/mo (7-day trial)
 
 Use Cogny when you only need marketing channels and want to avoid running your own OAuth proxy. Prefer native APIs when you need deep, custom control of a single tool.
+
+### Glasser Integration
+
+[Glasser](integrations/glasser.md) is a pay-per-call broker for paid data APIs — SEO metrics, SERP, web/news search, company and person enrichment, email finding, social scraping — under one key. Data APIs only; OAuth tools (GA4, ad platforms, CRMs) are not covered.
+
+- **Setup**: `npm install -g @glasser-ai/cli && glasser login`, or MCP at `https://api.glasser.ai/mcp` with a Bearer key
+- **Providers**: 20+ across SEO, search, enrichment, email finding, and scraping — DataForSEO, Ahrefs, Semrush, Serper, SerpApi, Exa, People Data Labs, Apollo, ZoomInfo, Hunter, ScrapeCreators, TikHub, Apify, Bright Data, and others (full list in the guide)
+- **Pricing**: per call at the price each endpoint publishes; no subscription
+
+Use Glasser for occasional lookups across several paid vendors when no accounts are set up. Prefer a vendor's own API when you already hold its key, and Google Search Console for your own site's search data.
 
 ---
 

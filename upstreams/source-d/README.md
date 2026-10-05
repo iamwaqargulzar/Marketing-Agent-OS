@@ -42,7 +42,7 @@ Skills reference each other and build on shared context. The `product-marketing`
 │  SEO &   │ │   CRO    │ │Content & │ │  Paid &    │ │ Growth & │ │  Sales &    │ │ Strategy  │
 │ Content  │ │          │ │   Copy   │ │Measurement │ │Retention │ │    GTM      │ │           │
 ├──────────┤ ├──────────┤ ├──────────┤ ├────────────┤ ├──────────┤ ├─────────────┤ ├───────────┤
-│seo-audit │ │cro       │ │copywritng│ │ads         │ │referrals │ │revops       │ │mktg-ideas │
+│seo-audit │ │cro       │ │copywritin│ │ads         │ │referrals │ │revops       │ │mktg-ideas │
 │ai-seo    │ │signup    │ │copy-edit │ │ad-creative │ │free-tools│ │sales-enable │ │mktg-psych │
 │site-arch │ │onboarding│ │cold-email│ │ab-testing  │ │churn-    │ │launch       │ │customer-  │
 │programm  │ │popups    │ │emails    │ │analytics   │ │ prevent  │ │pricing      │ │ research  │
@@ -80,10 +80,10 @@ See each skill's **Related Skills** section for the full dependency map.
 | [cold-email](skills/cold-email/) | Write B2B cold emails and follow-up sequences that get replies. Use when the user wants to write cold outreach emails,... |
 | [community-marketing](skills/community-marketing/) | Build and leverage online communities to drive product growth and brand loyalty. Use when the user wants to create a... |
 | [competitor-profiling](skills/competitor-profiling/) | When the user wants to research, profile, or analyze competitors from their URLs. Also use when the user mentions... |
-| [competitors](skills/competitors/) | When the user wants to create competitor comparison or alternative pages for SEO and sales enablement. Also use when... |
+| [competitors](skills/competitors/) | When the user wants to create competitor comparison or alternative pages for SEO and buyer-facing use. Also use when... |
 | [content-strategy](skills/content-strategy/) | When the user wants to plan a content strategy, decide what content to create, or figure out what topics to cover. Also... |
 | [copy-editing](skills/copy-editing/) | When the user wants to edit, review, or improve existing marketing copy, or refresh outdated content. Also use when the... |
-| [copywriting](skills/copywriting/) | When the user wants to write, rewrite, or improve marketing copy for any page — including homepage, landing pages,... |
+| [copywriting](skills/copywriting/) | When the user wants to write, rewrite, or improve marketing copy for any page, including homepage, landing pages,... |
 | [cro](skills/cro/) | When the user wants to optimize, improve, or increase conversions on any marketing page or form — including homepage,... |
 | [customer-research](skills/customer-research/) | When the user wants to conduct, analyze, or synthesize customer research. Use when the user mentions "customer... |
 | [directory-submissions](skills/directory-submissions/) | When the user wants to submit their product to startup, SaaS, AI, agent, MCP, no-code, or review directories for... |
@@ -115,7 +115,7 @@ See each skill's **Related Skills** section for the full dependency map.
 | [seo-audit](skills/seo-audit/) | When the user wants to audit, review, or diagnose SEO issues on their site. Also use when the user mentions "SEO... |
 | [signup](skills/signup/) | When the user wants to optimize signup, registration, account creation, or trial activation flows. Also use when the... |
 | [site-architecture](skills/site-architecture/) | When the user wants to plan, map, or restructure their website's page hierarchy, navigation, URL structure, or internal... |
-| [sms](skills/sms/) | When the user wants to plan, build, or optimize SMS or MMS marketing — including welcome flows, abandoned cart texts,... |
+| [sms](skills/sms/) | When the user wants to plan, build, or optimize SMS, MMS, or WhatsApp marketing — including welcome flows, abandoned... |
 | [social](skills/social/) | When the user wants help creating, scheduling, or optimizing social media content for LinkedIn, Twitter/X, Instagram,... |
 | [video](skills/video/) | When the user wants to create, generate, or produce video content using AI tools or programmatic frameworks. Also use... |
 <!-- SKILLS:END -->
@@ -158,7 +158,28 @@ Install via Claude Code's built-in plugin system:
 /plugin install marketing-skills
 ```
 
-### Option 3: Clone and Copy
+> **Note:** `/plugin` is only available in an interactive Claude Code CLI session. It is **not** available in Claude Code on the web, GitHub Actions, or other non-interactive/remote environments — in those cases you'll see `/plugin isn't available in this environment`. Use **Option 1 (`npx skills`)** instead, or the equivalent CLI commands:
+>
+> ```bash
+> claude plugin marketplace add coreyhaines31/marketingskills
+> claude plugin install marketing-skills@marketingskills
+> ```
+
+### Option 3: OpenAI Codex Plugin
+
+Install via Codex's plugin system:
+
+```bash
+# Add the marketplace
+codex plugin marketplace add coreyhaines31/marketingskills
+
+# Then browse and install from inside a Codex session
+/plugins
+```
+
+Select **marketing-skills** to install all skills. To pick up new releases later, run `codex plugin marketplace upgrade`.
+
+### Option 4: Clone and Copy
 
 Clone the entire repo and copy the skills folder:
 
@@ -167,7 +188,7 @@ git clone https://github.com/coreyhaines31/marketingskills.git
 cp -r marketingskills/skills/* .agents/skills/
 ```
 
-### Option 4: Git Submodule
+### Option 5: Git Submodule
 
 Add as a submodule for easy updates:
 
@@ -177,13 +198,13 @@ git submodule add https://github.com/coreyhaines31/marketingskills.git .agents/m
 
 Then reference skills from `.agents/marketingskills/skills/`.
 
-### Option 5: Fork and Customize
+### Option 6: Fork and Customize
 
 1. Fork this repository
 2. Customize skills for your specific needs
 3. Clone your fork into your projects
 
-### Option 6: SkillKit (Multi-Agent)
+### Option 7: SkillKit (Multi-Agent)
 
 Use [SkillKit](https://github.com/rohitg00/skillkit) to install skills across multiple AI agents (Claude Code, Cursor, Copilot, etc.):
 

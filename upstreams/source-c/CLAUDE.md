@@ -62,7 +62,8 @@ agency/CRM data persists under `~/.geo-prospects/` (`prospects.json`, `audits/`,
 `install.sh` copies `geo/`, `skills/`, `agents/`, `scripts/`, `schema/`, and `templates/` into
 `~/.claude/`, creates a Python venv at `~/.claude/skills/geo/.venv` (using `uv` if available, else
 stdlib `venv` + `pip`), installs `requirements.txt`, and **rewrites the script shebangs to point at
-that venv**. That is why installed scripts run under `~/.claude/skills/geo/.venv/bin/python3` while
+that venv**. That is why installed scripts run under `~/.claude/skills/geo/.venv/bin/python3`
+(`.venv/Scripts/python.exe` when `install.sh` is run from Git Bash on Windows) while
 the scripts in this repo carry a portable `#!/usr/bin/env python3`. `uninstall.sh` reverses it.
 
 ## Running the scripts (from the repo)

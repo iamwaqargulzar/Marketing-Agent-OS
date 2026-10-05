@@ -1,9 +1,9 @@
 ---
 name: marketing-plan
-description: "Create a comprehensive marketing plan grounded in current state, positioning, growth constraints, channels, budget, measurement, team and execution cadence."
+description: "Create a marketing plan grounded in current state, positioning, growth constraints, channels, budget, measurement, team, and execution cadence. Use for TAM/SAM/SOM, market sizing, market attractiveness, and a marketing roadmap."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "strategy"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,8 @@ Use this skill for **marketing plan**. Start from the user’s concrete objectiv
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+8. For TAM/SAM/SOM or market attractiveness, read `references/market-sizing.md`; triangulate methods and show assumptions, ranges, units, and uncertainty.
+9. If creating client artifacts, validate the client identifier and keep resolved paths within the user-selected client directory. Reject separators or traversal instead of silently rewriting an identifier into another client's name.
 
 ## Domain Checklist
 
@@ -66,6 +68,7 @@ Prefer first-party/project evidence, then direct public sources, then reputable 
 - `references/routing-policy.md` — precedence and conflict resolution
 - `references/product-context-schema.md` — shared marketing context
 - `references/connectors.md` — optional data/tool integrations
+- `references/market-sizing.md` — triangulated sizing and attractiveness decisions
 
 ## Next Best Skill
 

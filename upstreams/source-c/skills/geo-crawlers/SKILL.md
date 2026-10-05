@@ -280,6 +280,16 @@ Using the already-fetched robots.txt from Step 1, scan for `Content-Signal:` dir
 
 No additional HTTP request is needed. robots.txt is already fetched in Step 1.
 
+### Step 7: Detect Cloudflare Managed robots.txt
+
+Using the already-fetched robots.txt from Step 1, check for a block starting with `# BEGIN Cloudflare Managed content` (case-insensitive).
+
+1. If found, Cloudflare is prepending its managed robots.txt to the site's own file. That block disallows GPTBot, ClaudeBot, Google-Extended, Applebot-Extended, Amazonbot, Bytespider, CCBot and meta-externalagent.
+2. Record it as a **Critical Issue** if the site owner's own rules allow AI crawlers. The owner usually doesn't know it's on, because the block never appears in the robots.txt file on their server, only in the live response.
+3. Recommend: in the Cloudflare dashboard, go to Security Settings, filter by "Bot traffic", and turn off "block training in robots.txt" if the site wants to be used by AI. If blocking training is intentional, note it as a deliberate choice, not an issue.
+
+No additional HTTP request is needed. `fetch_page.py robots` returns this as `cloudflare_managed: true`.
+
 ---
 
 ## Output Format

@@ -1,9 +1,9 @@
 ---
 name: copy-editing
-description: "When the user wants to edit, review, or improve existing marketing copy, or refresh outdated content. Also use when the user mentions 'edit this copy,' 'review my copy,' 'copy feedback,' 'proofread,' 'polish this,' 'make this better,' 'copy sweep,' 'tighten this up,' 'this reads awkwardly,' 'clean up this text,' 'too wordy,' 'sharpen the messaging,' 'refresh this content,' 'update this page,' 'this content is outdated,' or 'content audit.' Use this when the user already has copy and wants it improved or refreshed rather than rewritten from scratch. For writing new copy, see copywriting."
+description: "Edit or review existing marketing copy for clarity, accuracy, voice, freshness, and repetitive AI-like phrasing. Use for proofreading, copy feedback, tightening text, refreshing outdated copy, or making a draft sound natural. Preserve effective copy and supported claims. For new copy use `copywriting`."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "content"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,7 @@ Use this skill for **copy editing**. Start from the user’s concrete objective 
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+8. When copy sounds generated, identify the actual repeated shape, vague claim, stock phrase, or unnecessary filler and repair it from supported facts. Leave clear, accurate copy alone; do not rewrite it merely to remove a punctuation mark or satisfy a blanket vocabulary ban.
 
 ## Domain Checklist
 

@@ -20,13 +20,15 @@ Marketing Agent OS uses the open Agent Skills directory convention and provides 
 
 ## Ecosystem bridge
 
-For hosts not represented by the built-in Python installer, use the Agent Skills CLI after this repository is published:
+For hosts not represented by the built-in Python installer, use the Agent Skills CLI:
 
 ```bash
-npx skills add <owner>/marketing-agent-os
+npx skills add iamwaqargulzar/Marketing-Agent-OS
 ```
 
-On 2026-09-29, `skills` CLI 1.5.22 discovered all 238 skills. On 2026-08-11, the same CLI installed the `marketing-os` smoke-test skill across all 76 agent definitions in its registry, resolving to 55 unique project directories. This included shared/universal locations plus host-native projections for AiderDesk, Amp, Claude Code, Codex-compatible hosts, Continue, Cursor-compatible hosts, Devin, Goose, Kilo Code, Kiro, OpenHands, Pi, Qwen, Roo, Trae, Windsurf, and others. This verifies package discovery and file projection, not the runtime behavior of every external application.
+On 2026-10-05, `skills` CLI 1.5.22 discovered all 238 skills. On 2026-08-11, the same CLI installed the `marketing-os` smoke-test skill across all 76 agent definitions in its registry, resolving to 55 unique project directories. This included shared/universal locations plus host-native projections for AiderDesk, Amp, Claude Code, Codex-compatible hosts, Continue, Cursor-compatible hosts, Devin, Goose, Kilo Code, Kiro, OpenHands, Pi, Qwen, Roo, Trae, Windsurf, and others. This verifies package discovery and file projection, not the runtime behavior of every external application.
+
+Version 1.4.0 retains the same portable installer and dependency boundary. The upstream SEO cockpit and native Codex marketplace files are preserved in their source snapshots; they are not installed as Marketing Agent OS plugins. Use the documented skill installer for the normalized package. Provider-specific authentication, paid APIs, rendering stacks, and dashboards remain optional and require their own host/version validation.
 
 OpenCode 1.18.15 was executed locally and discovered `marketing-os` from both `.opencode/skills` and `.agents/skills`. Codex CLI 0.147.0 was present; its skill metadata was validated with the official validator and the portable discovery test. Claude Code, Pi, and Amp executables were not present in the audit environment, so no native-execution claim is made for those binaries.
 

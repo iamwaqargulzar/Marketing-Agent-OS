@@ -6,7 +6,7 @@ Audit date: 2026-08-11
 
 The original combined ZIP was structurally readable but was not accepted as the release source. Work was rebuilt and checked against four independently cloned repositories pinned in `upstreams.lock.json`. The ZIP is excluded from version control and is not needed to build, validate, install, or update Marketing Agent OS.
 
-The upstream snapshots contain 1,897 tracked entries and 218 `SKILL.md` files representing 216 unique declared skill names. All upstream names are covered by the normalized layer. Duplicate upstream names are resolved into one installable implementation rather than exposed as routing conflicts.
+The initial upstream snapshots contained 1,897 tracked entries and 218 `SKILL.md` files representing 216 unique declared skill names. All upstream names were covered by the normalized layer. Duplicate upstream names are resolved into one installable implementation rather than exposed as routing conflicts. Current snapshot counts are recorded in `UPSTREAM_STATUS.json`.
 
 ## Corrected issues
 
@@ -23,6 +23,8 @@ The upstream snapshots contain 1,897 tracked entries and 218 `SKILL.md` files re
 
 ## Verified state
 
+Current package review: 2026-10-05, version 1.4.0. See [the upstream review](UPSTREAM_REVIEW-2026-10-05.md) for adaptations and source-only components. Historical native-host checks below retain their original scope.
+
 - 238 normalized skills pass the local metadata validator.
 - Portable package discovery reports all 238 skills through the Agent Skills CLI.
 - Agent Skills CLI 1.5.22 projected a selected skill across all 76 registered agent definitions (55 unique directories).
@@ -30,5 +32,6 @@ The upstream snapshots contain 1,897 tracked entries and 218 `SKILL.md` files re
 - Every pinned upstream snapshot matches its lock hash.
 - Every declared upstream skill name is represented in the normalized layer.
 - The package doctor passes before release once `SHA256SUMS.json` is regenerated.
+- The 16-test package suite includes Cloudflare managed-robots detection, bounded fetching, installer replacement, input validation, and integrity checks.
 
 Native execution has not been claimed for every listed harness. The installer paths are documented separately from host-version smoke-test status in `COMPATIBILITY.md`. Codex CLI 0.147.0 and OpenCode 1.18.15 were available during the audit; Claude Code, Pi, and Amp were not installed.

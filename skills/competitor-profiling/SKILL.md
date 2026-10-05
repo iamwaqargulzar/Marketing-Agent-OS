@@ -3,7 +3,7 @@ name: competitor-profiling
 description: "When the user wants to research, profile, or analyze competitors from their URLs. Also use when the user mentions 'competitor profile,' 'competitor research,' 'competitor analysis,' 'profile this competitor,' 'analyze competitor,' 'competitive intelligence,' 'competitor deep dive,' 'who are my competitors,' 'competitor landscape,' 'competitor dossier,' 'competitive audit,' or 'research these competitors.' Input is a list of competitor URLs. Output is structured competitor profile markdown files. For creating comparison/alternative pages from profiles, see competitors. For sales-specific battle cards, see sales-enablement."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "strategy"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,8 @@ Use this skill for **competitor profiling**. Start from the user’s concrete ob
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+8. Use the available browser or authorized connected data source instead of making a particular vendor mandatory. Mark unavailable metrics honestly. Date observed facts, distinguish inference from implications, and do not infer absence, free pricing, motive, or unchanged history from one scrape.
+9. Use sourced buyer/deal evidence for claimed advantages; keep unsupported advantages as hypotheses. Route TAM/SAM/SOM work to `marketing-plan` with the scope and source evidence.
 
 ## Domain Checklist
 

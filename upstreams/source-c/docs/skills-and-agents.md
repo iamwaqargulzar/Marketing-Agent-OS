@@ -49,7 +49,7 @@ See [commands-reference.md](commands-reference.md) for `/geo citability`.
 
 ### geo-crawlers
 
-**Purpose:** Audits which AI crawlers can access the site by parsing `robots.txt`, meta robots tags, and HTTP `X-Robots-Tag` headers. Produces a complete access map across 14 crawlers in three tiers.
+**Purpose:** Audits which AI crawlers can access the site by parsing `robots.txt`, meta robots tags, and HTTP `X-Robots-Tag` headers, and flags Cloudflare's managed robots.txt when it is silently blocking AI crawlers. Produces a complete access map across 14 crawlers in three tiers.
 
 **Inputs:** A domain URL.
 

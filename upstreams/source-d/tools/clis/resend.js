@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
+const rawArgs = process.argv.slice(2)
 const API_KEY = process.env.RESEND_API_KEY
 const BASE_URL = 'https://api.resend.com'
 
-if (!API_KEY) {
+if ((!API_KEY) && rawArgs.length > 0) {
   console.error(JSON.stringify({ error: 'RESEND_API_KEY environment variable required' }))
   process.exit(1)
 }
@@ -48,8 +49,15 @@ function parseArgs(args) {
   return result
 }
 
-const args = parseArgs(process.argv.slice(2))
+const args = parseArgs(rawArgs)
 const [cmd, sub, ...rest] = args._
+
+function booleanArg(name) {
+  const value = args[name]
+  if (value === true || value === 'true') return true
+  if (value === 'false') return false
+  throw new Error(`--${name} must be true or false (or a bare flag for true)`)
+}
 
 async function main() {
   let result
@@ -175,7 +183,7 @@ async function main() {
           const body = { email: args.email }
           if (args['first-name']) body.first_name = args['first-name']
           if (args['last-name']) body.last_name = args['last-name']
-          if (args.unsubscribed) body.unsubscribed = args.unsubscribed === 'true'
+          if (args.unsubscribed !== undefined) body.unsubscribed = booleanArg('unsubscribed')
           result = await api('POST', `/audiences/${audienceId}/contacts`, body)
           break
         }
@@ -184,7 +192,7 @@ async function main() {
           const body = {}
           if (args['first-name']) body.first_name = args['first-name']
           if (args['last-name']) body.last_name = args['last-name']
-          if (args.unsubscribed !== undefined) body.unsubscribed = args.unsubscribed === 'true'
+          if (args.unsubscribed !== undefined) body.unsubscribed = booleanArg('unsubscribed')
           result = await api('PATCH', `/audiences/${audienceId}/contacts/${contactId}`, body)
           break
         }
@@ -207,9 +215,10 @@ async function main() {
           result = await api('GET', `/webhooks/${rest[0]}`)
           break
         case 'create': {
-          if (!args.url) { result = { error: '--url required (webhook URL)' }; break }
+          const endpoint = args.endpoint || args.url
+          if (!endpoint) { result = { error: '--endpoint required (webhook URL; --url also accepted)' }; break }
           const events = args.events?.split(',') || ['email.sent', 'email.delivered', 'email.bounced']
-          result = await api('POST', '/webhooks', { url: args.url, events })
+          result = await api('POST', '/webhooks', { endpoint, events })
           break
         }
         case 'delete':
@@ -351,7 +360,7 @@ async function main() {
           domains: 'domains [list|get|create|verify|delete] [id] [--name <name>]',
           'api-keys': 'api-keys [list|create|delete] [id] [--name <name>]',
           audiences: 'audiences [list|get|create|delete] [id] [--name <name>]',
-          contacts: 'contacts <audience_id> [list|get|create|update|delete] [contact_id] [--email <email>]',
+          contacts: 'contacts <audience_id> [list|get|create|update|delete] [contact_id] [--email <email>] [--unsubscribed [true|false]]',
           webhooks: 'webhooks [list|get|create|delete] [id] [--endpoint <url>]',
           batch: 'batch --emails <json_array>',
           templates: 'templates [list|get|create|update|delete|publish|duplicate] [id] [--name <name>] [--html <html>] [--variables <json>]',

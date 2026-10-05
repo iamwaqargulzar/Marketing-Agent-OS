@@ -3,7 +3,7 @@ name: seo-google
 description: "Compatibility skill for seo google. Use when a user or upstream workflow invokes this name; route the task to `seo-audit` while preserving the requested scope and source-specific intent."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "seo-geo"
   provenance: "marketing-agent-os"
 ---
@@ -30,6 +30,8 @@ Use this skill for **seo google**. Start from the user’s concrete objective an
 2. Preserve any narrower intent implied by the compatibility name instead of broadening the task.
 3. Mention the canonical skill only when that helps the user understand routing; do not force migration.
 4. Return the same evidence labels, permission boundaries and handoff shape as canonical skills.
+5. Prefer the user's authorized Google connector and verify the requested property's access and scopes. If a local runtime is explicitly chosen, use its supported user-account or service-account method; a service account may not have the person's property access. Do not install credentials, read unrelated credential stores, or request pasted tokens as part of an audit.
+6. Distinguish a domain property identifier from a URL-prefix property and preserve it exactly in requests. An authentication success does not prove Search Console property permission; report the relevant access error without exposing credentials.
 
 ## Domain Checklist
 

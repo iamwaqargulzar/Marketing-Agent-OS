@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
+const rawArgs = process.argv.slice(2)
 const WRITE_KEY = process.env.SEGMENT_WRITE_KEY
 const ACCESS_TOKEN = process.env.SEGMENT_ACCESS_TOKEN
 const TRACKING_URL = 'https://api.segment.io/v1'
 const PROFILE_URL = 'https://profiles.segment.com/v1'
 
-if (!WRITE_KEY && !ACCESS_TOKEN) {
+if ((!WRITE_KEY && !ACCESS_TOKEN) && rawArgs.length > 0) {
   console.error(JSON.stringify({ error: 'SEGMENT_WRITE_KEY (for tracking) or SEGMENT_ACCESS_TOKEN (for profiles) environment variable required' }))
   process.exit(1)
 }
@@ -77,7 +78,7 @@ function parseArgs(args) {
   return result
 }
 
-const args = parseArgs(process.argv.slice(2))
+const args = parseArgs(rawArgs)
 const [cmd, sub, ...rest] = args._
 
 async function main() {
@@ -156,13 +157,13 @@ async function main() {
         case 'traits': {
           if (!args['space-id']) { result = { error: '--space-id required' }; break }
           if (!args['user-id']) { result = { error: '--user-id required' }; break }
-          result = await profileApi('GET', `/spaces/${args['space-id']}/collections/users/profiles/user_id:${args['user-id']}/traits`)
+          result = await profileApi('GET', `/spaces/${encodeURIComponent(args['space-id'])}/collections/users/profiles/user_id:${encodeURIComponent(args['user-id'])}/traits`)
           break
         }
         case 'events': {
           if (!args['space-id']) { result = { error: '--space-id required' }; break }
           if (!args['user-id']) { result = { error: '--user-id required' }; break }
-          result = await profileApi('GET', `/spaces/${args['space-id']}/collections/users/profiles/user_id:${args['user-id']}/events`)
+          result = await profileApi('GET', `/spaces/${encodeURIComponent(args['space-id'])}/collections/users/profiles/user_id:${encodeURIComponent(args['user-id'])}/events`)
           break
         }
         default:

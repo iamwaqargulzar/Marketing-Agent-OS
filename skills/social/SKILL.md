@@ -3,7 +3,7 @@ name: social
 description: "Plan and execute organic social strategy, calendar, creative, community engagement, social selling and measurement."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "social-growth"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,8 @@ Use this skill for **social**. Start from the user’s concrete objective and av
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+8. Ground hooks in a real observation or story. Review formulaic one-line paragraphs, engagement-bait closers, manufactured vulnerability, and repetitive openings without overriding the brand's voice.
+9. For an authorized scheduling workflow, inspect the connected tool's actual capabilities, create approved drafts, and bind scheduling to the chosen account, payload, and time. Report draft/queue links and receipts; use post-level results for the next calendar revision. Algorithm advice needs a dated first-party basis, not a universal performance guarantee.
 
 ## Domain Checklist
 

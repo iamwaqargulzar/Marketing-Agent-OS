@@ -234,6 +234,7 @@ def fetch_robots_txt(url: str, timeout: int = 15) -> dict:
         "exists": False,
         "content": "",
         "ai_crawler_status": {},
+        "cloudflare_managed": False,
         "sitemaps": [],
         "errors": [],
     }
@@ -244,6 +245,12 @@ def fetch_robots_txt(url: str, timeout: int = 15) -> dict:
         if response.status_code == 200:
             result["exists"] = True
             result["content"] = response.text
+            # Cloudflare's managed robots.txt prepends this block to the origin
+            # file and disallows GPTBot, ClaudeBot, Google-Extended and others,
+            # often without the site owner realising it is switched on.
+            result["cloudflare_managed"] = (
+                "# begin cloudflare managed content" in response.text.lower()
+            )
 
             # Parse for each AI crawler
             lines = response.text.split("\n")

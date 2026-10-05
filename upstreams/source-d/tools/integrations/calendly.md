@@ -96,6 +96,12 @@ POST https://api.calendly.com/webhook_subscriptions
 GET https://api.calendly.com/webhook_subscriptions?organization={organization_uri}&scope=organization
 ```
 
+For `scope=user`, include the `user` URI in the list query or creation body.
+For `scope=group`, include the `group` URI. The CLI forwards `--user` and
+`--group` and rejects these scopes when their identifier is missing.
+See [list subscriptions](https://developer.calendly.com/api-docs/calendly-api/webhooks/list-webhook-subscriptions)
+and [create subscription](https://developer.calendly.com/api-docs/calendly-api/webhooks/create-webhook-subscription).
+
 ### Delete webhook subscription
 
 ```bash

@@ -157,6 +157,7 @@ Analyzes which AI crawlers can access the site and provides a recommended robots
 
 - Fetches and parses `robots.txt`, mapping every User-agent directive to the 14 known AI crawlers.
 - Checks a sample of key pages for `<meta name="robots">` overrides and `X-Robots-Tag` HTTP headers.
+- Detects Cloudflare's managed robots.txt, which silently prepends AI crawler blocks to the site's own file.
 - Checks for the presence of `/llms.txt` and `/.well-known/ai-plugin.json`.
 - Assesses whether key content requires JavaScript rendering (AI crawlers do not execute JS).
 - Scores crawler access in three tiers: Tier 1 (ChatGPT, Claude, Perplexity — critical for AI search), Tier 2 (Gemini, Copilot, Apple Intelligence, Meta AI), and Tier 3 (training-only crawlers).

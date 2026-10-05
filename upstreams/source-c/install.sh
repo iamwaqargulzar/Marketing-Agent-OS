@@ -13,12 +13,18 @@ SKILLS_DIR="${CLAUDE_DIR}/skills"
 AGENTS_DIR="${CLAUDE_DIR}/agents"
 INSTALL_DIR="${SKILLS_DIR}/geo"
 VENV_DIR="${INSTALL_DIR}/.venv"
-VENV_PY="${VENV_DIR}/bin/python3"
+# Windows venvs (Git Bash / MSYS / Cygwin) put the interpreter at
+# Scripts/python.exe instead of bin/python3.
+case "${OSTYPE:-}" in
+    msys*|cygwin*|win32*) VENV_PY_REL="Scripts/python.exe" ;;
+    *)                    VENV_PY_REL="bin/python3" ;;
+esac
+VENV_PY="${VENV_DIR}/${VENV_PY_REL}"
 # Tilde-form path for patched references inside skill/agent .md files.
 # The tilde is intentionally kept literal — Claude Code's Bash expands
 # it when running the command later. Do NOT replace with $HOME here.
 # shellcheck disable=SC2088
-VENV_MD_PY='~/.claude/skills/geo/.venv/bin/python3'
+VENV_MD_PY="~/.claude/skills/geo/.venv/${VENV_PY_REL}"
 TEMP_DIR=$(mktemp -d)
 
 # Detect if running via curl pipe (no interactive input available)
@@ -74,22 +80,31 @@ main() {
     fi
     print_success "Git found: $(git --version)"
 
+    # Require Python >= 3.10 (requirements.txt pins Pillow/lxml that drop 3.9).
+    # Don't trust the first `python3` on PATH: macOS ships system python3 3.9.x,
+    # and Homebrew often exposes a newer Python only as pythonX.Y with no
+    # `python3` symlink, so probe versioned names too and pick the first that
+    # meets the minimum.
     PYTHON_CMD=""
-    if command -v python3 &> /dev/null; then
-        PYTHON_CMD="python3"
-    elif command -v python &> /dev/null; then
-        PY_VERSION=$(python --version 2>&1 | grep -oE '[0-9]+\.[0-9]+' | head -1)
-        if [ -n "$PY_VERSION" ]; then
-            MAJOR=$(echo "$PY_VERSION" | cut -d. -f1)
-            MINOR=$(echo "$PY_VERSION" | cut -d. -f2)
-            if [ "$MAJOR" -ge 3 ] && [ "$MINOR" -ge 8 ]; then
-                PYTHON_CMD="python"
-            fi
+    for cmd in python3 python3.15 python3.14 python3.13 python3.12 python3.11 python3.10 python; do
+        command -v "$cmd" &> /dev/null || continue
+        # A candidate can exist on PATH and still fail to run: a pyenv shim for
+        # a version that is installed but not active, or the Windows Store alias
+        # for python3. Under `set -euo pipefail` an unguarded failure here would
+        # end the installer with no message, so discard the candidate's stderr
+        # and fall through to the next name instead.
+        PY_VERSION=$("$cmd" --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+' | head -1 || true)
+        [ -n "$PY_VERSION" ] || continue
+        MAJOR=$(echo "$PY_VERSION" | cut -d. -f1)
+        MINOR=$(echo "$PY_VERSION" | cut -d. -f2)
+        if [ "$MAJOR" -gt 3 ] || { [ "$MAJOR" -eq 3 ] && [ "$MINOR" -ge 10 ]; }; then
+            PYTHON_CMD="$cmd"
+            break
         fi
-    fi
+    done
 
     if [ -z "$PYTHON_CMD" ]; then
-        print_error "Python 3.8+ is required but not found."
+        print_error "Python 3.10+ is required but not found."
         echo "  Install: https://www.python.org/downloads/"
         exit 1
     fi

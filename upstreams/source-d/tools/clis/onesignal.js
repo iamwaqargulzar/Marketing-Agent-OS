@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 
+const rawArgs = process.argv.slice(2)
 const REST_API_KEY = process.env.ONESIGNAL_REST_API_KEY
 const APP_ID = process.env.ONESIGNAL_APP_ID
 const BASE_URL = 'https://api.onesignal.com'
 
-if (!REST_API_KEY) {
+if ((!REST_API_KEY) && rawArgs.length > 0) {
   console.error(JSON.stringify({ error: 'ONESIGNAL_REST_API_KEY environment variable required' }))
   process.exit(1)
 }
 
-if (!APP_ID) {
+if ((!APP_ID) && rawArgs.length > 0) {
   console.error(JSON.stringify({ error: 'ONESIGNAL_APP_ID environment variable required' }))
   process.exit(1)
 }
@@ -56,7 +57,7 @@ function parseArgs(args) {
   return result
 }
 
-const args = parseArgs(process.argv.slice(2))
+const args = parseArgs(rawArgs)
 const [cmd, sub, ...rest] = args._
 
 async function main() {
@@ -152,7 +153,7 @@ async function main() {
           const aliasLabel = args['alias-label'] || 'external_id'
           const aliasId = args['alias-id']
           if (!aliasId) { result = { error: '--alias-id required' }; break }
-          result = await api('GET', `/api/v1/apps/${APP_ID}/users/by/${aliasLabel}/${aliasId}`)
+          result = await api('GET', `/apps/${APP_ID}/users/by/${encodeURIComponent(aliasLabel)}/${encodeURIComponent(aliasId)}`)
           break
         }
         case 'create': {
@@ -164,16 +165,25 @@ async function main() {
             payload.subscriptions = [{ type: 'Email', token: args.email }]
           }
           if (args.tags) {
-            try { payload.tags = JSON.parse(args.tags) } catch { result = { error: 'Invalid --tags JSON' }; break }
+            try {
+              const tags = JSON.parse(args.tags)
+              if (!tags || typeof tags !== 'object' || Array.isArray(tags)) {
+                result = { error: '--tags must be a JSON object' }; break
+              }
+              payload.properties = { tags }
+            } catch { result = { error: 'Invalid --tags JSON' }; break }
           }
-          result = await api('POST', `/api/v1/apps/${APP_ID}/users`, payload)
+          if (!payload.identity && !payload.subscriptions) {
+            result = { error: '--external-id or --email required' }; break
+          }
+          result = await api('POST', `/apps/${APP_ID}/users`, payload)
           break
         }
         case 'delete': {
           const aliasLabel = args['alias-label'] || 'external_id'
           const aliasId = args['alias-id']
           if (!aliasId) { result = { error: '--alias-id required' }; break }
-          result = await api('DELETE', `/api/v1/apps/${APP_ID}/users/by/${aliasLabel}/${aliasId}`)
+          result = await api('DELETE', `/apps/${APP_ID}/users/by/${encodeURIComponent(aliasLabel)}/${encodeURIComponent(aliasId)}`)
           break
         }
         default:
