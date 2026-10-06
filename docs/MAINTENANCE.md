@@ -63,6 +63,26 @@ Confirm the portable discovery count, smoke-test affected harness targets, updat
 
 Some pinned sources contain their own `.gitignore` files. When a reviewed source update adds an intentionally tracked file that matches one of those nested rules, stage the preserved snapshot explicitly with `git add -f upstreams/` so the Git commit remains complete.
 
+## 6. Publish and verify the release
+
+A commit, push, or `VERSION` change does not publish a GitHub release. For an authorized public version update, push the reviewed commit and wait for its cross-platform validation workflow to pass. Publish the version in `VERSION` against that exact tested commit, with reviewed release notes covering every change since the last published release:
+
+```bash
+gh release create vX.Y.Z --repo iamwaqargulzar/Marketing-Agent-OS --target FULL_TESTED_COMMIT_SHA --title "Marketing Agent OS vX.Y.Z" --notes-file /path/to/release-notes.md --latest
+```
+
+Replace the version, commit, and notes path with verified values. Do not use `--draft` for a release intended to be public. GitHub automatically provides ZIP and tar.gz source archives for the release tag.
+
+Verify publication separately from the command's success:
+
+```bash
+gh api repos/iamwaqargulzar/Marketing-Agent-OS/releases/latest --jq '{tag: .tag_name, draft: .draft, prerelease: .prerelease, published_at: .published_at, url: .html_url}'
+gh api repos/iamwaqargulzar/Marketing-Agent-OS/git/ref/tags/vX.Y.Z --jq '.object'
+git fetch origin tag vX.Y.Z
+```
+
+Confirm that the latest tag matches `VERSION`, the release is neither draft nor prerelease, and the tag resolves to the tested commit (dereference an annotated tag if needed). Report the live release URL to the user. If the version already has a release, inspect it before taking further action; never overwrite an existing release tag silently.
+
 ## Recovery
 
 The updater is all-or-nothing for the selected sources during a run. If a later review rejects an applied update, restore the affected files through normal version-control history; do not edit a pinned snapshot by hand.
