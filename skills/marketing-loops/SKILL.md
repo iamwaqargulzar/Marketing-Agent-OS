@@ -1,9 +1,9 @@
 ---
 name: marketing-loops
-description: "When the user wants to set up a recurring, self-running marketing workflow — a repeatable loop an AI agent runs on a cadence (weekly, daily, on a trigger) rather than a one-off task. Also use when the user mentions 'marketing loop,' 'recurring marketing workflow,' 'automate my marketing,' 'marketing on autopilot,' 'weekly marketing review,' 'ad fatigue check,' 'content refresh loop,' 'churn watch,' 'ranking drop alert,' 'always-on marketing,' 'marketing automation workflow,' or 'run this every week.' Use this to pick, adapt, and schedule an ongoing marketing loop that orchestrates the other marketing skills. For one-off marketing ideas, see marketing-ideas. For the experimentation loop specifically, see ab-testing."
+description: "Design recurring marketing workflows and bounded SEO or outbound operators, with cadence, evidence, shared-state ownership, caps, approvals, receipts, and stop conditions. Use specialist skills for one-off work."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "marketing"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **marketing loops**. Start from the user’s concrete objecti
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Channel operators
+
+For recurring SEO or outbound operations, read [references/channel-operators.md](references/channel-operators.md). Define the objective, data access, cadence, shared-state owner, approved actions, caps, stop conditions, and receipts. Use the host's supported scheduler only when scheduling is requested. A recurring workflow never grants default send/publish/spend authority, and private business state is persisted only in an authorized location.
 
 ## Domain Checklist
 

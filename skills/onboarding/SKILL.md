@@ -3,7 +3,7 @@ name: onboarding
 description: "When the user wants to optimize post-signup onboarding, user activation, first-run experience, or time-to-value. Also use when the user mentions \"onboarding flow,\" \"activation rate,\" \"user activation,\" \"first-run experience,\" \"empty states,\" \"onboarding checklist,\" \"aha moment,\" \"new user experience,\" \"users aren't activating,\" \"nobody completes setup,\" \"low activation rate,\" \"users sign up but don't use the product,\" \"time to value,\" or \"first session experience.\" Use this whenever users are signing up but not sticking around. For signup/registration optimization, see signup. For ongoing email sequences, see emails."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "cro"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **onboarding**. Start from the user’s concrete objective an
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Activation without leakage
+
+Define signup time zero, an early activation window, and a distinct later retention outcome. Use all eligible signups with full follow-up; immature cohorts remain pending. Exclude actions from the outcome window and post-outcome features. Treat correlated actions as hypotheses, validate on later mature cohorts, and test whether an intervention improves retention rather than claiming that forcing a correlated action causes it.
 
 ## Domain Checklist
 

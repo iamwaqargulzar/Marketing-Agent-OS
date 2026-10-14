@@ -12,11 +12,22 @@ if ((!PUBLIC_KEY || !SECRET_KEY) && rawArgs.length > 0) {
 
 const AUTH = 'Basic ' + Buffer.from(`${PUBLIC_KEY}:${SECRET_KEY}`).toString('base64')
 
+
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
+  }
+  return AbortSignal.timeout(ms)
+}
+
+
 async function api(method, path, body) {
   if (args['dry-run']) {
     return { _dry_run: true, method, url: `${BASE_URL}${path}`, headers: { Authorization: '***', 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: body || undefined }
   }
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await fetch(`${BASE_URL}${path}`, { signal: requestSignal(),
     method,
     headers: {
       'Authorization': AUTH,
@@ -25,6 +36,7 @@ async function api(method, path, body) {
     },
     body: body ? JSON.stringify(body) : undefined,
   })
+  if (!res.ok) process.exitCode = 1
   const text = await res.text()
   try {
     return JSON.parse(text)
@@ -166,12 +178,13 @@ async function main() {
           const amount = args.amount
           if (!customerKey) { result = { error: '--customer-key required' }; break }
           if (!amount) { result = { error: '--amount required (in cents)' }; break }
+          if (!args.currency) { result = { error: '--currency required (three-letter currency code)' }; break }
           const body = {
             customer_key: customerKey,
             amount: Number(amount),
+            currency: args.currency,
           }
-          if (args.currency) body.currency = args.currency
-          if (args.category) body.category = args.category
+          if (args.category) body.category_key = args.category
           if (args['product-key']) body.product_key = args['product-key']
           result = await api('POST', '/transactions', body)
           break
@@ -242,11 +255,14 @@ async function main() {
           const actionKey = args['action-key']
           if (!customerKey) { result = { error: '--customer-key required' }; break }
           if (!actionKey) { result = { error: '--action-key required' }; break }
+          const value = args.value === undefined ? 1 : Number(args.value)
+          if (!Number.isSafeInteger(value) || value < 1) { result = { error: '--value must be a positive integer' }; break }
           const body = {
-            customer_key: customerKey,
-            key: actionKey,
+            target_key: customerKey,
+            target_type: 'customer',
+            type: actionKey,
+            value,
           }
-          if (args.value) body.value = Number(args.value)
           result = await api('POST', '/actions', body)
           break
         }
@@ -340,8 +356,8 @@ async function main() {
         case 'create': {
           const target = args.target
           if (!target) { result = { error: '--target required (webhook URL)' }; break }
-          const body = { target }
-          if (args.events) body.events = args.events.split(',')
+          if (!args.events) { result = { error: '--events required (comma-separated event names)' }; break }
+          const body = { target_url: target, events: args.events.split(',') }
           result = await api('POST', '/webhooks', body)
           break
         }
@@ -362,18 +378,19 @@ async function main() {
         usage: {
           partnerships: 'partnerships [list | get --key <key> | create --email <email> --group <group-key> | update --key <key>]',
           customers: 'customers [list | get --key <key> | create --email <email> --partner-key <key> | update --key <key> | delete --key <key>]',
-          transactions: 'transactions [list | get --key <key> | create --customer-key <key> --amount <cents> | delete --key <key>]',
+          transactions: 'transactions [list | get --key <key> | create --customer-key <key> --amount <cents> --currency <code> [--category <category-key>] | delete --key <key>]',
           deals: 'deals [list | get --key <key> | create --partner-key <key> --name <name> | update --key <key> | archive --key <key>]',
-          actions: 'actions [list | create --customer-key <key> --action-key <key> [--value <n>]]',
+          actions: 'actions [list | create --customer-key <key> --action-key <action-type> [--value <count, default: 1>]]',
           rewards: 'rewards [list | create --partner-key <key> --amount <cents>]',
           leads: 'leads [list | get --key <key> | create --partner-key <key> --email <email> | update --key <key>]',
           groups: 'groups [list]',
-          webhooks: 'webhooks [list | get --key <key> | create --target <url> [--events <evt1,evt2>] | delete --key <key>]',
+          webhooks: 'webhooks [list | get --key <key> | create --target <url> --events <evt1,evt2> | delete --key <key>]',
           options: '--limit <n> --after <cursor> --before <cursor> --order-by <field>',
         }
       }
   }
 
+  if (result?.error && rawArgs.length > 0) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

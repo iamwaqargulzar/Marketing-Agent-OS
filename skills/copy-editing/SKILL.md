@@ -3,7 +3,7 @@ name: copy-editing
 description: "Edit or review existing marketing copy for clarity, accuracy, voice, freshness, and repetitive AI-like phrasing. Use for proofreading, copy feedback, tightening text, refreshing outdated copy, or making a draft sound natural. Preserve effective copy and supported claims. For new copy use `copywriting`."
 license: Apache-2.0
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   domain: "content"
   provenance: "marketing-agent-os"
 ---
@@ -32,6 +32,10 @@ Use this skill for **copy editing**. Start from the user’s concrete objective 
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
 8. When copy sounds generated, identify the actual repeated shape, vague claim, stock phrase, or unnecessary filler and repair it from supported facts. Leave clear, accurate copy alone; do not rewrite it merely to remove a punctuation mark or satisfy a blanket vocabulary ban.
+
+## Evidence-led content refresh
+
+For declining or stale pages, compare current query intent, relevant competing results, missing useful answers, and the page's actual performance before choosing a refresh or rewrite. Preserve supported claims and effective sections; record changes, redirect dependencies, and a post-refresh observation window. A traffic decline alone does not establish content decay.
 
 ## Domain Checklist
 

@@ -4,14 +4,33 @@ const rawArgs = process.argv.slice(2)
 const TOKEN = process.env.MIXPANEL_TOKEN
 const API_KEY = process.env.MIXPANEL_API_KEY
 const SECRET = process.env.MIXPANEL_SECRET
-const INGESTION_URL = 'https://api.mixpanel.com'
-const QUERY_URL = 'https://mixpanel.com/api/2.0'
-const EXPORT_URL = 'https://data.mixpanel.com/api/2.0'
+const PROJECT_SECRET = process.env.MIXPANEL_PROJECT_SECRET
+const REGION = process.env.MIXPANEL_REGION ?? 'us'
+const REGION_HOSTS = {
+  us: ['api.mixpanel.com', 'mixpanel.com', 'data.mixpanel.com'],
+  eu: ['api-eu.mixpanel.com', 'eu.mixpanel.com', 'data-eu.mixpanel.com'],
+  in: ['api-in.mixpanel.com', 'in.mixpanel.com', 'data-in.mixpanel.com'],
+}
+const hosts = Object.hasOwn(REGION_HOSTS, REGION) ? REGION_HOSTS[REGION] : REGION_HOSTS.us
+const INGESTION_URL = `https://${hosts[0]}`
+const QUERY_URL = `https://${hosts[1]}/api/2.0`
+const EXPORT_URL = `https://${hosts[2]}/api/2.0`
 
-if ((!TOKEN && !API_KEY) && rawArgs.length > 0) {
-  console.error(JSON.stringify({ error: 'MIXPANEL_TOKEN (for ingestion) or MIXPANEL_API_KEY + MIXPANEL_SECRET (for query/export) environment variables required' }))
+if ((!TOKEN && !API_KEY && !SECRET && !PROJECT_SECRET) && rawArgs.length > 0) {
+  console.error(JSON.stringify({ error: 'MIXPANEL_TOKEN (ingestion), MIXPANEL_API_KEY + MIXPANEL_SECRET (service account), or MIXPANEL_PROJECT_SECRET (legacy project auth) required' }))
   process.exit(1)
 }
+
+
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
+  }
+  return AbortSignal.timeout(ms)
+}
+
 
 async function ingestApi(method, path, body) {
   const headers = { 'Content-Type': 'application/json' }
@@ -23,24 +42,37 @@ async function ingestApi(method, path, body) {
     })
     return { _dry_run: true, method, url: `${INGESTION_URL}${path}`, headers, body: maskedBody }
   }
-  const res = await fetch(`${INGESTION_URL}${path}`, {
+  const res = await fetch(`${INGESTION_URL}${path}`, { signal: requestSignal(),
     method,
     headers,
     body: body ? JSON.stringify(body) : undefined,
   })
+  if (!res.ok) process.exitCode = 1
   const text = await res.text()
   try {
-    return JSON.parse(text)
+    const payload = JSON.parse(text)
+    if (payload === 0) process.exitCode = 1
+    return payload
   } catch {
     return { status: res.status, body: text }
   }
 }
 
-async function queryApi(method, baseUrl, path, params) {
-  if (!API_KEY || !SECRET) {
-    return { error: 'MIXPANEL_API_KEY and MIXPANEL_SECRET required for query/export operations' }
+function queryAuth() {
+  // Existing KEY:SECRET credentials are a service account, and always win.
+  if (API_KEY) {
+    if (!SECRET) throw new Error('MIXPANEL_SECRET required with MIXPANEL_API_KEY for service-account auth')
+    if (!args['project-id']) throw new Error('--project-id required for service-account query/export operations')
+    return Buffer.from(`${API_KEY}:${SECRET}`).toString('base64')
   }
-  const auth = Buffer.from(`${API_KEY}:${SECRET}`).toString('base64')
+  const secret = PROJECT_SECRET || SECRET
+  if (!secret) throw new Error('Service-account credentials or MIXPANEL_PROJECT_SECRET required for query/export operations')
+  return Buffer.from(`${secret}:`).toString('base64')
+}
+
+async function queryApi(method, baseUrl, path, params) {
+  const auth = queryAuth()
+  if (args['project-id']) params.set('project_id', args['project-id'])
   const url = params ? `${baseUrl}${path}?${params}` : `${baseUrl}${path}`
   const headers = {
     'Authorization': `Basic ${auth}`,
@@ -49,7 +81,7 @@ async function queryApi(method, baseUrl, path, params) {
   if (args['dry-run']) {
     return { _dry_run: true, method, url, headers: { ...headers, Authorization: '***' } }
   }
-  const res = await fetch(url, {
+  const res = await fetch(url, { signal: requestSignal(),
     method,
     headers,
   })
@@ -62,10 +94,7 @@ async function queryApi(method, baseUrl, path, params) {
 }
 
 async function queryApiPost(path, body) {
-  if (!API_KEY || !SECRET) {
-    return { error: 'MIXPANEL_API_KEY and MIXPANEL_SECRET required for query/export operations' }
-  }
-  const auth = Buffer.from(`${API_KEY}:${SECRET}`).toString('base64')
+  const auth = queryAuth()
   const headers = {
     'Authorization': `Basic ${auth}`,
     'Content-Type': 'application/json',
@@ -73,7 +102,7 @@ async function queryApiPost(path, body) {
   if (args['dry-run']) {
     return { _dry_run: true, method: 'POST', url: `${QUERY_URL}${path}`, headers: { ...headers, Authorization: '***' }, body: body || undefined }
   }
-  const res = await fetch(`${QUERY_URL}${path}`, {
+  const res = await fetch(`${QUERY_URL}${path}`, { signal: requestSignal(),
     method: 'POST',
     headers,
     body: JSON.stringify(body),
@@ -110,6 +139,7 @@ const args = parseArgs(rawArgs)
 const [cmd, sub, ...rest] = args._
 
 async function main() {
+  if (rawArgs.length > 0 && !Object.hasOwn(REGION_HOSTS, REGION)) throw new Error('MIXPANEL_REGION must be us, eu, or in')
   let result
 
   switch (cmd) {
@@ -121,6 +151,9 @@ async function main() {
           if (!args.event) { result = { error: '--event required' }; break }
           let properties
           try { properties = args.properties ? JSON.parse(args.properties) : {} } catch { result = { error: 'Invalid JSON in --properties' }; break }
+          if (properties === null || typeof properties !== 'object' || Array.isArray(properties)) {
+            throw new Error('--properties must be a JSON object')
+          }
           properties.token = TOKEN
           properties.distinct_id = args['distinct-id']
           result = await ingestApi('POST', '/track', [{
@@ -141,6 +174,9 @@ async function main() {
           if (!args['distinct-id']) { result = { error: '--distinct-id required' }; break }
           let properties
           try { properties = args.properties ? JSON.parse(args.properties) : {} } catch { result = { error: 'Invalid JSON in --properties' }; break }
+          if (properties === null || typeof properties !== 'object' || Array.isArray(properties)) {
+            throw new Error('--properties must be a JSON object')
+          }
           result = await ingestApi('POST', '/engage', [{
             $token: TOKEN,
             $distinct_id: args['distinct-id'],
@@ -233,13 +269,14 @@ async function main() {
           track: 'track event --distinct-id <id> --event <name> [--properties <json>]',
           profiles: 'profiles set --distinct-id <id> [--properties <json>]',
           query: 'query events --project-id <id> [--event <name>] [--from-date <date>] [--to-date <date>]',
-          funnels: 'funnels get --funnel-id <id> [--from-date <date>] [--to-date <date>]',
-          retention: 'retention get [--from-date <date>] [--to-date <date>] [--born-event <event>]',
-          export: 'export events --from-date <date> --to-date <date>',
+          funnels: 'funnels get --funnel-id <id> [--project-id <id>] [--from-date <date>] [--to-date <date>]',
+          retention: 'retention get [--project-id <id>] [--from-date <date>] [--to-date <date>] [--born-event <event>]',
+          export: 'export events --from-date <date> --to-date <date> [--project-id <id>]',
         }
       }
   }
 
+  if (result?.error && rawArgs.length > 0) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

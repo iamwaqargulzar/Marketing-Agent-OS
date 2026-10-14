@@ -3,7 +3,7 @@ name: schema
 description: "Design, validate and implement structured data that accurately represents visible page content and current search-engine eligibility rules."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "seo-geo"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **schema**. Start from the user’s concrete objective and av
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Consumer-specific feature support
+
+Separate Schema.org semantic validity from a consumer's supported search appearance. Check Google's current structured-data gallery before offering implementation for rich results. Google retired FAQ rich results in May 2026, HowTo rich results in 2023, and the sitelinks search box in 2024; matching semantic markup can remain useful for other consumers, and `WebSite` can still describe site identity. Missing retired-feature reports are not implementation failures. Validate semantics and supported-feature eligibility separately; never promise display.
 
 ## Domain Checklist
 

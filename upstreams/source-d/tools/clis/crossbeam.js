@@ -9,12 +9,23 @@ if ((!API_KEY) && rawArgs.length > 0) {
   process.exit(1)
 }
 
+
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
+  }
+  return AbortSignal.timeout(ms)
+}
+
+
 async function api(method, path, body) {
   const url = `${BASE_URL}${path}`
   if (args['dry-run']) {
     return { _dry_run: true, method, url, headers: { 'Authorization': 'Bearer ***', 'Content-Type': 'application/json' }, body: body || undefined }
   }
-  const res = await fetch(url, {
+  const res = await fetch(url, { signal: requestSignal(),
     method,
     headers: {
       'Authorization': `Bearer ${API_KEY}`,
@@ -92,26 +103,34 @@ async function main() {
       }
       break
 
-    case 'overlaps':
+    case 'overlaps': {
+      const type = args.type || 'accounts'
+      if (!['accounts', 'leads'].includes(type)) { result = { error: '--type must be accounts or leads' }; break }
       switch (sub) {
         case 'list': {
           const params = new URLSearchParams()
-          if (args['partner-id']) params.set('partner_id', args['partner-id'])
-          if (args['population-id']) params.set('population_id', args['population-id'])
+          if (args['partner-id']) params.set('partner-id', args['partner-id'])
+          if (args['population-id']) params.set('population-ids[]', args['population-id'])
+          if (args.cursor) params.set('cursor', args.cursor)
+          if (args.limit) params.set('limit', args.limit)
           const qs = params.toString()
-          result = await api('GET', `/overlaps${qs ? '?' + qs : ''}`)
+          result = await api('GET', `/overlaps/${type}${qs ? '?' + qs : ''}`)
           break
         }
         case 'get': {
-          const id = args.id
-          if (!id) { result = { error: '--id required' }; break }
-          result = await api('GET', `/overlaps/${id}`)
+          const id = args['record-id'] || args.id
+          if (!id) { result = { error: '--record-id required (source record ID; --id is an alias)' }; break }
+          const params = new URLSearchParams({ record_id: id })
+          if (args['partner-id']) params.set('partner-id', args['partner-id'])
+          if (args['partner-population-id']) params.set('partner-population-ids[]', args['partner-population-id'])
+          result = await api('GET', `/overlaps/${type}/search?${params}`)
           break
         }
         default:
           result = { error: 'Unknown overlaps subcommand. Use: list, get' }
       }
       break
+    }
 
     case 'reports':
       switch (sub) {
@@ -168,8 +187,8 @@ async function main() {
             get: 'populations get --id <id>',
           },
           overlaps: {
-            list: 'overlaps list [--partner-id <id>] [--population-id <id>]',
-            get: 'overlaps get --id <id>',
+            list: 'overlaps list [--type accounts|leads] [--partner-id <id>] [--population-id <own-id>] [--cursor <cursor>] [--limit <n>]',
+            get: 'overlaps get --record-id <source-record-id> [--type accounts|leads] [--partner-id <id>] [--partner-population-id <partner-id>] (--id is a record-id alias)',
           },
           reports: {
             list: 'reports list',
@@ -185,6 +204,7 @@ async function main() {
       }
   }
 
+  if (result?.error && rawArgs.length > 0) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

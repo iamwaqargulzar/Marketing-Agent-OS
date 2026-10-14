@@ -11,6 +11,17 @@ if ((!API_KEY) && rawArgs.length > 0) {
 const dc = API_KEY ? API_KEY.split('-').pop() : ''
 const BASE_URL = `https://${dc}.api.mailchimp.com/3.0`
 
+
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
+  }
+  return AbortSignal.timeout(ms)
+}
+
+
 async function api(method, path, body) {
   const auth = 'Basic ' + Buffer.from(`anystring:${API_KEY}`).toString('base64')
   const headers = {
@@ -20,7 +31,7 @@ async function api(method, path, body) {
   if (args['dry-run']) {
     return { _dry_run: true, method, url: `${BASE_URL}${path}`, headers: { ...headers, Authorization: '***' }, body: body || undefined }
   }
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await fetch(`${BASE_URL}${path}`, { signal: requestSignal(),
     method,
     headers,
     body: body ? JSON.stringify(body) : undefined,
@@ -125,7 +136,17 @@ async function main() {
             if (args['first-name']) body.merge_fields.FNAME = args['first-name']
             if (args['last-name']) body.merge_fields.LNAME = args['last-name']
           }
-          if (args.tags) body.tags = args.tags.split(',')
+          if (args.tags !== undefined) {
+            if (typeof args.tags !== 'string' || args.tags.split(',').some(tag => !tag.trim())) {
+              result = { error: '--tags must contain comma-separated non-empty tag names' }; break
+            }
+            if (Object.keys(body).length) {
+              result = { error: 'Update tags and member fields separately: Mailchimp uses separate endpoints' }; break
+            }
+            const tags = args.tags.split(',').map(name => ({ name: name.trim(), status: 'active' }))
+            result = await api('POST', `/lists/${args['list-id']}/members/${subscriberHash}/tags`, { tags })
+            break
+          }
           result = await api('PATCH', `/lists/${args['list-id']}/members/${subscriberHash}`, body)
           break
         }
@@ -212,6 +233,7 @@ async function main() {
       }
   }
 
+  if (result?.error && rawArgs.length > 0) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

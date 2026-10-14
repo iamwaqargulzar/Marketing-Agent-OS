@@ -6,13 +6,13 @@ function run(vendor, args, fetch = true) {
   const cli = path.resolve(__dirname, `../../tools/clis/${vendor}.js`)
   const source = `global.fetch = async (url, options) => {
     if (!${fetch}) throw new Error('Unexpected network request');
-    return { status: 200, text: async () => JSON.stringify({ url, method: options.method, body: options.body ? JSON.parse(options.body) : null }) };
+    return { ok: true, status: 200, text: async () => JSON.stringify({ url, method: options.method, body: options.body ? JSON.parse(options.body) : null }) };
   }; process.argv = ['node', ${JSON.stringify(cli)}, ...${JSON.stringify(args)}]; require(${JSON.stringify(cli)});`
   return spawnSync(process.execPath, ['-e', source], { encoding: 'utf8', timeout: 5000, env: {
     ...process.env, REWARDFUL_API_KEY: 'fake-key', RESEND_API_KEY: 'fake-key', POSTMARK_API_KEY: 'fake-key', BEEHIIV_API_KEY: 'fake-key', KLAVIYO_API_KEY: 'fake-key',
   } })
 }
-function output(result) { assert.equal(result.status, 0, result.stderr); return JSON.parse(result.stdout) }
+function output(result, expectedStatus = 0) { assert.equal(result.status, expectedStatus, result.stderr); return JSON.parse(result.stdout) }
 
 test('a layout creation request omits the API-forbidden Subject field', () => {
   const result = output(run('postmark', ['templates', 'create', '--name', 'Layout', '--type', 'Layout', '--html', '<div>{{{ @content }}}</div>']))
@@ -23,7 +23,7 @@ test('a layout creation request omits the API-forbidden Subject field', () => {
   assert.equal(result.body.HtmlBody, '<div>{{{ @content }}}</div>')
 })
 test('a subject for a layout stops before the provider rejects it', () => {
-  assert.match(output(run('postmark', ['templates', 'create', '--name', 'Layout', '--type', 'Layout', '--subject', 'Invalid', '--html', '{{{ @content }}}'], false)).error, /subject.*Layout/i)
+  assert.match(output(run('postmark', ['templates', 'create', '--name', 'Layout', '--type', 'Layout', '--subject', 'Invalid', '--html', '{{{ @content }}}'], false), 1).error, /subject.*Layout/i)
 })
 test('standard templates retain their required Subject and explicit type', () => {
   const result = output(run('postmark', ['templates', 'create', '--name', 'Standard', '--type', 'Standard', '--subject', 'Receipt', '--text', 'Hello']))

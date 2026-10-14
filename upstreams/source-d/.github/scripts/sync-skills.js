@@ -19,13 +19,15 @@ const README_FILE = "README.md";
  * Parse YAML frontmatter from a SKILL.md file
  */
 function parseFrontmatter(content) {
-  const match = content.match(/^---\n([\s\S]*?)\n---/);
+  const match = content.replace(/\r\n/g, "\n").match(/^---\n([\s\S]*?)\n---/);
   if (!match) return {};
 
   const frontmatter = {};
   const lines = match[1].split("\n");
 
   for (const line of lines) {
+    // Nested metadata keys are not skill name/description fields.
+    if (/^\s/.test(line)) continue;
     const colonIndex = line.indexOf(":");
     if (colonIndex === -1) continue;
 
@@ -115,7 +117,7 @@ function updateReadme(skills) {
   const content = fs.readFileSync(README_FILE, "utf8");
 
   // Match content between skill list markers
-  const tableRegex = /(<!-- SKILLS:START -->\n)[\s\S]*?(\n<!-- SKILLS:END -->)/;
+  const tableRegex = /(<!-- SKILLS:START -->\r?\n)[\s\S]*?(\r?\n<!-- SKILLS:END -->)/;
   const newTable = generateSkillsTable(skills);
 
   if (!tableRegex.test(content)) {
@@ -123,7 +125,10 @@ function updateReadme(skills) {
     return false;
   }
 
-  const newContent = content.replace(tableRegex, `$1${newTable}$2`);
+  const newContent = content.replace(tableRegex, (_match, start, end) => {
+    const newline = start.endsWith("\r\n") ? "\r\n" : "\n";
+    return start + newTable.replaceAll("\n", newline) + end;
+  });
 
   if (newContent === content) {
     return false;

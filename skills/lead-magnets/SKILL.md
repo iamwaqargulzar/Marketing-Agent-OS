@@ -1,9 +1,9 @@
 ---
 name: lead-magnets
-description: "When the user wants to create, plan, or optimize a lead magnet for email capture or lead generation. Also use when the user mentions \"lead magnet,\" \"gated content,\" \"content upgrade,\" \"downloadable,\" \"ebook,\" \"cheat sheet,\" \"checklist,\" \"template download,\" \"opt-in,\" \"freebie,\" \"PDF download,\" \"resource library,\" \"content offer,\" \"email capture content,\" \"Notion template,\" \"spreadsheet template,\" or \"what should I give away for emails.\" Use this for planning what to create and how to distribute it. For interactive tools as lead magnets, see free-tools. For writing the actual content, see copywriting. For the email sequence after capture, see emails."
+description: "Plan lead magnets and package owned courses or content libraries as installable agent skills, with rights checks, source-backed lessons, and distribution validation. For public-site AI visibility use `ai-seo`."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "content"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **lead magnets**. Start from the user’s concrete objective 
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Owned content as a skill
+
+For packaging a course or content archive as an installable agent skill, read [references/content-library-skill.md](references/content-library-skill.md). Confirm rights and redistribution scope, pilot representative sources, preserve evidence and uncertainty, and validate target-harness installation before release. Do not substitute a flattened transcript dump for a bounded useful workflow; publishing and lead capture remain separately authorized.
 
 ## Domain Checklist
 

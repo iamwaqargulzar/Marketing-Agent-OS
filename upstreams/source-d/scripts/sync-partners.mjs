@@ -30,7 +30,7 @@ const readmeBlock = active.length
   ? active
       .map(
         (p) =>
-          `> ◆ **[${p.name}](${p.url}${REF})** — *${p.categoryShort || p.category}.* ${p.blurb} → [Integration guide](${p.integration})`
+          `> ◆ **[${p.name}](${p.url}${p.noRef ? "" : REF})** — *${p.categoryShort || p.category}.* ${p.blurb} → [Integration guide](${p.integration})`
       )
       .join("\n\n")
   : "_No active partners yet. [Become a partner →](https://marketing-skills.com/sponsorship)_";

@@ -9,11 +9,22 @@ if ((!ACCESS_TOKEN) && rawArgs.length > 0) {
   process.exit(1)
 }
 
+
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
+  }
+  return AbortSignal.timeout(ms)
+}
+
+
 async function api(method, path, body) {
   if (args['dry-run']) {
     return { _dry_run: true, method, url: `${BASE_URL}${path}`, headers: { Authorization: '***', 'Content-Type': 'application/json' }, body: body || undefined }
   }
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await fetch(`${BASE_URL}${path}`, { signal: requestSignal(),
     method,
     headers: {
       'Authorization': `Bearer ${ACCESS_TOKEN}`,
@@ -22,6 +33,9 @@ async function api(method, path, body) {
     body: body ? JSON.stringify(body) : undefined,
   })
   const text = await res.text()
+  if (method === 'PUT' && !text && res.ok) {
+    return { success: true, message: 'Sitemap submitted successfully' }
+  }
   try {
     return JSON.parse(text)
   } catch {
@@ -63,6 +77,15 @@ function getDefaultDates() {
   }
 }
 
+function pageInteger(name, minimum, maximum = Number.MAX_SAFE_INTEGER) {
+  const value = args[name]
+  const number = Number(value)
+  if (typeof value !== 'string' || !/^\d+$/.test(value) || !Number.isSafeInteger(number) || number < minimum || number > maximum) {
+    throw new Error(`--${name} must be an integer between ${minimum} and ${maximum}`)
+  }
+  return number
+}
+
 async function main() {
   let result
   const siteUrl = args['site-url']
@@ -78,8 +101,10 @@ async function main() {
       const body = {
         startDate: args['start-date'] || defaults.startDate,
         endDate: args['end-date'] || defaults.endDate,
-        rowLimit: parseInt(args.limit || '100', 10),
+        rowLimit: args.limit === undefined ? 100 : pageInteger('limit', 1, 25000),
       }
+
+      if (args['start-row'] !== undefined) body.startRow = pageInteger('start-row', 0)
 
       switch (sub) {
         case 'query':
@@ -133,9 +158,6 @@ async function main() {
           if (!args['sitemap-url']) { result = { error: '--sitemap-url required' }; break }
           const sitemapUrl = encodeURIComponent(args['sitemap-url'])
           result = await api('PUT', `/webmasters/v3/sites/${encodedSiteUrl}/sitemaps/${sitemapUrl}`)
-          if (!result.body && !result.error) {
-            result = { success: true, message: 'Sitemap submitted successfully' }
-          }
           break
         }
         default:
@@ -148,9 +170,9 @@ async function main() {
       result = {
         error: 'Unknown command',
         usage: {
-          'search query': 'search query --site-url <url> [--start-date <date>] [--end-date <date>] [--limit <n>]',
-          'search pages': 'search pages --site-url <url> [--start-date <date>] [--end-date <date>] [--limit <n>]',
-          'search countries': 'search countries --site-url <url> [--start-date <date>] [--end-date <date>] [--limit <n>]',
+          'search query': 'search query --site-url <url> [--start-date <date>] [--end-date <date>] [--limit <1-25000>] [--start-row <n>]',
+          'search pages': 'search pages --site-url <url> [--start-date <date>] [--end-date <date>] [--limit <1-25000>] [--start-row <n>]',
+          'search countries': 'search countries --site-url <url> [--start-date <date>] [--end-date <date>] [--limit <1-25000>] [--start-row <n>]',
           'inspect url': 'inspect url --site-url <url> --url <page-url>',
           'sitemaps list': 'sitemaps list --site-url <url>',
           'sitemaps submit': 'sitemaps submit --site-url <url> --sitemap-url <sitemap-url>',
@@ -158,6 +180,7 @@ async function main() {
       }
   }
 
+  if (result?.error && rawArgs.length > 0) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

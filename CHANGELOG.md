@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## 1.5.0 — 2026-10-14
+
+- Refresh source A to `2541ef9b`, source C to `989cae01`, and source D v2.11.29 to `c7d7dfb6`; source B remains current at `4b99de2f`. Preserve complete pinned snapshots, licenses, attribution, and exact tree hashes.
+- Update 35 existing normalized skills and nine discovery descriptions without adding duplicate skills; all 238 skills and upstream declared names remain covered.
+- Add portable outbound, signal/enrichment, decision-time lead scoring and inbound routing, honest review/affiliate programs, shipped-release/site QA, owned-content skill packaging, channel-operator, and local/query SEO references.
+- Correct experiment interpretation and duration planning, matched-window analytics, activation/qualification leakage, partial health scores, gross-margin/cohort payback, ARR budget reconciliation, price-perception limits, compounding lift assumptions, recurring marketplace costs, backlink inspection, and consumer-specific structured-data eligibility.
+- Adapt current provider-event and Google Ads access guidance with first-party checks. Keep source-specific CLIs, native packaging, promotional content, and default autonomous sending out of the normalized standard-library core.
+- Add byte-for-byte specialist resource installation checks for Codex, Claude Code, OpenCode, Pi, Amp, and Cursor. Retain Linux/macOS/Windows package and installer gates and the explicit GitHub release-publication checklist.
+
 ## 1.4.0 — 2026-10-05
 
 - Refreshed all four pinned source snapshots: source A `3f68ddad`, source B v2.4.2 `4b99de2f`, source C `ea29bd29`, and source D v2.11.17 `dda3841f`. Retained licenses, notices, attribution, and exact snapshot hashes.

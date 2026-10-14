@@ -3,7 +3,7 @@ name: pricing
 description: "Design or evaluate pricing and packaging using customer value, willingness-to-pay evidence, competitive context, unit economics and experiment design."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "gtm-sales"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **pricing**. Start from the user’s concrete objective and a
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Price-perception limits
+
+For Van Westendorp research, validate currency, billing period, offering, and threshold ordering; document exclusions. At candidate price p, cheap curves count thresholds at or above p, expensive curves at or below p, with a consistent tie convention. Intersections suggest perceived acceptability and candidate tests, not revenue/profit optima or unchanged demand. Forecast conversion, margin, and retention only with additional behavioral evidence or explicitly labeled assumptions.
 
 ## Domain Checklist
 

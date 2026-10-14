@@ -1,9 +1,9 @@
 ---
 name: site-architecture
-description: "When the user wants to plan, map, or restructure their website's page hierarchy, navigation, URL structure, or internal linking. Also use when the user mentions \"sitemap,\" \"site map,\" \"visual sitemap,\" \"site structure,\" \"page hierarchy,\" \"information architecture,\" \"IA,\" \"navigation design,\" \"URL structure,\" \"breadcrumbs,\" \"internal linking strategy,\" \"website planning,\" \"what pages do I need,\" \"how should I organize my site,\" or \"site navigation.\" Use this whenever someone is planning what pages a website should have and how they connect. NOT for XML sitemaps (that's technical SEO — see seo-audit). For SEO audits, see seo-audit. For structured data, see schema."
+description: "Plan website hierarchy, URLs, navigation, internal linking, platform fit, or migration with URL preservation and rollback. Not for XML sitemap validation or technical SEO diagnosis."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "seo-geo"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **site architecture**. Start from the user’s concrete objec
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Platform and migration decision
+
+Inventory existing platform capabilities, URLs, valuable traffic/backlinks, content ownership, and actual maintenance constraints before choosing a builder or migrating. Prefer adding a section to the existing site when sufficient. For a migration, map old URLs to relevant destinations, test redirects/canonicals/internal links/sitemaps, preserve locale relationships, and define rollback. Avoid mass redirects to the homepage; use `launch` for go-live QA.
 
 ## Domain Checklist
 

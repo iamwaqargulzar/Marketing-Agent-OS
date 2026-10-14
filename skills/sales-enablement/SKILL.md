@@ -1,9 +1,9 @@
 ---
 name: sales-enablement
-description: "Create sales one-pagers, decks, battlecards, objection responses, demo narratives, and proof assets. Use for a live deal objection, competitive battle card, win-loss analysis, loss reasons, or defensible sales claims."
+description: "Create sales assets, battlecards, objection responses, demo narratives, cold-call and voicemail drafts, and win-loss analysis with defensible claims. For sending and multichannel cadence use `cold-email`."
 license: Apache-2.0
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   domain: "gtm-sales"
   provenance: "marketing-agent-os"
 ---
@@ -32,6 +32,10 @@ Use this skill for **sales enablement**. Start from the user’s concrete object
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
 8. For battlecards, live objections, or win-loss analysis, read `references/competitive-enablement.md`. Keep a deal-specific response separate from a reusable competitor-wide claim.
+
+## Cold-call and voicemail drafts
+
+For cold outreach calls, prepare a sourced relevance opener, permission-based short conversation, discovery question, common first-minute objections, and a concise honest voicemail. Do not fabricate a prior relationship or imply a referral without permission. Route broader cadence/sending to `cold-email`; confirm calling eligibility, recording requirements, and permitted channels before proposing execution.
 
 ## Domain Checklist
 

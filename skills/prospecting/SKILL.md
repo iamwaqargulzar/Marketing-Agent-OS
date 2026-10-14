@@ -1,9 +1,9 @@
 ---
 name: prospecting
-description: "Build qualified prospect lists using an explicit ICP, source provenance, qualification criteria, scoring, enrichment hygiene and outreach-compliance checks."
+description: "Build qualified prospect lists and sourced account briefs using ICP fit, buying signals, tiers, licensed-source provenance, verification, budgeted enrichment, and exact cache reuse. For outreach use `cold-email`; for competitors use `competitor-profiling`."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "gtm-sales"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **prospecting**. Start from the user’s concrete objective a
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Signals, verification, and enrichment
+
+Read [references/enrichment-and-signals.md](references/enrichment-and-signals.md) for signal-based sourcing, account tiers, research briefs, verification, multi-provider lookups, and cache reuse. Respect licensed-source terms; do not scrape LinkedIn, evade access restrictions, or infer sensitive traits. Use accepted identity/field evidence and defined cost/freshness limits. A verified email is not consent or permission to enroll a person in outreach.
 
 ## Domain Checklist
 

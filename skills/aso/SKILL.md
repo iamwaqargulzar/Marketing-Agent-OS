@@ -3,7 +3,7 @@ name: aso
 description: "When the user wants to audit or optimize an App Store or Google Play listing. Also use when the user mentions 'ASO audit,' 'app store optimization,' 'optimize my app listing,' 'improve app visibility,' 'app store ranking,' 'audit my listing,' 'why aren't people downloading my app,' 'improve my app conversion,' 'keyword optimization for app,' or 'compare my app to competitors.' Use when the user shares an App Store or Google Play URL and wants to improve it."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "seo-geo"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **aso**. Start from the user’s concrete objective and avail
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Preview-video evidence
+
+Check the store's current preview-video behavior for the actual placement, device, settings, and connection. Do not assume Google Play previews never autoplay or infer low ROI from tap-to-play rates. Design the opening to communicate without sound and validate listing conversion with the user's experiment. Store specifications, benchmarks, and vitals thresholds remain dated evidence requiring current first-party checks.
 
 ## Domain Checklist
 

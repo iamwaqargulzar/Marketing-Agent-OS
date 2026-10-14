@@ -5,8 +5,13 @@ const APP_KEY = process.env.CUSTOMERIO_APP_KEY
 const SITE_ID = process.env.CUSTOMERIO_SITE_ID
 const API_KEY = process.env.CUSTOMERIO_API_KEY
 
-const TRACK_URL = 'https://track.customer.io/api/v1'
-const APP_URL = 'https://api.customer.io/v1'
+const REGION = process.env.CUSTOMERIO_REGION || 'us'
+if (rawArgs.length > 0 && !['us', 'eu'].includes(REGION)) {
+  console.error(JSON.stringify({ error: 'CUSTOMERIO_REGION must be us or eu' }))
+  process.exit(1)
+}
+const TRACK_URL = REGION === 'eu' ? 'https://track-eu.customer.io/api/v1' : 'https://track.customer.io/api/v1'
+const APP_URL = REGION === 'eu' ? 'https://api-eu.customer.io/v1' : 'https://api.customer.io/v1'
 
 const hasTrackAuth = SITE_ID && API_KEY
 const hasAppAuth = APP_KEY
@@ -18,6 +23,17 @@ if ((!hasTrackAuth && !hasAppAuth) && rawArgs.length > 0) {
 
 const basicAuth = hasTrackAuth ? Buffer.from(`${SITE_ID}:${API_KEY}`).toString('base64') : null
 
+
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
+  }
+  return AbortSignal.timeout(ms)
+}
+
+
 async function trackApi(method, path, body) {
   if (!hasTrackAuth) {
     return { error: 'Track API requires CUSTOMERIO_SITE_ID and CUSTOMERIO_API_KEY environment variables' }
@@ -25,7 +41,7 @@ async function trackApi(method, path, body) {
   if (args['dry-run']) {
     return { _dry_run: true, method, url: `${TRACK_URL}${path}`, headers: { Authorization: '***', 'Content-Type': 'application/json' }, body: body || undefined }
   }
-  const res = await fetch(`${TRACK_URL}${path}`, {
+  const res = await fetch(`${TRACK_URL}${path}`, { signal: requestSignal(),
     method,
     headers: {
       'Authorization': `Basic ${basicAuth}`,
@@ -48,7 +64,7 @@ async function appApi(method, path, body) {
   if (args['dry-run']) {
     return { _dry_run: true, method, url: `${APP_URL}${path}`, headers: { Authorization: '***', 'Content-Type': 'application/json' }, body: body || undefined }
   }
-  const res = await fetch(`${APP_URL}${path}`, {
+  const res = await fetch(`${APP_URL}${path}`, { signal: requestSignal(),
     method,
     headers: {
       'Authorization': `Bearer ${APP_KEY}`,
@@ -87,6 +103,14 @@ function parseArgs(args) {
 const args = parseArgs(rawArgs)
 const [cmd, sub, ...rest] = args._
 
+function objectData() {
+  const data = JSON.parse(args.data)
+  if (data === null || typeof data !== 'object' || Array.isArray(data)) {
+    throw new Error('--data must be a JSON object')
+  }
+  return data
+}
+
 async function main() {
   let result
 
@@ -102,20 +126,27 @@ async function main() {
           if (args['last-name']) body.last_name = args['last-name']
           if (args['created-at']) body.created_at = parseInt(args['created-at'])
           if (args.plan) body.plan = args.plan
-          if (args.data) Object.assign(body, JSON.parse(args.data))
-          result = await trackApi('PUT', `/customers/${customerId}`, body)
+          if (args.data) Object.assign(body, objectData())
+          result = await trackApi('PUT', `/customers/${encodeURIComponent(customerId)}`, body)
           break
         }
         case 'get': {
           const customerId = rest[0] || args.id
           if (!customerId) { result = { error: 'Customer ID required (positional arg or --id)' }; break }
-          result = await appApi('GET', `/customers/${customerId}/attributes`)
+          result = await appApi('GET', `/customers/${encodeURIComponent(customerId)}/attributes`)
           break
         }
         case 'delete': {
           const customerId = rest[0] || args.id
           if (!customerId) { result = { error: 'Customer ID required (positional arg or --id)' }; break }
-          result = await trackApi('DELETE', `/customers/${customerId}`)
+          result = await trackApi('DELETE', `/customers/${encodeURIComponent(customerId)}`)
+          break
+        }
+        case 'suppress':
+        case 'unsuppress': {
+          const customerId = rest[0] || args.id
+          if (typeof customerId !== 'string' || customerId.trim().length === 0) throw new Error('Customer ID must be a non-empty string (positional arg or --id)')
+          result = await trackApi('POST', `/customers/${encodeURIComponent(customerId)}/${sub}`)
           break
         }
         case 'track-event': {
@@ -123,12 +154,12 @@ async function main() {
           if (!customerId) { result = { error: 'Customer ID required (positional arg or --id)' }; break }
           if (!args.name) { result = { error: '--name required (event name)' }; break }
           const body = { name: args.name }
-          if (args.data) body.data = JSON.parse(args.data)
-          result = await trackApi('POST', `/customers/${customerId}/events`, body)
+          if (args.data) body.data = objectData()
+          result = await trackApi('POST', `/customers/${encodeURIComponent(customerId)}/events`, body)
           break
         }
         default:
-          result = { error: 'Unknown customers subcommand. Use: identify, get, delete, track-event' }
+          result = { error: 'Unknown customers subcommand. Use: identify, get, delete, suppress, unsuppress, track-event' }
       }
       break
 
@@ -155,7 +186,7 @@ async function main() {
           const body = {}
           if (args.emails) body.emails = args.emails.split(',')
           if (args.ids) body.ids = args.ids.split(',')
-          if (args.data) body.data = JSON.parse(args.data)
+          if (args.data) body.data = objectData()
           result = await appApi('POST', `/campaigns/${campaignId}/triggers`, body)
           break
         }
@@ -174,7 +205,7 @@ async function main() {
           }
           if (args['identifier-id']) body.identifiers.id = args['identifier-id']
           if (args['identifier-email']) body.identifiers.email = args['identifier-email']
-          if (args.data) body.message_data = JSON.parse(args.data)
+          if (args.data) body.message_data = objectData()
           if (args.from) body.from = args.from
           if (args.subject) body.subject = args.subject
           if (args.body) body.body = args.body
@@ -190,13 +221,14 @@ async function main() {
       result = {
         error: 'Unknown command',
         usage: {
-          customers: 'customers [identify|get|delete|track-event] <customer_id> [--email <email>] [--first-name <name>] [--plan <plan>] [--data <json>] [--name <event>]',
+          customers: 'customers [identify|get|delete|suppress|unsuppress|track-event] <customer_id> [--email <email>] [--first-name <name>] [--plan <plan>] [--data <json>] [--name <event>]',
           campaigns: 'campaigns [list|get|metrics|trigger] [campaign_id] [--emails <e1,e2>] [--ids <id1,id2>] [--data <json>]',
           send: 'send email --message-id <id> --to <email> [--identifier-id <id>] [--identifier-email <email>] [--data <json>]',
         }
       }
   }
 
+  if (result?.error && rawArgs.length > 0) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

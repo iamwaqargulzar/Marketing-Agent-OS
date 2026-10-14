@@ -9,6 +9,17 @@ if ((!API_KEY) && rawArgs.length > 0) {
   process.exit(1)
 }
 
+
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
+  }
+  return AbortSignal.timeout(ms)
+}
+
+
 async function api(method, path, body) {
   const headers = {
     'Authorization': `Bearer ${API_KEY}`,
@@ -18,7 +29,7 @@ async function api(method, path, body) {
   if (args['dry-run']) {
     return { _dry_run: true, method, url: `${BASE_URL}${path}`, headers: { ...headers, Authorization: '***' }, body: body || undefined }
   }
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await fetch(`${BASE_URL}${path}`, { signal: requestSignal(),
     method,
     headers,
     body: body ? JSON.stringify(body) : undefined,
@@ -54,6 +65,20 @@ function parseArgs(args) {
 const args = parseArgs(rawArgs)
 const [cmd, sub, ...rest] = args._
 
+function suggestionBody() {
+  const keyword = args.keyword !== undefined ? args.keyword : args.kw
+  if (typeof keyword !== 'string' || !keyword.trim()) throw new Error('--keyword required (one seed keyword; --kw is an alias)')
+  const body = { keyword }
+  if (args.num !== undefined) {
+    const num = Number(args.num)
+    if (typeof args.num !== 'string' || !Number.isSafeInteger(num) || num < 1 || num > 10000) {
+      throw new Error('--num must be an integer from 1 to 10000')
+    }
+    body.num = num
+  }
+  return body
+}
+
 async function main() {
   let result
   const country = args.country || 'us'
@@ -70,15 +95,11 @@ async function main() {
           break
         }
         case 'related': {
-          const kw = args.kw?.split(',')
-          if (!kw) { result = { error: '--kw required (comma-separated keywords)' }; break }
-          result = await api('POST', '/get_related_keywords', { country, currency, dataSource, kw })
+          result = await api('POST', '/get_related_keywords', suggestionBody())
           break
         }
         case 'pasf': {
-          const kw = args.kw?.split(',')
-          if (!kw) { result = { error: '--kw required (comma-separated keywords)' }; break }
-          result = await api('POST', '/get_pasf_keywords', { country, currency, dataSource, kw })
+          result = await api('POST', '/get_pasf_keywords', suggestionBody())
           break
         }
         default:
@@ -168,7 +189,7 @@ async function main() {
       result = {
         error: 'Unknown command',
         usage: {
-          keywords: 'keywords [data|related|pasf] --kw <kw1,kw2,...>',
+          keywords: 'keywords data --kw <kw1,kw2,...> | keywords [related|pasf] --keyword <seed> [--num <n>] (--kw is a seed alias)',
           domain: 'domain [keywords|traffic|backlinks|unique-backlinks] --domain <domain>',
           url: 'url [keywords|traffic|backlinks|unique-backlinks] --url <url>',
           account: 'account [credits|countries|currencies]',
@@ -177,6 +198,7 @@ async function main() {
       }
   }
 
+  if (result?.error && rawArgs.length > 0) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

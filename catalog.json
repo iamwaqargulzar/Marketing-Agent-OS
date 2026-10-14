@@ -1,6 +1,6 @@
 {
   "package": "marketing-agent-os",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "skills": [
     {
       "name": "ab-test-setup",
@@ -304,7 +304,7 @@
     },
     {
       "name": "cold-email",
-      "description": "Write B2B cold outreach and follow-up sequences grounded in relevance, evidence, concise value, compliant sending practices and clear calls to action.",
+      "description": "Draft B2B cold outreach and follow-ups; plan sending readiness, LinkedIn outreach, multichannel cadence, and reply handling with evidence, eligibility, and permission controls. For list sourcing use `prospecting`; for lifecycle flows use `emails`.",
       "domain": "lifecycle",
       "sources": [
         "source-d"
@@ -954,7 +954,7 @@
     },
     {
       "name": "influencer-marketing",
-      "description": "Plan creator and influencer programs from audience mapping and discovery through outreach, contracting, content review, amplification and ROI measurement.",
+      "description": "Plan creator partnerships, influencer campaigns, and sponsored Telegram channel placements with audience evidence, disclosure checks, approved assets, and measured outcomes.",
       "domain": "influencer",
       "sources": [
         "source-d"
@@ -994,7 +994,7 @@
     },
     {
       "name": "launch",
-      "description": "Plan and run product or feature launches from positioning and tiering through asset readiness, launch-day orchestration, feedback and momentum.",
+      "description": "Plan product or feature launches, draft release notes from confirmed shipped changes, and check website go-live readiness. Separate announcement drafts from authorized publication.",
       "domain": "gtm-sales",
       "sources": [
         "source-d"
@@ -1104,7 +1104,7 @@
     },
     {
       "name": "lead-magnets",
-      "description": "When the user wants to create, plan, or optimize a lead magnet for email capture or lead generation. Also use when the user mentions \"lead magnet,\" \"gated content,\" \"content upgrade,\" \"downloadable,\" \"ebook,\" \"cheat sheet,\" \"checklist,\" \"template download,\" \"opt-in,\" \"freebie,\" \"PDF download,\" \"resource library,\" \"content offer,\" \"email capture content,\" \"Notion template,\" \"spreadsheet template,\" or \"what should I give away for emails.\" Use this for planning what to create and how to distribute it. For interactive tools as lead magnets, see free-tools. For writing the actual content, see copywriting. For the email sequence after capture, see emails.",
+      "description": "Plan lead magnets and package owned courses or content libraries as installable agent skills, with rights checks, source-backed lessons, and distribution validation. For public-site AI visibility use `ai-seo`.",
       "domain": "content",
       "sources": [
         "source-d"
@@ -1164,7 +1164,7 @@
     },
     {
       "name": "marketing-loops",
-      "description": "When the user wants to set up a recurring, self-running marketing workflow — a repeatable loop an AI agent runs on a cadence (weekly, daily, on a trigger) rather than a one-off task. Also use when the user mentions 'marketing loop,' 'recurring marketing workflow,' 'automate my marketing,' 'marketing on autopilot,' 'weekly marketing review,' 'ad fatigue check,' 'content refresh loop,' 'churn watch,' 'ranking drop alert,' 'always-on marketing,' 'marketing automation workflow,' or 'run this every week.' Use this to pick, adapt, and schedule an ongoing marketing loop that orchestrates the other marketing skills. For one-off marketing ideas, see marketing-ideas. For the experimentation loop specifically, see ab-testing.",
+      "description": "Design recurring marketing workflows and bounded SEO or outbound operators, with cadence, evidence, shared-state ownership, caps, approvals, receipts, and stop conditions. Use specialist skills for one-off work.",
       "domain": "marketing",
       "sources": [
         "source-d"
@@ -1664,7 +1664,7 @@
     },
     {
       "name": "prospecting",
-      "description": "Build qualified prospect lists using an explicit ICP, source provenance, qualification criteria, scoring, enrichment hygiene and outreach-compliance checks.",
+      "description": "Build qualified prospect lists and sourced account briefs using ICP fit, buying signals, tiers, licensed-source provenance, verification, budgeted enrichment, and exact cache reuse. For outreach use `cold-email`; for competitors use `competitor-profiling`.",
       "domain": "gtm-sales",
       "sources": [
         "source-d"
@@ -1714,7 +1714,7 @@
     },
     {
       "name": "referrals",
-      "description": "When the user wants to create, optimize, or analyze a referral program, affiliate program, or word-of-mouth strategy. Also use when the user mentions 'referral,' 'affiliate,' 'ambassador,' 'word of mouth,' 'viral loop,' 'refer a friend,' 'partner program,' 'referral incentive,' 'how to get referrals,' 'customers referring customers,' or 'affiliate payout.' Use this whenever someone wants existing users or partners to bring in new customers. For launch-specific virality, see launch.",
+      "description": "Design referral and affiliate programs, honest review-request workflows, review-response drafts, and permissioned testimonial reuse. Keep payout economics, platform rules, and incremental evidence explicit.",
       "domain": "social-growth",
       "sources": [
         "source-d"
@@ -1754,7 +1754,7 @@
     },
     {
       "name": "sales-enablement",
-      "description": "Create sales one-pagers, decks, battlecards, objection responses, demo narratives, and proof assets. Use for a live deal objection, competitive battle card, win-loss analysis, loss reasons, or defensible sales claims.",
+      "description": "Create sales assets, battlecards, objection responses, demo narratives, cold-call and voicemail drafts, and win-loss analysis with defensible claims. For sending and multichannel cadence use `cold-email`.",
       "domain": "gtm-sales",
       "sources": [
         "source-d"
@@ -2205,7 +2205,7 @@
     },
     {
       "name": "site-architecture",
-      "description": "When the user wants to plan, map, or restructure their website's page hierarchy, navigation, URL structure, or internal linking. Also use when the user mentions \"sitemap,\" \"site map,\" \"visual sitemap,\" \"site structure,\" \"page hierarchy,\" \"information architecture,\" \"IA,\" \"navigation design,\" \"URL structure,\" \"breadcrumbs,\" \"internal linking strategy,\" \"website planning,\" \"what pages do I need,\" \"how should I organize my site,\" or \"site navigation.\" Use this whenever someone is planning what pages a website should have and how they connect. NOT for XML sitemaps (that's technical SEO — see seo-audit). For SEO audits, see seo-audit. For structured data, see schema.",
+      "description": "Plan website hierarchy, URLs, navigation, internal linking, platform fit, or migration with URL preservation and rollback. Not for XML sitemap validation or technical SEO diagnosis.",
       "domain": "seo-geo",
       "sources": [
         "source-d"

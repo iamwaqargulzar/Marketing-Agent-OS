@@ -3,7 +3,7 @@ name: programmatic-seo
 description: "Design scalable SEO page systems using templates, structured data sources, quality thresholds, internal linking, indexation controls and anti-thin-content gates."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "seo-geo"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **programmatic seo**. Start from the user’s concrete object
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Platform fit
+
+Prefer the existing platform if it supports the required page volume, refresh workflow, crawlable HTML, conditional sections, and per-page indexation. Verify current limits and preserve canonical URLs before proposing a new stack. Pilot representative data-rich and data-poor pages; apply uniqueness and evidence gates before scaling. Platform migration belongs to `site-architecture`; provisioning and publication require their own scope.
 
 ## Domain Checklist
 

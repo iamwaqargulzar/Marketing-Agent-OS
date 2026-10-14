@@ -9,11 +9,22 @@ if ((!API_KEY) && rawArgs.length > 0) {
   process.exit(1)
 }
 
+
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
+  }
+  return AbortSignal.timeout(ms)
+}
+
+
 async function api(method, path, body) {
   if (args['dry-run']) {
     return { _dry_run: true, method, url: `${BASE_URL}${path}`, headers: { 'x-api-key': '***', 'Content-Type': 'application/json', 'x-exa-integration': 'marketingskills' }, body: body || undefined }
   }
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await fetch(`${BASE_URL}${path}`, { signal: requestSignal(),
     method,
     headers: {
       'x-api-key': API_KEY,
@@ -22,6 +33,7 @@ async function api(method, path, body) {
     },
     body: body ? JSON.stringify(body) : undefined,
   })
+  if (!res.ok) process.exitCode = 1
   const text = await res.text()
   try {
     return JSON.parse(text)
@@ -70,6 +82,38 @@ function buildContents(args) {
   return Object.keys(contents).length ? contents : null
 }
 
+function buildResearch(args) {
+  const research = {}
+  if (args['output-schema'] !== undefined) {
+    let schema
+    try { schema = JSON.parse(args['output-schema']) } catch { throw new Error('--output-schema requires valid JSON') }
+    if (!schema || typeof schema !== 'object' || Array.isArray(schema) || !['text', 'object'].includes(schema.type)) {
+      throw new Error('--output-schema requires an object with root type text or object')
+    }
+    research.outputSchema = schema
+  }
+  for (const [flag, field] of [['objective', 'objective'], ['system-prompt', 'systemPrompt']]) {
+    if (args[flag] !== undefined) {
+      if (typeof args[flag] !== 'string' || !args[flag].trim() || (flag === 'objective' && args[flag].length > 4096)) {
+        throw new Error(`--${flag} requires nonempty text${flag === 'objective' ? ' of at most 4096 characters' : ''}`)
+      }
+      research[field] = args[flag]
+    }
+  }
+  if (args['additional-queries'] !== undefined) {
+    let queries
+    try { queries = JSON.parse(args['additional-queries']) } catch { throw new Error('--additional-queries requires a JSON array') }
+    if (!Array.isArray(queries) || queries.length < 1 || queries.length > 10 || queries.some(query => typeof query !== 'string' || !query.trim())) {
+      throw new Error('--additional-queries requires one to ten nonempty strings')
+    }
+    if (!['deep-lite', 'deep', 'deep-reasoning'].includes(args.type)) {
+      throw new Error('--additional-queries requires --type deep-lite, deep, or deep-reasoning')
+    }
+    research.additionalQueries = queries
+  }
+  return research
+}
+
 const args = parseArgs(rawArgs)
 const [cmd, ...rest] = args._
 
@@ -77,10 +121,34 @@ async function main() {
   let result
 
   switch (cmd) {
+    case 'answer': {
+      const query = args.query ?? rest.join(' ')
+      if (typeof query !== 'string' || !query.trim()) throw new Error('answer requires a nonempty --query or positional question')
+      const body = { query }
+      for (const [flag, field] of [['model', 'model'], ['system-prompt', 'systemPrompt']]) {
+        if (args[flag] === undefined) continue
+        if (typeof args[flag] !== 'string' || !args[flag].trim()) throw new Error(`--${flag} requires a value`)
+        body[field] = args[flag]
+      }
+      if (args.text !== undefined) {
+        if (args.text === true || args.text === 'true') body.text = true
+        else if (args.text === 'false') body.text = false
+        else throw new Error('--text must be true or false (or a bare flag for true)')
+      }
+      if (args['output-schema'] !== undefined) {
+        let schema
+        try { schema = JSON.parse(args['output-schema']) } catch { throw new Error('--output-schema must be a JSON object') }
+        if (!schema || typeof schema !== 'object' || Array.isArray(schema)) throw new Error('--output-schema must be a JSON object')
+        body.outputSchema = schema
+      }
+      result = await api('POST', '/answer', body)
+      break
+    }
+
     case 'search': {
       const query = args.query || rest.join(' ')
       if (!query) { result = { error: '--query required' }; break }
-      const body = { query }
+      const body = { query, ...buildResearch(args) }
       if (args.type) body.type = args.type
       if (args.num) body.numResults = Number(args.num)
       if (args.category) body.category = args.category
@@ -131,7 +199,8 @@ async function main() {
       result = {
         error: 'Unknown command',
         usage: {
-          search: 'search --query <q> [--type neural|fast|auto|deep-lite|deep|deep-reasoning|instant] [--num <n>] [--category company|research paper|news|personal site|financial report|people] [--include-domains <d1,d2>] [--exclude-domains <d1,d2>] [--include-text <phrases>] [--exclude-text <phrases>] [--start-published <ISO>] [--end-published <ISO>] [--user-location <CC>] [--text] [--highlights] [--summary] [--max-chars <n>] [--highlight-query <q>] [--summary-query <q>]',
+          answer: 'answer [question | --query <q>] [--model <model>] [--system-prompt <instructions>] [--text true|false] [--output-schema <JSON object>]',
+          search: 'search --query <q> [--type neural|fast|auto|deep-lite|deep|deep-reasoning|instant] [--num <n>] [--category company|research paper|news|personal site|financial report|people] [--include-domains <d1,d2>] [--exclude-domains <d1,d2>] [--include-text <phrases>] [--exclude-text <phrases>] [--start-published <ISO>] [--end-published <ISO>] [--user-location <CC>] [--text] [--highlights] [--summary] [--max-chars <n>] [--highlight-query <q>] [--summary-query <q>] [--output-schema <JSON>] [--objective <text>] [--system-prompt <text>] [--additional-queries <JSON-array>]',
           'find-similar': 'find-similar --url <url> [--num <n>] [--include-domains <d1,d2>] [--exclude-domains <d1,d2>] [--start-published <ISO>] [--end-published <ISO>] [--text] [--highlights] [--summary]',
           contents: 'contents --urls <url1,url2> [--text] [--highlights] [--summary] [--max-chars <n>] [--highlight-query <q>] [--summary-query <q>]',
           options: '--dry-run (preview request without sending)',
@@ -139,6 +208,7 @@ async function main() {
       }
   }
 
+  if (result?.error && rawArgs.length > 0) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

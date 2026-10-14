@@ -1,9 +1,9 @@
 ---
 name: influencer-marketing
-description: "Plan creator and influencer programs from audience mapping and discovery through outreach, contracting, content review, amplification and ROI measurement."
+description: "Plan creator partnerships, influencer campaigns, and sponsored Telegram channel placements with audience evidence, disclosure checks, approved assets, and measured outcomes."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "influencer"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **influencer marketing**. Start from the user’s concrete ob
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Telegram channel placements
+
+For a sponsored Telegram post, separate direct admin placements from the official ad product and check each one's current rules. Assess dated post-view evidence, audience language/topic, channel age, anomalous growth, placement terms, and distribution of comparable post reach; subscribers are not guaranteed impressions and views are not unique people. Label third-party reach/pricing benchmarks as proxies. Propose a capped pilot with disclosures, approved assets, tracking limits, and delivered-placement receipts before extrapolating ROI.
 
 ## Domain Checklist
 

@@ -1,9 +1,9 @@
 ---
 name: referrals
-description: "When the user wants to create, optimize, or analyze a referral program, affiliate program, or word-of-mouth strategy. Also use when the user mentions 'referral,' 'affiliate,' 'ambassador,' 'word of mouth,' 'viral loop,' 'refer a friend,' 'partner program,' 'referral incentive,' 'how to get referrals,' 'customers referring customers,' or 'affiliate payout.' Use this whenever someone wants existing users or partners to bring in new customers. For launch-specific virality, see launch."
+description: "Design referral and affiliate programs, honest review-request workflows, review-response drafts, and permissioned testimonial reuse. Keep payout economics, platform rules, and incremental evidence explicit."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "social-growth"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **referrals**. Start from the user’s concrete objective and
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Reviews and affiliate operations
+
+Read [references/reviews-and-affiliates.md](references/reviews-and-affiliates.md) for honest review programs, responses, testimonial permission, affiliate terms, reconciliation, and incremental measurement. Keep review requests distinct from positive-feedback gating and referral payout mechanics. Default to no review incentive pending a current platform-specific check; public reviews do not automatically authorize reuse in advertising.
 
 ## Domain Checklist
 

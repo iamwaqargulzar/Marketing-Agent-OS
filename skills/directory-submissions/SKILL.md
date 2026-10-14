@@ -3,7 +3,7 @@ name: directory-submissions
 description: "When the user wants to submit their product to startup, SaaS, AI, agent, MCP, no-code, or review directories for backlinks, domain rating, and discovery. Also use when the user mentions \"directory submissions,\" \"submit to directories,\" \"backlinks from directories,\" \"list my product,\" \"submit to Product Hunt,\" \"BetaList,\" \"TAAFT,\" \"Futurepedia,\" \"G2 listing,\" \"Capterra listing,\" \"AlternativeTo,\" \"SaaSHub,\" \"AI directories,\" \"MCP registry,\" \"agent directory,\" \"dofollow backlinks,\" \"launch directories,\" or \"directory tracker.\" Use this whenever someone is planning the directory layer of a product launch or an ongoing backlink campaign. For the broader launch moment, see launch. For programmatic SEO pages that should live behind these backlinks, see programmatic-seo. For AI citation optimization, see ai-seo."
 license: Apache-2.0
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   domain: "seo-geo"
   provenance: "marketing-agent-os"
 ---
@@ -35,6 +35,10 @@ Use this skill for **directory submissions**. Start from the user’s concrete o
 9. For MCP servers, evaluate the official MCP Registry and its current namespace/publication requirements before third-party aggregators. For plugins or skills, verify the target marketplace's eligibility; a GitHub repository is not automatically an MCP server.
 10. Rank destinations by buyer relevance, real discovery traffic, editorial quality, cost, and maintenance burden. Do not equate domain-rating gains with customer acquisition or imply guaranteed dofollow links.
 11. Draft listing fields and a submission tracker with destination, check date, owner, fee/badge requirement, approved payload, and actual receipt. Submit only within the user's granted destinations and scope.
+
+## Observed backlink verification
+
+Inspect the actual destination anchor in listing HTML or rendered DOM, including redirects and `rel` tokens (`nofollow`, `sponsored`, `ugc`). HTTP headers cannot establish anchor attributes. An inspected anchor without these tokens is an unqualified link observed, not a guaranteed ranking benefit; there is no `dofollow` attribute. Record missing, blocked, login-only, and JavaScript-unverified cases honestly, with listing URL, destination, timestamp, and access limits.
 
 ## Domain Checklist
 

@@ -9,11 +9,22 @@ if (!API_KEY && rawArgs.length > 0) {
   process.exit(1)
 }
 
+
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
+  }
+  return AbortSignal.timeout(ms)
+}
+
+
 async function api(method, path, body) {
   if (args['dry-run']) {
     return { _dry_run: true, method, url: `${BASE_URL}${path}`, headers: { Authorization: 'Bearer ***', 'Content-Type': 'application/json' }, body: body || undefined }
   }
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await fetch(`${BASE_URL}${path}`, { signal: requestSignal(),
     method,
     headers: {
       Authorization: `Bearer ${API_KEY}`,
@@ -21,6 +32,7 @@ async function api(method, path, body) {
     },
     body: body ? JSON.stringify(body) : undefined,
   })
+  if (!res.ok) process.exitCode = 1
   const text = await res.text()
   try {
     return JSON.parse(text)
@@ -112,7 +124,22 @@ async function main() {
     case 'crawl-status': {
       const id = args.id || rest[0]
       if (!id) { result = { error: '--id required' }; break }
-      result = await api('GET', `/v2/crawl/${id}`)
+      let query = ''
+      if (args.skip !== undefined) {
+        const skip = Number(args.skip)
+        if (typeof args.skip !== 'string' || !/^\d+$/.test(args.skip) || !Number.isSafeInteger(skip)) {
+          result = { error: '--skip must be a nonnegative integer from the returned next URL' }; break
+        }
+        query = `?${new URLSearchParams({ skip: args.skip })}`
+      }
+      result = await api('GET', `/v2/crawl/${id}${query}`)
+      break
+    }
+
+    case 'crawl-errors': {
+      const id = args.id || rest[0]
+      if (!id) { result = { error: '--id required' }; break }
+      result = await api('GET', `/v2/crawl/${id}/errors`)
       break
     }
 
@@ -124,12 +151,14 @@ async function main() {
           search: 'search --query <q> [--limit <n>] [--sources web,news,images] [--tbs qdr:d|qdr:w|qdr:m] [--scrape] [--formats markdown,html]',
           map: 'map --url <url> [--limit <n>] [--search <term>] [--include-subdomains]',
           crawl: 'crawl --url <url> [--limit <n>] [--max-depth <n>] [--include-paths /blog,/docs] [--exclude-paths /tag] [--formats markdown,html]',
-          'crawl-status': 'crawl-status --id <crawlId>',
+          'crawl-status': 'crawl-status --id <crawlId> [--skip <offset from next URL>]',
+          'crawl-errors': 'crawl-errors --id <crawlId>',
           options: '--dry-run (preview request without sending)',
         }
       }
   }
 
+  if (result?.error && rawArgs.length > 0) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

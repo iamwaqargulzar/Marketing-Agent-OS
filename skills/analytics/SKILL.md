@@ -3,7 +3,7 @@ name: analytics
 description: "Design, audit or improve marketing analytics, event tracking, funnels, UTM governance, reporting and decision-grade measurement."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "paid-measurement"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,12 @@ Use this skill for **analytics**. Start from the user’s concrete objective and
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Reconciled measurement
+
+Compute totals, rates, and deltas from row-level data with a reproducible script or spreadsheet; independently reconcile headline figures and investigate mismatches. Numerator and denominator must cover the same closed observation window and segment. Keep immature cohorts pending, not failed, and state excluded windows.
+
+Preserve provider event names: GA4 enhanced measurement uses `click`, `view_search_results`, and separate `video_start`, `video_progress`, `video_complete` events, not option-label names. Confirm enabled settings and observed payloads; custom names require their own collection. Read machine-readable amounts with explicit currency/units rather than stripping punctuation from localized prices. Tie recommendations to the stated goal, not only operational convenience.
 
 ## Domain Checklist
 

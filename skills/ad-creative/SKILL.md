@@ -3,7 +3,7 @@ name: ad-creative
 description: "Generate and iterate paid-ad creative systems: angles, hooks, copy, concepts, variants, fatigue management and test matrices."
 license: Apache-2.0
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   domain: "paid-measurement"
   provenance: "marketing-agent-os"
 ---
@@ -33,6 +33,10 @@ Use this skill for **ad creative**. Start from the user’s concrete objective a
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
 8. Review the whole batch for repeated sentence shapes, generic hooks, vague CTAs, and unsupported proof. Keep concept, audience, format, funnel role, and measurement hypothesis distinct; a format ranking from one account is a test hypothesis for another.
 9. If producing an HTML review artifact, validate data shape, escape data embedded in script/HTML, restrict unapproved remote assets, and make concept controls accessible. Use actual supplied engagement metrics or omit them; never hardcode social proof.
+
+## Testable creative briefs
+
+Preserve the exact approved product name in every variant. Match headline treatment to audience awareness and provide a mobile-readable visual specification. Each test hypothesis names the audience, comparison/control, metric, expected direction, and baseline-backed magnitude when available; describe what a loss would teach. CTR alone does not prove qualified conversions or incremental revenue.
 
 ## Domain Checklist
 

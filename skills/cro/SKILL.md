@@ -3,7 +3,7 @@ name: cro
 description: "Improve conversion performance on marketing pages and forms through diagnosis, message hierarchy, friction analysis, proof, UX hypotheses, instrumentation and experiments."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "cro"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **cro**. Start from the user’s concrete objective and avail
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Form enrichment
+
+Keep successful valid form submission separate from enrichment and sales qualification. An unavailable provider, ambiguous company, or timeout must not silently discard a lead. Specify a useful fallback and ownership handoff; route enrichment and CRM rules to `revops`, and experiment design to `ab-testing`. Confirm conversions at the actual accepted-submission boundary, not simply on a button click.
 
 ## Domain Checklist
 

@@ -3,7 +3,7 @@ name: co-marketing
 description: "When the user wants to find co-marketing partners, plan joint campaigns, or brainstorm partnership opportunities. Use when the user says 'co-marketing,' 'partner marketing,' 'joint campaign,' 'who should we partner with,' 'integration marketing,' 'cross-promotion,' 'collaborate with another company,' 'partnership ideas,' or 'co-brand.' For customer referral programs, see referrals. For launch-specific partnerships, see launch."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "social-growth"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **co marketing**. Start from the user’s concrete objective 
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Marketplace unit economics
+
+Use actual contract terms for marketplace fees, region, program, and renewal basis. A fee charged on each renewal belongs in recurring distribution cost/contribution margin, not solely in one-time CAC; do not count it twice. Include separate upfront acquisition costs, serving costs, churn, and collection timing in payback. A platform's audience is a distribution hypothesis, not evidence that this partnership will acquire customers.
 
 ## Domain Checklist
 

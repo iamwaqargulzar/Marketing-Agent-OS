@@ -23,7 +23,7 @@ The initial upstream snapshots contained 1,897 tracked entries and 218 `SKILL.md
 
 ## Verified state
 
-Current package review: 2026-10-05, version 1.4.0. See [the upstream review](UPSTREAM_REVIEW-2026-10-05.md) for adaptations and source-only components. Historical native-host checks below retain their original scope.
+Current package review: 2026-10-14, version 1.5.0. See [the upstream review](UPSTREAM_REVIEW-2026-10-14.md) for adaptations and source-only components. Historical native-host checks below retain their original scope.
 
 - 238 normalized skills pass the local metadata validator.
 - Portable package discovery reports all 238 skills through the Agent Skills CLI.
@@ -32,6 +32,6 @@ Current package review: 2026-10-05, version 1.4.0. See [the upstream review](UPS
 - Every pinned upstream snapshot matches its lock hash.
 - Every declared upstream skill name is represented in the normalized layer.
 - The package doctor passes before release once `SHA256SUMS.json` is regenerated.
-- The 16-test package suite includes Cloudflare managed-robots detection, bounded fetching, installer replacement, input validation, and integrity checks.
+- The 17-test package suite includes Cloudflare managed-robots detection, bounded fetching, installer replacement, input validation, integrity checks, and byte-for-byte installation of specialist references across six major harness targets.
 
 Native execution has not been claimed for every listed harness. The installer paths are documented separately from host-version smoke-test status in `COMPATIBILITY.md`. Codex CLI 0.147.0 and OpenCode 1.18.15 were available during the audit; Claude Code, Pi, and Amp were not installed.

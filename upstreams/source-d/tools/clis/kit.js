@@ -10,6 +10,17 @@ if ((!API_SECRET && !API_KEY) && rawArgs.length > 0) {
   process.exit(1)
 }
 
+
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
+  }
+  return AbortSignal.timeout(ms)
+}
+
+
 async function api(method, path, body, useSecret = true) {
   const url = new URL(`${BASE_URL}${path}`)
   if (method === 'GET' || method === 'DELETE') {
@@ -38,7 +49,11 @@ async function api(method, path, body, useSecret = true) {
   }
   if (args['dry-run']) {
     const dryRunHeaders = { ...opts.headers }
-    const dryRunUrl = url.toString().replace(API_SECRET, '***').replace(API_KEY, '***')
+    const previewUrl = new URL(url)
+    for (const key of ['api_secret', 'api_key']) {
+      if (previewUrl.searchParams.has(key)) previewUrl.searchParams.set(key, '***')
+    }
+    const dryRunUrl = previewUrl.toString()
     let dryRunBody = undefined
     if (opts.body) {
       const parsed = JSON.parse(opts.body)
@@ -48,7 +63,7 @@ async function api(method, path, body, useSecret = true) {
     }
     return { _dry_run: true, method, url: dryRunUrl, headers: dryRunHeaders, body: dryRunBody }
   }
-  const res = await fetch(url.toString(), opts)
+  const res = await fetch(url.toString(), { ...opts, signal: requestSignal() })
   const text = await res.text()
   try {
     return JSON.parse(text)
@@ -80,6 +95,13 @@ function parseArgs(args) {
 const args = parseArgs(rawArgs)
 const [cmd, sub, ...rest] = args._
 
+function requireFieldObject(fields) {
+  if (fields === null || typeof fields !== 'object' || Array.isArray(fields)) {
+    throw new Error('--fields must be a JSON object')
+  }
+  return fields
+}
+
 async function main() {
   let result
 
@@ -101,6 +123,7 @@ async function main() {
           if (args['first-name']) body.first_name = args['first-name']
           if (args.fields) {
             try { body.fields = JSON.parse(args.fields) } catch { result = { error: 'Invalid JSON in --fields' }; break }
+            requireFieldObject(body.fields)
           }
           result = await api('PUT', `/subscribers/${rest[0]}`, body)
           break
@@ -128,6 +151,7 @@ async function main() {
           if (args['first-name']) body.first_name = args['first-name']
           if (args.fields) {
             try { body.fields = JSON.parse(args.fields) } catch { result = { error: 'Invalid JSON in --fields' }; break }
+            requireFieldObject(body.fields)
           }
           result = await api('POST', `/forms/${formId}/subscribe`, body, false)
           break
@@ -150,6 +174,7 @@ async function main() {
           if (args['first-name']) body.first_name = args['first-name']
           if (args.fields) {
             try { body.fields = JSON.parse(args.fields) } catch { result = { error: 'Invalid JSON in --fields' }; break }
+            requireFieldObject(body.fields)
           }
           result = await api('POST', `/sequences/${sequenceId}/subscribe`, body, false)
           break
@@ -172,6 +197,7 @@ async function main() {
           if (args['first-name']) body.first_name = args['first-name']
           if (args.fields) {
             try { body.fields = JSON.parse(args.fields) } catch { result = { error: 'Invalid JSON in --fields' }; break }
+            requireFieldObject(body.fields)
           }
           result = await api('POST', `/tags/${tagId}/subscribe`, body, false)
           break
@@ -224,6 +250,7 @@ async function main() {
       }
   }
 
+  if (result?.error && rawArgs.length > 0) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

@@ -10,6 +10,17 @@ if ((!API_KEY) && rawArgs.length > 0) {
   process.exit(1)
 }
 
+
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
+  }
+  return AbortSignal.timeout(ms)
+}
+
+
 async function api(method, path, body) {
   const headers = {
     'Authorization': `Klaviyo-API-Key ${API_KEY}`,
@@ -20,7 +31,7 @@ async function api(method, path, body) {
   if (args['dry-run']) {
     return { _dry_run: true, method, url: `${BASE_URL}${path}`, headers: { ...headers, Authorization: '***' }, body: body || undefined }
   }
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await fetch(`${BASE_URL}${path}`, { signal: requestSignal(),
     method,
     headers,
     body: body ? JSON.stringify(body) : undefined,
@@ -113,6 +124,7 @@ async function main() {
         case 'list': {
           const params = new URLSearchParams()
           if (args['page-size']) params.set('page[size]', args['page-size'])
+          if (args['page-cursor']) params.set('page[cursor]', args['page-cursor'])
           const qs = params.toString()
           result = await api('GET', `/lists/${qs ? '?' + qs : ''}`)
           break
@@ -168,6 +180,7 @@ async function main() {
           const params = new URLSearchParams()
           if (args.filter) params.set('filter', args.filter)
           if (args['page-size']) params.set('page[size]', args['page-size'])
+          if (args['page-cursor']) params.set('page[cursor]', args['page-cursor'])
           const qs = params.toString()
           result = await api('GET', `/events/${qs ? '?' + qs : ''}`)
           break
@@ -183,7 +196,13 @@ async function main() {
           const email = args.email
           if (!metric) { result = { error: '--metric required (metric name)' }; break }
           if (!email) { result = { error: '--email required' }; break }
-          const properties = {}
+          let properties = {}
+          if (args.properties !== undefined) {
+            if (args.property !== undefined) throw new Error('Use --property or --properties, not both')
+            if (typeof args.properties !== 'string') throw new Error('--properties must be a JSON object')
+            try { properties = JSON.parse(args.properties) } catch { throw new Error('--properties must be valid JSON object') }
+            if (properties === null || typeof properties !== 'object' || Array.isArray(properties)) throw new Error('--properties must be a JSON object')
+          }
           let value
           if (args.value !== undefined) {
             if (typeof args.value !== 'string' || !args.value.trim() || !Number.isFinite(Number(args.value))) {
@@ -224,6 +243,7 @@ async function main() {
           const params = new URLSearchParams()
           if (args.filter) params.set('filter', args.filter)
           if (args['page-size']) params.set('page[size]', args['page-size'])
+          if (args['page-cursor']) params.set('page[cursor]', args['page-cursor'])
           const qs = params.toString()
           result = await api('GET', `/campaigns/${qs ? '?' + qs : ''}`)
           break
@@ -245,6 +265,7 @@ async function main() {
           const params = new URLSearchParams()
           if (args.filter) params.set('filter', args.filter)
           if (args['page-size']) params.set('page[size]', args['page-size'])
+          if (args['page-cursor']) params.set('page[cursor]', args['page-cursor'])
           const qs = params.toString()
           result = await api('GET', `/flows/${qs ? '?' + qs : ''}`)
           break
@@ -275,6 +296,7 @@ async function main() {
         case 'list': {
           const params = new URLSearchParams()
           if (args['page-size']) params.set('page[size]', args['page-size'])
+          if (args['page-cursor']) params.set('page[cursor]', args['page-cursor'])
           const qs = params.toString()
           result = await api('GET', `/metrics/${qs ? '?' + qs : ''}`)
           break
@@ -295,6 +317,7 @@ async function main() {
         case 'list': {
           const params = new URLSearchParams()
           if (args['page-size']) params.set('page[size]', args['page-size'])
+          if (args['page-cursor']) params.set('page[cursor]', args['page-cursor'])
           const qs = params.toString()
           result = await api('GET', `/segments/${qs ? '?' + qs : ''}`)
           break
@@ -316,6 +339,7 @@ async function main() {
           const params = new URLSearchParams()
           if (args.filter) params.set('filter', args.filter)
           if (args['page-size']) params.set('page[size]', args['page-size'])
+          if (args['page-cursor']) params.set('page[cursor]', args['page-cursor'])
           const qs = params.toString()
           result = await api('GET', `/templates/${qs ? '?' + qs : ''}`)
           break
@@ -337,7 +361,7 @@ async function main() {
         usage: {
           profiles: 'profiles [list | get --id <id> | create --email <email> | update --id <id>]',
           lists: 'lists [list | get --id <id> | create --name <name> | delete --id <id> | add-profiles --id <list-id> --profiles <id1,id2> | remove-profiles --id <list-id> --profiles <id1,id2>]',
-          events: 'events [list | get --id <id> | create --metric <name> --email <email>]',
+          events: 'events [list | get --id <id> | create --metric <name> --email <email> [--property <pairs> | --properties <json_object>]]',
           campaigns: 'campaigns [list | get --id <id>]',
           flows: 'flows [list | get --id <id> | update --id <id> --status <status>]',
           metrics: 'metrics [list | get --id <id>]',
@@ -348,6 +372,7 @@ async function main() {
       }
   }
 
+  if (result?.error && rawArgs.length > 0) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

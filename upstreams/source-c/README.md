@@ -15,15 +15,12 @@
 
 ## Star History
 
-<a href="https://www.star-history.com/#zubair-trabzada/geo-seo-claude&Date">
-  <picture>
-    <source
-      media="(prefers-color-scheme: dark)"
-      srcset="https://zubair-trabzada.github.io/geo-seo-claude/star-history-dark.svg">
-    <img
-      alt="Star History Chart"
-      src="https://zubair-trabzada.github.io/geo-seo-claude/star-history.svg">
-  </picture>
+<a href="https://www.star-history.com/?type=date&repos=zubair-trabzada%2Fgeo-seo-claude">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=zubair-trabzada/geo-seo-claude&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=zubair-trabzada/geo-seo-claude&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=zubair-trabzada/geo-seo-claude&type=date&legend=top-left" />
+ </picture>
 </a>
 
 ---

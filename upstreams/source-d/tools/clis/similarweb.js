@@ -2,20 +2,31 @@
 
 const rawArgs = process.argv.slice(2)
 const API_KEY = process.env.SIMILARWEB_API_KEY
-const BASE_URL = 'https://api.similarweb.com/v1'
+const BASE_URL = 'https://api.similarweb.com'
 
 if ((!API_KEY) && rawArgs.length > 0) {
   console.error(JSON.stringify({ error: 'SIMILARWEB_API_KEY environment variable required' }))
   process.exit(1)
 }
 
-async function api(method, path, body) {
-  const separator = path.includes('?') ? '&' : '?'
-  const url = `${BASE_URL}${path}${separator}api_key=${API_KEY}`
-  if (args['dry-run']) {
-    return { _dry_run: true, method, url: url.replace(API_KEY, '***'), headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: body || undefined }
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
   }
-  const res = await fetch(url, {
+  return AbortSignal.timeout(ms)
+}
+
+async function api(method, path, body, version = 'v1') {
+  const url = new URL(`${BASE_URL}/${version}${path}`)
+  url.searchParams.set('api_key', API_KEY)
+  if (args['dry-run']) {
+    const previewUrl = new URL(url)
+    previewUrl.searchParams.set('api_key', '***')
+    return { _dry_run: true, method, url: previewUrl.toString(), headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: body || undefined }
+  }
+  const res = await fetch(url, { signal: requestSignal(),
     method,
     headers: {
       'Content-Type': 'application/json',
@@ -125,8 +136,8 @@ async function main() {
       if (!args.start) { result = { error: '--start required (YYYY-MM)' }; break }
       if (!args.end) { result = { error: '--end required (YYYY-MM)' }; break }
       const params = new URLSearchParams({ start_date: args.start, end_date: args.end })
-      if (args.country) params.set('country', args.country)
-      result = await api('GET', `/website/${encodeURIComponent(domain)}/traffic-sources/referrals?${params.toString()}`)
+      params.set('country', args.country || 'world')
+      result = await api('GET', `/website/${encodeURIComponent(domain)}/traffic-sources/referrals?${params.toString()}`, undefined, 'v4')
       break
     }
 
@@ -206,6 +217,7 @@ async function main() {
       }
   }
 
+  if (result?.error && rawArgs.length > 0) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

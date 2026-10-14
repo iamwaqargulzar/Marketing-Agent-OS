@@ -9,11 +9,22 @@ if ((!API_KEY) && rawArgs.length > 0) {
   process.exit(1)
 }
 
+
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
+  }
+  return AbortSignal.timeout(ms)
+}
+
+
 async function api(method, path, body) {
   if (args['dry-run']) {
     return { _dry_run: true, method, url: `${BASE_URL}${path}`, headers: { 'Authorization': '***', 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: body || undefined }
   }
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await fetch(`${BASE_URL}${path}`, { signal: requestSignal(),
     method,
     headers: {
       'Authorization': `Bearer ${API_KEY}`,
@@ -123,7 +134,7 @@ async function main() {
           if (!subId) { result = { error: '--id required' }; break }
           const body = {}
           if (args.tier) body.tier = args.tier
-          result = await api('PUT', `/publications/${pubId}/subscriptions/${subId}`, body)
+          result = await api('PATCH', `/publications/${pubId}/subscriptions/${subId}`, body)
           break
         }
         case 'delete': {
@@ -160,9 +171,9 @@ async function main() {
           if (!pubId) { result = { error: '--publication required' }; break }
           const title = args.title
           if (!title) { result = { error: '--title required' }; break }
-          const body = { title }
+          if (typeof args.content !== 'string' || !args.content.trim()) { result = { error: '--content required (HTML post body)' }; break }
+          const body = { title, body_content: args.content }
           if (args.subtitle) body.subtitle = args.subtitle
-          if (args.content) body.content = args.content
           if (args.status) body.status = args.status
           result = await api('POST', `/publications/${pubId}/posts`, body)
           break
@@ -235,7 +246,7 @@ async function main() {
         usage: {
           publications: 'publications [list | get --publication <id>]',
           subscriptions: 'subscriptions [list | get --id <id> | create --email <email> | update --id <id> | delete --id <id>] --publication <id>',
-          posts: 'posts [list | get --id <id> | create --title <title> | delete --id <id>] --publication <id>',
+          posts: 'posts [list | get --id <id> | create --title <title> --content <html> | delete --id <id>] --publication <id>',
           segments: 'segments [list | get --id <id>] --publication <id>',
           automations: 'automations [list | get --id <id>] --publication <id>',
           'referral-program': 'referral-program [get] --publication <id>',
@@ -244,6 +255,7 @@ async function main() {
       }
   }
 
+  if (result?.error && rawArgs.length > 0) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

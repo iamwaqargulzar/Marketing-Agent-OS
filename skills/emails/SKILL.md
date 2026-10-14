@@ -3,7 +3,7 @@ name: emails
 description: "Design lifecycle email programs and sequences with segmentation, deliverability, personalization, testing and measurement."
 license: Apache-2.0
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   domain: "lifecycle"
   provenance: "marketing-agent-os"
 ---
@@ -32,6 +32,10 @@ Use this skill for **emails**. Start from the user’s concrete objective and av
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
 8. Review subject/body pairs for stock openers, vague benefits, repetitive sentence shapes, and unnecessary filler. Do not fabricate a prior thread with Re:/Fwd: or invent customer proof. Preserve the user's voice, suppression rules, and one concrete next action.
+
+## Sequence and copy boundaries
+
+For a lifecycle sequence, specify audience, entry trigger, timing, purpose/CTA per message, suppression and exit events, and a confirmed conversion outcome. Audit gaps across onboarding, billing, usage, retention, and win-back before adding messages. Select segmentation and copy from real context; cold outbound and cross-channel prospect replies belong to `cold-email`, not an automatically enrolled nurture flow.
 
 ## Domain Checklist
 

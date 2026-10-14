@@ -9,11 +9,22 @@ if ((!API_KEY) && rawArgs.length > 0) {
   process.exit(1)
 }
 
+
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
+  }
+  return AbortSignal.timeout(ms)
+}
+
+
 async function api(method, path, body) {
   if (args['dry-run']) {
     return { _dry_run: true, method, url: `${BASE_URL}${path}`, headers: { 'Authorization': '***', 'Content-Type': 'application/json' }, body: body || undefined }
   }
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await fetch(`${BASE_URL}${path}`, { signal: requestSignal(),
     method,
     headers: {
       'Authorization': `Bearer ${API_KEY}`,
@@ -71,6 +82,10 @@ async function main() {
         body.template_id = args['template-id']
         if (args['template-data']) {
           try { body.personalizations[0].dynamic_template_data = JSON.parse(args['template-data']) } catch (e) { result = { error: 'Invalid JSON for --template-data: ' + e.message }; break }
+          const data = body.personalizations[0].dynamic_template_data
+          if (data === null || typeof data !== 'object' || Array.isArray(data)) {
+            throw new Error('--template-data must be a JSON object')
+          }
         }
       } else {
         const content = []
@@ -117,12 +132,12 @@ async function main() {
         case 'list': {
           const params = new URLSearchParams()
           if (args.limit) params.set('page_size', args.limit)
-          result = await api('GET', `/marketing/campaigns?${params}`)
+          result = await api('GET', `/marketing/singlesends?${params}`)
           break
         }
         case 'get':
           if (!rest[0]) { result = { error: 'Campaign ID required' }; break }
-          result = await api('GET', `/marketing/campaigns/${rest[0]}`)
+          result = await api('GET', `/marketing/singlesends/${rest[0]}`)
           break
         default:
           result = { error: 'Unknown campaigns subcommand. Use: list, get' }
@@ -196,7 +211,7 @@ async function main() {
         usage: {
           send: 'send --from <email> --to <email> [--subject <subject>] [--html <html>] [--text <text>] [--template-id <id> (d-... supplies its own subject)] [--template-data <json>]',
           contacts: 'contacts [list|add|search] [--email <email>] [--first-name <name>] [--last-name <name>] [--list-ids <ids>] [--query <sgql>]',
-          campaigns: 'campaigns [list|get] [id] [--limit <n>]',
+          campaigns: 'campaigns [list|get] [single_send_id] [--limit <n>] (Marketing Single Sends)',
           stats: 'stats get [--start-date <YYYY-MM-DD>] [--end-date <YYYY-MM-DD>]',
           bounces: 'bounces list [--start-time <ts>] [--end-time <ts>] [--limit <n>]',
           'spam-reports': 'spam-reports list [--start-time <ts>] [--end-time <ts>] [--limit <n>]',
@@ -205,6 +220,7 @@ async function main() {
       }
   }
 
+  if (result?.error && rawArgs.length > 0) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

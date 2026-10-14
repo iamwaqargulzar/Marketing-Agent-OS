@@ -3,7 +3,7 @@ name: churn-prevention
 description: "When the user wants to reduce churn, build cancellation flows, set up save offers, recover failed payments, or implement retention strategies. Also use when the user mentions 'churn,' 'cancel flow,' 'offboarding,' 'save offer,' 'dunning,' 'failed payment recovery,' 'win-back,' 'retention,' 'exit survey,' 'pause subscription,' 'involuntary churn,' 'people keep canceling,' 'churn rate is too high,' 'how do I keep users,' or 'customers are leaving.' Use this whenever someone is losing subscribers or wants to build systems to prevent it. For post-cancel win-back email sequences, see emails. For in-app upgrade paywalls, see paywalls."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "lifecycle"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **churn prevention**. Start from the user’s concrete object
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Calibrated customer health
+
+Map each health signal to the same 0–100 direction before weighting it. Treat missing/stale signals as unavailable; if partial scores are permitted, divide the weighted observed sum by observed weight and report coverage. All unavailable means no score, not zero or healthy. Validate thresholds against later renewal/churn outcomes. An individual 0–6 recommendation rating is a detractor classification; it is not aggregate NPS. Confirm retry schedules and billing-provider capabilities rather than copying a universal dunning sequence.
 
 ## Domain Checklist
 

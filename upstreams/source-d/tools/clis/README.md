@@ -32,6 +32,8 @@ export PATH="$PATH:/path/to/marketingskills/tools/clis"
 
 ## Authentication
 
+For step-by-step account setup and private credential loading, see [guided tool connections](../SETUP.md).
+
 Every CLI reads credentials from environment variables:
 
 | CLI | Environment Variable |
@@ -90,6 +92,7 @@ Every CLI reads credentials from environment variables:
 | `sendgrid` | `SENDGRID_API_KEY` |
 | `tiktok-ads` | `TIKTOK_ACCESS_TOKEN`, `TIKTOK_ADVERTISER_ID` |
 | `tolt` | `TOLT_API_KEY` |
+| `truelist` | `TRUELIST_API_KEY` |
 | `trustpilot` | `TRUSTPILOT_API_KEY`, `TRUSTPILOT_API_SECRET`, `TRUSTPILOT_BUSINESS_UNIT_ID` |
 | `typeform` | `TYPEFORM_API_KEY` |
 | `hunter` | `HUNTER_API_KEY` |
@@ -208,8 +211,21 @@ DOMAINS=$(rewardful affiliates list | jq -r '.data[].email')
 | `supermetrics.js` | Data Aggregation | [Supermetrics](https://supermetrics.com) |
 | `tiktok-ads.js` | Ads | [TikTok Ads](https://ads.tiktok.com) |
 | `tolt.js` | Referral | [Tolt](https://tolt.io) |
+| `truelist.js` | Email Verification | [Truelist](https://truelist.io) |
 | `trustpilot.js` | Reviews | [Trustpilot](https://trustpilot.com) |
 | `typeform.js` | Forms | [Typeform](https://typeform.com) |
 | `wistia.js` | Video | [Wistia](https://wistia.com) |
 | `zapier.js` | Automation | [Zapier](https://zapier.com) |
 | `zoominfo.js` | Data Enrichment | [ZoomInfo](https://zoominfo.com) |
+
+## HTTP request deadlines
+
+HTTP calls in 65 of the CLIs use a 120-second per-request deadline, long enough for slow endpoints such as Firecrawl scrapes (60-second default on Firecrawl's side) and large analytics exports. The Truelist CLI is not covered. Lower or raise it with `--timeout-ms <1-600000>`, for example:
+
+```bash
+node tools/clis/exa.js search --query 'Recent market research' --timeout-ms 30000
+```
+
+The deadline covers obtaining headers and consuming the response body, including OAuth requests. Each subsequent HTTP call gets its own deadline; this is not a total command deadline or a bound on external credential commands. An aborted call exits as a failure. Aborting a local request does not cancel work already accepted by a provider: check provider status before manually retrying a mutation. The CLI does not add automatic retries. Dry runs issue no HTTP request.
+
+Implemented using [Node's AbortSignal.timeout](https://nodejs.org/api/globals.html#static-method-abortsignaltimeoutdelay), available on the supported Node 18+ runtime, preserving zero-dependency standalone scripts. Native loopback tests cover stalled headers, stalled bodies, OAuth, successful responses and malformed timeout values without live accounts.

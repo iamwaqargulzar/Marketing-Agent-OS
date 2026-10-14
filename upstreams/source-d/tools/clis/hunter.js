@@ -9,13 +9,23 @@ if ((!API_KEY) && rawArgs.length > 0) {
   process.exit(1)
 }
 
-async function api(method, path, body) {
-  const separator = path.includes('?') ? '&' : '?'
-  const url = `${BASE_URL}${path}${separator}api_key=${API_KEY}`
-  if (args['dry-run']) {
-    return { _dry_run: true, method, url: url.replace(API_KEY, '***'), headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: body || undefined }
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
   }
-  const res = await fetch(url, {
+  return AbortSignal.timeout(ms)
+}
+
+async function api(method, path, body) {
+  const url = new URL(`${BASE_URL}${path}`)
+  url.searchParams.set('api_key', API_KEY)
+  if (args['dry-run']) {
+    url.searchParams.set('api_key', '***')
+    return { _dry_run: true, method, url: url.toString(), headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: body || undefined }
+  }
+  const res = await fetch(url.toString(), { signal: requestSignal(),
     method,
     headers: {
       'Content-Type': 'application/json',
@@ -51,6 +61,17 @@ function parseArgs(args) {
   return result
 }
 
+function addPagination(params) {
+  for (const [flag, minimum, maximum] of [['offset', 0, Number.MAX_SAFE_INTEGER], ['limit', 1, 100]]) {
+    if (args[flag] === undefined) continue
+    const value = typeof args[flag] === 'string' ? Number(args[flag]) : NaN
+    if (!Number.isSafeInteger(value) || value < minimum || value > maximum) {
+      throw new Error(`--${flag} must be a whole number from ${minimum} to ${maximum}`)
+    }
+    params.set(flag, String(value))
+  }
+}
+
 const args = parseArgs(rawArgs)
 const [cmd, sub, ...rest] = args._
 
@@ -64,7 +85,7 @@ async function main() {
           const domain = args.domain
           if (!domain) { result = { error: '--domain required' }; break }
           const params = new URLSearchParams({ domain })
-          if (args.limit) params.set('limit', args.limit)
+          addPagination(params)
           if (args.type) params.set('type', args.type)
           result = await api('GET', `/domain-search?${params.toString()}`)
           break
@@ -200,7 +221,10 @@ async function main() {
         case 'get': {
           const id = args.id
           if (!id) { result = { error: '--id required' }; break }
-          result = await api('GET', `/leads_lists/${id}`)
+          const params = new URLSearchParams()
+          addPagination(params)
+          const qs = params.toString()
+          result = await api('GET', `/leads_lists/${id}${qs ? '?' + qs : ''}`)
           break
         }
         default:
@@ -213,7 +237,7 @@ async function main() {
         error: 'Unknown command',
         usage: {
           domain: {
-            search: 'domain search --domain <domain> [--limit <n>] [--type personal|generic]',
+            search: 'domain search --domain <domain> [--limit <1-100>] [--offset <n>] [--type personal|generic]',
             count: 'domain count --domain <domain> [--type personal|generic]',
           },
           email: {
@@ -235,12 +259,13 @@ async function main() {
           },
           'leads-lists': {
             list: 'leads-lists list [--limit <n>] [--offset <n>]',
-            get: 'leads-lists get --id <id>',
+            get: 'leads-lists get --id <id> [--limit <1-100>] [--offset <n>]',
           },
         }
       }
   }
 
+  if (result?.error && rawArgs.length > 0) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

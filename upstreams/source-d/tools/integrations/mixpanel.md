@@ -8,14 +8,28 @@ Product analytics platform for tracking user behavior and retention.
 |-------------|-----------|-------|
 | API | ✓ | Ingestion API, Query API, Data Export |
 | MCP | - | Not available |
-| CLI | - | Not available |
+| CLI | ✓ | [mixpanel.js](../clis/mixpanel.js) |
 | SDK | ✓ | JavaScript, iOS, Android, Python, etc. |
 
 ## Authentication
 
 - **Ingestion**: Project token (public)
-- **Query API**: Service Account (username:secret as Basic auth)
-- **Export**: API Secret
+- **Query API / Export**: Service Account (username:secret as Basic auth). Set
+  `MIXPANEL_API_KEY` to the service-account username and `MIXPANEL_SECRET` to its secret.
+  Supply `--project-id` for query/export commands; GET requests send it as `project_id`.
+- **Legacy fallback**: When `MIXPANEL_API_KEY` is absent, `MIXPANEL_PROJECT_SECRET`
+  (or `MIXPANEL_SECRET` alone) is sent as the Basic auth username with an empty password.
+  A configured service account always takes precedence; a username without its secret
+  is an error and does not fall back.
+- **Deprecation**: Project-secret authentication retires on March 3, 2027 and is
+  unavailable for new projects. Use service accounts for new integrations. See
+  [Service Accounts](https://docs.mixpanel.com/reference/service-accounts) and
+  [Project Secret](https://docs.mixpanel.com/reference/project-secret).
+
+```bash
+node tools/clis/mixpanel.js export events --project-id 123 \
+  --from-date 2024-01-01 --to-date 2024-01-31 --dry-run
+```
 
 ## Common Agent Operations
 
@@ -72,19 +86,19 @@ POST https://mixpanel.com/api/2.0/insights
 ### Get funnel data
 
 ```bash
-GET https://mixpanel.com/api/2.0/funnels?funnel_id={funnel_id}&from_date=2024-01-01&to_date=2024-01-31
+GET https://mixpanel.com/api/2.0/funnels?project_id={project_id}&funnel_id={funnel_id}&from_date=2024-01-01&to_date=2024-01-31
 ```
 
 ### Export raw events
 
 ```bash
-GET https://data.mixpanel.com/api/2.0/export?from_date=2024-01-01&to_date=2024-01-01
+GET https://data.mixpanel.com/api/2.0/export?project_id={project_id}&from_date=2024-01-01&to_date=2024-01-01
 ```
 
 ### Get retention data
 
 ```bash
-GET https://mixpanel.com/api/2.0/retention?from_date=2024-01-01&to_date=2024-01-31&retention_type=birth&born_event=signup_completed
+GET https://mixpanel.com/api/2.0/retention?project_id={project_id}&from_date=2024-01-01&to_date=2024-01-31&retention_type=birth&born_event=signup_completed
 ```
 
 ## JavaScript SDK
@@ -135,3 +149,26 @@ mixpanel.track('Feature Used', {
 - analytics
 - ab-testing
 - onboarding
+
+### Select the project's API region
+
+Set `MIXPANEL_REGION` to your existing project's region: `us` (default), `eu`,
+or `in`. One setting selects the documented ingestion, query, and raw-export
+API families consistently:
+
+| Region | Ingestion | Query | Export |
+|--------|-----------|-------|--------|
+| `us` | `api.mixpanel.com` | `mixpanel.com` | `data.mixpanel.com` |
+| `eu` | `api-eu.mixpanel.com` | `eu.mixpanel.com` | `data-eu.mixpanel.com` |
+| `in` | `api-in.mixpanel.com` | `in.mixpanel.com` | `data-in.mixpanel.com` |
+
+```bash
+MIXPANEL_REGION=eu node tools/clis/mixpanel.js track event \
+  --distinct-id owned-test-user --event 'Owned test event' --dry-run
+```
+
+Unknown regions fail before any request. Dry runs use the selected hosts and
+mask credentials as before. Authentication, payloads, and response parsing are
+unchanged. Match the region in your Mixpanel project settings; selecting a host
+does not move a project or establish a data-residency guarantee. See the
+[official API overview](https://docs.mixpanel.com/reference/overview).

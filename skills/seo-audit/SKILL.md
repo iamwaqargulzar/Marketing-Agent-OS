@@ -3,7 +3,7 @@ name: seo-audit
 description: "Audit a site or page across technical SEO, on-page quality, content, structured data, performance, indexability, AI-search readiness and conversion-sensitive search experience."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "seo-geo"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **seo audit**. Start from the user’s concrete objective and
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Prioritized and local SEO
+
+Read [references/local-and-query-diagnosis.md](references/local-and-query-diagnosis.md) for local profile/citation checks, evidence-based ranking opportunities, title analysis, and international annotations. Use current Search Console query/page evidence to identify attainable improvements; an aggregate position or character-count target is not a ranking promise. Confirm the affected URL/locale relationships when hreflang is broken; an absent `x-default` is not inherently invalid and one bad pair need not invalidate all reciprocal pairs.
 
 ## Domain Checklist
 

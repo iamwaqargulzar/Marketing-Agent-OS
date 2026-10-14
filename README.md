@@ -24,7 +24,7 @@ Marketing Agent OS is an open-source collection of 238 portable AI agent skills 
 | Runtime dependency | None for instruction-only skills; helper scripts use Python 3 standard library |
 | License | Apache-2.0 wrapper, with retained third-party licenses and attribution |
 
-Package verification: **2026-10-05**, version **1.4.0**. Native-host checks and ecosystem projection tests are dated separately in the [compatibility matrix](docs/COMPATIBILITY.md).
+Package verification: **2026-10-14**, version **1.5.0**. Native-host checks and ecosystem projection tests are dated separately in the [compatibility matrix](docs/COMPATIBILITY.md). See the [latest upstream review](docs/UPSTREAM_REVIEW-2026-10-14.md) for changes and validation scope.
 
 ## Why Marketing Agent OS?
 

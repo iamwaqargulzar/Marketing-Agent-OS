@@ -3,7 +3,7 @@ name: revops
 description: "Design revenue operations across lifecycle stages, lead/account routing, scoring, handoffs, pipeline definitions, CRM hygiene and SLA measurement."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "gtm-sales"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **revops**. Start from the user’s concrete objective and av
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Qualification and inbound routing
+
+Read [references/qualification-and-routing.md](references/qualification-and-routing.md) for decision-time scoring, maturity/holdout rules, bounded form enrichment, duplicate and late-result handling, and ownership fallback. Keep outbound stages explicit: targeted, enrolled, replied, positive, booked, held, opportunity. Define stage entry evidence and channel/signal/sequence IDs; booking is not a held meeting or recognized revenue.
 
 ## Domain Checklist
 

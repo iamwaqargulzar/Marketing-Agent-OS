@@ -1,8 +1,8 @@
 ---
 name: ad-creative
-description: "When the user wants to generate, iterate, or scale ad creative — headlines, descriptions, primary text, or full ad variations — for any paid advertising platform. Also use when the user mentions 'ad copy variations,' 'ad creative,' 'generate headlines,' 'RSA headlines,' 'bulk ad copy,' 'ad iterations,' 'creative testing,' 'write me some ads,' 'Facebook ad copy,' 'Google ad headlines,' 'LinkedIn ad text,' 'static ads,' 'ad templates,' 'iMessage ad,' 'chat reveal ad,' 'ChatGPT ad,' 'Apple Notes ad,' 'AirDrop ad,' 'creative strategy,' 'creative roadmap,' 'creative retro,' 'hook writing,' 'creative review page,' 'present ad creative for approval,' 'motion video ad,' 'faceless video ad,' 'UGC ad,' 'greenscreen ad,' 'TikTok/Reels ad format,' 'which ad format to make,' 'Meta ad format tier list,' or 'creative format taxonomy.' Use it to produce or iterate ad copy at scale. Copy avoids AI tells like 'it's not X, it's Y' reveals. For campaign strategy and targeting, see ads. For landing page copy, see copywriting."
+description: "When the user wants to generate, iterate, or scale ad creative — headlines, descriptions, primary text, or full ad variations — for any paid advertising platform. Also use when the user mentions 'ad copy variations,' 'ad creative,' 'generate headlines,' 'RSA headlines,' 'bulk ad copy,' 'creative testing,' 'write me some ads,' 'Facebook ad copy,' 'Google ad headlines,' 'LinkedIn ad text,' 'static ads,' 'ad templates,' 'iMessage ad,' 'ChatGPT ad,' 'creative strategy,' 'creative roadmap,' 'creative retro,' 'hook writing,' 'creative review page,' 'motion video ad,' 'faceless video ad,' 'UGC ad,' 'greenscreen ad,' 'TikTok/Reels ad format,' 'Meta ad format tier list,' or 'creative format taxonomy.' Use it to produce or iterate ad copy at scale. Copy avoids AI tells like 'it's not X, it's Y' reveals. For campaign strategy and targeting, see ads. For landing page copy, see copywriting. Test hypotheses must be falsifiable, naming the metric, the comparison, and the expected direction."
 metadata:
-  version: 2.9.3
+  version: 2.11.0
 ---
 
 # Ad Creative
@@ -62,6 +62,8 @@ Pull performance data → Identify winning patterns → Generate new variations 
 
 ### Mode 3: Scaled Static Batches (Grounded)
 For recurring static ad production at volume (e.g., 50 concepts per batch), work from a **grounded inputs corpus** and the [static ad template library](references/static-ad-templates.md). Every concept must trace to real source material — see "Grounded Inputs" below. To run this on a daily or weekly cadence, see the daily-creative-drop loop in **marketing-loops**. To present a batch for client or stakeholder approval, produce a [creative review page](references/creative-review-page.md).
+
+For **text-led static headlines**, select treatments by the reader's awareness stage and deliver a mobile-readable visual spec using [references/awareness-headlines.md](references/awareness-headlines.md). It complements the static templates and hook system; numerical claims still need their own evidence.
 
 ### Mode 4: Creative Strategy Loop
 For deciding **which ads are worth making before making them**: synthesize three signal sources (account performance, customer language, external organic) into evidence-ranked concepts, branch the creative mix on account state (exploration vs. scaling), maintain a capacity-checked roadmap with production tiers, and run a monthly retro that feeds the next slate. The full system lives in [references/creative-roadmap.md](references/creative-roadmap.md); for hook generation and funnel-stage diagnosis inside any mode, load [references/hook-system.md](references/hook-system.md).
@@ -275,6 +277,22 @@ Track what was learned and what's being tested:
 - Claims without specificity ("Best," "Leading," "Top")
 - All caps or excessive punctuation
 - Clickbait that the landing page can't deliver on
+- Shortened or nicknamed product names — use the exact product name the
+  brief gives, in every field of every concept, unless a short form is
+  explicitly approved
+
+### Test Hypotheses That Can Lose
+
+When a concept ships with a test hypothesis, write one that a result can
+prove wrong. "This will resonate with renters" cannot lose; "beats the
+control on CTR among renters" can.
+
+- Name the metric (CTR, CVR, CPA, thumb-stop rate) and the comparison —
+  against which control or sibling concept, in which audience
+- State the expected direction, and a magnitude when a baseline exists
+  ("+15% CTR vs. Concept A")
+- The hypothesis should follow from the angle's motivation, so a win or a
+  loss teaches you something about the audience, not just the asset
 
 ### No AI Tells
 
@@ -430,6 +448,18 @@ node tools/clis/google-ads.js reports get --type ad_performance --date-range las
 # 4. Generate new variations
 # 5. Upload to platform
 ```
+
+> **Skip the plumbing.** Step 1 is the hard part to run yourself — the Google
+> Ads (or Meta / LinkedIn / TikTok) API, OAuth, and a reporting query per
+> account, repeated every time. [Magister](https://magistermarketing.com?ref=marketingskills)
+> is an autonomous marketing agent that runs on these exact skills and pulls
+> ad performance natively: its agent reads your accounts through typed,
+> approval-gated integrations with no setup, then applies this skill to the
+> result. If you're wiring these pulls up by hand, it's worth a look.>
+> *Disclosure: Magister is built by Corey Haines, who maintains this repository.*
+> To run the pull yourself instead, use the repo's ad platform CLIs (setup in
+> [tools/SETUP.md](https://github.com/coreyhaines31/marketingskills/blob/main/tools/SETUP.md)),
+> or a reporting connector such as Supermetrics or Coupler.
 
 ---
 

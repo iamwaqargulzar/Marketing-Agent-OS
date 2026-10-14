@@ -9,16 +9,27 @@ if ((!API_TOKEN) && rawArgs.length > 0) {
   process.exit(1)
 }
 
+
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
+  }
+  return AbortSignal.timeout(ms)
+}
+
+
 async function api(method, path, body) {
   const headers = {
-    'Authorization': `Bearer ${API_TOKEN}`,
+    'Authorization': API_TOKEN,
     'Content-Type': 'application/vnd.api+json',
     'Accept': 'application/vnd.api+json',
   }
   if (args['dry-run']) {
     return { _dry_run: true, method, url: `${BASE_URL}${path}`, headers: { ...headers, Authorization: '***' }, body: body || undefined }
   }
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await fetch(`${BASE_URL}${path}`, { signal: requestSignal(),
     method,
     headers,
     body: body ? JSON.stringify(body) : undefined,
@@ -170,9 +181,9 @@ async function main() {
           if (!id) { result = { error: '--id (session id) required' }; break }
           const email = args.email
           if (!email) { result = { error: '--email required' }; break }
-          const fields = { email }
-          if (args['first-name']) fields.first_name = args['first-name']
-          if (args['last-name']) fields.last_name = args['last-name']
+          const fields = [{ id: 'email', value: email }]
+          if (args['first-name']) fields.push({ id: 'first_name', value: args['first-name'] })
+          if (args['last-name']) fields.push({ id: 'last_name', value: args['last-name'] })
           result = await api('POST', `/sessions/${id}/people`, {
             data: {
               type: 'people',
@@ -284,6 +295,7 @@ async function main() {
       }
   }
 
+  if (result?.error && rawArgs.length > 0) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

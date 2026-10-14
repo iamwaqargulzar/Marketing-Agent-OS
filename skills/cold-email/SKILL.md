@@ -1,9 +1,9 @@
 ---
 name: cold-email
-description: "Write B2B cold outreach and follow-up sequences grounded in relevance, evidence, concise value, compliant sending practices and clear calls to action."
+description: "Draft B2B cold outreach and follow-ups; plan sending readiness, LinkedIn outreach, multichannel cadence, and reply handling with evidence, eligibility, and permission controls. For list sourcing use `prospecting`; for lifecycle flows use `emails`."
 license: Apache-2.0
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   domain: "lifecycle"
   provenance: "marketing-agent-os"
 ---
@@ -32,6 +32,10 @@ Use this skill for **cold email**. Start from the user’s concrete objective an
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
 8. Use specific, sourced relevance and a low-friction next action. Remove formulaic praise, fake familiarity, stock openers, and repeated template shapes; do not manufacture a relationship, reply thread, or success evidence.
+
+## Outbound operations
+
+For sending setup, multichannel cadence, or reply triage, read [references/outbound-operations.md](references/outbound-operations.md). Verify contact provenance, eligibility, deliverability, current provider rules, approved claims, and scope/caps before any send. A reply on any channel stops other automated touches for that person; distinguish a proposed suppression from a connector-confirmed write. Draft response handling and booking in the prospect's time zone; neither a positive reply nor a tested template authorizes sending.
 
 ## Domain Checklist
 

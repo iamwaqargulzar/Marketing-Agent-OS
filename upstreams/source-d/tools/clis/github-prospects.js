@@ -26,6 +26,17 @@ function parseArgs(args) {
 
 const args = parseArgs(process.argv.slice(2))
 
+
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
+  }
+  return AbortSignal.timeout(ms)
+}
+
+
 async function api(path, opts = {}) {
   const url = path.startsWith('http') ? path : `${BASE_URL}${path}`
   const headers = {
@@ -44,7 +55,7 @@ async function api(path, opts = {}) {
     }
   }
 
-  const res = await fetch(url, { headers })
+  const res = await fetch(url, { signal: requestSignal(), headers })
   const rateLimitRemaining = res.headers.get('x-ratelimit-remaining')
   const rateLimitReset = res.headers.get('x-ratelimit-reset')
 
@@ -89,7 +100,7 @@ async function paginate(path, { limit, perPage = 100 } = {}) {
     lastRate = result.rate_limit_remaining
     all.push(...result.data)
     if (limit && all.length >= limit) {
-      return { data: all.slice(0, limit), rate_limit_remaining: lastRate, truncated: true }
+      return { data: all.slice(0, limit), rate_limit_remaining: lastRate, truncated: all.length > limit || Boolean(result.next) }
     }
     next = result.next
   }
@@ -258,6 +269,7 @@ async function main() {
       }
   }
 
+  if (result?.error && result.status >= 400) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

@@ -11,11 +11,22 @@ if ((!API_KEY) && rawArgs.length > 0) {
   process.exit(1)
 }
 
+
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
+  }
+  return AbortSignal.timeout(ms)
+}
+
+
 async function api(method, path, body) {
   if (args['dry-run']) {
     return { _dry_run: true, method, url: `${BASE_URL}${path}`, headers: { Authorization: '***', 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: body || undefined }
   }
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await fetch(`${BASE_URL}${path}`, { signal: requestSignal(),
     method,
     headers: {
       'Authorization': `Bearer ${API_KEY}`,
@@ -24,6 +35,7 @@ async function api(method, path, body) {
     },
     body: body ? JSON.stringify(body) : undefined,
   })
+  if (!res.ok) process.exitCode = 1
   const text = await res.text()
   try {
     return JSON.parse(text)
@@ -203,6 +215,16 @@ async function main() {
           const id = args.id
           if (!id) { result = { error: '--id required' }; break }
           const body = {}
+          if (args.items !== undefined) {
+            try { body.items = JSON.parse(args.items) } catch { result = { error: 'Invalid JSON in --items' }; break }
+            if (!Array.isArray(body.items) || body.items.length === 0) {
+              result = { error: '--items must be a nonempty JSON array of {price_id, quantity}' }; break
+            }
+          }
+          if (args['next-billed-at'] !== undefined) body.next_billed_at = args['next-billed-at']
+          if ((args.items !== undefined || args['next-billed-at'] !== undefined) && !args['proration-billing-mode']) {
+            result = { error: '--proration-billing-mode required when changing items or the next billing date' }; break
+          }
           if (args['proration-billing-mode']) body.proration_billing_mode = args['proration-billing-mode']
           if (args['scheduled-change']) {
             try { body.scheduled_change = JSON.parse(args['scheduled-change']) } catch { result = { error: 'Invalid JSON in --scheduled-change' }; break }
@@ -372,7 +394,7 @@ async function main() {
           products: 'products [list | get --id <id> | create --name <n> --tax-category <cat> | update --id <id>]',
           prices: 'prices [list | get --id <id> | create --product-id <id> --amount <amt> [--currency USD] [--interval month --frequency 1] | update --id <id>]',
           customers: 'customers [list | get --id <id> | create --email <email> [--name <name>] | update --id <id>]',
-          subscriptions: 'subscriptions [list | get --id <id> | update --id <id> | cancel --id <id> [--effective-from next_billing_period] | pause --id <id> | resume --id <id>]',
+          subscriptions: 'subscriptions [list | get --id <id> | update --id <id> [--items <json> | --next-billed-at <ISO>] [--proration-billing-mode <mode>] | cancel --id <id> [--effective-from next_billing_period] | pause --id <id> | resume --id <id>]',
           transactions: 'transactions [list | get --id <id> | create --items <json>]',
           discounts: 'discounts [list | get --id <id> | create --amount <amt> --type <type> [--code <code>] [--max-uses <count>]]',
           adjustments: 'adjustments [list | create --transaction-id <id> --action <action> --reason <reason> --items <json>]',
@@ -383,6 +405,7 @@ async function main() {
       }
   }
 
+  if (result?.error && rawArgs.length > 0) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

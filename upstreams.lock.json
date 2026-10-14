@@ -1,14 +1,14 @@
 {
-  "audited_on": "2026-10-05",
+  "audited_on": "2026-10-14",
   "schema_version": 1,
   "sources": {
     "source-a": {
-      "commit": "3f68ddad1f01a43a45e3a075ccff2d146644a4ad",
+      "commit": "2541ef9bf25f1c1c816130efca3d21c022a22b2e",
       "file_count": 1089,
       "license": "Apache-2.0",
       "path": "upstreams/source-a",
       "repository": "aaron-he-zhu/aaron-marketing-skills",
-      "tree_sha256": "b3f49c7a90a76b318c09aded0abd22ddfc0074f378fceb19f5e45e201feee6d9",
+      "tree_sha256": "a8a11d5c5bb5a3672deb923985897d89a04af93340c7f598fb5f2a0aac51b2d6",
       "url": "https://github.com/aaron-he-zhu/aaron-marketing-skills.git"
     },
     "source-b": {
@@ -21,21 +21,21 @@
       "url": "https://github.com/AgriciDaniel/claude-seo.git"
     },
     "source-c": {
-      "commit": "ea29bd291a0b52648ef92a80d84a2e1f89ef754b",
+      "commit": "989cae01e8ebbc42a9ec798eb9e7cb423f5ec89c",
       "file_count": 71,
       "license": "MIT",
       "path": "upstreams/source-c",
       "repository": "zubair-trabzada/geo-seo-claude",
-      "tree_sha256": "8b2835a755e55d16ad0be48475e2546615940f565db2e7e18c187fb72001b527",
+      "tree_sha256": "87b3d75bc19fec9718e5e0b708c045e76e7b1f38f850a0465ee00be43dda311e",
       "url": "https://github.com/zubair-trabzada/geo-seo-claude.git"
     },
     "source-d": {
-      "commit": "dda3841f0b294e01e93b1541486beefbfab0915e",
-      "file_count": 515,
+      "commit": "c7d7dfb6b460fc376b4b2204b78a9c9fd5ca6467",
+      "file_count": 676,
       "license": "MIT",
       "path": "upstreams/source-d",
       "repository": "coreyhaines31/marketingskills",
-      "tree_sha256": "7725957f0f4d0037582ad0032d15b531b9c2182d5b34a27f43c06e5e23ae9910",
+      "tree_sha256": "7effe43da21860a118f1569ec8619fbe45b5454a3da5581a68de9459674d1425",
       "url": "https://github.com/coreyhaines31/marketingskills.git"
     }
   }

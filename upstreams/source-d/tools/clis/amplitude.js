@@ -11,13 +11,24 @@ if ((!API_KEY) && rawArgs.length > 0) {
   process.exit(1)
 }
 
+
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
+  }
+  return AbortSignal.timeout(ms)
+}
+
+
 async function ingestApi(method, path, body) {
   if (args['dry-run']) {
     const maskedBody = body ? JSON.parse(JSON.stringify(body)) : undefined
     if (maskedBody && maskedBody.api_key) maskedBody.api_key = '***'
     return { _dry_run: true, method, url: `${INGESTION_URL}${path}`, headers: { 'Content-Type': 'application/json' }, body: maskedBody }
   }
-  const res = await fetch(`${INGESTION_URL}${path}`, {
+  const res = await fetch(`${INGESTION_URL}${path}`, { signal: requestSignal(),
     method,
     headers: { 'Content-Type': 'application/json' },
     body: body ? JSON.stringify(body) : undefined,
@@ -39,7 +50,7 @@ async function queryApi(method, path, params) {
     return { _dry_run: true, method, url, headers: { 'Authorization': '***', 'Content-Type': 'application/json' } }
   }
   const auth = Buffer.from(`${API_KEY}:${SECRET_KEY}`).toString('base64')
-  const res = await fetch(url, {
+  const res = await fetch(url, { signal: requestSignal(),
     method,
     headers: {
       'Authorization': `Basic ${auth}`,
@@ -87,6 +98,19 @@ function parseArgs(args) {
 const args = parseArgs(rawArgs)
 const [cmd, sub, ...rest] = args._
 
+function isObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value)
+}
+
+function jsonArg(name, description) {
+  if (typeof args[name] !== 'string') throw new Error(`--${name} must be ${description}`)
+  try {
+    return JSON.parse(args[name])
+  } catch {
+    throw new Error(`--${name} must be ${description}`)
+  }
+}
+
 async function main() {
   let result
 
@@ -94,14 +118,19 @@ async function main() {
     case 'track':
       switch (sub) {
         case 'event': {
-          if (!args['user-id']) { result = { error: '--user-id required' }; break }
+          for (const key of ['user-id', 'device-id']) {
+            if (args[key] !== undefined && (typeof args[key] !== 'string' || args[key].trim().length === 0)) throw new Error(`--${key} requires a non-empty string`)
+          }
+          if (!args['user-id'] && !args['device-id']) { result = { error: '--user-id or --device-id required' }; break }
           if (!args['event-type']) { result = { error: '--event-type required' }; break }
           const event = {
-            user_id: args['user-id'],
+            ...(args['user-id'] !== undefined ? { user_id: args['user-id'] } : {}),
+            ...(args['device-id'] !== undefined ? { device_id: args['device-id'] } : {}),
             event_type: args['event-type'],
           }
-          if (args.properties) {
-            event.event_properties = JSON.parse(args.properties)
+          if (args.properties !== undefined) {
+            event.event_properties = jsonArg('properties', 'a JSON object')
+            if (!isObject(event.event_properties)) throw new Error('--properties must be a JSON object')
           }
           result = await ingestApi('POST', '/2/httpapi', {
             api_key: API_KEY,
@@ -111,7 +140,13 @@ async function main() {
         }
         case 'batch': {
           if (!args.events) { result = { error: '--events required (JSON array)' }; break }
-          const events = JSON.parse(args.events)
+          const events = jsonArg('events', 'a JSON array of event objects')
+          if (!Array.isArray(events) || events.some(event => !isObject(event))) {
+            throw new Error('--events must be a JSON array of event objects')
+          }
+          if (events.some(event => Object.hasOwn(event, 'event_properties') && !isObject(event.event_properties))) {
+            throw new Error('--events event_properties must be a JSON object')
+          }
           result = await ingestApi('POST', '/batch', {
             api_key: API_KEY,
             events,
@@ -126,9 +161,23 @@ async function main() {
     case 'users':
       switch (sub) {
         case 'activity': {
-          if (!args['user-id']) { result = { error: '--user-id required' }; break }
+          const userId = args['user-id']
+          let amplitudeId = args['amplitude-id']
+          if (!userId && !amplitudeId) { result = { error: '--user-id or --amplitude-id required' }; break }
+          if (userId && amplitudeId) { result = { error: 'Use only one of --user-id or --amplitude-id' }; break }
+          if (userId) {
+            const searchParams = new URLSearchParams({ user: userId })
+            const search = await queryApi('GET', '/usersearch', searchParams)
+            if (search._dry_run || !Array.isArray(search.matches)) { result = search; break }
+            const matches = search.matches.filter(match => match.user_id === userId)
+            if (matches.length !== 1) {
+              result = { error: matches.length ? 'Multiple exact user ID matches; use --amplitude-id' : 'No exact user ID match found' }
+              break
+            }
+            amplitudeId = matches[0].amplitude_id
+          }
           const params = new URLSearchParams()
-          params.set('user', args['user-id'])
+          params.set('user', amplitudeId)
           result = await queryApi('GET', '/useractivity', params)
           break
         }
@@ -161,9 +210,13 @@ async function main() {
           const params = new URLSearchParams()
           params.set('start', args.start)
           params.set('end', args.end)
-          if (args.event) {
-            params.set('e', JSON.stringify([{ event_type: args.event }]))
+          for (const key of ['start-event', 'return-event', 'event']) {
+            if (args[key] !== undefined && (typeof args[key] !== 'string' || !args[key].trim())) {
+              throw new Error(`--${key} requires a nonempty event name`)
+            }
           }
+          params.set('se', JSON.stringify({ event_type: args['start-event'] || '_new' }))
+          params.set('re', JSON.stringify({ event_type: args['return-event'] || args.event || '_active' }))
           result = await queryApi('GET', '/retention', params)
           break
         }
@@ -176,14 +229,15 @@ async function main() {
       result = {
         error: 'Unknown command',
         usage: {
-          track: 'track [event --user-id <id> --event-type <type> [--properties <json>] | batch --events <json>]',
-          users: 'users activity --user-id <id>',
+          track: 'track [event [--user-id <id>] [--device-id <id>] --event-type <type> [--properties <json>] | batch --events <json>]',
+          users: 'users activity [--user-id <external-user-id> | --amplitude-id <internal-id>] (--user-id dry-run previews the initial lookup)',
           export: "export events --start <YYYYMMDDThh> --end <YYYYMMDDThh> (ZIP in base64 body; decode with Buffer.from(result.body, 'base64'))",
-          retention: 'retention get --start <YYYYMMDD> --end <YYYYMMDD> [--event <type>]',
+          retention: 'retention get --start <YYYYMMDD> --end <YYYYMMDD> [--start-event <type>] [--return-event <type>] [--event <return-type>]',
         }
       }
   }
 
+  if (result?.error && rawArgs.length > 0) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

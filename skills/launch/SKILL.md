@@ -1,9 +1,9 @@
 ---
 name: launch
-description: "Plan and run product or feature launches from positioning and tiering through asset readiness, launch-day orchestration, feedback and momentum."
+description: "Plan product or feature launches, draft release notes from confirmed shipped changes, and check website go-live readiness. Separate announcement drafts from authorized publication."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "gtm-sales"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **launch**. Start from the user’s concrete objective and av
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Shipped changes and site readiness
+
+For announcements derived from a repository or website go-live, read [references/release-and-site-qa.md](references/release-and-site-qa.md). Separate merged code, deployed behavior, and user availability. Only confirmed shipped changes support public claims; publication is complete only after a matching public receipt. Include conversion-flow tests, consent, production indexability, redirects, and rollback for a site launch.
 
 ## Domain Checklist
 

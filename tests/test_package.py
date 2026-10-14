@@ -94,6 +94,44 @@ class PackageTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertFalse((target / "local-change.txt").exists())
 
+    def test_specialist_resources_survive_harness_installation(self):
+        resources = {
+            "cold-email": "outbound-operations.md",
+            "prospecting": "enrichment-and-signals.md",
+            "revops": "qualification-and-routing.md",
+            "referrals": "reviews-and-affiliates.md",
+            "launch": "release-and-site-qa.md",
+            "lead-magnets": "content-library-skill.md",
+            "marketing-loops": "channel-operators.md",
+            "seo-audit": "local-and-query-diagnosis.md",
+        }
+        targets = {
+            "codex": ".agents/skills",
+            "claude-code": ".claude/skills",
+            "opencode": ".opencode/skills",
+            "pi": ".pi/skills",
+            "amp": ".agents/skills",
+            "cursor": ".cursor/skills",
+        }
+        for agent, destination in targets.items():
+            with self.subTest(agent=agent), tempfile.TemporaryDirectory() as directory:
+                args = ["--agent", agent, "--project", directory]
+                for skill in resources:
+                    args.extend(["--skill", skill])
+                result = run_script("install.py", *args)
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                for skill, reference in resources.items():
+                    source = ROOT / "skills" / skill
+                    installed = Path(directory) / destination / skill
+                    self.assertEqual(
+                        (installed / "SKILL.md").read_bytes(),
+                        (source / "SKILL.md").read_bytes(),
+                    )
+                    self.assertEqual(
+                        (installed / "references" / reference).read_bytes(),
+                        (source / "references" / reference).read_bytes(),
+                    )
+
     def test_installer_rejects_unknown_and_traversal_names(self):
         with tempfile.TemporaryDirectory() as directory:
             for name in ("does-not-exist", "../scripts"):

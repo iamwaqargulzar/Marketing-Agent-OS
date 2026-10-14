@@ -10,6 +10,17 @@ if ((!TOKEN) && rawArgs.length > 0) {
   process.exit(1)
 }
 
+
+function requestSignal() {
+  const raw = args['timeout-ms'] ?? '120000'
+  const ms = Number(raw)
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw) || !Number.isSafeInteger(ms) || ms < 1 || ms > 600000) {
+    throw new Error('--timeout-ms must be an integer from 1 to 600000')
+  }
+  return AbortSignal.timeout(ms)
+}
+
+
 async function api(method, path, body) {
   if (args['dry-run']) {
     return { _dry_run: true, method, url: `${BASE_URL}${path}`, headers: { 'Access-Token': '***', 'Content-Type': 'application/json' }, body: body || undefined }
@@ -24,13 +35,18 @@ async function api(method, path, body) {
   if (body && method === 'POST') {
     opts.body = JSON.stringify(body)
   }
-  const res = await fetch(`${BASE_URL}${path}`, opts)
+  const res = await fetch(`${BASE_URL}${path}`, { ...opts, signal: requestSignal() })
   const text = await res.text()
+  let result
   try {
-    return JSON.parse(text)
+    result = JSON.parse(text)
   } catch {
-    return { status: res.status, body: text }
+    result = { status: res.status, body: text }
   }
+  if (!res.ok || (typeof result?.code === 'number' && result.code !== 0)) {
+    process.exitCode = 1
+  }
+  return result
 }
 
 function parseArgs(args) {
@@ -185,6 +201,7 @@ async function main() {
       }
   }
 
+  if (result?.error && rawArgs.length > 0) process.exitCode = 1
   console.log(JSON.stringify(result, null, 2))
 }
 

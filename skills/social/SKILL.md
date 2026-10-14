@@ -3,7 +3,7 @@ name: social
 description: "Plan and execute organic social strategy, calendar, creative, community engagement, social selling and measurement."
 license: Apache-2.0
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   domain: "social-growth"
   provenance: "marketing-agent-os"
 ---
@@ -33,6 +33,10 @@ Use this skill for **social**. Start from the user’s concrete objective and av
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
 8. Ground hooks in a real observation or story. Review formulaic one-line paragraphs, engagement-bait closers, manufactured vulnerability, and repetitive openings without overriding the brand's voice.
 9. For an authorized scheduling workflow, inspect the connected tool's actual capabilities, create approved drafts, and bind scheduling to the chosen account, payload, and time. Report draft/queue links and receipts; use post-level results for the next calendar revision. Algorithm advice needs a dated first-party basis, not a universal performance guarantee.
+
+## Platform-specific channel limits
+
+Separate a Telegram channel, discussion group, bot, and paid placement when planning distribution. Adapt cadence and measurement to observed reach rather than follower-count assumptions. For LinkedIn outbound messages, use `cold-email` and current platform rules; organic posting, social engagement, and an outreach enrollment are distinct scopes.
 
 ## Domain Checklist
 
