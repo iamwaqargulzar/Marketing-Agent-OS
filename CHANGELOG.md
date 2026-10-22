@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## 1.6.0 — 2026-10-22
+
+- Refresh source A to `79c145da`, source B to `23a2a811`, and source D v2.13.0 to `e85f3cbc`; source C remains current at `989cae01`. Retain exact snapshots, tree hashes, licenses, and attribution.
+- Add portable `conversion-tracking` and `link-building` specialists, bringing the normalized inventory to 240 skills. Separate conversion delivery from event plans, attribution, and campaign strategy; separate earned-link planning from backlink-profile diagnosis.
+- Update 21 existing skills, including router boundaries, with answer-claim evidence, versioned prompt/multi-turn panels, agent-task discovery, multilingual/commerce fit, AI-impact measurement, paid-account operating reviews, creator/newsletter programs, voice-preserving edits, and authorized learning-registry updates.
+- Adapt read-only stack/CVE exposure guidance without importing unsafe inference that missing PHP signals prove no exposure. Require authorized scope, current first-party advisories, actual inventory/backport evidence, and separate remediation authority.
+- Keep upstream conversion snippets, GTM recipes/builders, paid-tool promotions, and provider-specific integrations in provenance snapshots rather than silently installing live-site code or a vendor runtime.
+- Expand byte-for-byte resource installation checks to eleven specialists across six harness targets; add standalone instruction-only installation tests and update cross-platform discovery/projection CI for all 240 skills. Correct the stale README test count.
+
 ## 1.5.0 — 2026-10-14
 
 - Refresh source A to `2541ef9b`, source C to `989cae01`, and source D v2.11.29 to `c7d7dfb6`; source B remains current at `4b99de2f`. Preserve complete pinned snapshots, licenses, attribution, and exact tree hashes.

@@ -3,7 +3,7 @@ name: free-tools
 description: "When the user wants to plan, evaluate, or build a free tool for marketing purposes — lead generation, SEO value, or brand awareness. Also use when the user mentions \"engineering as marketing,\" \"free tool,\" \"marketing tool,\" \"calculator,\" \"generator,\" \"interactive tool,\" \"lead gen tool,\" \"build a tool for leads,\" \"free resource,\" \"ROI calculator,\" \"grader tool,\" \"audit tool,\" \"should I build a free tool,\" or \"tools for lead gen.\" Use this whenever someone wants to build something useful and give it away to attract leads or earn links. For downloadable content lead magnets (ebooks, checklists, templates), see lead-magnets."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "marketing"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **free tools**. Start from the user’s concrete objective an
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Validate the acquisition job
+
+Choose one useful audience task and an honest path to product value before adding features. Pilot demand and measure actual eligible usage, qualified leads, conversion, and ongoing cost; vendor case studies are illustrative, not traffic or conversion forecasts. Use `link-building` for earned promotion and propose changes to approved learnings rather than silently updating business records.
 
 ## Domain Checklist
 

@@ -4,10 +4,10 @@
 
 [![Release](https://img.shields.io/github/v/release/iamwaqargulzar/Marketing-Agent-OS?display_name=tag)](https://github.com/iamwaqargulzar/Marketing-Agent-OS/releases/latest)
 [![License](https://img.shields.io/github/license/iamwaqargulzar/Marketing-Agent-OS)](LICENSE)
-[![Agent Skills](https://img.shields.io/badge/Agent%20Skills-238-6f42c1)](catalog.json)
+[![Agent Skills](https://img.shields.io/badge/Agent%20Skills-240-6f42c1)](catalog.json)
 [![Platforms](https://img.shields.io/badge/platforms-Linux%20%7C%20macOS%20%7C%20Windows-167d3e)](docs/COMPATIBILITY.md)
 
-Marketing Agent OS is an open-source collection of 238 portable AI agent skills for marketing, SEO, generative engine optimization (GEO), answer engine optimization (AEO), content, CRO, paid media, lifecycle, social, analytics, and growth. It works across major AI coding agents while preserving reproducible upstream provenance and safety controls.
+Marketing Agent OS is an open-source collection of 240 portable AI agent skills for marketing, SEO, generative engine optimization (GEO), answer engine optimization (AEO), content, CRO, paid media, lifecycle, social, analytics, and growth. It works across major AI coding agents while preserving reproducible upstream provenance and safety controls.
 
 > Use one governed marketing skill library across Codex, Claude Code, OpenCode, Pi, Amp, Cursor, Gemini CLI, GitHub Copilot, and dozens of other Agent Skills-compatible harnesses.
 
@@ -15,7 +15,7 @@ Marketing Agent OS is an open-source collection of 238 portable AI agent skills 
 
 | Capability | Verified project fact |
 |---|---|
-| Installable skills | 238 uniquely named Agent Skills |
+| Installable skills | 240 uniquely named Agent Skills |
 | Marketing coverage | SEO, GEO/AEO, content, CRO, paid, lifecycle, social, research, analytics, sales, and RevOps |
 | Operating systems | Linux, macOS, and Windows |
 | Built-in installer targets | 14 direct harness targets |
@@ -24,7 +24,9 @@ Marketing Agent OS is an open-source collection of 238 portable AI agent skills 
 | Runtime dependency | None for instruction-only skills; helper scripts use Python 3 standard library |
 | License | Apache-2.0 wrapper, with retained third-party licenses and attribution |
 
-Package verification: **2026-10-14**, version **1.5.0**. Native-host checks and ecosystem projection tests are dated separately in the [compatibility matrix](docs/COMPATIBILITY.md). See the [latest upstream review](docs/UPSTREAM_REVIEW-2026-10-14.md) for changes and validation scope.
+Package verification: **2026-10-22**, version **1.6.0**. Native-host checks and ecosystem projection tests are dated separately in the [compatibility matrix](docs/COMPATIBILITY.md). See the [latest upstream review](docs/UPSTREAM_REVIEW-2026-10-22.md) for changes and validation scope.
+
+New in 1.6.0: dedicated [conversion tracking](skills/conversion-tracking/SKILL.md) and [earned link building](skills/link-building/SKILL.md), plus expanded AI-answer evidence, paid operating reviews, and read-only stack-exposure guidance.
 
 ## Why Marketing Agent OS?
 
@@ -72,7 +74,7 @@ npx skills add iamwaqargulzar/Marketing-Agent-OS \
   --agent codex claude-code opencode pi amp
 ```
 
-Installing all 238 skills into every harness creates many copies and may crowd skill discovery. Start focused, then add specialists as needed.
+Installing all 240 skills into every harness creates many copies and may crowd skill discovery. Start focused, then add specialists as needed.
 
 ### Clone and use the cross-platform installer
 
@@ -136,7 +138,7 @@ The built-in installer also supports Cline, Roo, Windsurf, OpenClaw, and Hermes.
 ```mermaid
 flowchart LR
     A["Four pinned upstream repositories"] --> B["Audit and reconciliation"]
-    B --> C["238 normalized Marketing Agent OS skills"]
+    B --> C["240 normalized Marketing Agent OS skills"]
     C --> D["Universal .agents/skills"]
     C --> E["Host-native skill directories"]
     C --> F["Claude Code plugin"]
@@ -187,13 +189,13 @@ python3 -m unittest discover -s tests -v
 npx --yes skills@1.5.22 add . --list --full-depth
 ```
 
-The current release passes 16 tests, validates all 238 skills with zero doctor errors or warnings, and records every release entry in [`SHA256SUMS.json`](SHA256SUMS.json). GitHub Actions repeats package validation, tests, and installer smoke checks on Linux, macOS, and Windows, plus ecosystem discovery and major-harness projections. These checks verify packaging and installation; native task execution depends on the host and optional tools.
+The current release passes 18 tests, validates all 240 skills with zero doctor errors or warnings, and records every release entry in [`SHA256SUMS.json`](SHA256SUMS.json). GitHub Actions repeats package validation, tests, and installer smoke checks on Linux, macOS, and Windows, plus ecosystem discovery and major-harness projections. These checks verify packaging and installation; native task execution depends on the host and optional tools.
 
 ## Frequently asked questions
 
 ### What is Marketing Agent OS?
 
-Marketing Agent OS is a portable open-source library of 238 AI agent skills for marketing work. It combines marketing strategy, SEO, GEO, AEO, content, CRO, paid acquisition, lifecycle, social, analytics, sales, and RevOps workflows in one governed package that can be installed across major AI coding agents.
+Marketing Agent OS is a portable open-source library of 240 AI agent skills for marketing work. It combines marketing strategy, SEO, GEO, AEO, content, CRO, paid acquisition, lifecycle, social, analytics, sales, and RevOps workflows in one governed package that can be installed across major AI coding agents.
 
 ### Does Marketing Agent OS work with Codex, Claude Code, OpenCode, Pi, and Amp?
 
@@ -207,9 +209,9 @@ No. SEO and AI-search optimization are deep parts of the project, but the librar
 
 SEO improves visibility in conventional search results. GEO improves the likelihood that generative AI systems can retrieve, understand, and cite content. AEO structures useful answers for answer engines and direct-response search experiences. Marketing Agent OS includes connected workflows for all three disciplines.
 
-### Are all 238 skills loaded at once?
+### Are all 240 skills loaded at once?
 
-Not necessarily. The repository contains 238 skills, but selective installation is recommended. Install a small router and the specialists you use most, then expand the set when a task requires more coverage.
+Not necessarily. The repository contains 240 skills, but selective installation is recommended. Install a small router and the specialists you use most, then expand the set when a task requires more coverage.
 
 ### How are upstream changes handled?
 
@@ -222,7 +224,7 @@ Each source is pinned by repository URL, commit hash, file count, license, and n
 - [Compatibility matrix](docs/COMPATIBILITY.md)
 - [Audit report](docs/AUDIT.md)
 - [Upstream maintenance](docs/MAINTENANCE.md)
-- [Latest upstream review](docs/UPSTREAM_REVIEW-2026-10-05.md)
+- [Latest upstream review](docs/UPSTREAM_REVIEW-2026-10-22.md)
 - [Source manifest](SOURCE_MANIFEST.md)
 - [Contributing](CONTRIBUTING.md)
 - [Support](SUPPORT.md)

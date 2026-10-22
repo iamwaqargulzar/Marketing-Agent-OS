@@ -3,7 +3,7 @@ name: content-strategy
 description: "When the user wants to plan a content strategy, decide what content to create, or figure out what topics to cover. Also use when the user mentions \"content strategy,\" \"what should I write about,\" \"content ideas,\" \"blog strategy,\" \"topic clusters,\" \"content planning,\" \"editorial calendar,\" \"content marketing,\" \"content roadmap,\" \"what content should I create,\" \"blog topics,\" \"content pillars,\" or \"I don't know what to write.\" Use this whenever someone needs help deciding what content to produce, not just writing it. For writing individual pieces, see copywriting. For SEO-specific audits, see seo-audit. For social media content specifically, see social."
 license: Apache-2.0
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   domain: "content"
   provenance: "marketing-agent-os"
 ---
@@ -35,6 +35,10 @@ Use this skill for **content strategy**. Start from the user’s concrete object
 ## Information-gain check
 
 Before commissioning a search-led piece, inspect current relevant results and state what this piece adds: verified original data, a real product example, a usable tool/template, a clearer answer, or a defensible new perspective. If no distinctive benefit can be identified, revise the brief instead of producing another interchangeable page. Record source-access limits rather than pretending to have reviewed the results.
+
+## Promoting useful assets
+
+Use `link-building` to qualify editorial opportunities for real research, tools, or templates. Preserve source methods and limitations; curated statistics are not original research, and historical case studies do not guarantee that a format will earn links or traffic.
 
 ## Domain Checklist
 

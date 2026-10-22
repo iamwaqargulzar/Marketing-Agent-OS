@@ -3,7 +3,7 @@ name: social
 description: "Plan and execute organic social strategy, calendar, creative, community engagement, social selling and measurement."
 license: Apache-2.0
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
   domain: "social-growth"
   provenance: "marketing-agent-os"
 ---
@@ -37,6 +37,10 @@ Use this skill for **social**. Start from the user’s concrete objective and av
 ## Platform-specific channel limits
 
 Separate a Telegram channel, discussion group, bot, and paid placement when planning distribution. Adapt cadence and measurement to observed reach rather than follower-count assumptions. For LinkedIn outbound messages, use `cold-email` and current platform rules; organic posting, social engagement, and an outreach enrollment are distinct scopes.
+
+## Contrast and listening evidence
+
+Use contrast hooks only when they express a real audience tension or visual change; preserve the user's voice rather than forcing formulaic reversals. For X or assistant-assisted social listening, use available authorized sources, record exact query/time/source coverage, and corroborate quotes and claims. An assistant summary is not a complete or representative conversation sample, and a listening task does not authorize posting or DMs.
 
 ## Domain Checklist
 

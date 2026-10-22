@@ -28,6 +28,7 @@ Anyone — including tool makers and partners — may contribute content that na
 | ◆ Converly | Conversion tracking / attribution | [converly.md](integrations/converly.md) |
 | ◆ Ploy | AI website & growth platform | [ploy.md](integrations/ploy.md) |
 | ◆ AIsa | SEO, search & social data | [aisa.md](integrations/aisa.md) |
+| ◆ Omnia | AI search visibility (AEO) | [omnia.md](integrations/omnia.md) |
 <!-- PARTNERS:END -->
 
 <!-- The table above is generated from partners.json — run `node scripts/sync-partners.mjs`. -->
@@ -38,7 +39,7 @@ Anyone — including tool makers and partners — may contribute content that na
 
 | Tool | Category | API | MCP | CLI | SDK | Guide |
 |------|----------|:---:|:---:|:---:|:---:|-------|
-| ◆ converly | Conversion Tracking | ✓ | ✓ | ✓ | - | [converly.md](integrations/converly.md) |
+| ◆ converly | Conversion Tracking | ✓ | ✓ | ✓ | ✓ | [converly.md](integrations/converly.md) |
 | ◆ ploy | Website | ✓ | - | ✓ | - | [ploy.md](integrations/ploy.md) |
 | ◆ aisa | SEO / Data APIs | ✓ | ✓ | ✓ | - | [aisa.md](integrations/aisa.md) |
 | ga4 | Analytics | ✓ | ✓ | [✓](clis/ga4.js) | ✓ | [ga4.md](integrations/ga4.md) |
@@ -54,6 +55,7 @@ Anyone — including tool makers and partners — may contribute content that na
 | dataforseo | SEO | ✓ | - | [✓](clis/dataforseo.js) | ✓ | [dataforseo.md](integrations/dataforseo.md) |
 | keywords-everywhere | SEO | ✓ | - | [✓](clis/keywords-everywhere.js) | - | [keywords-everywhere.md](integrations/keywords-everywhere.md) |
 | rankparse | SEO | ✓ | ✓ | [✓](clis/rankparse.js) | - | [rankparse.md](integrations/rankparse.md) |
+| omnia | AEO | ✓ | ✓ | - | - | [omnia.md](integrations/omnia.md) |
 | clearbit | Data Enrichment (legacy) | ✓ | - | [✓](clis/clearbit.js) | ✓ | [clearbit.md](integrations/clearbit.md) |
 | apollo | Data Enrichment | ✓ | ✓ | [✓](clis/apollo.js) | - | [apollo.md](integrations/apollo.md) |
 | zoominfo | Data Enrichment | ✓ | ✓ | [✓](clis/zoominfo.js) | - | [zoominfo.md](integrations/zoominfo.md) |
@@ -101,7 +103,7 @@ Anyone — including tool makers and partners — may contribute content that na
 | lemlist | Email Outreach | ✓ | ✓ | [✓](clis/lemlist.js) | - | [lemlist.md](integrations/lemlist.md) |
 | instantly | Email Outreach | ✓ | ✓ | [✓](clis/instantly.js) | - | [instantly.md](integrations/instantly.md) |
 | google-ads | Ads | ✓ | ✓ | [✓](clis/google-ads.js) | ✓ | [google-ads.md](integrations/google-ads.md) |
-| meta-ads | Ads | ✓ | - | [✓](clis/meta-ads.js) | ✓ | [meta-ads.md](integrations/meta-ads.md) |
+| meta-ads | Ads | ✓ | ✓ | [✓](clis/meta-ads.js) | ✓ | [meta-ads.md](integrations/meta-ads.md) |
 | linkedin-ads | Ads | ✓ | - | [✓](clis/linkedin-ads.js) | - | [linkedin-ads.md](integrations/linkedin-ads.md) |
 | tiktok-ads | Ads | ✓ | - | [✓](clis/tiktok-ads.js) | ✓ | [tiktok-ads.md](integrations/tiktok-ads.md) |
 | zapier | Automation | ✓ | ✓ | [✓](clis/zapier.js) | ✓ | [zapier.md](integrations/zapier.md) |
@@ -260,7 +262,7 @@ Paid advertising platforms and campaign management.
 | Tool | Best For | MCP Available |
 |------|----------|:-------------:|
 | **google-ads** | Search intent, high-intent traffic | ✓ |
-| **meta-ads** | Demand gen, visual products, B2C | - |
+| **meta-ads** | Demand gen, visual products, B2C | ✓ |
 | **linkedin-ads** | B2B, job title targeting | - |
 | **tiktok-ads** | Younger demographics, video | - |
 
@@ -501,6 +503,16 @@ Sales conversation analytics, call recording, and deal intelligence.
 
 **Agent recommendation**: Gong for mining sales call transcripts for customer research, competitive intelligence, and coaching insights. Essential for revenue attribution and win/loss analysis.
 
+### AEO (Answer Engine Optimization)
+
+Answer engine optimization tools for AI visibility monitoring, competitor benchmarking, citation analysis, and content optimization.
+
+| Tool | Best For | Notes |
+|------|----------|-------|
+| **[omnia](integrations/omnia.md)** | AI visibility monitoring, prompt discovery, competitor benchmarking, citation analysis, and agent-assisted content optimization and outreach | REST API + OAuth MCP for data access; built-in agent for execution |
+
+**Agent note**: Omnia is the only AEO tool with an integration guide here. The ai-seo skill's monitoring tools table lists the alternatives (Otterly AI, Peec AI, ZipTie, LLMrefs, Profound, Ahrefs Brand Radar, Semrush) and a DIY method; choose on coverage and fit. With Omnia, use MCP for interactive analysis or the API for recurring reports; the built-in Omnia Agent handles content updates, publishing, and outreach with user approval.
+
 ### AI Content
 
 AI-powered content generation and optimization platforms.
@@ -602,6 +614,7 @@ These tools have Model Context Protocol servers available, enabling direct agent
 - **outreach** - Sales engagement sequences
 - **crossbeam** - Partner ecosystem data
 - **introw** - Partner relationship management
+- **omnia** - AI visibility, competitor mentions, and citation data (OAuth)
 - **exa** - AI-powered web search for LLMs and agents
 - **apollo** - B2B prospecting, enrichment, and sequences
 - **hubspot** - CRM read and write
@@ -625,13 +638,21 @@ To use MCP tools, ensure the appropriate MCP server is configured in your enviro
 
 ### Composio Integration
 
-[Composio](integrations/composio.md) provides managed OAuth and pre-built connectors for 500+ tools via a single MCP server. It adds MCP access to tools that don't have native MCP servers, including Salesforce, Meta Ads, LinkedIn Ads, Google Sheets, Slack, Notion, and more. (HubSpot now has its own official MCP server.)
+[Composio](integrations/composio.md) provides managed OAuth and pre-built connectors for 500+ tools via a single MCP server. It adds MCP access to tools that don't have native MCP servers, including Salesforce, LinkedIn Ads, Google Sheets, Slack, Notion, and more. (HubSpot and Meta Ads now have their own official MCP servers.)
 
 - **Setup**: `npx @composio/mcp@latest setup`
 - **Quick start**: See [tools/composio/README.md](composio/README.md)
 - **Marketing tool mapping**: See [tools/composio/marketing-tools.md](composio/marketing-tools.md)
 
 Use Composio when you need MCP access to OAuth-heavy tools. Prefer native MCP servers (GA4, Stripe, Mailchimp, etc.) when available — they have deeper coverage.
+
+### AIsa Data Access
+
+[◆ AIsa](integrations/aisa.md) offers access to supported SEO, search, social, and company-data providers through one account. Check operation coverage, account access, and pricing before choosing it alongside direct provider connections or manual exports. Its data access serves a different need from connecting existing SaaS accounts through Composio.
+
+- **Quick start**: [tools/aisa/README.md](aisa/README.md)
+- **Coverage and alternatives**: [tools/aisa/coverage-map.md](aisa/coverage-map.md)
+- **Evaluation scenarios**: [tools/aisa/evals/README.md](aisa/evals/README.md)
 
 ### Cogny Integration
 

@@ -3,7 +3,7 @@ name: marketing-loops
 description: "Design recurring marketing workflows and bounded SEO or outbound operators, with cadence, evidence, shared-state ownership, caps, approvals, receipts, and stop conditions. Use specialist skills for one-off work."
 license: Apache-2.0
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   domain: "marketing"
   provenance: "marketing-agent-os"
 ---
@@ -35,6 +35,10 @@ Use this skill for **marketing loops**. Start from the user’s concrete objecti
 ## Channel operators
 
 For recurring SEO or outbound operations, read [references/channel-operators.md](references/channel-operators.md). Define the objective, data access, cadence, shared-state owner, approved actions, caps, stop conditions, and receipts. Use the host's supported scheduler only when scheduling is requested. A recurring workflow never grants default send/publish/spend authority, and private business state is persisted only in an authorized location.
+
+## Learning and review loops
+
+Relevant loops may sample agent-task choices, answer accuracy, niche content outliers, creator prospects, launch reactions, earned-link opportunities, or paid-account decisions. Bound sources, cadence, permissions, duplicate handling, and stop conditions. Separate observed outliers from reproducible learning. At session end propose an evidenced context update through the registry owner; a scheduled run does not grant permission to edit context, send outreach, deploy, or change spend.
 
 ## Domain Checklist
 

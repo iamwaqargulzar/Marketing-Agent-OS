@@ -1,9 +1,9 @@
 ---
 name: product-marketing
-description: "Build or update the shared product-marketing context: product, audience, positioning, competitors, jobs-to-be-done, objections, customer language, proof and goals. Use before downstream execution when context is missing."
+description: "Create or update product-marketing context, positioning, ICP, evidence-backed brand voice, optional paid-media targets, and approved learnings. Maintain one authorized context writer and preserve evidence/history; do not invent missing business facts."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "strategy"
   provenance: "marketing-agent-os"
 ---
@@ -30,6 +30,10 @@ Use this skill for **product marketing**. Start from the user’s concrete objec
 4. Separate durable facts from campaign hypotheses and time-sensitive market claims.
 5. Write the result using `assets/product-marketing-template.md` and include a changelog/date.
 6. Do not persist the file unless the user explicitly requested a write or gave permission.
+
+## Voice, paid context, and learning registry
+
+Read [references/context-learnings.md](references/context-learnings.md) to maintain evidence-backed voice attributes, optional paid-media targets/conversion truth, and scoped learnings. Keep one writer and approved history. Start missing sections from supplied facts or explicit unknowns; do not invent targets, prior experiments, or user preferences.
 
 ## Domain Checklist
 

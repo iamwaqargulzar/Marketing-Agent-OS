@@ -3,7 +3,7 @@ name: competitor-profiling
 description: "When the user wants to research, profile, or analyze competitors from their URLs. Also use when the user mentions 'competitor profile,' 'competitor research,' 'competitor analysis,' 'profile this competitor,' 'analyze competitor,' 'competitive intelligence,' 'competitor deep dive,' 'who are my competitors,' 'competitor landscape,' 'competitor dossier,' 'competitive audit,' or 'research these competitors.' Input is a list of competitor URLs. Output is structured competitor profile markdown files. For creating comparison/alternative pages from profiles, see competitors. For sales-specific battle cards, see sales-enablement."
 license: Apache-2.0
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
   domain: "strategy"
   provenance: "marketing-agent-os"
 ---
@@ -37,6 +37,10 @@ Use this skill for **competitor profiling**. Start from the user’s concrete ob
 ## Research boundary
 
 Use `prospecting` for an account the user wants to sell to. A competitor dossier and a prospect brief serve different decisions; do not convert competitive research into contact enrollment or outreach authorization.
+
+## Earned-link handoff
+
+For turning evidenced competitor referring pages/domains into a page-level earned-link plan, use `link-building`. Do not interpret a proprietary authority score or raw link-count gap as proof of the ranking cause.
 
 ## Domain Checklist
 

@@ -3,7 +3,7 @@ name: marketing-os
 description: "Route complex marketing work across strategy, narrative, SEO/GEO, CRO, lifecycle, paid, social, influencer, launch, sales and measurement. Use for broad marketing plans, multi-channel work, or when the right specialist skill is unclear."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "marketing"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **marketing os**. Start from the user’s concrete objective 
 5. Apply the evidence, permission, and handoff contract in `references/skill-contract.md`.
 6. For cross-skill or side-effecting workflows, apply `references/control-artifacts.md`; keep proposal, approval, execution, receipt, and measurement separate.
 7. For high-impact deliverables, run the relevant quality gate and return one integrated recommendation rather than disconnected expert notes.
+
+## Specialist boundaries
+
+Route confirmed outcome detection/delivery, pixels, CAPI, and end-to-end conversion verification to `conversion-tracking`, not campaign strategy or attribution modeling. Route earned-link tactics and outreach planning to `link-building`, keeping backlink-profile diagnosis in `offsite-signal-analyzer`. Use the bundled catalog for the full inventory; routing does not authorize external actions.
 
 ## Domain Checklist
 

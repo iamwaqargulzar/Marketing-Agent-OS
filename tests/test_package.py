@@ -104,6 +104,9 @@ class PackageTests(unittest.TestCase):
             "lead-magnets": "content-library-skill.md",
             "marketing-loops": "channel-operators.md",
             "seo-audit": "local-and-query-diagnosis.md",
+            "conversion-tracking": "verification.md",
+            "link-building": "earned-link-plan.md",
+            "seo-technical": "stack-exposure.md",
         }
         targets = {
             "codex": ".agents/skills",
@@ -127,10 +130,31 @@ class PackageTests(unittest.TestCase):
                         (installed / "SKILL.md").read_bytes(),
                         (source / "SKILL.md").read_bytes(),
                     )
-                    self.assertEqual(
-                        (installed / "references" / reference).read_bytes(),
-                        (source / "references" / reference).read_bytes(),
-                    )
+                    self.assertTrue((installed / "references" / reference).is_file())
+                    for resource in source.rglob("*"):
+                        if resource.is_file():
+                            self.assertEqual(
+                                (installed / resource.relative_to(source)).read_bytes(),
+                                resource.read_bytes(),
+                            )
+
+    def test_new_specialists_are_standalone_instruction_packages(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result = run_script(
+                "install.py", "--project", directory,
+                "--skill", "conversion-tracking", "--skill", "link-building",
+            )
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            for skill in ("conversion-tracking", "link-building"):
+                installed = Path(directory) / ".agents/skills" / skill
+                self.assertEqual(
+                    (installed / "references/skill-contract.md").read_bytes(),
+                    (ROOT / "references/skill-contract.md").read_bytes(),
+                )
+                files = [path for path in installed.rglob("*") if path.is_file()]
+                self.assertTrue(files)
+                self.assertTrue(all(path.suffix == ".md" for path in files))
+                self.assertFalse((Path(directory) / "upstreams").exists())
 
     def test_installer_rejects_unknown_and_traversal_names(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -366,7 +390,7 @@ class PackageTests(unittest.TestCase):
         result = run_script("reconcile_upstreams.py")
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         report = json.loads(result.stdout)
-        self.assertEqual(report["normalized_skill_count"], 238)
+        self.assertEqual(report["normalized_skill_count"], 240)
         self.assertTrue(
             all(source["snapshot_matches_lock"] for source in report["sources"].values())
         )

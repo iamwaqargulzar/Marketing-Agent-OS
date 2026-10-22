@@ -17,11 +17,13 @@ Run into a problem or have a question? [Open an issue](https://github.com/coreyh
 The library is free and MIT-licensed. [Verified Partners](tools/REGISTRY.md#verified-partners) fund the work — vetted, disclosed tool integrations, listed alongside the neutral options and never influencing what the core skills recommend. The full rules and boundaries are in [tools/PARTNERS.md](tools/PARTNERS.md). [Become a partner →](https://marketing-skills.com/sponsorship)
 
 <!-- PARTNERS:START -->
-> ◆ **[Converly](https://converly.io?ref=marketingskills)** — *Conversion tracking / attribution.* Server-side conversion tracking that fires when someone submits a form, books a meeting, or starts a chat — passing click IDs and identifiers for Enhanced Conversions (Google) and high EMQ match rates (Meta), across 100+ tools. CLI + MCP so your agent sets it up in minutes. → [Integration guide](tools/integrations/converly.md)
+> ◆ **[Converly](https://converly.io)** — *Conversion tracking / attribution.* Server-side conversion tracking that fires when someone submits a form, books a meeting, or starts a chat — passing click IDs and identifiers for Enhanced Conversions (Google) and stronger match quality (Meta), across about 100 tools. CLI + MCP so your agent sets it up in minutes. → [Integration guide](tools/integrations/converly.md)
 
-> ◆ **[Ploy](https://ploy.ai?ref=marketingskills)** — *AI website & growth platform.* AI marketing platform built around a hosted website builder — an in-app agent that builds and publishes pages, PloyDB for pages at scale, routing to add pages to an existing site, built-in analytics and visitor identification, and a CLI for coding agents. → [Integration guide](tools/integrations/ploy.md)
+> ◆ **[Ploy](https://ploy.ai)** — *AI website & growth platform.* AI marketing platform built around a hosted website builder — an in-app agent that builds and publishes pages, PloyDB for pages at scale, routing to add pages to an existing site, built-in analytics and visitor identification, and a CLI for coding agents. → [Integration guide](tools/integrations/ploy.md)
 
 > ◆ **[AIsa](https://aisa.one)** — *SEO, search & social data.* One AIsa key, pay as you go, instead of a subscription to every data platform. Agents get SEO, search, social, and market data from Similarweb, Semrush, Ahrefs, DataForSEO, Tavily, Reddit, X, and more through REST or MCP, and pay only for the calls they make. → [Integration guide](tools/integrations/aisa.md)
+
+> ◆ **[Omnia](https://www.useomnia.com)** — *AI search visibility (AEO).* Omnia tracks how AI engines answer your customers' questions every day: visibility, citations, Share of Voice and sentiment for your brand and competitors. Connect the Omnia MCP to Claude and these skills run on real AI answers data instead of guesses. Or let your Omnia Agent turn it into prioritized work that you review and approve. → [Integration guide](tools/integrations/omnia.md)
 <!-- PARTNERS:END -->
 
 <!-- The Partners block above is generated from partners.json — run `node scripts/sync-partners.mjs` after editing it. -->
@@ -53,7 +55,7 @@ Skills reference each other and build on shared context. The `product-marketing`
 │schema    │ │paywalls  │ │social    │ │            │ │community │ │competitors  │ │           │
 │content   │ │          │ │video     │ │            │ │lead-magnt│ │comp-profile │ │           │
 │aso       │ │          │ │image     │ │            │ │co-mktg   │ │directory    │ │           │
-│          │ │          │ │sms       │ │            │ │          │ │prospecting  │ │           │
+│link-build│ │          │ │sms       │ │            │ │          │ │prospecting  │ │           │
 └────┬─────┘ └────┬─────┘ └────┬─────┘ └─────┬──────┘ └────┬─────┘ └──────┬──────┘ └─────┬─────┘
      │            │            │              │             │              │              │
      └────────────┴─────┬──────┴──────────────┴─────────────┴──────────────┴──────────────┘
@@ -86,6 +88,7 @@ See each skill's **Related Skills** section for the full dependency map.
 | [competitor-profiling](skills/competitor-profiling/) | When the user wants to research, profile, or analyze competitors from their URLs. Also use when the user mentions... |
 | [competitors](skills/competitors/) | When the user wants to create competitor comparison or alternative pages for SEO and buyer-facing use. Also use when... |
 | [content-strategy](skills/content-strategy/) | When the user wants to plan a content strategy, decide what content to create, or figure out what topics to cover. Also... |
+| [conversion-tracking](skills/conversion-tracking/) | Set up, audit, verify, or fix website conversion tracking. Use when the conversion is a form submission, booked... |
 | [copy-editing](skills/copy-editing/) | When the user wants to edit, review, or improve existing marketing copy, or refresh outdated content. Also use when the... |
 | [copywriting](skills/copywriting/) | When the user wants to write, rewrite, or improve marketing copy for any page, including homepage, landing pages,... |
 | [cro](skills/cro/) | When the user wants to optimize, improve, or increase conversions on any marketing page or form — including homepage,... |
@@ -98,6 +101,7 @@ See each skill's **Related Skills** section for the full dependency map.
 | [influencer-marketing](skills/influencer-marketing/) | When the user wants to run influencer, creator, or ambassador partnerships to promote their product — finding and... |
 | [launch](skills/launch/) | When the user wants to plan a product launch, feature announcement, or release strategy. Also use when the user... |
 | [lead-magnets](skills/lead-magnets/) | When the user wants to create, plan, or optimize a lead magnet for email capture or lead generation. Also use when the... |
+| [link-building](skills/link-building/) | When the user wants to earn backlinks or third-party mentions that lift rankings and AI citations. Also use when the... |
 | [marketing-council](skills/marketing-council/) | When the user wants multiple expert perspectives on a marketing question — a simulated board of advisors staffed by... |
 | [marketing-ideas](skills/marketing-ideas/) | When the user needs marketing ideas, inspiration, or strategies for their SaaS or software product. Also use when the... |
 | [marketing-loops](skills/marketing-loops/) | When the user wants to set up a recurring, self-running marketing workflow — a repeatable loop an AI agent runs on a... |
@@ -329,6 +333,7 @@ You can also invoke skills directly:
 ### SEO & Discovery
 - `seo-audit` - Technical and on-page SEO
 - `ai-seo` - AI search optimization (AEO, GEO, LLMO)
+- `link-building` - Earned links and mentions on AI-cited pages
 - `programmatic-seo` - Scaled page generation
 - `site-architecture` - Page hierarchy, navigation, URL structure
 - `competitors` - Comparison and alternative pages
@@ -342,6 +347,7 @@ You can also invoke skills directly:
 
 ### Measurement & Testing
 - `analytics` - Event tracking setup
+- `conversion-tracking` - Pixels, conversion tags, server-side delivery, and tracking audits
 - `ab-testing` - Experiment design
 
 ### Retention

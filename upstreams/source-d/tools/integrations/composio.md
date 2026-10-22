@@ -26,7 +26,7 @@ Composio is an **alternative integration method**, not a replacement. Use this d
 | Scenario | Use |
 |----------|-----|
 | Tool has native MCP server (GA4, Stripe, Mailchimp) | Native MCP server |
-| Tool has CLI but no MCP (Meta Ads, LinkedIn Ads, HubSpot) | Composio for MCP access |
+| Tool has CLI but no MCP (LinkedIn Ads, Salesforce) | Composio for MCP access |
 | OAuth-heavy tool with no CLI (Google Sheets, Slack, Notion) | Composio |
 | Need deep, customized integration | Native API + CLI |
 | Need quick read/write access across many tools | Composio |
@@ -186,5 +186,5 @@ Agent uses `SALESFORCE` to read leads and `SLACK` to post messages.
 
 - analytics (cross-platform data via Composio connectors)
 - emails (ActiveCampaign, Klaviyo access)
-- ads (Meta Ads, LinkedIn Ads MCP access)
+- ads (LinkedIn Ads MCP access; Meta Ads also has an official MCP)
 - referrals (Shopify integration)

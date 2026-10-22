@@ -7,7 +7,7 @@ Advertising platform for Facebook, Instagram, Messenger, and Audience Network.
 | Integration | Available | Notes |
 |-------------|-----------|-------|
 | API | ✓ | Marketing API for campaigns, audiences, reporting |
-| MCP | - | Not available |
+| MCP | ✓ | Official remote server at `mcp.facebook.com/ads` (Meta Ads AI Connectors), open beta since 2026-04-29, read and write; see [Official MCP server](#official-mcp-server) |
 | CLI | - | Not available |
 | SDK | ✓ | Official SDKs for Python, PHP, Node.js |
 
@@ -16,6 +16,20 @@ Advertising platform for Facebook, Instagram, Messenger, and Audience Network.
 - **Type**: OAuth 2.0 Access Token
 - **Header**: Access token as query parameter
 - **Setup**: Create app in Meta Business Suite, generate System User token
+
+## Official MCP server
+
+Meta hosts an official ads MCP server, part of **Meta Ads AI Connectors** (open beta since 2026-04-29, checked 2026-10-15). It works with any MCP client, including Claude and ChatGPT. Meta also ships a local ads CLI with the same tool surface for terminal agents.
+
+- **Endpoint:** `https://mcp.facebook.com/ads`
+- **Claude setup:** Settings → Connectors → Add custom connector, paste the endpoint, then sign in with Facebook Login for Business (a Facebook account or Meta Managed Account) and approve permissions. No Meta developer app or system user token is needed.
+- **Access:** you see the ad accounts your Facebook profile can access through its Business Portfolio. The open beta isn't enabled for every advertiser yet; if the connector authenticates but returns no ads tools, access hasn't reached that account.
+- **Tools:** 29 at launch, across performance and insights, campaign creation and management, catalog management, accounts and assets, and dataset/signal diagnostics. Meta adds tools as products leave beta, so treat any count as a floor.
+- **Cost:** free during the beta, within normal Marketing API rate limits.
+
+**Start read-only.** The connector includes write tools (create campaigns, edit budgets and status). Run reporting and diagnostics for the first few weeks and check the answers against Ads Manager before allowing any write. After that, apply changes only as a reviewed plan (current state → change → expected effect → rollback) with explicit approval of that specific change. See the ads skill's [audit guardrails](../../skills/ads/references/audit-guardrails.md).
+
+Use the Marketing API below when you need endpoints the connector doesn't expose, scheduled jobs without a chat client, or the repository CLI.
 
 ## Common Agent Operations
 

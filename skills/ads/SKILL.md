@@ -3,7 +3,7 @@ name: ads
 description: "Plan and optimize paid media across search, social and other platforms, including account structure, targeting, bidding, measurement, budget and creative testing."
 license: Apache-2.0
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
   domain: "paid-measurement"
   provenance: "marketing-agent-os"
 ---
@@ -40,6 +40,10 @@ Use gross-margin payback, not revenue-only CAC/ARPU, to assess recovery: CAC / (
 Treat optimized ad-delivery winners as screening evidence, not randomized landing-page evidence. Confirm a mirrored headline in a fresh page experiment with consistent incoming traffic and planned guardrails. Static-versus-video, broad-targeting, algorithm, and lift claims require account evidence; no creative format guarantees a gain.
 
 For Google Ads API setup, verify OAuth-project API access and target-account permissions separately. Developer tokens were sunset in September 2026; new access is managed in the OAuth credentials' Google Cloud project. Do not request a retired token to satisfy an old local CLI. Reuse an approved connector and current first-party setup documentation; changing project, billing, credentials, or scopes requires explicit authorization.
+
+## Operating review and tracking handoff
+
+For account reviews, read [references/operating-review.md](references/operating-review.md). Check the user's paid-media targets and approved learnings, label missing data, and separate facts from hypotheses. Route pixel/CAPI/server-side setup and conversion-delivery faults to `conversion-tracking`; a recommended account change is not an executed change.
 
 ## Domain Checklist
 

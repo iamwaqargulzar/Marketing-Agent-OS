@@ -1,6 +1,6 @@
 {
   "package": "marketing-agent-os",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "skills": [
     {
       "name": "ab-test-setup",
@@ -84,7 +84,7 @@
     },
     {
       "name": "ai-seo",
-      "description": "Optimize for AI search, answer engines, GEO/AEO/LLMO and conventional search together. Use for citability, AI crawler access, entity/brand evidence, llms.txt evaluation, platform readiness and AI-answer visibility.",
+      "description": "Optimize AI-search and agent-task discoverability with prompt panels, answer-claim accuracy, citation/recommendation evidence, multilingual/commerce fit, crawler access, and attributable business-outcome evaluation. Use for GEO/AEO/LLMO and AI-answer visibility; for conversion event delivery use `conversion-tracking`.",
       "domain": "seo-geo",
       "sources": [
         "source-d"
@@ -94,7 +94,7 @@
     },
     {
       "name": "analytics",
-      "description": "Design, audit or improve marketing analytics, event tracking, funnels, UTM governance, reporting and decision-grade measurement.",
+      "description": "Design or audit general marketing analytics, event plans, funnels, UTM governance, partner-link taxonomy, and reporting. For delivery of confirmed outcomes to analytics or ad platforms, pixels/CAPI, and received-conversion verification use `conversion-tracking`; for credit allocation use `attribution`.",
       "domain": "paid-measurement",
       "sources": [
         "source-d"
@@ -471,6 +471,16 @@
       ],
       "alias_of": null,
       "phase": "activate"
+    },
+    {
+      "name": "conversion-tracking",
+      "description": "Set up, audit, verify, or fix conversion delivery for forms, bookings, signups, calls, and purchases across analytics and ad platforms. Use for GTM/pixels, CAPI, enhanced conversions, server-side delivery, missing or duplicate conversions. For tracking plans and UTMs use `analytics`; for assigning credit use `attribution`; for campaign strategy use `ads`.",
+      "domain": "paid-measurement",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
     },
     {
       "name": "conversion-value-mapper",
@@ -954,7 +964,7 @@
     },
     {
       "name": "influencer-marketing",
-      "description": "Plan creator partnerships, influencer campaigns, and sponsored Telegram channel placements with audience evidence, disclosure checks, approved assets, and measured outcomes.",
+      "description": "Plan creator partnerships, performance-paid ad-content programs, newsletter sponsorships, and Telegram placements with audience evidence, usage rights, disclosure, compensation terms, and measured outcomes.",
       "domain": "influencer",
       "sources": [
         "source-d"
@@ -1106,6 +1116,16 @@
       "name": "lead-magnets",
       "description": "Plan lead magnets and package owned courses or content libraries as installable agent skills, with rights checks, source-backed lessons, and distribution validation. For public-site AI visibility use `ai-seo`.",
       "domain": "content",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
+      "name": "link-building",
+      "description": "Plan earned backlinks and third-party mentions for specific pages: page-level link gaps, linkable assets, reclamation, partner/resource-page outreach, and link-vendor risk checks. For backlink-profile diagnosis use `offsite-signal-analyzer`; for journalists use `public-relations`; for directories use `directory-submissions`.",
+      "domain": "seo-geo",
       "sources": [
         "source-d"
       ],
@@ -1624,7 +1644,7 @@
     },
     {
       "name": "product-marketing",
-      "description": "Build or update the shared product-marketing context: product, audience, positioning, competitors, jobs-to-be-done, objections, customer language, proof and goals. Use before downstream execution when context is missing.",
+      "description": "Create or update product-marketing context, positioning, ICP, evidence-backed brand voice, optional paid-media targets, and approved learnings. Maintain one authorized context writer and preserve evidence/history; do not invent missing business facts.",
       "domain": "strategy",
       "sources": [
         "source-d"
@@ -2125,7 +2145,7 @@
     },
     {
       "name": "seo-technical",
-      "description": "Compatibility skill for seo technical. Use when a user or upstream workflow invokes this name; route the task to `seo-audit` while preserving the requested scope and source-specific intent.",
+      "description": "Preserve technical-SEO compatibility routing to `seo-audit`. Use for crawl/index/rendering concerns and explicitly authorized read-only server-stack/CVE exposure review; observations do not prove a runtime is safe or exploitable.",
       "domain": "seo-geo",
       "sources": [
         "source-b"

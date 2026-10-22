@@ -3,7 +3,7 @@ name: copywriting
 description: "Write or rewrite high-intent marketing copy grounded in product context, customer language, claims evidence, offer structure and conversion goals."
 license: Apache-2.0
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
   domain: "content"
   provenance: "marketing-agent-os"
 ---
@@ -36,6 +36,10 @@ Use this skill for **copywriting**. Start from the user’s concrete objective a
 ## Unsupported-claim resolution
 
 When a requested claim lacks support, explicitly identify it, explain the evidence gap, draft the closest supportable alternative, and name the specific evidence that could unlock the original. Do not silently drop it or invent reviews, guarantees, certifications, or outcome numbers. Keep product naming consistent with the approved brief.
+
+## Draft from the user's judgment
+
+Before drafting, distinguish a blank brief, an existing voice/argument to preserve, and a scoped point edit. Use actual writing samples, approved vocabulary, and applicable learnings. Work in meaningful units when helpful, keep lines that already work, and check specificity, substantiation, audience fit, and whether the claim could describe any competitor. Avoid imposing a formula, invented persona, or mandatory whole-page rewrite on a narrow request.
 
 ## Domain Checklist
 

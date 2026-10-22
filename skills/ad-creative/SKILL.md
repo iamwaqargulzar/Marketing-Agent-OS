@@ -3,7 +3,7 @@ name: ad-creative
 description: "Generate and iterate paid-ad creative systems: angles, hooks, copy, concepts, variants, fatigue management and test matrices."
 license: Apache-2.0
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
   domain: "paid-measurement"
   provenance: "marketing-agent-os"
 ---
@@ -37,6 +37,10 @@ Use this skill for **ad creative**. Start from the user’s concrete objective a
 ## Testable creative briefs
 
 Preserve the exact approved product name in every variant. Match headline treatment to audience awareness and provide a mobile-readable visual specification. Each test hypothesis names the audience, comparison/control, metric, expected direction, and baseline-backed magnitude when available; describe what a loss would teach. CTR alone does not prove qualified conversions or incremental revenue.
+
+## Approved learnings and contrast hooks
+
+Read relevant approved product-context learnings before proposing angles, offers, or formats as new. A prior result applies only to its supported audience/window. For contrast openings, connect a real audience tension or specific visual change to a supportable promise; do not force a stock reversal into every ad. Keep the user's voice, tested lines, and scoped creative brief.
 
 ## Domain Checklist
 

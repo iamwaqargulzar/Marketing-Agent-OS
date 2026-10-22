@@ -8,23 +8,23 @@
     "description": "Create and iterate paid ad copy, hooks, headlines, and visual or video concepts. Prepares creative tests with falsifiable hypotheses and approval-ready variations."
   },
   "ads": {
-    "source_description_sha256": "3d91c40e9118a679edc321891c036f3a8695d49b4db5e9e44f6f5d7c6b1df595",
-    "description": "Plan and optimize paid campaigns: audiences, budgets, bidding, retargeting, ABM, ROAS, CPA, CAC payback, and lead quality across Google, Meta, and LinkedIn."
+    "source_description_sha256": "c54fc7bb2dfa432ec60fd08ab9452d36a7dd8c80de4dda8a3f4dafee1509d921",
+    "description": "Plan and optimize paid campaigns across Google, Meta, and LinkedIn: audiences, budgets, bidding, ROAS, CPA, and lead quality. Weekly checks end in one HOLD/FIX/TEST/INVESTIGATE call."
   },
   "ai-seo": {
     "source_description_sha256": "fe0e0f43de0d37634ec768d9eb300e9bf25638df1c42bf7e06c56bf56be67406",
     "description": "Improve AI search visibility, LLM citations, AEO/GEO, AI Overviews, and agent-readable site content; audit why AI answers overlook your brand."
   },
   "analytics": {
-    "source_description_sha256": "49d1b69d88b7e7ca12afe19a254e6c70874c1112a420e5eea06632a273e889be",
-    "description": "Set up or audit GA4, conversion events, UTMs, and tracking plans. Computes metrics from row-level data and compares rates only over matching closed windows."
+    "source_description_sha256": "e18a8bc80b57e466f2e256b20d90678b8cea57aa08af87a45b929cdeb1a21a6f",
+    "description": "Set up or audit GA4, conversion events, UTMs, partner link patterns, and tracking plans. Computes metrics from row-level data and compares rates only over matching closed windows."
   },
   "aso": {
     "source_description_sha256": "3e5d0a3c81b0b2b73d05dbef76c8bc33079b540ca9c5027c1328d7b0610cdf7c",
     "description": "Audit and optimize App Store or Google Play listings, app keywords, visibility, rankings, and listing conversion."
   },
   "attribution": {
-    "source_description_sha256": "01fdc33a6297f1e4606a52eec48c00ece9cc43db22ef2519ff90eed0785e81bb",
+    "source_description_sha256": "619168d09f7a8fcb273df85ff9414a45b2a560c63aff3e4476b3e069a60b06e8",
     "description": "Choose attribution models, reconcile revenue dashboards, and investigate channel impact using multi-touch, MMM, incrementality, and first-party attribution."
   },
   "churn-prevention": {
@@ -55,13 +55,17 @@
     "source_description_sha256": "602ac5599f4e6e51643d9caa4ccd3cb5429751987750b15cc39e9cba002a85e6",
     "description": "Plan content topics, pillars, clusters, editorial calendars, blog strategy, and content roadmaps before writing individual pieces."
   },
+  "conversion-tracking": {
+    "source_description_sha256": "a84dea1ca5ad6a6cfb5bd2851c48ac05feae1af463f78ff927276ab8567fabb3",
+    "description": "Set up, audit, and fix conversion tracking from forms, bookings, and checkouts to Google Ads, Meta, GA4, LinkedIn, TikTok, and Microsoft Ads."
+  },
   "copy-editing": {
-    "source_description_sha256": "728676d47b83c05e644fe912d8ff281a31a9f60b10a068905d67abb2c434d3ba",
-    "description": "Review, polish, tighten, or refresh existing marketing copy; remove awkward wording, stale content, and AI writing patterns."
+    "source_description_sha256": "3d2e37bce6de1230991064d501775040a9fb1e5245f6fb01470ad162a6d7a39e",
+    "description": "Review, polish, tighten, or refresh existing marketing copy; remove awkward wording, stale content, and AI writing patterns. One-line fixes get a point edit."
   },
   "copywriting": {
-    "source_description_sha256": "83204d7fc89cbd16a32dbb659afe5b1431ad8b7b75d96a030075a914272665a3",
-    "description": "Write or rewrite website marketing copy: homepages, landing pages, product pages, headlines, CTAs, and value propositions, with only claims you can support."
+    "source_description_sha256": "9a9074bbdc5b1572b884398b815e9160fd120360229a15d6f995d890c01f11e6",
+    "description": "Write or rewrite website marketing copy: homepages, landing pages, product pages, headlines, CTAs, and value propositions. Diagnoses the draft first and makes only supportable claims."
   },
   "cro": {
     "source_description_sha256": "3e28de53a48fe9dbacc1437567c19ce5185b5f175e7b0141eb2117c83f4366e2",
@@ -92,8 +96,8 @@
     "description": "Create or optimize marketing images: blog heroes, product mockups, social graphics, banners, listing visuals, and brand assets."
   },
   "influencer-marketing": {
-    "source_description_sha256": "26bf257280ecea95cf0b04294b9ed059ab2c770a9db98b73991207f832e46414",
-    "description": "Find and vet creators, influencers, and ambassadors, including Telegram channels; plan sponsorship deals, briefs, disclosure, UGC partnerships, and ROI."
+    "source_description_sha256": "a3c8f53353577ed234f1d380273a4bafb4ce80b49d702657bc763f8bd95da741",
+    "description": "Find and vet creators, influencers, ambassadors, newsletters, and Telegram channels; plan sponsorship deals, briefs, disclosure, UGC partnerships, and ROI."
   },
   "launch": {
     "source_description_sha256": "4f9e8b4197efa11516acf70a82a62f063ee2931783026e0559d57a9118061f4d",
@@ -102,6 +106,10 @@
   "lead-magnets": {
     "source_description_sha256": "aecc5622c2d6a2d7f2adb039359152375e1bb7dba3b57117aa0f6a67d611c6e3",
     "description": "Plan lead magnets and content offers: ebooks, checklists, templates, gating, landing pages, and packaging a course or content library as an installable agent skill."
+  },
+  "link-building": {
+    "source_description_sha256": "41c4fce1924387807bb8f0ec4d482d5e14cb7a4806de15e850362dd98727d4bb",
+    "description": "Earn backlinks and third-party mentions on pages search engines and AI assistants trust, without link spam."
   },
   "marketing-council": {
     "source_description_sha256": "103f655a5584cfab3521597f218b44e4bf20181ca2231bf68e67da7c9481f101",
@@ -112,7 +120,7 @@
     "description": "Brainstorm marketing tactics, growth ideas, and channel strategies for a SaaS or software product when deciding what to try next."
   },
   "marketing-loops": {
-    "source_description_sha256": "25e3acff129240b76e9ea2abff129204c3a0a378af15c113375da01030de0767",
+    "source_description_sha256": "6526682d76640216ec7f9e319942bb7bc476b3526fa22d25df1590bc29a05531",
     "description": "Design recurring agent-run marketing loops: weekly reviews, SEO and outbound operators, signal sweeps, reply triage, ad fatigue, churn and content decay."
   },
   "marketing-plan": {
@@ -144,8 +152,8 @@
     "description": "Choose pricing, tiers, value metrics, freemium, trials, and packaging; audit pricing pages for buyers and AI readability."
   },
   "product-marketing": {
-    "source_description_sha256": "f43b89c43d215c35cc750379b109b7a3ea6584b99890c2725b7e770fa1579f2c",
-    "description": "Create or update product marketing context, positioning, audience, ICP, and foundational information shared across marketing tasks."
+    "source_description_sha256": "5df66d7db32477b15ff2d8b1addb251fc206c6954df5defc14ff6e411b4e0575",
+    "description": "Create or update the shared product marketing context: positioning, ICP, brand voice, paid ads targets, and the learnings ledger other marketing skills read."
   },
   "programmatic-seo": {
     "source_description_sha256": "073514d574b449feeb016800b4fee0e50cb1e920a6a85443ce7c81c3392124b3",

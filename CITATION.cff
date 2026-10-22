@@ -4,13 +4,13 @@ title: "Marketing Agent OS"
 type: software
 authors:
   - name: "Marketing Agent OS contributors"
-version: 1.5.0
-date-released: 2026-10-14
+version: 1.6.0
+date-released: 2026-10-22
 license: Apache-2.0
 repository-code: "https://github.com/iamwaqargulzar/Marketing-Agent-OS"
 url: "https://github.com/iamwaqargulzar/Marketing-Agent-OS"
 abstract: >-
-  A cross-platform, governed collection of 238 portable AI agent skills for
+  A cross-platform, governed collection of 240 portable AI agent skills for
   marketing, SEO, GEO, AEO, content, CRO, paid media, lifecycle, social,
   analytics, growth, sales, and revenue operations.
 keywords:

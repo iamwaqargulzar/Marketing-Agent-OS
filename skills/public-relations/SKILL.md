@@ -3,7 +3,7 @@ name: public-relations
 description: "Plan public relations, earned media, journalist outreach, press materials, or crisis communications. Use for media pitches, press releases, reporter requests, holding statements, reputation incidents, or a crisis response plan. For launch coordination use `launch`; for directory listings use `directory-submissions`; for prospect outreach use `cold-email`."
 license: Apache-2.0
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   domain: "gtm-sales"
   provenance: "marketing-agent-os"
 ---
@@ -32,6 +32,10 @@ Use this skill for **public relations**. Start from the user’s concrete object
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
 8. For an incident or holding statement, read `references/crisis-communications.md`; establish verified facts, affected people, the response owner, and the next update before drafting.
+
+## Earned-link boundary
+
+Press coverage and journalist/podcast work remain here. Use `link-building` for a wider program of reclamation, partner/resource pages, and earned mentions. Neither a press pitch draft nor a proposed link placement authorizes sending or payment.
 
 ## Domain Checklist
 

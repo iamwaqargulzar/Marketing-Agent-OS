@@ -1,9 +1,9 @@
 ---
 name: seo-technical
-description: "Compatibility skill for seo technical. Use when a user or upstream workflow invokes this name; route the task to `seo-audit` while preserving the requested scope and source-specific intent."
+description: "Preserve technical-SEO compatibility routing to `seo-audit`. Use for crawl/index/rendering concerns and explicitly authorized read-only server-stack/CVE exposure review; observations do not prove a runtime is safe or exploitable."
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "seo-geo"
   provenance: "marketing-agent-os"
 ---
@@ -30,6 +30,10 @@ Use this skill for **seo technical**. Start from the user’s concrete objective
 2. Preserve any narrower intent implied by the compatibility name instead of broadening the task.
 3. Mention the canonical skill only when that helps the user understand routing; do not force migration.
 4. Return the same evidence labels, permission boundaries and handoff shape as canonical skills.
+
+## Authorized stack exposure
+
+For a requested read-only stack/CVE review within the named authorized target, read [references/stack-exposure.md](references/stack-exposure.md), preserving the canonical `seo-audit` evidence and permission boundaries. Missing headers or frontend PHP signals do not prove an unexposed backend; verify advisory applicability and actual inventory before drawing a security conclusion.
 
 ## Domain Checklist
 

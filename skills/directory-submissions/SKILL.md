@@ -3,7 +3,7 @@ name: directory-submissions
 description: "When the user wants to submit their product to startup, SaaS, AI, agent, MCP, no-code, or review directories for backlinks, domain rating, and discovery. Also use when the user mentions \"directory submissions,\" \"submit to directories,\" \"backlinks from directories,\" \"list my product,\" \"submit to Product Hunt,\" \"BetaList,\" \"TAAFT,\" \"Futurepedia,\" \"G2 listing,\" \"Capterra listing,\" \"AlternativeTo,\" \"SaaSHub,\" \"AI directories,\" \"MCP registry,\" \"agent directory,\" \"dofollow backlinks,\" \"launch directories,\" or \"directory tracker.\" Use this whenever someone is planning the directory layer of a product launch or an ongoing backlink campaign. For the broader launch moment, see launch. For programmatic SEO pages that should live behind these backlinks, see programmatic-seo. For AI citation optimization, see ai-seo."
 license: Apache-2.0
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
   domain: "seo-geo"
   provenance: "marketing-agent-os"
 ---
@@ -39,6 +39,10 @@ Use this skill for **directory submissions**. Start from the user’s concrete o
 ## Observed backlink verification
 
 Inspect the actual destination anchor in listing HTML or rendered DOM, including redirects and `rel` tokens (`nofollow`, `sponsored`, `ugc`). HTTP headers cannot establish anchor attributes. An inspected anchor without these tokens is an unqualified link observed, not a guaranteed ranking benefit; there is no `dofollow` attribute. Record missing, blocked, login-only, and JavaScript-unverified cases honestly, with listing URL, destination, timestamp, and access limits.
+
+## Link-program boundary
+
+Directory listings are one bounded distribution tactic. Use `link-building` for the wider earned-link and third-party-mention plan; directory counts or unqualified anchors do not prove ranking gains.
 
 ## Domain Checklist
 

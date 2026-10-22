@@ -3,7 +3,7 @@ name: offsite-signal-analyzer
 description: "Use when the user asks to \"analyze backlinks\", \"analyze my off-site signals\", or \"track AI traffic / ChatGPT / Perplexity referrals\"; profiles referring domains, anchor-text mix, toxic links, and disavow candidates (backlinks mode) or isolates AI-assistant referral sessions in GA4/GSC/logs and reports their trend, landing pages, and AI-vs-organic conversion (ai-referrals mode). Not for internal links — use site-structure-optimizer; not for keyword positions — use rank-tracker; not for multi-metric stakeholder reports — use performance-monitor. 外链分析/反向链接/AI流量/AI引荐/ChatGPT流量/AI转化"
 license: Apache-2.0
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "seo-geo"
   provenance: "marketing-agent-os"
 ---
@@ -31,6 +31,10 @@ Use this skill for **offsite signal analyzer**. Start from the user’s concrete
 5. Prioritize actions by impact, confidence, effort and dependency. Identify what would falsify important assumptions.
 6. For external side effects, publishing, sending, spend changes, account changes or persistent writes, obtain authorization first.
 7. Finish with decision-ready output, evidence labels, open loops, and no more than three next-best skills.
+
+## Planning versus diagnosis
+
+Keep backlink-profile diagnosis and AI-referral evidence here. Use `link-building` when the next requested job is an earned-link prospect/tactic/outreach plan. A toxic-link label does not authorize disavow edits, and research evidence does not grant outreach permission.
 
 ## Domain Checklist
 

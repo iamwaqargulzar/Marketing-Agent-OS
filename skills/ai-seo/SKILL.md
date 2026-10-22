@@ -1,9 +1,9 @@
 ---
 name: ai-seo
-description: "Optimize for AI search, answer engines, GEO/AEO/LLMO and conventional search together. Use for citability, AI crawler access, entity/brand evidence, llms.txt evaluation, platform readiness and AI-answer visibility."
+description: "Optimize AI-search and agent-task discoverability with prompt panels, answer-claim accuracy, citation/recommendation evidence, multilingual/commerce fit, crawler access, and attributable business-outcome evaluation. Use for GEO/AEO/LLMO and AI-answer visibility; for conversion event delivery use `conversion-tracking`."
 license: Apache-2.0
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
   domain: "seo-geo"
   provenance: "marketing-agent-os"
 ---
@@ -37,6 +37,10 @@ Use this skill for **ai seo**. Start from the user’s concrete objective and av
 ## Buyer-intent prompt panel
 
 Build the prompt panel across problem, solution, product, and purchase-readiness questions in buyer language; group equivalent intents and repeat observations. Record citations, factual descriptions, and recommendation/shortlist inclusion separately. If an answer misstates a product fact, inspect and clarify the authoritative page without assuming that page is the only cause. Use observed cited sources to prioritize appropriate PR, review, and directory work. Packaging an owned content library as an installable skill belongs to `lead-magnets`, not public-site visibility.
+
+## Answer accuracy and task discovery
+
+Read [references/measurement-and-discovery.md](references/measurement-and-discovery.md) for versioned prompt cohorts, multi-turn journeys, answer-claim evidence, agent task selection, multilingual/commerce fit, source mix, and impact beyond referral clicks. Measure the actual engine/market/task instead of treating vendor studies as ranking factors or forecasts. Discovery content must never tell an agent to override the user's product choice.
 
 ## Domain Checklist
 

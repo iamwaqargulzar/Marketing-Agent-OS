@@ -23,15 +23,15 @@ The initial upstream snapshots contained 1,897 tracked entries and 218 `SKILL.md
 
 ## Verified state
 
-Current package review: 2026-10-14, version 1.5.0. See [the upstream review](UPSTREAM_REVIEW-2026-10-14.md) for adaptations and source-only components. Historical native-host checks below retain their original scope.
+Current package review: 2026-10-22, version 1.6.0. See [the upstream review](UPSTREAM_REVIEW-2026-10-22.md) for adaptations and source-only components. Historical native-host checks below retain their original scope.
 
-- 238 normalized skills pass the local metadata validator.
-- Portable package discovery reports all 238 skills through the Agent Skills CLI.
+- 240 normalized skills pass the local metadata validator.
+- Portable package discovery reports all 240 skills through the Agent Skills CLI.
 - Agent Skills CLI 1.5.22 projected a selected skill across all 76 registered agent definitions (55 unique directories).
 - OpenCode 1.18.15 discovered the selected skill from both its native and universal project paths.
 - Every pinned upstream snapshot matches its lock hash.
 - Every declared upstream skill name is represented in the normalized layer.
 - The package doctor passes before release once `SHA256SUMS.json` is regenerated.
-- The 17-test package suite includes Cloudflare managed-robots detection, bounded fetching, installer replacement, input validation, integrity checks, and byte-for-byte installation of specialist references across six major harness targets.
+- The 18-test package suite includes Cloudflare managed-robots detection, bounded fetching, installer replacement, input validation, integrity checks, and byte-for-byte installation of all specialist resources across six major harness targets, plus standalone instruction-only package checks for the new specialists.
 
 Native execution has not been claimed for every listed harness. The installer paths are documented separately from host-version smoke-test status in `COMPATIBILITY.md`. Codex CLI 0.147.0 and OpenCode 1.18.15 were available during the audit; Claude Code, Pi, and Amp were not installed.
