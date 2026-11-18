@@ -1,120 +1,506 @@
 #!/usr/bin/env python3
-"""Fetch public HTTP(S) pages with bounded reads and basic metadata extraction."""
+"""
+Fetch and parse web pages for GEO analysis.
+Extracts HTML, text content, meta tags, headers, and structured data.
+"""
 
-from __future__ import annotations
-
-import argparse
-import ipaddress
+import sys
 import json
 import re
-import socket
-import urllib.parse
-import urllib.request
-from html import unescape
+from urllib.parse import urljoin, urlparse
+
+try:
+    import requests
+    from bs4 import BeautifulSoup
+except ImportError:
+    print("ERROR: Required packages not installed. Run: pip install -r requirements.txt")
+    sys.exit(1)
+
+# Common AI crawler user agents for testing
+AI_CRAWLERS = {
+    "GPTBot": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; GPTBot/1.2; +https://openai.com/gptbot)",
+    "ClaudeBot": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; ClaudeBot/1.0; +https://www.anthropic.com/claude-bot)",
+    "PerplexityBot": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; PerplexityBot/1.0; +https://perplexity.ai/perplexitybot)",
+    "GoogleBot": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+    "BingBot": "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)",
+}
+
+DEFAULT_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate",
+}
 
 
-def validate_url(url: str, allow_private: bool) -> None:
-    parsed = urllib.parse.urlsplit(url)
-    if parsed.scheme not in {"http", "https"} or not parsed.hostname:
-        raise ValueError("URL must use http:// or https:// and include a hostname")
-    if parsed.username or parsed.password:
-        raise ValueError("URLs containing credentials are not accepted")
-    if allow_private:
-        return
-    for result in socket.getaddrinfo(parsed.hostname, parsed.port or 443, type=socket.SOCK_STREAM):
-        address = ipaddress.ip_address(result[4][0])
-        if not address.is_global:
-            raise ValueError(f"private, loopback, link-local, or reserved address blocked: {address}")
-
-
-class SafeRedirect(urllib.request.HTTPRedirectHandler):
-    def __init__(self, allow_private: bool):
-        super().__init__()
-        self.allow_private = allow_private
-
-    def redirect_request(self, request, fp, code, msg, headers, newurl):
-        validate_url(newurl, self.allow_private)
-        return super().redirect_request(request, fp, code, msg, headers, newurl)
-
-
-def first_text(html: str, pattern: str) -> str | None:
-    match = re.search(pattern, html, re.IGNORECASE | re.DOTALL)
-    if not match:
-        return None
-    return unescape(re.sub(r"<[^>]+>", " ", match.group(1))).strip()
-
-
-def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("url")
-    parser.add_argument("--timeout", type=float, default=15)
-    parser.add_argument("--max-bytes", type=int, default=5_000_000)
-    parser.add_argument("--allow-private", action="store_true")
-    parser.add_argument("--json", action="store_true")
-    args = parser.parse_args()
-    if args.timeout <= 0 or args.max_bytes <= 0:
-        parser.error("--timeout and --max-bytes must be positive")
-
-    validate_url(args.url, args.allow_private)
-    request = urllib.request.Request(
-        args.url,
-        headers={"User-Agent": "MarketingAgentOS/1.1 (+read-only audit)"},
-    )
-    opener = urllib.request.build_opener(SafeRedirect(args.allow_private))
-    with opener.open(request, timeout=args.timeout) as response:
-        raw = response.read(args.max_bytes + 1)
-        if len(raw) > args.max_bytes:
-            raise SystemExit(f"Response exceeds --max-bytes ({args.max_bytes})")
-        charset = response.headers.get_content_charset() or "utf-8"
-        html = raw.decode(charset, "replace")
-        final = response.geturl()
-        validate_url(final, args.allow_private)
-        status = getattr(response, "status", 200)
-
-    output = {
-        "requested_url": args.url,
-        "final_url": final,
-        "status": status,
-        "bytes": len(raw),
-        "title": first_text(html, r"<title[^>]*>(.*?)</title>"),
-        "meta_description": None,
+def fetch_page(url: str, timeout: int = 30) -> dict:
+    """Fetch a page and return structured analysis data."""
+    result = {
+        "url": url,
+        "status_code": None,
+        "redirect_chain": [],
+        "headers": {},
+        "meta_tags": {},
+        "title": None,
+        "description": None,
         "canonical": None,
-        "robots_meta": None,
-        "h1_count": len(re.findall(r"<h1\b", html, re.IGNORECASE)),
+        "h1_tags": [],
+        "heading_structure": [],
+        "word_count": 0,
+        "text_content": "",
+        "internal_links": [],
+        "external_links": [],
+        "images": [],
+        "structured_data": [],
+        "has_ssr_content": True,
+        "security_headers": {},
+        "errors": [],
     }
-    if urllib.parse.urlsplit(final).path == "/robots.txt":
-        output["cloudflare_managed"] = bool(
-            re.search(r"^\s*#\s*begin cloudflare managed content\s*$", html, re.IGNORECASE | re.MULTILINE)
+
+    parsed_url = urlparse(url)
+    if parsed_url.scheme not in ("http", "https"):
+        result["errors"].append(f"Unsupported URL scheme: {parsed_url.scheme!r}. Only http and https are allowed.")
+        return result
+
+    try:
+        response = requests.get(
+            url,
+            headers=DEFAULT_HEADERS,
+            timeout=timeout,
+            allow_redirects=True,
         )
-    match = re.search(
-        r"<meta[^>]+name=[\"']description[\"'][^>]+content=[\"'](.*?)[\"']",
-        html,
-        re.IGNORECASE | re.DOTALL,
-    ) or re.search(
-        r"<meta[^>]+content=[\"'](.*?)[\"'][^>]+name=[\"']description[\"']",
-        html,
-        re.IGNORECASE | re.DOTALL,
-    )
-    output["meta_description"] = unescape(match.group(1)).strip() if match else None
-    match = re.search(
-        r"<link[^>]+rel=[\"'][^\"']*canonical[^\"']*[\"'][^>]+href=[\"'](.*?)[\"']",
-        html,
-        re.IGNORECASE | re.DOTALL,
-    )
-    output["canonical"] = urllib.parse.urljoin(final, match.group(1).strip()) if match else None
-    match = re.search(
-        r"<meta[^>]+name=[\"']robots[\"'][^>]+content=[\"'](.*?)[\"']",
-        html,
-        re.IGNORECASE | re.DOTALL,
-    )
-    output["robots_meta"] = match.group(1).strip() if match else None
-    print(
-        json.dumps(output, indent=2, ensure_ascii=False)
-        if args.json
-        else "\n".join(f"{key}: {value}" for key, value in output.items())
-    )
-    return 0
+
+        # Track redirects
+        if response.history:
+            result["redirect_chain"] = [
+                {"url": r.url, "status": r.status_code} for r in response.history
+            ]
+
+        result["status_code"] = response.status_code
+        result["headers"] = dict(response.headers)
+
+        # Security headers check
+        security_headers = [
+            "Strict-Transport-Security",
+            "Content-Security-Policy",
+            "X-Frame-Options",
+            "X-Content-Type-Options",
+            "Referrer-Policy",
+            "Permissions-Policy",
+        ]
+        for header in security_headers:
+            result["security_headers"][header] = response.headers.get(header, None)
+
+        # Parse HTML
+        soup = BeautifulSoup(response.text, "lxml")
+
+        # Title
+        title_tag = soup.find("title")
+        result["title"] = title_tag.get_text(strip=True) if title_tag else None
+
+        # Meta tags
+        for meta in soup.find_all("meta"):
+            name = meta.get("name", meta.get("property", ""))
+            content = meta.get("content", "")
+            if name and content:
+                result["meta_tags"][name.lower()] = content
+                if name.lower() == "description":
+                    result["description"] = content
+
+        # Canonical
+        canonical = soup.find("link", rel="canonical")
+        result["canonical"] = canonical.get("href") if canonical else None
+
+        # Headings
+        for level in range(1, 7):
+            for heading in soup.find_all(f"h{level}"):
+                text = heading.get_text(strip=True)
+                result["heading_structure"].append({"level": level, "text": text})
+                if level == 1:
+                    result["h1_tags"].append(text)
+
+        # Structured data (JSON-LD) — extract before decompose() mutates the tree.
+        # Flatten @graph and top-level arrays so each entity is its own block with
+        # its own @type; otherwise a single {"@graph":[...]} block (what Next.js and
+        # most CMSs emit) reports as one block with @type None and looks empty.
+        for script in soup.find_all("script", type="application/ld+json"):
+            try:
+                raw = script.string or script.get_text()
+                data = json.loads(raw)
+            except (json.JSONDecodeError, TypeError):
+                result["errors"].append("Invalid JSON-LD detected")
+                continue
+            for node in (data if isinstance(data, list) else [data]):
+                if isinstance(node, dict) and isinstance(node.get("@graph"), list):
+                    result["structured_data"].extend(node["@graph"])
+                else:
+                    result["structured_data"].append(node)
+
+        # SSR check — must run BEFORE decompose() mutates the tree
+        js_app_roots = soup.find_all(
+            id=re.compile(r"(app|root|__next|__nuxt)", re.I)
+        )
+
+        # Check SSR by measuring content inside framework root divs
+        # before decompose() strips elements from the tree
+        ssr_check_results = []
+        for root_el in js_app_roots:
+            inner_text = root_el.get_text(strip=True)
+            ssr_check_results.append({
+                "id": root_el.get("id", "unknown"),
+                "text_length": len(inner_text),
+            })
+
+        # Text content — decompose non-content elements (destructive)
+        for element in soup.find_all(["script", "style", "nav", "footer", "header"]):
+            element.decompose()
+        text = soup.get_text(separator=" ", strip=True)
+        result["text_content"] = text
+        result["word_count"] = len(text.split())
+
+        # Links
+        parsed_url = urlparse(url)
+        base_domain = parsed_url.netloc
+        for link in soup.find_all("a", href=True):
+            href = urljoin(url, link["href"])
+            link_text = link.get_text(strip=True)
+            parsed_href = urlparse(href)
+            if parsed_href.netloc == base_domain:
+                result["internal_links"].append({"url": href, "text": link_text})
+            elif parsed_href.scheme in ("http", "https"):
+                result["external_links"].append({"url": href, "text": link_text})
+
+        # Images
+        for img in soup.find_all("img"):
+            img_data = {
+                "src": img.get("src", ""),
+                "alt": img.get("alt", ""),
+                "width": img.get("width"),
+                "height": img.get("height"),
+                "loading": img.get("loading"),
+            }
+            result["images"].append(img_data)
+
+        # SSR assessment — use pre-decompose measurements + overall content
+        if js_app_roots:
+            for check in ssr_check_results:
+                # Only flag as client-rendered if both the root div has
+                # minimal content AND the overall page has little text.
+                # Sites using SSR/prerendering (WordPress, LiteSpeed Cache,
+                # Prerender.io) will have substantial text despite having
+                # framework-style root divs.
+                if check["text_length"] < 50 and result["word_count"] < 200:
+                    result["has_ssr_content"] = False
+                    result["errors"].append(
+                        f"Possible client-side only rendering detected: "
+                        f"#{check['id']} has minimal server-rendered content "
+                        f"({result['word_count']} words on page)"
+                    )
+
+    except requests.exceptions.Timeout:
+        result["errors"].append(f"Timeout after {timeout} seconds")
+    except requests.exceptions.ConnectionError as e:
+        result["errors"].append(f"Connection error: {str(e)}")
+    except Exception as e:
+        result["errors"].append(f"Unexpected error: {str(e)}")
+
+    return result
+
+
+def fetch_robots_txt(url: str, timeout: int = 15) -> dict:
+    """Fetch and parse robots.txt for AI crawler directives."""
+    parsed = urlparse(url)
+    robots_url = f"{parsed.scheme}://{parsed.netloc}/robots.txt"
+
+    ai_crawlers = [
+        "GPTBot",
+        "OAI-SearchBot",
+        "ChatGPT-User",
+        "ClaudeBot",
+        "anthropic-ai",
+        "PerplexityBot",
+        "CCBot",
+        "Bytespider",
+        "cohere-ai",
+        "Google-Extended",
+        "GoogleOther",
+        "Applebot-Extended",
+        "FacebookBot",
+        "Amazonbot",
+    ]
+
+    result = {
+        "url": robots_url,
+        "exists": False,
+        "content": "",
+        "ai_crawler_status": {},
+        "cloudflare_managed": False,
+        "sitemaps": [],
+        "errors": [],
+    }
+
+    try:
+        response = requests.get(robots_url, headers=DEFAULT_HEADERS, timeout=timeout)
+
+        if response.status_code == 200:
+            result["exists"] = True
+            result["content"] = response.text
+            # Cloudflare's managed robots.txt prepends this block to the origin
+            # file and disallows GPTBot, ClaudeBot, Google-Extended and others,
+            # often without the site owner realising it is switched on.
+            result["cloudflare_managed"] = (
+                "# begin cloudflare managed content" in response.text.lower()
+            )
+
+            # Parse for each AI crawler
+            lines = response.text.split("\n")
+            current_agent = None
+            agent_rules = {}
+
+            for line in lines:
+                line = line.strip()
+                if line.lower().startswith("user-agent:"):
+                    current_agent = line.split(":", 1)[1].strip()
+                    if current_agent not in agent_rules:
+                        agent_rules[current_agent] = []
+                elif line.lower().startswith("disallow:") and current_agent:
+                    path = line.split(":", 1)[1].strip()
+                    agent_rules[current_agent].append(
+                        {"directive": "Disallow", "path": path}
+                    )
+                elif line.lower().startswith("allow:") and current_agent:
+                    path = line.split(":", 1)[1].strip()
+                    agent_rules[current_agent].append(
+                        {"directive": "Allow", "path": path}
+                    )
+                elif line.lower().startswith("sitemap:"):
+                    sitemap_url = line.split(":", 1)[1].strip()
+                    # Handle case where "Sitemap:" splits off the "http"
+                    if not sitemap_url.startswith("http"):
+                        sitemap_url = "http" + sitemap_url
+                    result["sitemaps"].append(sitemap_url)
+
+            # Determine status for each AI crawler
+            for crawler in ai_crawlers:
+                if crawler in agent_rules:
+                    rules = agent_rules[crawler]
+                    if any(
+                        r["directive"] == "Disallow" and r["path"] == "/"
+                        for r in rules
+                    ):
+                        result["ai_crawler_status"][crawler] = "BLOCKED"
+                    elif any(
+                        r["directive"] == "Disallow" and r["path"] for r in rules
+                    ):
+                        result["ai_crawler_status"][crawler] = "PARTIALLY_BLOCKED"
+                    else:
+                        result["ai_crawler_status"][crawler] = "ALLOWED"
+                elif "*" in agent_rules:
+                    wildcard_rules = agent_rules["*"]
+                    if any(
+                        r["directive"] == "Disallow" and r["path"] == "/"
+                        for r in wildcard_rules
+                    ):
+                        result["ai_crawler_status"][crawler] = "BLOCKED_BY_WILDCARD"
+                    else:
+                        result["ai_crawler_status"][crawler] = "ALLOWED_BY_DEFAULT"
+                else:
+                    result["ai_crawler_status"][crawler] = "NOT_MENTIONED"
+
+        elif response.status_code == 404:
+            result["errors"].append("No robots.txt found (404)")
+            for crawler in ai_crawlers:
+                result["ai_crawler_status"][crawler] = "NO_ROBOTS_TXT"
+        else:
+            result["errors"].append(
+                f"Unexpected status code: {response.status_code}"
+            )
+
+    except Exception as e:
+        result["errors"].append(f"Error fetching robots.txt: {str(e)}")
+
+    return result
+
+
+def fetch_llms_txt(url: str, timeout: int = 15) -> dict:
+    """Check for llms.txt file."""
+    parsed = urlparse(url)
+    llms_url = f"{parsed.scheme}://{parsed.netloc}/llms.txt"
+    llms_full_url = f"{parsed.scheme}://{parsed.netloc}/llms-full.txt"
+
+    result = {
+        "llms_txt": {"url": llms_url, "exists": False, "content": ""},
+        "llms_full_txt": {"url": llms_full_url, "exists": False, "content": ""},
+        "errors": [],
+    }
+
+    for key, check_url in [("llms_txt", llms_url), ("llms_full_txt", llms_full_url)]:
+        try:
+            response = requests.get(
+                check_url, headers=DEFAULT_HEADERS, timeout=timeout
+            )
+            if response.status_code == 200:
+                result[key]["exists"] = True
+                result[key]["content"] = response.text
+        except Exception as e:
+            result["errors"].append(f"Error checking {check_url}: {str(e)}")
+
+    return result
+
+
+def extract_content_blocks(html: str) -> list:
+    """Extract content blocks for citability analysis."""
+    soup = BeautifulSoup(html, "lxml")
+
+    # Remove non-content elements
+    for element in soup.find_all(
+        ["script", "style", "nav", "footer", "header", "aside"]
+    ):
+        element.decompose()
+
+    blocks = []
+    # Extract content sections (between headings)
+    current_heading = None
+    current_content = []
+
+    for element in soup.find_all(
+        ["h1", "h2", "h3", "h4", "h5", "h6", "p", "ul", "ol", "table", "blockquote"]
+    ):
+        tag = element.name
+
+        if tag.startswith("h"):
+            # Save previous block
+            if current_content:
+                text = " ".join(current_content)
+                word_count = len(text.split())
+                blocks.append(
+                    {
+                        "heading": current_heading,
+                        "content": text,
+                        "word_count": word_count,
+                        "tag_types": list(
+                            set(
+                                [
+                                    e.name
+                                    for e in element.find_all_previous(
+                                        ["p", "ul", "ol", "table"]
+                                    )
+                                ]
+                            )
+                        ),
+                    }
+                )
+            current_heading = element.get_text(strip=True)
+            current_content = []
+        else:
+            text = element.get_text(strip=True)
+            if text:
+                current_content.append(text)
+
+    # Don't forget the last block
+    if current_content:
+        text = " ".join(current_content)
+        blocks.append(
+            {
+                "heading": current_heading,
+                "content": text,
+                "word_count": len(text.split()),
+            }
+        )
+
+    return blocks
+
+
+def crawl_sitemap(url: str, max_pages: int = 50, timeout: int = 15) -> list:
+    """Crawl sitemap.xml to discover pages."""
+    parsed = urlparse(url)
+    sitemap_urls = [
+        f"{parsed.scheme}://{parsed.netloc}/sitemap.xml",
+        f"{parsed.scheme}://{parsed.netloc}/sitemap_index.xml",
+        f"{parsed.scheme}://{parsed.netloc}/sitemap/",
+    ]
+
+    discovered_pages = set()
+
+    for sitemap_url in sitemap_urls:
+        try:
+            response = requests.get(
+                sitemap_url, headers=DEFAULT_HEADERS, timeout=timeout
+            )
+            if response.status_code == 200:
+                soup = BeautifulSoup(response.text, "lxml")
+
+                # Check for sitemap index
+                for sitemap in soup.find_all("sitemap"):
+                    loc = sitemap.find("loc")
+                    if loc:
+                        # Fetch child sitemap
+                        try:
+                            child_resp = requests.get(
+                                loc.text.strip(),
+                                headers=DEFAULT_HEADERS,
+                                timeout=timeout,
+                            )
+                            if child_resp.status_code == 200:
+                                child_soup = BeautifulSoup(child_resp.text, "lxml")
+                                for url_tag in child_soup.find_all("url"):
+                                    loc_tag = url_tag.find("loc")
+                                    if loc_tag:
+                                        discovered_pages.add(loc_tag.text.strip())
+                                    if len(discovered_pages) >= max_pages:
+                                        break
+                        except Exception:
+                            pass
+                    if len(discovered_pages) >= max_pages:
+                        break
+
+                # Direct URL entries
+                for url_tag in soup.find_all("url"):
+                    loc = url_tag.find("loc")
+                    if loc:
+                        discovered_pages.add(loc.text.strip())
+                    if len(discovered_pages) >= max_pages:
+                        break
+
+                if discovered_pages:
+                    break
+
+        except Exception:
+            continue
+
+    return list(discovered_pages)[:max_pages]
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    if len(sys.argv) < 2:
+        print("Usage: python fetch_page.py <url> [mode]")
+        print("Modes: page (default), robots, llms, sitemap, blocks, full")
+        sys.exit(1)
+
+    target_url = sys.argv[1]
+    mode = sys.argv[2] if len(sys.argv) > 2 else "page"
+
+    if mode == "page":
+        data = fetch_page(target_url)
+    elif mode == "robots":
+        data = fetch_robots_txt(target_url)
+    elif mode == "llms":
+        data = fetch_llms_txt(target_url)
+    elif mode == "sitemap":
+        pages = crawl_sitemap(target_url)
+        data = {"pages": pages, "count": len(pages)}
+    elif mode == "blocks":
+        response = requests.get(target_url, headers=DEFAULT_HEADERS, timeout=30)
+        data = extract_content_blocks(response.text)
+    elif mode == "full":
+        data = {
+            "page": fetch_page(target_url),
+            "robots": fetch_robots_txt(target_url),
+            "llms": fetch_llms_txt(target_url),
+            "sitemap": crawl_sitemap(target_url),
+        }
+    else:
+        print(f"Unknown mode: {mode}")
+        sys.exit(1)
+
+    print(json.dumps(data, indent=2, default=str))

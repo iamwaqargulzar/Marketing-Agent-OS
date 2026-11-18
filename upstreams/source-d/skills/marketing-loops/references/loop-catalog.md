@@ -357,6 +357,21 @@ Loops are grouped by function. Naming follows the "The X loop" convention.
 - **Stop / bail-out**: No meaningful diffs → log "no change."
 - **Output**: A change digest + recommended responses.
 
+### The growth-move watch loop
+- **Check cadence**: Monthly
+- **Acts when**: A company already torn down with `reverse-engineer-marketing` makes a new growth move: a new ad network, page family, product loop, pricing change, content format, or hiring burst in one channel.
+- **Purpose**: Keep a teardown current, so the user's plays track what the company is doing now, not what it did a year ago.
+- **Skills used**: `reverse-engineer-marketing`, plus whichever skill a new move routes to
+- **Loop body**:
+  1. Rerun the teardown script's `stack`, `history`, `hero`, `site`, `dns`, and `subdomains` commands plus the industry pack's commands, check the ad libraries and paid promotion, and pull the last month's posts and new interviews.
+  2. Append new dated moves to a fresh move log.
+  3. Run the script's `diff` against the previous month's log.
+  4. For each new move, decide whether it changes a play, and name the skill to hand it to.
+- **Self-check**: Is the move real and dated, with a link? A pixel alone is inferred, so confirm it in the ad library before calling it a new paid channel.
+- **State / idempotency**: One dated move log per month in `teardowns/<target>/`; the diff only reports moves missing from the previous log, so nothing is flagged twice.
+- **Stop / bail-out**: No new moves → log "no new moves" and exit. Three straight quiet months → suggest dropping to quarterly.
+- **Output**: A short watch report: new moves with links, which plays they change, and where to hand them.
+
 ### The backlink-prospecting loop
 - **Check cadence**: Weekly
 - **Acts when**: New relevant link/guest-post/mention targets appear (or the pipeline is thin).
@@ -425,8 +440,9 @@ Loops are grouped by function. Naming follows the "The X loop" convention.
   1. Pull new signals since the last run: job posts, job changes of past champions, identified website visits, funding, product-usage triggers, social engagement.
   2. Drop accounts outside the ICP, already in a sequence, customers, open deals, and anything on the suppression list.
   3. Score and tier the rest; find and verify the contact who owns the problem.
-  4. Match each to its play (see the prospecting skill's signal plays reference) and stage the first touch.
-- **Self-check**: Is the signal inside its freshness window? Does the account still pass the ICP check? Is the email verified within the last 7 days?
+  4. Match each to its play (see the prospecting skill's signal plays reference). For gap plays, check the gap and save the evidence (date, URL or screenshot); no evidence means no gap play.
+  5. Stage the first touch.
+- **Self-check**: Is the signal inside its freshness window? For gap plays, was the gap verified within the last 7 days? Does the account still pass the ICP check? Is the email verified within the last 7 days?
 - **State / idempotency**: Key on account + signal type + signal date; never enroll the same account twice for the same signal, and respect a cooldown after any previous sequence.
 - **Stop / bail-out**: No fresh signals → log "no action." Halt if a signal source fails rather than acting on partial data. First touches for Tier 1 go to a human for approval.
 - **Output**: Enrolled or staged contacts, each with its signal, tier, and play.

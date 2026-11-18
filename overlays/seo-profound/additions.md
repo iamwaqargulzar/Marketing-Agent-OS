@@ -1,0 +1,9 @@
+### Workflow
+
+1. Define brand/entity, market, language, platforms, prompt set, date range, and comparison period.
+2. Verify connector availability and current metric definitions.
+3. Record sample size and methodology with each rate or trend.
+4. Separate mentions, recommendations, citations, and linked citations.
+5. Flag prompt-set or model changes that make period comparisons unreliable.
+6. Triangulate material conclusions with owned analytics, search evidence, or a second visibility source when available.
+7. Route passage optimization to `geo-citability` and broad remediation to `seo-geo`.

@@ -283,10 +283,14 @@ def test_render_page_never_mode_against_example_com() -> None:
 
 
 def _fake_response(text: str, status: int = 200, url: str = "https://x.example/"):
+    body = text.encode("utf-8")
     return SimpleNamespace(
-        text=text, content=text.encode("utf-8"), status_code=status,
+        text=text, content=body, status_code=status,
         headers={"Content-Type": "text/html"},
         url=url, history=[],
+        # render_page streams the raw body through url_safety.read_bounded.
+        iter_content=lambda chunk_size=1: iter([body]),
+        close=lambda: None,
     )
 
 
@@ -357,12 +361,23 @@ class _FakePlaywrightManager:
             def detach(self):
                 return None
 
+        # Recorded on the page so tests can assert how the context was guarded.
+        page.context_kwargs = None
+        page.context_routes = []
+        page.context_ws_routes = []
         context = SimpleNamespace(
             new_page=lambda: page,
             new_cdp_session=lambda _page: _Session(),
+            route=lambda url, handler: page.context_routes.append((url, handler)),
+            route_web_socket=lambda url, handler: page.context_ws_routes.append((url, handler)),
         )
+
+        def new_context(**kwargs):
+            page.context_kwargs = kwargs
+            return context
+
         browser = SimpleNamespace(
-            new_context=lambda **_kwargs: context,
+            new_context=new_context,
             close=lambda: None,
         )
         self.playwright = SimpleNamespace(
@@ -395,6 +410,19 @@ def test_render_uses_domcontentloaded_for_persistent_socket_pages() -> None:
     assert result["error"] is None
     assert page.goto_options["wait_until"] == "domcontentloaded"
     assert result["render_diagnostics"] == []
+
+
+def test_render_context_blocks_service_workers_and_websockets() -> None:
+    page = _FakeBrowserPage([(200, 20), (200, 20), (200, 20)])
+    result = _render_with_fake_browser(page)
+    assert result["error"] is None
+    assert page.context_kwargs["service_workers"] == "block"
+    assert page.context_kwargs["user_agent"]
+    assert [url for url, _handler in page.context_routes] == ["**/*"]
+    assert [url for url, _handler in page.context_ws_routes] == ["**/*"]
+    import url_safety
+
+    assert page.context_ws_routes[0][1] is url_safety._never_connect_web_socket
 
 
 def test_render_navigation_timeout_returns_degraded_dom() -> None:
@@ -547,7 +575,7 @@ def test_render_page_result_dict_has_all_documented_fields() -> None:
         "extracted_text", "publication_date", "accessibility_tree",
         "accessibility_error", "accessibility_partial",
         "headers", "redirect_chain", "console_errors", "render_engine",
-        "render_diagnostics", "render_ms", "mode_used", "error",
+        "render_diagnostics", "render_ms", "mode_used", "too_large", "error",
     }
     assert set(result.keys()) == expected_fields
 

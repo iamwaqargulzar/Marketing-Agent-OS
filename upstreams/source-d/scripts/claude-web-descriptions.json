@@ -44,7 +44,7 @@
     "description": "Plan or grow a user community, forum, Discord, or Slack group; develop engagement, advocates, ambassadors, and community-led growth."
   },
   "competitor-profiling": {
-    "source_description_sha256": "3f165644d9ccb503da4cbf21ceb1b85e214054a409e5e63e77aaeca155cf78a3",
+    "source_description_sha256": "67829f69107f779e04a44714ce962c7398f5826e43fb3d35635c5b138d5d3ad8",
     "description": "Research competitors from URLs and build structured profiles, competitive intelligence, landscape analyses, and dossiers. Not for accounts you sell to."
   },
   "competitors": {
@@ -140,8 +140,8 @@
     "description": "Optimize post-signup activation, setup, first-run experience, empty states, aha moments, and time to value."
   },
   "paywalls": {
-    "source_description_sha256": "142a11cbc3835effdb8406e978efb631136365e57c8d9288adf2e7068f33631d",
-    "description": "Improve in-app paywalls, upgrade prompts, feature gates, trial-expiry screens, and freemium-to-paid conversion."
+    "source_description_sha256": "846c18b6361827cf6ab3e78f82dec2939dcc4d91a220346a01bb20c97ef971cb",
+    "description": "Improve in-app paywalls, upgrade prompts, feature gates, trial screens, and mobile subscription-app paywalls."
   },
   "popups": {
     "source_description_sha256": "71756773110b7bccc866f3e802ce94862787bc06d66f8f3884a1b4ee2f210968",
@@ -160,8 +160,8 @@
     "description": "Plan or build SEO pages at scale: templates, directories, locations, comparisons, integrations, and choosing a CMS or platform that can publish them."
   },
   "prospecting": {
-    "source_description_sha256": "09d4017158f32de61dd87f8cac1d396cca5f317877e7eca861da5901079db6a5",
-    "description": "Build and qualify prospect lists: ICP, buying signals, enrichment waterfalls, email verification and catch-alls, account tiers, and pre-outreach research."
+    "source_description_sha256": "41344c08167b646c11c61bc43ca680d071fc342ec1e61fd2248cf7c2a244cd29",
+    "description": "Build and qualify prospect lists: ICP, buying signals, gap plays, enrichment waterfalls, email verification and catch-alls, account tiers, and pre-outreach research."
   },
   "public-relations": {
     "source_description_sha256": "f61b65fb0370119ece6b4a3a2405a2c78ad3b801a0914e65867926e0d9eb86cd",
@@ -170,6 +170,10 @@
   "referrals": {
     "source_description_sha256": "7e42fb5573746882642f70abd8438f4167090decba14facb4fd6e1958a94573d",
     "description": "Design or improve referral, affiliate, and partner programs, plus review programs: getting more reviews, responding to them, and reusing testimonials."
+  },
+  "reverse-engineer-marketing": {
+    "source_description_sha256": "b542d1574cafdc78c6bc0ca080671f2c05f76c83d034cd6f61eb9d8f0b8fa017",
+    "description": "Reverse engineer how a company grew: its moves against its traffic, sign-ups and demos, team interviews, hidden signals, your gap, and plays routed to skills."
   },
   "revops": {
     "source_description_sha256": "63e21583a10d3e06f02aeb31293089ea6f2b811253bf9ffcc57e35e61581df5c",

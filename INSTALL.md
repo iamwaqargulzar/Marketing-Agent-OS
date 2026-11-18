@@ -1,6 +1,6 @@
 # Marketing Agent OS installation
 
-The package is self-contained. Instruction-only use has no runtime dependency. Optional helper scripts use Python 3's standard library except PDF rendering (`reportlab`).
+The package is self-contained. Instructions need no runtime. Each skill carries the helpers it uses: many need only Python 3, and some list optional packages such as `requests` or `playwright` in the skill's helper notes. Skills ask before installing anything.
 
 ## Operating systems
 
@@ -38,7 +38,9 @@ Use repeated `--skill` flags, for example:
 
 `python3 scripts/install.py --agent codex --skill marketing-os --skill seo --skill ai-seo --skill cro`
 
-Because this package deliberately exposes hundreds of source-compatible skill names, a selective install can improve skill discovery/context budgets on hosts with large skill registries. The complete archive remains the source of truth.
+With 241 skills, a selective install improves discovery on hosts with limited context budgets. Skills mention related skills by name; if one is not installed, the agent says so instead of failing.
+
+The Python installer includes the shared `marketing-os` library with specialist selections. When selecting specialists through a third-party skill manager, select `marketing-os` too. Each source runtime can be extracted offline, including its original dependency manifests, helpers, tests, and agent definitions. See the [source library guide](skills/marketing-os/references/source-library.md). Use `--force` to upgrade an existing package-owned skill after reviewing local changes.
 
 ## Additional hosts
 
@@ -48,4 +50,4 @@ Directory support and native-discovery confidence differ by host. Consult `docs/
 
 ## Verification
 
-Run `python3 scripts/build_manifest.py`, then `python3 scripts/doctor.py` before installation. Use `--dry-run` to preview targets.
+Run `python3 scripts/doctor.py` against the supplied release manifest before installation. Use `--dry-run` to preview targets.

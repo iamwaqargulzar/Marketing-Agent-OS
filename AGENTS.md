@@ -11,3 +11,4 @@ When using this repository:
 7. Use deterministic scripts when they improve reproducibility; scripts do not override evidence or permission rules.
 8. Prefer optional connected tools/MCPs already available in the host; never request credentials if a connector can do the job.
 9. Keep outputs decision-ready: evidence, recommendation, validation, dependencies, risks.
+10. `skills/`, `agents/`, and `catalog.json` are generated. Change `overlays/` or `scripts/build_skills.py`, then run the build; never edit generated files directly.

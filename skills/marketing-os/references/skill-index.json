@@ -1,20 +1,20 @@
 {
   "package": "marketing-agent-os",
-  "version": "1.6.0",
+  "version": "2.1.0",
   "skills": [
     {
       "name": "ab-test-setup",
-      "description": "Compatibility skill for ab test setup. Use when a user or upstream workflow invokes this name; route the task to `ab-testing` while preserving the requested scope and source-specific intent.",
+      "description": "Earlier name for ab-testing, kept so existing setups keep working. Use when ab test setup is requested by this exact name.",
       "domain": "marketing",
       "sources": [
-        "source-d"
+        "unified"
       ],
       "alias_of": "ab-testing",
       "phase": null
     },
     {
       "name": "ab-testing",
-      "description": "Design valid marketing experiments with hypotheses, primary metrics, guardrails, sample/traffic assumptions, implementation QA and decision rules.",
+      "description": "When the user wants to plan, design, or implement an A/B test or experiment, or build a growth experimentation program. Also use when the user mentions \"A/B test,\" \"split test,\" \"experiment,\" \"test this change,\" \"variant copy,\" \"multivariate test,\" \"hypothesis,\" \"should I test this,\" \"which version is better,\" \"test two versions,\" \"statistical significance,\" \"how long should I run this test,\" \"growth experiments,\" \"experiment velocity,\" \"experiment backlog,\" \"ICE score,\" \"experimentation program,\" or \"experiment playbook.\" Use this whenever someone is comparing two approaches and wants to measure which performs better, or when they want to build a systematic experimentation practice. For tracking implementation, see analytics. For page-level conversion optimization, see cro.",
       "domain": "cro",
       "sources": [
         "source-d"
@@ -34,7 +34,7 @@
     },
     {
       "name": "ad-creative",
-      "description": "Generate and iterate paid-ad creative systems: angles, hooks, copy, concepts, variants, fatigue management and test matrices.",
+      "description": "When the user wants to generate, iterate, or scale ad creative — headlines, descriptions, primary text, or full ad variations — for any paid advertising platform. Also use when the user mentions 'ad copy variations,' 'ad creative,' 'generate headlines,' 'RSA headlines,' 'bulk ad copy,' 'creative testing,' 'write me some ads,' 'Facebook ad copy,' 'Google ad headlines,' 'LinkedIn ad text,' 'static ads,' 'ad templates,' 'iMessage ad,' 'ChatGPT ad,' 'creative strategy,' 'creative roadmap,' 'creative retro,' 'hook writing,' 'creative review page,' 'motion video ad,' 'faceless video ad,' 'UGC ad,' 'greenscreen ad,' 'TikTok/Reels ad format,' 'Meta ad format tier list,' or 'creative format taxonomy.' Use it to produce or iterate ad copy at scale. Copy avoids AI tells like 'it's not X, it's Y' reveals. For campaign strategy and targeting, see ads. For landing page copy, see copywriting. Test hypotheses must be falsifiable, naming the metric, the comparison, and the expected direction.",
       "domain": "paid-measurement",
       "sources": [
         "source-d"
@@ -64,7 +64,7 @@
     },
     {
       "name": "ads",
-      "description": "Plan and optimize paid media across search, social and other platforms, including account structure, targeting, bidding, measurement, budget and creative testing.",
+      "description": "When the user wants help with paid advertising campaigns on Google Ads, Meta (Facebook/Instagram), LinkedIn, Twitter/X, or other ad platforms. Also use when the user mentions 'PPC,' 'paid media,' 'ROAS,' 'CPA,' 'ad campaign,' 'retargeting,' 'audience targeting,' 'Google Ads,' 'Facebook ads,' 'LinkedIn ads,' 'ad budget,' 'cost per click,' 'ad spend,' 'should I run ads,' 'ABM,' 'account-based marketing,' 'B2B ads,' 'lead quality,' 'negative keywords,' 'Performance Max,' 'thought leader ads,' 'when should I kill an ad,' 'search terms report,' 'wasted spend,' or 'is this campaign working.' Use this for campaign strategy, audience targeting, bidding, and optimization. For bulk ad creative generation and iteration, see ad-creative. For landing page optimization, see cro. For outbound to target accounts, see cold-email. For pixels, CAPI, and tracking audits, see conversion-tracking. End every recommendation with facts, hypotheses, and missing data, and label unavailable inputs MISSING instead of estimating them.",
       "domain": "paid-measurement",
       "sources": [
         "source-d"
@@ -84,7 +84,7 @@
     },
     {
       "name": "ai-seo",
-      "description": "Optimize AI-search and agent-task discoverability with prompt panels, answer-claim accuracy, citation/recommendation evidence, multilingual/commerce fit, crawler access, and attributable business-outcome evaluation. Use for GEO/AEO/LLMO and AI-answer visibility; for conversion event delivery use `conversion-tracking`.",
+      "description": "When the user wants to optimize content for AI search engines, get cited by LLMs, or appear in AI-generated answers. Also use when the user mentions 'AI SEO,' 'AEO,' 'GEO,' 'LLMO,' 'answer engine optimization,' 'generative engine optimization,' 'LLM optimization,' 'AI Overviews,' 'optimize for ChatGPT,' 'optimize for Perplexity,' 'AI citations,' 'AI visibility,' 'zero-click search,' 'how do I show up in AI answers,' 'LLM mentions,' 'optimize for Claude/Gemini,' 'llms.txt,' 'llms-full.txt,' 'OKF,' 'Open Knowledge Format,' 'knowledge bundle,' 'agent-readable site,' 'agent readiness,' 'is my site agent-ready,' 'WebMCP,' 'do listicles still work for AI,' 'ChatGPT stopped citing comparison pages,' 'how do LLMs see our brand,' 'LinkedIn for AEO,' or 'AI citation format shift.' Use this whenever someone wants their content to be cited or surfaced by AI assistants and AI search engines. For traditional technical and on-page SEO audits, see seo-audit. For structured data implementation, see schema.",
       "domain": "seo-geo",
       "sources": [
         "source-d"
@@ -94,7 +94,7 @@
     },
     {
       "name": "analytics",
-      "description": "Design or audit general marketing analytics, event plans, funnels, UTM governance, partner-link taxonomy, and reporting. For delivery of confirmed outcomes to analytics or ad platforms, pixels/CAPI, and received-conversion verification use `conversion-tracking`; for credit allocation use `attribution`.",
+      "description": "When the user wants to set up, improve, or audit analytics tracking and measurement. Also use when the user mentions \"set up tracking,\" \"GA4,\" \"Google Analytics,\" \"event tracking,\" \"UTM parameters,\" \"tag manager,\" \"GTM,\" \"analytics implementation,\" \"tracking plan,\" \"how do I measure this,\" \"Mixpanel,\" \"Segment,\" \"are my events firing,\" or \"analytics isn't working.\" Use this whenever someone asks how to know if something is working or wants to measure marketing results. For getting conversions into ad platforms (pixels, conversion tags, CAPI, server-side) and verifying they arrived, see conversion-tracking. For choosing attribution models, comparing multi-touch/MMM/incrementality, or reconciling conflicting numbers across tools, see attribution. For A/B test measurement, see ab-testing. Rate metrics divide matching closed windows — never full-period spend by partial-period results.",
       "domain": "paid-measurement",
       "sources": [
         "source-d"
@@ -104,10 +104,10 @@
     },
     {
       "name": "analytics-tracking",
-      "description": "Compatibility skill for analytics tracking. Use when a user or upstream workflow invokes this name; route the task to `analytics` while preserving the requested scope and source-specific intent.",
+      "description": "Earlier name for analytics, kept so existing setups keep working. Use when analytics tracking is requested by this exact name.",
       "domain": "marketing",
       "sources": [
-        "source-d"
+        "unified"
       ],
       "alias_of": "analytics",
       "phase": null
@@ -124,17 +124,17 @@
     },
     {
       "name": "aso-audit",
-      "description": "Compatibility skill for aso audit. Use when a user or upstream workflow invokes this name; route the task to `aso` while preserving the requested scope and source-specific intent.",
+      "description": "Earlier name for aso, kept so existing setups keep working. Use when aso audit is requested by this exact name.",
       "domain": "marketing",
       "sources": [
-        "source-d"
+        "unified"
       ],
       "alias_of": "aso",
       "phase": null
     },
     {
       "name": "attribution",
-      "description": "Analyze channel and campaign contribution using explicit attribution assumptions, reconciliation across systems, incrementality where possible, and confidence labels.",
+      "description": "When the user wants to figure out which marketing actually drives conversions and revenue, choose or interpret an attribution model, or reconcile conflicting numbers across tools. Also use when the user mentions \"attribution,\" \"attribution model,\" \"first-touch vs last-touch,\" \"multi-touch,\" \"which channel drives revenue,\" \"what's my real CAC,\" \"my dashboards disagree,\" \"Google/Meta says X but GA says Y,\" \"media mix model,\" \"MMM,\" \"incrementality,\" \"geo lift,\" \"holdout test,\" \"how did you hear about us,\" \"self-reported attribution,\" \"dark social,\" or wants to instrument attribution themselves — \"stitch my bookings to their source,\" \"SavvyCal/Calendly attribution,\" \"close the identify gap,\" \"track conversions on a third-party domain,\" \"first-party / self-hosted attribution.\" For event tracking setup and UTMs, see analytics. For ad-platform pixels/CAPI and conversion tracking, see conversion-tracking. For pipeline and CRM revenue reporting, see revops. For the AI-search attribution blind spot, see ai-seo.",
       "domain": "paid-measurement",
       "sources": [
         "source-d"
@@ -244,7 +244,7 @@
     },
     {
       "name": "campaign-planner",
-      "description": "Use when the user asks to \"plan an influencer campaign\", \"build a campaign blueprint\", or \"launch a product with creators\"; produces campaign objectives, platform and influencer-tier strategy, content requirements, a phased timeline, budget allocation, and KPI targets. Not for writing individual creator briefs — use brief-generator; not for the overall product-launch plan (tiering, calendar, press, community day) — use launch-tier-planner, which hands this skill the creator lane. A launch request that does not mention creators routes to the launch discipline, not here. 达人营销策划/种草方案",
+      "description": "Use when the user asks to \"plan an influencer campaign\", \"build a campaign blueprint\", \"track or close a creator campaign\", or \"record a late campaign correction\"; produces the plan and, when requested, a non-canonical evidence tracker with scoped identity, publication, reconciliation, close, and reopen receipts. Not for individual creator briefs — use brief-generator; not for overall product launches without creators — use launch-tier-planner; not for sending, publishing, amplifying, or paying — use the owning execution workflow. 达人营销策划/种草方案/活动追踪与关账",
       "domain": "influencer",
       "sources": [
         "source-a"
@@ -304,7 +304,7 @@
     },
     {
       "name": "cold-email",
-      "description": "Draft B2B cold outreach and follow-ups; plan sending readiness, LinkedIn outreach, multichannel cadence, and reply handling with evidence, eligibility, and permission controls. For list sourcing use `prospecting`; for lifecycle flows use `emails`.",
+      "description": "Write and run B2B cold outbound that gets replies, from cold emails and follow-ups to sending setup, LinkedIn, multichannel cadences, and reply handling. Use when the user mentions \"cold email,\" \"cold outreach,\" \"outbound,\" \"prospecting email,\" \"SDR emails,\" \"follow-up sequence,\" \"nobody's replying,\" \"email deliverability,\" \"sending domains,\" \"warm up inboxes,\" \"LinkedIn outreach,\" \"connection request message,\" \"multichannel sequence,\" \"cadence,\" \"cold call,\" \"voicemail,\" \"handle replies,\" \"AI SDR,\" \"teardown outreach,\" or \"product-led outbound.\" Send from secondary domains, verify lists first, turn off open tracking, and stop every channel when a prospect replies. Copy avoids AI tells like 'it's not X, it's Y' reveals. For building the list and account research, see prospecting. For lifecycle email, see emails. For call scripts and sales collateral, see sales-enablement.",
       "domain": "lifecycle",
       "sources": [
         "source-d"
@@ -344,10 +344,10 @@
     },
     {
       "name": "competitor-alternatives",
-      "description": "Compatibility skill for competitor alternatives. Use when a user or upstream workflow invokes this name; route the task to `competitors` while preserving the requested scope and source-specific intent.",
+      "description": "Earlier name for competitors, kept so existing setups keep working. Use when competitor alternatives is requested by this exact name.",
       "domain": "marketing",
       "sources": [
-        "source-d"
+        "unified"
       ],
       "alias_of": "competitors",
       "phase": null
@@ -364,7 +364,7 @@
     },
     {
       "name": "competitor-profiling",
-      "description": "When the user wants to research, profile, or analyze competitors from their URLs. Also use when the user mentions 'competitor profile,' 'competitor research,' 'competitor analysis,' 'profile this competitor,' 'analyze competitor,' 'competitive intelligence,' 'competitor deep dive,' 'who are my competitors,' 'competitor landscape,' 'competitor dossier,' 'competitive audit,' or 'research these competitors.' Input is a list of competitor URLs. Output is structured competitor profile markdown files. For creating comparison/alternative pages from profiles, see competitors. For sales-specific battle cards, see sales-enablement.",
+      "description": "When the user wants to research, profile, or analyze competitors from their URLs. Also use when the user mentions 'competitor profile,' 'competitor research,' 'competitor analysis,' 'profile this competitor,' 'analyze competitor,' 'competitive intelligence,' 'competitor deep dive,' 'who are my competitors,' 'competitor landscape,' 'competitor dossier,' 'competitive audit,' or 'research these competitors.' Input is a list of competitor URLs. Output is structured competitor profile markdown files. For creating comparison/alternative pages from profiles, see competitors. For sales-specific battle cards, see sales-enablement. For researching accounts you're selling to, see prospecting. For how a competitor grew over time and what to copy, see reverse-engineer-marketing.",
       "domain": "strategy",
       "sources": [
         "source-d"
@@ -384,7 +384,7 @@
     },
     {
       "name": "competitors",
-      "description": "Create or audit competitor comparison and alternative pages. Use for vs pages, product alternatives, competitive landing pages, competitor teardowns, or stale/overclaimed competitive assets. For battlecards, live objections, and win-loss analysis use `sales-enablement`; for URL-based research use `competitor-profiling`.",
+      "description": "When the user wants to create competitor comparison or alternative pages for SEO and buyer-facing use. Also use when the user mentions 'alternative page,' 'vs page,' 'competitor comparison,' 'comparison page,' '[Product] vs [Product],' '[Product] alternative,' 'competitive landing pages,' 'how do we compare to X,' 'competitor teardown,' 'audit our competitor pages,' 'are our comparison pages out of date,' or 'competitive asset audit.' Use this for any content that positions your product against competitors. Covers four formats: singular alternative, plural alternatives, you vs competitor, and competitor vs competitor. For auditing existing claims (not researching competitors from scratch, which is competitor-profiling; not technical SEO on these pages, which is seo-audit), use the asset audit here. For internal battle cards and sales-specific competitor docs, see sales-enablement.",
       "domain": "strategy",
       "sources": [
         "source-d"
@@ -474,7 +474,7 @@
     },
     {
       "name": "conversion-tracking",
-      "description": "Set up, audit, verify, or fix conversion delivery for forms, bookings, signups, calls, and purchases across analytics and ad platforms. Use for GTM/pixels, CAPI, enhanced conversions, server-side delivery, missing or duplicate conversions. For tracking plans and UTMs use `analytics`; for assigning credit use `attribution`; for campaign strategy use `ads`.",
+      "description": "Set up, audit, verify, or fix website conversion tracking. Use when the conversion is a form submission, booked meeting, chat, phone call, signup, or purchase; when conversions must reach Google Ads, Meta, GA4, LinkedIn, TikTok, or Microsoft Ads; when the work involves GTM tags and dataLayer events, pixels, the Conversions API (CAPI), Enhanced Conversions, server-side tagging, or gclid and fbclid capture; or when the user reports conversion problems like \"conversions stopped\", \"double counting\", \"spend but no conversions\", \"GA4 and Google Ads don't match\", or an Unverified or Inactive status. Covers lead gen and ecommerce. Always fire on confirmed success, never the submit click; verify a test conversion arrives; diagnose before changing anything; offer free and native paths alongside paid ones and disclose partner tools. For tracking plans and UTMs, see analytics. For attribution models, see attribution. For campaigns and bidding, see ads. For CRM lead-stage design, see revops.",
       "domain": "paid-measurement",
       "sources": [
         "source-d"
@@ -494,7 +494,7 @@
     },
     {
       "name": "copy-editing",
-      "description": "Edit or review existing marketing copy for clarity, accuracy, voice, freshness, and repetitive AI-like phrasing. Use for proofreading, copy feedback, tightening text, refreshing outdated copy, or making a draft sound natural. Preserve effective copy and supported claims. For new copy use `copywriting`.",
+      "description": "When the user wants to edit, review, or improve existing marketing copy, or refresh outdated content. Also use when the user mentions 'edit this copy,' 'review my copy,' 'copy feedback,' 'proofread,' 'polish this,' 'make this better,' 'copy sweep,' 'tighten this up,' 'this reads awkwardly,' 'clean up this text,' 'too wordy,' 'sharpen the messaging,' 'refresh this content,' 'update this page,' 'this content is outdated,' or 'content audit,' 'this sounds like AI,' 'AI slop,' 'de-slop this,' or 'make it sound human.' Use this when the user already has copy and wants it improved or refreshed rather than rewritten from scratch. Every edit removes AI tells such as 'it's not X, it's Y' reveals, 'no X, no Y, no Z' lists, and sentences that trail into extra comma clauses. A request to fix one line gets a point edit that changes only that line. For writing new copy, see copywriting.",
       "domain": "content",
       "sources": [
         "source-d"
@@ -504,7 +504,7 @@
     },
     {
       "name": "copywriting",
-      "description": "Write or rewrite high-intent marketing copy grounded in product context, customer language, claims evidence, offer structure and conversion goals.",
+      "description": "When the user wants to write, rewrite, or improve marketing copy for any page, including homepage, landing pages, pricing pages, feature pages, about pages, or product pages. Also use when the user says \"write copy for,\" \"improve this copy,\" \"rewrite this page,\" \"marketing copy,\" \"headline help,\" \"CTA copy,\" \"value proposition,\" \"tagline,\" \"hero section copy,\" \"this copy is weak,\" \"this sounds like AI,\" \"AI slop,\" \"make it sound human,\" or \"help me describe my product.\" Drafts never use AI tells like \"it's not X, it's Y\" reveals, \"no X, no Y, no Z\" lists, or sentences that trail into extra comma clauses. For email copy, see emails. For popup copy, see popups. For editing existing copy, see copy-editing. For the offer underneath the copy (bonuses, guarantees, value framing), see offers. Claims must be supportable, and a declined claim names the evidence that would unlock it. Diagnoses the input first (blank brief, real voice, or point edit) and changes only what it calls for.",
       "domain": "content",
       "sources": [
         "source-d"
@@ -544,7 +544,7 @@
     },
     {
       "name": "cro",
-      "description": "Improve conversion performance on marketing pages and forms through diagnosis, message hierarchy, friction analysis, proof, UX hypotheses, instrumentation and experiments.",
+      "description": "When the user wants to optimize, improve, or increase conversions on any marketing page or form — including homepage, landing pages, pricing pages, feature pages, lead capture forms, or contact forms. Also use when the user says 'CRO,' 'conversion rate optimization,' 'this page isn't converting,' 'improve conversions,' 'why isn't this page working,' 'my landing page sucks,' 'form abandonment,' 'nobody's converting,' 'low conversion rate,' or 'this page needs work.' Use this even if the user just shares a URL and asks for feedback. For signup/registration flows, see signup. For post-signup activation, see onboarding. For popups/modals, see popups.",
       "domain": "cro",
       "sources": [
         "source-d"
@@ -554,7 +554,7 @@
     },
     {
       "name": "customer-research",
-      "description": "Plan, analyze and synthesize customer research into pains, jobs, triggers, objections, language, segments and evidence-backed marketing implications.",
+      "description": "When the user wants to conduct, analyze, or synthesize customer research. Use when the user mentions \"customer research,\" \"ICP research,\" \"talk to customers,\" \"analyze transcripts,\" \"customer interviews,\" \"survey analysis,\" \"support ticket analysis,\" \"voice of customer,\" \"VOC,\" \"build personas,\" \"customer personas,\" \"jobs to be done,\" \"JTBD,\" \"what do customers say,\" \"what are customers struggling with,\" \"Reddit mining,\" \"G2 reviews,\" \"review mining,\" \"digital watering holes,\" \"community research,\" \"forum research,\" \"competitor reviews,\" \"customer sentiment,\" \"PMF survey,\" \"product/market fit survey,\" \"customer interview questions,\" \"interview outreach,\" \"Sales Safari,\" or \"find out why customers churn/convert/buy.\" Use for analyzing existing research assets, mining online sources, AND running primary research (interviews and surveys). For writing copy informed by research, see copywriting. For acting on research to improve pages, see cro.",
       "domain": "strategy",
       "sources": [
         "source-d"
@@ -584,7 +584,7 @@
     },
     {
       "name": "directory-submissions",
-      "description": "When the user wants to submit their product to startup, SaaS, AI, agent, MCP, no-code, or review directories for backlinks, domain rating, and discovery. Also use when the user mentions \"directory submissions,\" \"submit to directories,\" \"backlinks from directories,\" \"list my product,\" \"submit to Product Hunt,\" \"BetaList,\" \"TAAFT,\" \"Futurepedia,\" \"G2 listing,\" \"Capterra listing,\" \"AlternativeTo,\" \"SaaSHub,\" \"AI directories,\" \"MCP registry,\" \"agent directory,\" \"dofollow backlinks,\" \"launch directories,\" or \"directory tracker.\" Use this whenever someone is planning the directory layer of a product launch or an ongoing backlink campaign. For the broader launch moment, see launch. For programmatic SEO pages that should live behind these backlinks, see programmatic-seo. For AI citation optimization, see ai-seo.",
+      "description": "When the user wants to submit their product to startup, SaaS, AI, agent, MCP, no-code, or review directories for backlinks, domain rating, and discovery. Also use when the user mentions \"directory submissions,\" \"submit to directories,\" \"backlinks from directories,\" \"list my product,\" \"submit to Product Hunt,\" \"BetaList,\" \"TAAFT,\" \"Futurepedia,\" \"G2 listing,\" \"Capterra listing,\" \"AlternativeTo,\" \"SaaSHub,\" \"AI directories,\" \"MCP registry,\" \"publish my MCP server,\" \"awesome list,\" \"llms.txt directory,\" \"Claude plugin directory,\" \"agent directory,\" \"dofollow backlinks,\" \"launch directories,\" or \"directory tracker.\" Use this whenever someone is planning the directory layer of a product launch or an ongoing backlink campaign. For the broader launch moment, see launch. For programmatic SEO pages that should live behind these backlinks, see programmatic-seo. For AI citation optimization, see ai-seo.",
       "domain": "seo-geo",
       "sources": [
         "source-d"
@@ -654,10 +654,10 @@
     },
     {
       "name": "email-sequence",
-      "description": "Compatibility skill for email sequence. Use when a user or upstream workflow invokes this name; route the task to `emails` while preserving the requested scope and source-specific intent.",
+      "description": "Earlier name for emails, kept so existing setups keep working. Use when email sequence is requested by this exact name.",
       "domain": "marketing",
       "sources": [
-        "source-d"
+        "unified"
       ],
       "alias_of": "emails",
       "phase": null
@@ -674,7 +674,7 @@
     },
     {
       "name": "emails",
-      "description": "Design lifecycle email programs and sequences with segmentation, deliverability, personalization, testing and measurement.",
+      "description": "When the user wants to create or optimize an email sequence, drip campaign, automated email flow, or lifecycle email program. Also use when the user mentions \"email sequence,\" \"drip campaign,\" \"nurture sequence,\" \"onboarding emails,\" \"welcome sequence,\" \"re-engagement emails,\" \"email automation,\" \"lifecycle emails,\" \"trigger-based emails,\" \"email funnel,\" \"email workflow,\" \"what emails should I send,\" \"welcome series,\" or \"email cadence.\" Use this for any multi-email automated flow. Emails avoid AI tells like 'it's not X, it's Y' reveals, 'no X, no Y, no Z' lists, and fake 'Re:' subject lines. For cold outreach and outbound sequences, see cold-email. For in-app onboarding, see onboarding.",
       "domain": "lifecycle",
       "sources": [
         "source-d"
@@ -704,7 +704,7 @@
     },
     {
       "name": "events",
-      "description": "Plan and evaluate event marketing across hosted events, webinars, sponsorships, speaking, trade shows, dinners, workshops, and conferences. Use for event selection, audience fit, promotion, meeting strategy, follow-up, content reuse, pipeline measurement, or event ROI. For launch-only moments use `launch`; for ongoing communities use `community-marketing`.",
+      "description": "When the user wants to plan, run, sponsor, speak at, or get pipeline from events — webinars, conferences, trade shows, meetups, dinners, workshops, virtual summits, or user conferences. Also use when the user mentions 'event marketing,' 'field marketing,' 'run a webinar,' 'webinar funnel,' 'show-up rate,' 'should we sponsor,' 'sponsor a conference,' 'trade show booth,' 'booth strategy,' 'event ROI,' 'badge scans,' 'event follow-up,' 'speaking slot,' 'CFP,' 'conference talk,' 'host a dinner,' 'user conference,' or 'virtual summit.' Covers all four roles: hosting, sponsoring/exhibiting, speaking, and attending. For product launch moments, see launch. For the partnership side of joint webinars, see co-marketing. For ongoing community programs, see community-marketing. For podcast appearances, see public-relations. For the email sequences themselves, see emails.",
       "domain": "event-marketing",
       "sources": [
         "source-d"
@@ -734,20 +734,20 @@
     },
     {
       "name": "form-cro",
-      "description": "Compatibility skill for form cro. Use when a user or upstream workflow invokes this name; route the task to `cro` while preserving the requested scope and source-specific intent.",
+      "description": "Earlier name for cro, kept so existing setups keep working. Use when form cro is requested by this exact name.",
       "domain": "marketing",
       "sources": [
-        "source-d"
+        "unified"
       ],
       "alias_of": "cro",
       "phase": null
     },
     {
       "name": "free-tool-strategy",
-      "description": "Compatibility skill for free tool strategy. Use when a user or upstream workflow invokes this name; route the task to `free-tools` while preserving the requested scope and source-specific intent.",
+      "description": "Earlier name for free-tools, kept so existing setups keep working. Use when free tool strategy is requested by this exact name.",
       "domain": "marketing",
       "sources": [
-        "source-d"
+        "unified"
       ],
       "alias_of": "free-tools",
       "phase": null
@@ -764,62 +764,62 @@
     },
     {
       "name": "geo",
-      "description": "Compatibility skill for geo. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "description": "GEO-first SEO analysis tool. Optimizes websites for AI-powered search engines (ChatGPT, Claude, Perplexity, Gemini, Google AI Overviews) while maintaining traditional SEO foundations. Performs full GEO audits, citability scoring, AI crawler analysis, llms.txt generation, brand mention scanning, platform-specific optimization, schema markup, technical SEO, content quality (E-E-A-T), and client-ready GEO report generation. Use when user says \"geo\", \"seo\", \"audit\", \"AI search\", \"AI visibility\", \"optimize\", \"citability\", \"llms.txt\", \"schema\", \"brand mentions\", \"GEO report\", or any URL for analysis.",
       "domain": "seo-geo",
       "sources": [
         "source-c"
       ],
-      "alias_of": "ai-seo",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "geo-audit",
-      "description": "Compatibility skill for geo audit. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "description": "Full website GEO+SEO audit with parallel subagent delegation. Orchestrates a comprehensive Generative Engine Optimization audit across AI citability, platform analysis, technical infrastructure, content quality, and schema markup. Produces a composite GEO Score (0-100) with prioritized action plan.",
       "domain": "seo-geo",
       "sources": [
         "source-c"
       ],
-      "alias_of": "ai-seo",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "geo-brand-mentions",
-      "description": "Compatibility skill for geo brand mentions. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "description": "Brand mention and authority scanner for AI visibility. Analyzes brand presence across platforms that AI models rely on for entity recognition and citation decisions. Produces a Brand Authority Score (0-100) with platform-specific recommendations.",
       "domain": "seo-geo",
       "sources": [
         "source-c"
       ],
-      "alias_of": "ai-seo",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "geo-citability",
-      "description": "Compatibility skill for geo citability. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "description": "AI citability scoring and optimization. Analyzes web page content to determine how likely AI systems (ChatGPT, Claude, Perplexity, Gemini) are to cite or quote passages from the page. Provides a citability score (0-100) with specific rewrite suggestions.",
       "domain": "seo-geo",
       "sources": [
         "source-c"
       ],
-      "alias_of": "ai-seo",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "geo-compare",
-      "description": "Compatibility skill for geo compare. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "description": "Monthly delta tracking and progress reporting for GEO clients. Compares two GEO audits (baseline vs. current), calculates score improvements across all categories, tracks action item completion, and generates a \"here's your progress\" client report. Use when user says \"compare\", \"delta\", \"monthly report\", \"progress\", \"confronta\", \"progressi\", \"report mensile\", or when running a monthly client check-in.",
       "domain": "seo-geo",
       "sources": [
         "source-c"
       ],
-      "alias_of": "ai-seo",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "geo-content",
-      "description": "Compatibility skill for geo content. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "description": "Content quality and E-E-A-T assessment for AI citability — evaluate experience, expertise, authoritativeness, trustworthiness, and content structure",
       "domain": "seo-geo",
       "sources": [
         "source-c"
       ],
-      "alias_of": "ai-seo",
+      "alias_of": null,
       "phase": null
     },
     {
@@ -834,92 +834,92 @@
     },
     {
       "name": "geo-crawlers",
-      "description": "Compatibility skill for geo crawlers. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "description": "AI crawler access analysis. Checks robots.txt, meta tags, and HTTP headers to determine which AI crawlers can access the site. Provides a complete access map and recommendations for maximizing AI visibility while maintaining appropriate control.",
       "domain": "seo-geo",
       "sources": [
         "source-c"
       ],
-      "alias_of": "ai-seo",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "geo-llmstxt",
-      "description": "Compatibility skill for geo llmstxt. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "description": "Analyzes and generates llms.txt files -- the emerging standard for helping AI systems understand website structure and content. Can validate existing llms.txt files or generate new ones from scratch by crawling the site.",
       "domain": "seo-geo",
       "sources": [
         "source-c"
       ],
-      "alias_of": "ai-seo",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "geo-platform-optimizer",
-      "description": "Compatibility skill for geo platform optimizer. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "description": "Platform-specific AI search optimization — audit and optimize for Google AI Overviews, ChatGPT, Perplexity, Gemini, and Bing Copilot individually",
       "domain": "seo-geo",
       "sources": [
         "source-c"
       ],
-      "alias_of": "ai-seo",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "geo-proposal",
-      "description": "Compatibility skill for geo proposal. Use when a user or upstream workflow invokes this name; route the task to `sales-enablement` while preserving the requested scope and source-specific intent.",
+      "description": "Auto-generate a professional, client-ready GEO service proposal from audit data. Creates a full proposal in markdown and PDF including executive summary, findings, recommended service packages (Basic/Standard/Premium), pricing, timeline, and terms. Use when user says \"proposal\", \"proposta\", \"offerta\", \"preventivo\", \"generate proposal\", or after completing a GEO audit for a prospect.",
       "domain": "seo-geo",
       "sources": [
         "source-c"
       ],
-      "alias_of": "sales-enablement",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "geo-prospect",
-      "description": "Compatibility skill for geo prospect. Use when a user or upstream workflow invokes this name; route the task to `prospecting` while preserving the requested scope and source-specific intent.",
+      "description": "CRM-lite for managing GEO agency prospects and clients. Track leads through the full sales pipeline: Lead → Qualified → Proposal Sent → Won → Lost. Store audit history, notes, deal values, and generate pipeline summaries. Use when user says \"prospect\", \"lead\", \"client\", \"pipeline\", \"crm\", \"nuovo prospect\", \"aggiungi cliente\", or when managing the business side of GEO services.",
       "domain": "seo-geo",
       "sources": [
         "source-c"
       ],
-      "alias_of": "prospecting",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "geo-report",
-      "description": "Compatibility skill for geo report. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "description": "Generate a professional, client-facing GEO report combining all audit results into a single deliverable with scores, findings, and prioritized actions",
       "domain": "seo-geo",
       "sources": [
         "source-c"
       ],
-      "alias_of": "ai-seo",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "geo-report-pdf",
-      "description": "Compatibility skill for geo report pdf. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "description": "Generate a professional PDF report from a GEO audit using pandoc + Chrome headless. Converts GEO-AUDIT-REPORT.md into a styled, client-ready PDF with a cover page, color-coded score tables, severity-tagged findings, and a 90-day roadmap.",
       "domain": "seo-geo",
       "sources": [
         "source-c"
       ],
-      "alias_of": "ai-seo",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "geo-schema",
-      "description": "Compatibility skill for geo schema. Use when a user or upstream workflow invokes this name; route the task to `schema` while preserving the requested scope and source-specific intent.",
+      "description": "Schema.org structured data audit and generation optimized for AI discoverability — detect, validate, and generate JSON-LD markup",
       "domain": "seo-geo",
       "sources": [
         "source-c"
       ],
-      "alias_of": "schema",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "geo-technical",
-      "description": "Compatibility skill for geo technical. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "description": "Technical SEO audit with GEO-specific checks — crawlability, indexability, security, performance, SSR, and AI crawler access",
       "domain": "seo-geo",
       "sources": [
         "source-c"
       ],
-      "alias_of": "ai-seo",
+      "alias_of": null,
       "phase": null
     },
     {
@@ -954,7 +954,7 @@
     },
     {
       "name": "influencer-discovery",
-      "description": "Use when the user asks to \"find influencers\", \"build an influencer list\", or \"discover creators in [niche]\"; produces a multi-platform candidate pool, per-influencer profiles, authenticity red-flag screening, and a tiered shortlist with preliminary triage signals. Not for STAR scoring or ranking a known shortlist — use fit-scorer. 达人挖掘/找达人/创作者名单",
+      "description": "Use when the user asks to \"find influencers\", \"build an influencer list\", or \"discover creators in [niche]\"; produces a multi-platform candidate pool, per-influencer evidence profiles, authenticity red-flag screening, and a Fit-readiness queue without action ranking. Not for STAR scoring or ranking a known shortlist — use fit-scorer. 达人挖掘/找达人/创作者名单",
       "domain": "influencer",
       "sources": [
         "source-a"
@@ -964,7 +964,7 @@
     },
     {
       "name": "influencer-marketing",
-      "description": "Plan creator partnerships, performance-paid ad-content programs, newsletter sponsorships, and Telegram placements with audience evidence, usage rights, disclosure, compensation terms, and measured outcomes.",
+      "description": "When the user wants to run influencer, creator, or ambassador partnerships to promote their product — finding and vetting partners, structuring deals, briefing creators, disclosure compliance, and measuring ROI. Also use when the user mentions 'influencer marketing,' 'creator partnerships,' 'sponsorships,' 'YouTube sponsorships,' 'podcast sponsorships,' 'newsletter sponsorship,' 'newsletter ad,' 'sponsor a newsletter,' 'brand ambassador,' 'ambassador program,' 'creator program,' 'UGC creators,' 'tech UGC,' 'UGC creator program,' 'creator network,' 'B2B influencers,' 'thought leader ads,' 'gifting,' 'product seeding,' 'whitelisting creator content,' 'Telegram channel ads,' 'buy a post in a Telegram channel,' 'how much to pay an influencer,' or 'FTC disclosure.' For affiliate/referral payout mechanics, see referrals. For community-led advocacy, see community-marketing. For turning creator content into paid ads, see ad-creative.",
       "domain": "influencer",
       "sources": [
         "source-d"
@@ -1004,7 +1004,7 @@
     },
     {
       "name": "launch",
-      "description": "Plan product or feature launches, draft release notes from confirmed shipped changes, and check website go-live readiness. Separate announcement drafts from authorized publication.",
+      "description": "When the user wants to plan a product launch, feature announcement, or release strategy. Also use when the user mentions 'launch,' 'Product Hunt,' 'feature release,' 'announcement,' 'go-to-market,' 'beta launch,' 'early access,' 'waitlist,' 'product update,' 'how do I launch this,' 'site launch,' 'go live,' 'pre-launch QA,' 'launch checklist,' 'GTM plan,' 'we're about to ship,' 'changelog,' 'release notes,' or 'what did we ship this week.' Use this whenever someone is preparing to release something publicly. For ongoing marketing after launch, see marketing-ideas. For the offer being launched (bonuses, guarantees, scarcity, naming), see offers.",
       "domain": "gtm-sales",
       "sources": [
         "source-d"
@@ -1084,10 +1084,10 @@
     },
     {
       "name": "launch-strategy",
-      "description": "Compatibility skill for launch strategy. Use when a user or upstream workflow invokes this name; route the task to `launch` while preserving the requested scope and source-specific intent.",
+      "description": "Earlier name for launch, kept so existing setups keep working. Use when launch strategy is requested by this exact name.",
       "domain": "marketing",
       "sources": [
-        "source-d"
+        "unified"
       ],
       "alias_of": "launch",
       "phase": null
@@ -1114,7 +1114,7 @@
     },
     {
       "name": "lead-magnets",
-      "description": "Plan lead magnets and package owned courses or content libraries as installable agent skills, with rights checks, source-backed lessons, and distribution validation. For public-site AI visibility use `ai-seo`.",
+      "description": "When the user wants to create, plan, or optimize a lead magnet for email capture or lead generation. Also use when the user mentions \"lead magnet,\" \"gated content,\" \"content upgrade,\" \"downloadable,\" \"ebook,\" \"cheat sheet,\" \"checklist,\" \"template download,\" \"opt-in,\" \"freebie,\" \"PDF download,\" \"resource library,\" \"content offer,\" \"email capture content,\" \"Notion template,\" \"spreadsheet template,\" \"what should I give away for emails,\" \"course as a skill,\" or \"package our content as an agent skill.\" Use this for planning what to create and how to distribute it. For interactive tools as lead magnets, see free-tools. For writing the actual content, see copywriting. For the email sequence after capture, see emails.",
       "domain": "content",
       "sources": [
         "source-d"
@@ -1124,7 +1124,7 @@
     },
     {
       "name": "link-building",
-      "description": "Plan earned backlinks and third-party mentions for specific pages: page-level link gaps, linkable assets, reclamation, partner/resource-page outreach, and link-vendor risk checks. For backlink-profile diagnosis use `offsite-signal-analyzer`; for journalists use `public-relations`; for directories use `directory-submissions`.",
+      "description": "When the user wants to earn backlinks or third-party mentions that lift rankings and AI citations. Also use when the user mentions 'link building,' 'linkbuilding,' 'backlinks,' 'get more backlinks,' 'link prospecting,' 'link gap,' 'competitor backlinks,' 'unlinked mentions,' 'link reclamation,' 'broken link building,' 'resource pages,' 'guest posting,' 'get into best-of lists,' 'listicle outreach,' 'domain rating,' 'referring domains,' 'anchor text,' or 'is this link vendor safe.' Use this whenever rankings stall on authority or someone wants off-site mentions that AI engines cite. Never recommend buying links that pass ranking credit: paid or exchanged placements get rel=sponsored or nofollow. For press coverage and journalist requests, see public-relations. For directories, see directory-submissions. For reviews, see referrals. For Reddit and communities, see community-marketing. For on-site AI citation work, see ai-seo.",
       "domain": "seo-geo",
       "sources": [
         "source-d"
@@ -1164,7 +1164,7 @@
     },
     {
       "name": "marketing-council",
-      "description": "Stress-test a marketing decision using multiple expert lenses and synthesize disagreements into a clear decision with evidence and risks.",
+      "description": "When the user wants multiple expert perspectives on a marketing question — a simulated board of advisors staffed by legendary marketers (Seth Godin, David Ogilvy, Eugene Schwartz, April Dunford, Rory Sutherland, Alex Hormozi, Byron Sharp, and more). Also use when the user mentions 'marketing council,' 'board of advisors,' 'advisory board,' 'what would Seth Godin say,' 'what would Ogilvy think,' 'channel Hormozi,' 'get multiple perspectives,' 'debate this,' 'have the council review,' 'marketing mentors,' or asks how a famous marketer would approach their problem. The council gives each advisor's take through their documented frameworks, surfaces where they disagree, and synthesizes a recommendation. For executing the winning direction, hand off to positioning, offers, copywriting, ads, or the relevant skill.",
       "domain": "strategy",
       "sources": [
         "source-d"
@@ -1184,7 +1184,7 @@
     },
     {
       "name": "marketing-loops",
-      "description": "Design recurring marketing workflows and bounded SEO or outbound operators, with cadence, evidence, shared-state ownership, caps, approvals, receipts, and stop conditions. Use specialist skills for one-off work.",
+      "description": "When the user wants to set up a recurring, self-running marketing workflow — a repeatable loop an AI agent runs on a cadence (weekly, daily, on a trigger) rather than a one-off task. Also use when the user mentions 'marketing loop,' 'recurring marketing workflow,' 'automate my marketing,' 'marketing on autopilot,' 'weekly marketing review,' 'ad fatigue check,' 'weekly ads check,' 'content refresh loop,' 'churn watch,' 'ranking drop alert,' 'run my SEO,' 'SEO operator,' 'daily SEO agent,' 'run my outbound,' 'AI SDR,' 'reply triage,' 'always-on marketing,' 'marketing automation workflow,' or 'run this every week.' Use this to pick, adapt, and schedule an ongoing marketing loop that orchestrates the other marketing skills. For one-off marketing ideas, see marketing-ideas. For the experimentation loop specifically, see ab-testing.",
       "domain": "marketing",
       "sources": [
         "source-d"
@@ -1204,7 +1204,7 @@
     },
     {
       "name": "marketing-plan",
-      "description": "Create a marketing plan grounded in current state, positioning, growth constraints, channels, budget, measurement, team, and execution cadence. Use for TAM/SAM/SOM, market sizing, market attractiveness, and a marketing roadmap.",
+      "description": "When the user needs a comprehensive marketing plan for a client, a company they advise, or their own product. Also use when the user mentions \"marketing plan,\" \"growth plan,\" \"GTM plan,\" \"go-to-market plan,\" \"AARRR plan,\" \"90-day marketing plan,\" \"12-month marketing roadmap,\" \"fractional CMO plan,\" \"fCMO plan,\" \"market sizing,\" \"TAM SAM SOM,\" \"how big is this market,\" or \"market research.\" Generates an exhaustive 13-section plan structured by AARRR (Acquisition, Activation, Retention, Referral, Revenue), customized to the client's current budget, team, and stage, mapped to future funding milestones, cross-referenced with the 139-idea marketing-ideas library and an embedded 17-section current-state audit rubric, with a marketing operations stack showing which skills and MCP/API integrations execute each part. Outputs a Notion-paste-ready markdown document. For positioning and ICP context before planning, see product-marketing. For stage-specific deep work, see onboarding, signup, emails, referrals, pricing.",
       "domain": "strategy",
       "sources": [
         "source-d"
@@ -1404,10 +1404,10 @@
     },
     {
       "name": "onboarding-cro",
-      "description": "Compatibility skill for onboarding cro. Use when a user or upstream workflow invokes this name; route the task to `onboarding` while preserving the requested scope and source-specific intent.",
+      "description": "Earlier name for onboarding, kept so existing setups keep working. Use when onboarding cro is requested by this exact name.",
       "domain": "marketing",
       "sources": [
-        "source-d"
+        "unified"
       ],
       "alias_of": "onboarding",
       "phase": null
@@ -1424,10 +1424,10 @@
     },
     {
       "name": "page-cro",
-      "description": "Compatibility skill for page cro. Use when a user or upstream workflow invokes this name; route the task to `cro` while preserving the requested scope and source-specific intent.",
+      "description": "Earlier name for cro, kept so existing setups keep working. Use when page cro is requested by this exact name.",
       "domain": "marketing",
       "sources": [
-        "source-d"
+        "unified"
       ],
       "alias_of": "cro",
       "phase": null
@@ -1444,10 +1444,10 @@
     },
     {
       "name": "paid-ads",
-      "description": "Compatibility skill for paid ads. Use when a user or upstream workflow invokes this name; route the task to `ads` while preserving the requested scope and source-specific intent.",
+      "description": "Earlier name for ads, kept so existing setups keep working. Use when paid ads is requested by this exact name.",
       "domain": "marketing",
       "sources": [
-        "source-d"
+        "unified"
       ],
       "alias_of": "ads",
       "phase": null
@@ -1474,17 +1474,17 @@
     },
     {
       "name": "paywall-upgrade-cro",
-      "description": "Compatibility skill for paywall upgrade cro. Use when a user or upstream workflow invokes this name; route the task to `paywalls` while preserving the requested scope and source-specific intent.",
+      "description": "Earlier name for paywalls, kept so existing setups keep working. Use when paywall upgrade cro is requested by this exact name.",
       "domain": "marketing",
       "sources": [
-        "source-d"
+        "unified"
       ],
       "alias_of": "paywalls",
       "phase": null
     },
     {
       "name": "paywalls",
-      "description": "When the user wants to create or optimize in-app paywalls, upgrade screens, upsell modals, or feature gates. Also use when the user mentions \"paywall,\" \"upgrade screen,\" \"upgrade modal,\" \"upsell,\" \"feature gate,\" \"convert free to paid,\" \"freemium conversion,\" \"trial expiration screen,\" \"limit reached screen,\" \"plan upgrade prompt,\" \"in-app pricing,\" \"free users won't upgrade,\" \"trial to paid conversion,\" or \"how do I get users to pay.\" Use this for any in-product moment where you're asking users to upgrade. Distinct from public pricing pages (see cro) — this focuses on in-product upgrade moments where the user has already experienced value. For pricing decisions, see pricing.",
+      "description": "When the user wants to create or optimize in-app paywalls, upgrade screens, upsell modals, or feature gates. Also use when the user mentions \"paywall,\" \"upgrade screen,\" \"upgrade modal,\" \"upsell,\" \"feature gate,\" \"convert free to paid,\" \"freemium conversion,\" \"trial expiration screen,\" \"limit reached screen,\" \"plan upgrade prompt,\" \"in-app pricing,\" \"free users won't upgrade,\" \"trial to paid conversion,\" or \"how do I get users to pay,\" \"mobile app paywall,\" \"subscription app paywall,\" or \"App Store subscription pricing.\" Use this for any in-product moment where you're asking users to upgrade. Distinct from public pricing pages (see cro) — this focuses on in-product upgrade moments where the user has already experienced value. For pricing decisions, see pricing.",
       "domain": "cro",
       "sources": [
         "source-d"
@@ -1544,10 +1544,10 @@
     },
     {
       "name": "popup-cro",
-      "description": "Compatibility skill for popup cro. Use when a user or upstream workflow invokes this name; route the task to `popups` while preserving the requested scope and source-specific intent.",
+      "description": "Earlier name for popups, kept so existing setups keep working. Use when popup cro is requested by this exact name.",
       "domain": "marketing",
       "sources": [
-        "source-d"
+        "unified"
       ],
       "alias_of": "popups",
       "phase": null
@@ -1604,7 +1604,7 @@
     },
     {
       "name": "pricing",
-      "description": "Design or evaluate pricing and packaging using customer value, willingness-to-pay evidence, competitive context, unit economics and experiment design.",
+      "description": "When the user wants help with pricing decisions, packaging, or monetization strategy. Also use when the user mentions 'pricing,' 'pricing tiers,' 'freemium,' 'free trial,' 'packaging,' 'price increase,' 'value metric,' 'Van Westendorp,' 'willingness to pay,' 'monetization,' 'how much should I charge,' 'my pricing is wrong,' 'pricing page,' 'annual vs monthly,' 'per seat pricing,' 'should I offer a free plan,' 'pricing page teardown,' 'pricing page audit,' 'is my pricing page AI-readable,' or 'can AI read my pricing.' Use this whenever someone is figuring out what to charge, how to structure their plans, or wants to audit a pricing page (for humans and for the AI agents that shortlist tools). For in-app upgrade screens, see paywalls. For offer construction (bonuses, guarantees, value framing, naming) on services/courses/coaching/high-ticket B2B, see offers.",
       "domain": "gtm-sales",
       "sources": [
         "source-d"
@@ -1624,10 +1624,10 @@
     },
     {
       "name": "pricing-strategy",
-      "description": "Compatibility skill for pricing strategy. Use when a user or upstream workflow invokes this name; route the task to `pricing` while preserving the requested scope and source-specific intent.",
+      "description": "Earlier name for pricing, kept so existing setups keep working. Use when pricing strategy is requested by this exact name.",
       "domain": "marketing",
       "sources": [
-        "source-d"
+        "unified"
       ],
       "alias_of": "pricing",
       "phase": null
@@ -1644,7 +1644,7 @@
     },
     {
       "name": "product-marketing",
-      "description": "Create or update product-marketing context, positioning, ICP, evidence-backed brand voice, optional paid-media targets, and approved learnings. Maintain one authorized context writer and preserve evidence/history; do not invent missing business facts.",
+      "description": "When the user wants to create or update their product marketing context document. Also use when the user mentions 'product context,' 'marketing context,' 'set up context,' 'positioning,' 'who is my target audience,' 'describe my product,' 'ICP,' 'ideal customer profile,' 'brand voice,' 'tone of voice,' 'brand guidelines,' 'what have we learned,' 'log this learning,' or wants to avoid repeating foundational information across marketing tasks. Use this at the start of any new project before using other marketing skills — it creates `.agents/product-marketing.md` that all other skills reference for product, audience, and positioning context.",
       "domain": "strategy",
       "sources": [
         "source-d"
@@ -1654,17 +1654,17 @@
     },
     {
       "name": "product-marketing-context",
-      "description": "Compatibility skill for product marketing context. Use when a user or upstream workflow invokes this name; route the task to `product-marketing` while preserving the requested scope and source-specific intent.",
+      "description": "Earlier name for product-marketing, kept so existing setups keep working. Use when product marketing context is requested by this exact name.",
       "domain": "marketing",
       "sources": [
-        "source-d"
+        "unified"
       ],
       "alias_of": "product-marketing",
       "phase": null
     },
     {
       "name": "programmatic-seo",
-      "description": "Design scalable SEO page systems using templates, structured data sources, quality thresholds, internal linking, indexation controls and anti-thin-content gates.",
+      "description": "When the user wants to create SEO-driven pages at scale using templates and data. Also use when the user mentions \"programmatic SEO,\" \"template pages,\" \"pages at scale,\" \"directory pages,\" \"location pages,\" \"[keyword] + [city] pages,\" \"comparison pages,\" \"integration pages,\" \"building many pages for SEO,\" \"pSEO,\" \"generate 100 pages,\" \"data-driven pages,\" \"templated landing pages,\" or \"which CMS for pSEO.\" Use this whenever someone wants to create many similar pages targeting different keywords or locations. For auditing existing SEO issues, see seo-audit. For content strategy planning, see content-strategy.",
       "domain": "seo-geo",
       "sources": [
         "source-d"
@@ -1684,7 +1684,7 @@
     },
     {
       "name": "prospecting",
-      "description": "Build qualified prospect lists and sourced account briefs using ICP fit, buying signals, tiers, licensed-source provenance, verification, budgeted enrichment, and exact cache reuse. For outreach use `cold-email`; for competitors use `competitor-profiling`.",
+      "description": "When the user wants to find, qualify, and build a list of prospects to reach out to, across B2B SaaS, general B2B, or local small businesses. Also use when the user mentions \"prospecting,\" \"build a prospect list,\" \"find leads,\" \"lead list,\" \"outbound list,\" \"target account list,\" \"ICP-fit accounts,\" \"find local businesses,\" \"find my first customers,\" \"design partners,\" \"signal-based outbound,\" \"gap plays,\" \"buying signals,\" \"intent data,\" \"job change alerts,\" \"waterfall enrichment,\" \"Clay table,\" \"lookalike accounts,\" \"catch-all emails,\" \"account tiering,\" or \"research this account before I reach out.\" Always verify emails before they reach a sequence, and never scrape LinkedIn. Define audiences in Sales Navigator and pull contacts from licensed data. Covers list building, signals, enrichment, verification, and account research. For the outreach itself (copy, sending setup, LinkedIn, cadences, replies), see cold-email. For researching competitors, see competitor-profiling.",
       "domain": "gtm-sales",
       "sources": [
         "source-d"
@@ -1694,7 +1694,7 @@
     },
     {
       "name": "public-relations",
-      "description": "Plan public relations, earned media, journalist outreach, press materials, or crisis communications. Use for media pitches, press releases, reporter requests, holding statements, reputation incidents, or a crisis response plan. For launch coordination use `launch`; for directory listings use `directory-submissions`; for prospect outreach use `cold-email`.",
+      "description": "When the user wants help with public relations, earned media, press coverage, journalist outreach, or media strategy (not pull requests). Also use when the user mentions 'PR,' 'press,' 'press release,' 'media outreach,' 'pitch a journalist,' 'get featured,' 'media list,' 'media kit,' 'press kit,' 'newsjacking,' 'news hijack,' 'HARO,' 'Qwoted,' 'Featured,' 'reporter request,' 'tech press,' 'TechCrunch,' 'thought leadership placement,' 'op-ed,' 'guest article,' 'press contacts,' 'podcast prep,' 'podcast guest,' 'prep me for this podcast,' 'how do I get press,' 'PR crisis,' 'crisis communications,' 'respond to backlash,' 'we got hacked,' 'data breach statement,' or 'holding statement.' Also covers crisis response when something goes wrong. For startup/SaaS/AI directory submissions, see directory-submissions. For product launches, see launch. For social-media engagement, see social. For cold-email outreach to prospects, see cold-email.",
       "domain": "gtm-sales",
       "sources": [
         "source-d"
@@ -1724,17 +1724,17 @@
     },
     {
       "name": "referral-program",
-      "description": "Compatibility skill for referral program. Use when a user or upstream workflow invokes this name; route the task to `referrals` while preserving the requested scope and source-specific intent.",
+      "description": "Earlier name for referrals, kept so existing setups keep working. Use when referral program is requested by this exact name.",
       "domain": "marketing",
       "sources": [
-        "source-d"
+        "unified"
       ],
       "alias_of": "referrals",
       "phase": null
     },
     {
       "name": "referrals",
-      "description": "Design referral and affiliate programs, honest review-request workflows, review-response drafts, and permissioned testimonial reuse. Keep payout economics, platform rules, and incremental evidence explicit.",
+      "description": "When the user wants to create, optimize, or analyze a referral program, affiliate program, or word-of-mouth strategy. Also use when the user mentions 'referral,' 'affiliate,' 'ambassador,' 'word of mouth,' 'viral loop,' 'refer a friend,' 'partner program,' 'referral incentive,' 'how to get referrals,' 'customers referring customers,' 'affiliate payout,' 'get more reviews,' 'G2 reviews,' 'review campaign,' or 'respond to a bad review.' Use this whenever someone wants existing users or partners to bring in new customers. For launch-specific virality, see launch.",
       "domain": "social-growth",
       "sources": [
         "source-d"
@@ -1753,8 +1753,18 @@
       "phase": "report"
     },
     {
+      "name": "reverse-engineer-marketing",
+      "description": "When the user wants to reverse engineer how another company grew and copy what worked. Also use when the user mentions 'reverse engineer,' 'how did X grow,' 'how does X get customers,' 'growth teardown,' 'marketing teardown,' 'GTM teardown,' 'growth blueprint,' 'what is X doing for marketing,' 'what made X take off,' 'copy X's playbook,' 'X's distribution strategy,' 'what content works for X,' 'funnel hack,' 'map their funnel,' or 'watch what X is doing.' Builds a dated log of a company's moves against its traffic curve from public data, sign-ups and demos, team interviews, and hidden signals (DNS, certificate logs, archives, sponsorships), compares it with the user's own data, and turns what lined up with growth into plays routed to the skill that runs each one. For a snapshot profile of a competitor's positioning, pricing, and features, see competitor-profiling. For comparison pages, see competitors. For why a single post went viral, see social.",
+      "domain": "strategy",
+      "sources": [
+        "source-d"
+      ],
+      "alias_of": null,
+      "phase": null
+    },
+    {
       "name": "revops",
-      "description": "Design revenue operations across lifecycle stages, lead/account routing, scoring, handoffs, pipeline definitions, CRM hygiene and SLA measurement.",
+      "description": "When the user wants help with revenue operations, lead lifecycle management, or marketing-to-sales handoff processes. Also use when the user mentions 'RevOps,' 'revenue operations,' 'lead scoring,' 'outbound pipeline stages,' 'lead routing,' 'MQL,' 'SQL,' 'pipeline stages,' 'deal desk,' 'CRM automation,' 'marketing-to-sales handoff,' 'data hygiene,' 'leads aren't getting to sales,' 'pipeline management,' 'lead qualification,' or 'when should marketing hand off to sales.' Use this for anything involving the systems and processes that connect marketing to revenue. For cold outreach emails, see cold-email. For email drip campaigns, see emails. For pricing decisions, see pricing.",
       "domain": "gtm-sales",
       "sources": [
         "source-d"
@@ -1774,7 +1784,7 @@
     },
     {
       "name": "sales-enablement",
-      "description": "Create sales assets, battlecards, objection responses, demo narratives, cold-call and voicemail drafts, and win-loss analysis with defensible claims. For sending and multichannel cadence use `cold-email`.",
+      "description": "When the user wants to create sales collateral, pitch decks, one-pagers, objection handling docs, or demo scripts. Also use when the user mentions 'sales deck,' 'pitch deck,' 'one-pager,' 'leave-behind,' 'objection handling,' 'deal-specific ROI analysis,' 'demo script,' 'talk track,' 'sales playbook,' 'proposal template,' 'buyer persona card,' 'battle card,' 'battlecard,' 'competitive one-pager,' 'win-loss analysis,' 'why are we losing deals,' 'loss reasons,' 'how do I respond to this objection,' 'prospect just said,' 'help my sales team,' 'sales materials,' or 'what should I give my sales reps,' 'cold call script,' or 'voicemail script.' Use this for any document or asset that helps a sales team close deals. For public competitor comparison pages, see competitors. For running buyer interviews or churn research, see customer-research. For marketing website copy, see copywriting. For cold outreach emails, see cold-email. For the offer being sold (bonuses, guarantees, pricing structure), see offers.",
       "domain": "gtm-sales",
       "sources": [
         "source-d"
@@ -1794,7 +1804,7 @@
     },
     {
       "name": "schema",
-      "description": "Design, validate and implement structured data that accurately represents visible page content and current search-engine eligibility rules.",
+      "description": "When the user wants to add, fix, or optimize schema markup and structured data on their site. Also use when the user mentions \"schema markup,\" \"structured data,\" \"JSON-LD,\" \"rich snippets,\" \"schema.org,\" \"FAQ schema,\" \"product schema,\" \"review schema,\" \"breadcrumb schema,\" \"Google rich results,\" \"knowledge panel,\" \"star ratings in search,\" or \"add structured data.\" Use this whenever someone wants their pages to show enhanced results in Google. For broader SEO issues, see seo-audit. For AI search optimization, see ai-seo.",
       "domain": "seo-geo",
       "sources": [
         "source-d"
@@ -1804,10 +1814,10 @@
     },
     {
       "name": "schema-markup",
-      "description": "Compatibility skill for schema markup. Use when a user or upstream workflow invokes this name; route the task to `schema` while preserving the requested scope and source-specific intent.",
+      "description": "Earlier name for schema, kept so existing setups keep working. Use when schema markup is requested by this exact name.",
       "domain": "marketing",
       "sources": [
-        "source-d"
+        "unified"
       ],
       "alias_of": "schema",
       "phase": null
@@ -1834,7 +1844,7 @@
     },
     {
       "name": "seo",
-      "description": "Orchestrate comprehensive SEO work across technical, content, schema, backlinks, local, ecommerce, programmatic SEO and AI-search/GEO. Use for full-site audits, SEO plans, or multi-specialist SEO investigations.",
+      "description": "Comprehensive SEO analysis for any website or business type. Full site audits, single-page analysis, technical SEO (crawlability, indexability, Core Web Vitals with INP), schema markup, content quality (E-E-A-T), image optimization, sitemap analysis, and GEO for AI Overviews/ChatGPT/Perplexity. Industry detection for SaaS, e-commerce, local, publishers, agencies. Triggers on: SEO, audit, schema, Core Web Vitals, sitemap, E-E-A-T, AI Overviews, GEO, technical SEO, content quality, page speed. Use this hub only when the SEO domain is clear and the requested workflow is not; otherwise use the specific seo-* skill.",
       "domain": "seo-geo",
       "sources": [
         "source-b"
@@ -1844,7 +1854,7 @@
     },
     {
       "name": "seo-agentic",
-      "description": "Audit and improve a website's readiness for AI agents that browse, understand interfaces, complete forms, or perform user-authorized tasks. Use for agent accessibility, server-rendered content, AI access policy, Markdown/discovery surfaces, or optional browser-agent tools. For citation visibility use `ai-seo`; for commerce protocols use `seo-ecommerce`.",
+      "description": "Audit and fix agent readiness: the Lighthouse Agentic Browsing fraction, accessibility tree for agents, robots.txt and Content-Signal for AI agents, WAF treatment of agent traffic, llms.txt, Markdown delivery, ai-catalog.json, /.well-known discovery files, and WebMCP tools. Use when the user asks whether AI agents can use or browse the site, or about llms.txt or WebMCP. Exclude AI citability and brand signals (seo-geo) and commerce protocol depth (seo-ecommerce).",
       "domain": "seo-agentic",
       "sources": [
         "source-b"
@@ -1854,7 +1864,7 @@
     },
     {
       "name": "seo-ahrefs",
-      "description": "Analyze live Ahrefs backlink, referring-domain, organic-keyword, and content data when an authorized Ahrefs connector is available. Use for Ahrefs-specific SEO evidence, not for estimates when no live connection exists.",
+      "description": "Ahrefs API analyst (extension). Reads referring domains, backlinks, organic keywords, and content explorer data via the tested @ahrefs/mcp@0.0.11 server. Pairs with seo-backlinks for multi-source confidence weighting.",
       "domain": "seo-geo",
       "sources": [
         "source-b"
@@ -1864,7 +1874,7 @@
     },
     {
       "name": "seo-audit",
-      "description": "Audit a site or page across technical SEO, on-page quality, content, structured data, performance, indexability, AI-search readiness and conversion-sensitive search experience.",
+      "description": "When the user wants to audit, review, or diagnose SEO issues on their site. Also use when the user mentions \"SEO audit,\" \"technical SEO,\" \"why am I not ranking,\" \"SEO issues,\" \"on-page SEO,\" \"meta tags review,\" \"SEO health check,\" \"my traffic dropped,\" \"lost rankings,\" \"not showing up in Google,\" \"site isn't ranking,\" \"Google update hit me,\" \"page speed,\" \"core web vitals,\" \"crawl errors,\" \"indexing issues,\" \"stuck on page 2,\" \"striking distance keywords,\" \"title tag rewrite,\" \"low CTR,\" \"local SEO,\" \"Google Business Profile,\" or \"map pack.\" Use this even if the user just says something vague like \"my SEO is bad\" or \"help with SEO\" — start with an audit. For building pages at scale to target keywords, see programmatic-seo. For adding structured data, see schema. For AI search optimization, see ai-seo.",
       "domain": "seo-geo",
       "sources": [
         "source-b",
@@ -1875,17 +1885,17 @@
     },
     {
       "name": "seo-backlinks",
-      "description": "Compatibility skill for seo backlinks. Use when a user or upstream workflow invokes this name; route the task to `offsite-signal-analyzer` while preserving the requested scope and source-specific intent.",
+      "description": "Analyze a site's backlink profile, anchors, toxic signals, competitors, gaps, and disavow candidates. Use only when links or referring domains are the requested focus.",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "offsite-signal-analyzer",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-bing",
-      "description": "Audit Bing search visibility, Webmaster Tools evidence, and IndexNow readiness when authorized tools are available. Use for Bing indexing, link, crawl, or Microsoft search visibility work; not for Google indexing assumptions.",
+      "description": "Bing Webmaster Tools + IndexNow extension. Microsoft Copilot citations are fed by the Bing index; this skill makes Bing visibility, link data, and IndexNow URL submission first-class.",
       "domain": "seo-geo",
       "sources": [
         "source-b"
@@ -1895,77 +1905,77 @@
     },
     {
       "name": "seo-cluster",
-      "description": "Compatibility skill for seo cluster. Use when a user or upstream workflow invokes this name; route the task to `content-strategy` while preserving the requested scope and source-specific intent.",
+      "description": "Cluster keywords by SERP overlap and design hub-and-spoke content architecture with internal links. Use for planning; `/seo cluster execute` then writes the posts with a blog-write skill when it is installed, or content briefs when it is not.",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "content-strategy",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-competitor-pages",
-      "description": "Compatibility skill for seo competitor pages. Use when a user or upstream workflow invokes this name; route the task to `competitors` while preserving the requested scope and source-specific intent.",
+      "description": "Generate SEO-optimized competitor comparison and alternatives pages. Covers \"X vs Y\" layouts, \"alternatives to X\" pages, feature matrices, schema markup, and conversion optimization. Use when user says \"comparison page\", \"vs page\", \"alternatives page\", \"competitor comparison\", \"X vs Y\", \"versus\", \"compare competitors\", or \"alternative to\".",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "competitors",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-content",
-      "description": "Compatibility skill for seo content. Use when a user or upstream workflow invokes this name; route the task to `content-strategy` while preserving the requested scope and source-specific intent.",
+      "description": "Evaluate page content for usefulness, E-E-A-T, readability, thinness, and AI citation readiness, plus last-mile draft cleanup (AI-typical phrasing and invisible Unicode watermark characters). Use for content-only analysis, not full-page technical checks.",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "content-strategy",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-content-brief",
-      "description": "Compatibility skill for seo content brief. Use when a user or upstream workflow invokes this name; route the task to `content-strategy` while preserving the requested scope and source-specific intent.",
+      "description": "Generate competitive SEO content briefs with per-section word counts, competitor scoring, keyword placement guidance, and page-type templates. Supports both new page briefs and improve-existing-page briefs. Use when user says \"content brief\", \"write a brief\", \"content outline\", \"blog brief\", \"service page brief\", \"brief for\", \"writing brief\", \"content plan\", or \"outline for\".",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "content-strategy",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-dataforseo",
-      "description": "Compatibility skill for seo dataforseo. Use when a user or upstream workflow invokes this name; route the task to `seo` while preserving the requested scope and source-specific intent.",
+      "description": "Live SEO data via DataForSEO MCP server: SERP analysis, keyword research (volume, difficulty, intent, trends), backlink profiles, on-page analysis, competitor and content analysis, business listings, AI visibility (LLM mention tracking), and domain analytics. Requires DataForSEO extension installed. Use when user says \"dataforseo\", \"live SERP\", \"keyword volume\", \"backlink data\", \"AI visibility check\", or \"real search data\".",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "seo",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-drift",
-      "description": "Compatibility skill for seo drift. Use when a user or upstream workflow invokes this name; route the task to `performance-monitor` while preserving the requested scope and source-specific intent.",
+      "description": "SEO drift monitoring: capture baselines of SEO-critical elements, detect changes, and track regressions over time. Git for SEO: baseline, diff, and track changes to your on-page SEO. Use when user says \"SEO drift\", \"baseline\", \"track changes\", \"did anything break\", \"SEO regression\", \"compare SEO\", \"before and after\", \"monitor SEO changes\", or \"deployment check\".",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "performance-monitor",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-ecommerce",
-      "description": "Compatibility skill for seo ecommerce. Use when a user or upstream workflow invokes this name; route the task to `seo-audit` while preserving the requested scope and source-specific intent.",
+      "description": "Analyze ecommerce SEO across product pages, product schema, Shopping visibility, marketplace signals, and keyword gaps. Use only for stores, catalogs, or product listings.",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "seo-audit",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-firecrawl",
-      "description": "Crawl, map, or scrape websites with Firecrawl when an authorized connector is available. Use for JavaScript-rendered pages, site inventories, broken-link discovery, and bounded multi-page SEO collection.",
+      "description": "Full-site crawling, scraping, and site mapping via Firecrawl MCP. Use when user says \"crawl site\", \"map site\", \"full crawl\", \"find all pages\", \"broken links\", \"site structure\", \"discover pages\", \"JS rendering\", or needs site-wide analysis.",
       "domain": "seo-geo",
       "sources": [
         "source-b"
@@ -1975,87 +1985,87 @@
     },
     {
       "name": "seo-flow",
-      "description": "Compatibility skill for seo flow. Use when a user or upstream workflow invokes this name; route the task to `seo` while preserving the requested scope and source-specific intent.",
+      "description": "FLOW framework integration: evidence-led SEO using the Find → Leverage → Optimize → Win loop. Surfaces stage-specific AI prompts from the FLOW knowledge base (41 prompts, CC BY 4.0). Use when user says \"FLOW\", \"FLOW framework\", \"seo flow\", \"evidence-led SEO\", \"find leverage optimize win\", or wants stage-specific SEO prompts.",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "seo",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-geo",
-      "description": "Compatibility skill for seo geo. Use when a user or upstream workflow invokes this name; route the task to `ai-seo` while preserving the requested scope and source-specific intent.",
+      "description": "Audit and improve content for AI Overviews and answer engines, including citability, entity clarity, crawler access, brand signals, and passage structure. Use when the user asks about AI Overviews, AI Mode, ChatGPT, Perplexity or Gemini citations, GEO, or AI search visibility.",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "ai-seo",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-google",
-      "description": "Compatibility skill for seo google. Use when a user or upstream workflow invokes this name; route the task to `seo-audit` while preserving the requested scope and source-specific intent.",
+      "description": "Google SEO APIs: Search Console (Search Analytics, URL Inspection, Sitemaps), PageSpeed Insights v5, CrUX field data with 25-week history, Indexing API v3, and GA4 organic traffic. Provides real Google field data for Core Web Vitals, indexation status, search performance, and organic traffic trends. Use when user says \"search console\", \"GSC\", \"PageSpeed\", \"CrUX\", \"field data\", \"indexing API\", \"GA4 organic\", \"URL inspection\", or \"real CWV data\".",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "seo-audit",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-hreflang",
-      "description": "Compatibility skill for seo hreflang. Use when a user or upstream workflow invokes this name; route the task to `seo-audit` while preserving the requested scope and source-specific intent.",
+      "description": "Hreflang and international SEO audit, validation, and generation. Detects common mistakes, validates language/region codes, and generates correct hreflang implementations. Use when user says \"hreflang\", \"i18n SEO\", \"international SEO\", \"multi-language\", \"multi-region\", or \"language tags\".",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "seo-audit",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-image-gen",
-      "description": "Compatibility skill for seo image gen. Use when a user or upstream workflow invokes this name; route the task to `image` while preserving the requested scope and source-specific intent.",
+      "description": "AI image generation for SEO assets: OG/social preview images, blog hero images, schema images, product photography, infographics. Powered by Gemini via nanobanana-mcp. Requires banana extension installed. Use when the user wants an SEO asset and says \"OG image\", \"social preview\", \"hero image\", \"blog image\", \"product photo\", \"infographic\", \"seo image\", \"image-gen\", \"favicon\", \"schema image\", or \"pinterest pin\". Not for general artwork, banners, or thumbnails unrelated to SEO.",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "image",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-images",
-      "description": "Compatibility skill for seo images. Use when a user or upstream workflow invokes this name; route the task to `seo-audit` while preserving the requested scope and source-specific intent.",
+      "description": "Image optimization analysis for SEO and performance. Checks alt text, file sizes, formats, responsive images, lazy loading, CLS prevention, image SERP rankings (via DataForSEO), and image file optimization (WebP/AVIF conversion, IPTC/XMP metadata injection). Use when user says \"image optimization\", \"alt text\", \"image SEO\", \"image size\", \"image audit\", \"optimize images\", \"image metadata\", \"image SERP\", \"convert to webp\", or \"image file optimize\".",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "seo-audit",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-local",
-      "description": "Compatibility skill for seo local. Use when a user or upstream workflow invokes this name; route the task to `seo-audit` while preserving the requested scope and source-specific intent.",
+      "description": "Audit local SEO, including Google Business Profile, NAP consistency, citations, reviews, local schema, location pages, and multi-location structure. Use when the user asks about local SEO, a local business, the map pack, or a GBP profile; use seo-maps for geo-grid rank tracking.",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "seo-audit",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-maps",
-      "description": "Compatibility skill for seo maps. Use when a user or upstream workflow invokes this name; route the task to `seo-audit` while preserving the requested scope and source-specific intent.",
+      "description": "Maps intelligence for local SEO: geo-grid rank tracking, GBP profile auditing via API, review intelligence across Google/Tripadvisor/Trustpilot, cross-platform NAP verification, competitor radius mapping, and LocalBusiness schema generation. Three tiers: free (Overpass + Geoapify), DataForSEO, and DataForSEO + Google. Use when user says \"maps\", \"geo-grid\", \"rank tracking\", \"GBP audit\", \"review velocity\", \"competitor radius\", or \"SoLV\".",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "seo-audit",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-matomo",
-      "description": "Analyze Matomo analytics for SEO and marketing decisions using an authorized connector, Reporting API, or user export. Use for organic traffic, landing pages, referrers, devices, countries, goals, events, or GA4-to-Matomo reporting comparisons. Not for Search Console query/index data or changing Matomo configuration.",
+      "description": "Matomo Reporting API extension. Self-hosted or Matomo Cloud analytics as a GA4 alternative or complement. Organic traffic, landing pages, device / country breakdowns, referrers, search keywords. Triggers on \"Matomo\", \"self-hosted analytics\", \"analytics ohne Google\", \"GA4 alternative\", \"Matomo Reporting\", \"Piwik\".",
       "domain": "analytics",
       "sources": [
         "source-b"
@@ -2065,27 +2075,27 @@
     },
     {
       "name": "seo-page",
-      "description": "Compatibility skill for seo page. Use when a user or upstream workflow invokes this name; route the task to `seo-audit` while preserving the requested scope and source-specific intent.",
+      "description": "Analyze one supplied URL across on-page, content, technical metadata, schema, images, and performance. Use only for a single-page review.",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "seo-audit",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-plan",
-      "description": "Compatibility skill for seo plan. Use when a user or upstream workflow invokes this name; route the task to `seo` while preserving the requested scope and source-specific intent.",
+      "description": "Strategic SEO planning for new or existing websites. Industry-specific templates, competitive analysis, content strategy, and implementation roadmap. Use when user says \"SEO plan\", \"SEO strategy\", \"SEO planning\", \"content strategy\", \"keyword strategy\", \"content calendar\", \"site architecture\", or \"SEO roadmap\".",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "seo",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-profound",
-      "description": "Analyze Profound AI-visibility and citation-tracking data when an authorized connector is available. Use for time-series brand mentions, cited prompts, competitor co-mentions, and AI-answer visibility trends.",
+      "description": "Profound LLM citation tracker (extension). Time-series brand citation rates across ChatGPT, Perplexity, and other LLMs. Pairs with seo-seranking for triangulated AI visibility coverage.",
       "domain": "seo-geo",
       "sources": [
         "source-b"
@@ -2095,27 +2105,27 @@
     },
     {
       "name": "seo-programmatic",
-      "description": "Compatibility skill for seo programmatic. Use when a user or upstream workflow invokes this name; route the task to `programmatic-seo` while preserving the requested scope and source-specific intent.",
+      "description": "Programmatic SEO planning and analysis for pages generated at scale from data sources. Covers template engines, URL patterns, internal linking automation, thin content safeguards, and index bloat prevention. Use when user says \"programmatic SEO\", \"pages at scale\", \"dynamic pages\", \"template pages\", \"generated pages\", or \"data-driven SEO\".",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "programmatic-seo",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-schema",
-      "description": "Compatibility skill for seo schema. Use when a user or upstream workflow invokes this name; route the task to `schema` while preserving the requested scope and source-specific intent.",
+      "description": "Detect, validate, or generate Schema.org JSON-LD for a supplied page or entity. Use only when structured data or rich-result markup is requested.",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "schema",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-seranking",
-      "description": "Analyze SE Ranking organic and AI-visibility data when an authorized connector is available. Use for rankings, competitors, backlinks, SERP features, and cross-platform AI share-of-voice evidence.",
+      "description": "SE Ranking AI visibility analyst (extension). Tracks AI Share-of-Voice across ChatGPT, Gemini, Perplexity, AI Overviews, and AI Mode in a single query.",
       "domain": "seo-geo",
       "sources": [
         "source-b"
@@ -2125,37 +2135,37 @@
     },
     {
       "name": "seo-sitemap",
-      "description": "Compatibility skill for seo sitemap. Use when a user or upstream workflow invokes this name; route the task to `site-architecture` while preserving the requested scope and source-specific intent.",
+      "description": "Analyze existing XML sitemaps or generate new ones with industry templates. Validates format, URLs, and structure. Use when user says \"sitemap\", \"generate sitemap\", \"sitemap issues\", or \"XML sitemap\".",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "site-architecture",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-sxo",
-      "description": "Compatibility skill for seo sxo. Use when a user or upstream workflow invokes this name; route the task to `cro` while preserving the requested scope and source-specific intent.",
+      "description": "Diagnose search-experience and intent mismatches using SERP page types, user stories, and persona scoring. Use when ranking problems appear intent- or layout-driven.",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "cro",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-technical",
-      "description": "Preserve technical-SEO compatibility routing to `seo-audit`. Use for crawl/index/rendering concerns and explicitly authorized read-only server-stack/CVE exposure review; observations do not prove a runtime is safe or exploitable.",
+      "description": "Audit technical SEO across crawlability, indexability, security, URLs, mobile, Core Web Vitals, rendering, structured data, and IndexNow. Use when the user asks for a technical SEO audit or about crawling, indexing, rendering, or site speed. Exclude content strategy and backlinks.",
       "domain": "seo-geo",
       "sources": [
         "source-b"
       ],
-      "alias_of": "seo-audit",
+      "alias_of": null,
       "phase": null
     },
     {
       "name": "seo-unlighthouse",
-      "description": "Run or interpret bounded multi-page Unlighthouse audits for local Lighthouse evidence. Use for site-wide performance, accessibility, best-practice, and SEO regression checks when field data or API quotas are insufficient.",
+      "description": "Multi-page Lighthouse audit via the MIT-licensed Unlighthouse CLI. Free-tier alternative to running PageSpeed against every URL on a site, no API quota burn, runs locally.",
       "domain": "seo-geo",
       "sources": [
         "source-b"
@@ -2215,17 +2225,17 @@
     },
     {
       "name": "signup-flow-cro",
-      "description": "Compatibility skill for signup flow cro. Use when a user or upstream workflow invokes this name; route the task to `signup` while preserving the requested scope and source-specific intent.",
+      "description": "Earlier name for signup, kept so existing setups keep working. Use when signup flow cro is requested by this exact name.",
       "domain": "marketing",
       "sources": [
-        "source-d"
+        "unified"
       ],
       "alias_of": "signup",
       "phase": null
     },
     {
       "name": "site-architecture",
-      "description": "Plan website hierarchy, URLs, navigation, internal linking, platform fit, or migration with URL preservation and rollback. Not for XML sitemap validation or technical SEO diagnosis.",
+      "description": "When the user wants to plan, map, or restructure their website's page hierarchy, navigation, URL structure, or internal linking. Also use when the user mentions \"sitemap,\" \"site map,\" \"visual sitemap,\" \"site structure,\" \"page hierarchy,\" \"information architecture,\" \"IA,\" \"navigation design,\" \"URL structure,\" \"breadcrumbs,\" \"internal linking strategy,\" \"website planning,\" \"what pages do I need,\" \"how should I organize my site,\" \"site navigation,\" \"which website builder should I use,\" \"migrate my website,\" or \"add a blog to my existing site.\" Use this whenever someone is planning what pages a website should have, how they connect, and where to build them. NOT for XML sitemaps (that's technical SEO — see seo-audit). For SEO audits, see seo-audit. For structured data, see schema.",
       "domain": "seo-geo",
       "sources": [
         "source-d"
@@ -2245,7 +2255,7 @@
     },
     {
       "name": "sms",
-      "description": "Plan or improve SMS, MMS, and WhatsApp business messaging: consent, templates, customer-service windows, welcome/cart/post-purchase/win-back flows, transactional messages, deliverability, and measurement. Use for SMS campaigns, WhatsApp Business API, template planning, or click-to-WhatsApp journeys. For email use `emails`; for opt-in forms use `popups`.",
+      "description": "When the user wants to plan, build, or optimize SMS, MMS, or WhatsApp marketing — including welcome flows, abandoned cart texts, post-purchase, win-back, promotional sends, or transactional/auth SMS. Also use when the user mentions \"SMS marketing,\" \"text message campaigns,\" \"SMS sequence,\" \"SMS automation,\" \"abandoned cart text,\" \"post-purchase SMS,\" \"Klaviyo SMS,\" \"Postscript,\" \"Attentive,\" \"Twilio,\" \"A2P 10DLC,\" \"TCPA,\" \"SMS compliance,\" \"short code,\" \"toll-free SMS,\" \"MMS campaign,\" \"should I do SMS,\" \"SMS vs email,\" \"WhatsApp marketing,\" \"WhatsApp Business API,\" \"WhatsApp templates,\" or \"click-to-WhatsApp.\" For email sequences, see emails. For SMS copy framing, see copywriting. For opt-in popups that capture phone numbers, see popups.",
       "domain": "lifecycle",
       "sources": [
         "source-d"
@@ -2255,7 +2265,7 @@
     },
     {
       "name": "social",
-      "description": "Plan and execute organic social strategy, calendar, creative, community engagement, social selling and measurement.",
+      "description": "When the user wants help creating, scheduling, or optimizing social media content for LinkedIn, Twitter/X, Instagram, TikTok, or Facebook, or wants to do social listening and engagement triage. Also use when the user mentions 'LinkedIn post,' 'Twitter thread,' 'social media,' 'content calendar,' 'social scheduling,' 'engagement,' 'viral content,' 'what should I post,' 'repurpose this content,' 'tweet ideas,' 'LinkedIn carousel,' 'social media strategy,' 'grow my following,' 'TikTok video,' 'Reels,' 'Shorts,' 'video script,' 'video hook,' 'short-form video,' 'create a reel,' 'social listening,' 'brand mentions,' 'competitor monitoring,' 'top posts to comment on,' 'find people asking for,' 'carousel,' 'slide-by-slide,' or 'document post.' Use this for social content, repurposing, scheduling, video scripts, and listening. Posts avoid AI tells like 'it's not X, it's Y' reveals and broetry. For broader content strategy, see content-strategy. For paid ads, see ad-creative. For earned media, see public-relations.",
       "domain": "social-growth",
       "sources": [
         "source-d"
@@ -2275,10 +2285,10 @@
     },
     {
       "name": "social-content",
-      "description": "Compatibility skill for social content. Use when a user or upstream workflow invokes this name; route the task to `social` while preserving the requested scope and source-specific intent.",
+      "description": "Earlier name for social, kept so existing setups keep working. Use when social content is requested by this exact name.",
       "domain": "marketing",
       "sources": [
-        "source-d"
+        "unified"
       ],
       "alias_of": "social",
       "phase": null
@@ -2385,7 +2395,7 @@
     },
     {
       "name": "video",
-      "description": "Create or edit marketing video, programmatic compositions, explainers, avatars, or repeatable product-demo recordings. Use for video production, AI video, Remotion, Hyperframes, in-app demos, scene timing, captions, or matching an edit style. For social strategy use `social`; for paid-ad concepts use `ad-creative`.",
+      "description": "When the user wants to create, generate, or produce video content using AI tools or programmatic frameworks. Also use when the user mentions 'video production,' 'AI video,' 'Remotion,' 'Hyperframes,' 'HeyGen,' 'Synthesia,' 'Veo,' 'Sora,' 'Runway,' 'Kling,' 'Seedance,' 'Hailuo,' 'MiniMax,' 'Pika,' 'Hunyuan,' 'Wan,' 'video generation,' 'AI avatar,' 'talking head video,' 'programmatic video,' 'video template,' 'explainer video,' 'product demo video,' 'record a product demo,' 'feature demo video,' 'in-app demo,' 'video pipeline,' 'copy this edit,' 'match this video style,' 'reverse-engineer this video,' 'edit like this reference,' or 'make me a video.' Use this for video creation, generation, and production workflows. For video content strategy and what to post, see social. For paid video ad creative, see ad-creative.",
       "domain": "content",
       "sources": [
         "source-d"

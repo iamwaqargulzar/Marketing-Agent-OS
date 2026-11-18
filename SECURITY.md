@@ -28,7 +28,7 @@ Please do not include real credentials, customer data, or third-party private in
 
 ## Security boundaries
 
-- The normalized skill layer is validated; pinned upstream snapshots are retained for provenance and are not installed.
+- The router ships complete pinned source archives alongside the validated portable skills. Original scripts, plugins, and hooks run only when explicitly invoked or enabled.
 - Optional connectors may require separate credentials and inherit the security model of their provider and host harness.
 - Time-sensitive platform instructions must be checked against current first-party sources.
 - A skill does not grant permission to publish, send, spend, mutate accounts, or persist business data.

@@ -2,6 +2,25 @@
 
 ## Unreleased
 
+## 2.1.0 — 2026-11-18
+
+- Include four complete pinned source trees with the installed router. Specialists point to their original entrypoints and the local installer includes the shared library on selective installs.
+- Ship all 24 portable agent briefs, the control-artifact validator, and both upstream copyright notices for the merged SEO audit.
+- Supply inline agent instructions for GEO audits and restore the previous snapshot if an upstream replacement fails after backup.
+
+## 2.0.0 — 2026-11-01
+
+- **Rebuilt the installed skills.** Earlier releases covered upstream names but shipped them through one shared template, which dropped most upstream instructions and all of their reference material. Skills are now generated from the pinned sources by `scripts/build_skills.py`, and carry complete workflows, references, and templates. The typical `SKILL.md` went from about 4 KB to about 13 KB.
+- Restored 38 specialist skills, including `seo-technical`, `seo-local`, `geo-technical`, and `geo-citability`, that had been reduced to short redirects. 19 retired names remain as short pointers.
+- Replaced 23 stub agents of about 300 bytes with 24 complete specialist agents.
+- Refresh source A to `903d6479` (20.2.0), source B to `6be93f45` (2.5.0), and source D to `88c79f65` (2.14.0); source C remains at `989cae01`. Add `reverse-engineer-marketing`, for 241 skills.
+- Bundle the read-oriented helpers each skill uses, including public-data connectors and deterministic audit scoring. Exclude helpers that send or publish, make paid calls, set up credentials, or depend on a source runtime, and state the exclusions inside each affected skill.
+- Remove sponsor markers, partner listings, community footers, and referral links. Rewrite remaining upstream names and host-only paths, keeping credit that licenses or citations require.
+- Ship `LICENSE.txt` and `NOTICE.md` in every derived skill, because single-skill installs previously omitted the MIT and Apache notices. Each skill's `license` field now states its real source license.
+- Preserve local additions from earlier releases in `overlays/`, and rewrite the `marketing-os` router with a guide to choosing between overlapping skills.
+- Doctor now fails on stale builds, broken links, missing license files, upstream names, promotions, and excluded helpers. Tests now guard against a return to templated skills and run every bundled helper.
+- Correct the README clone command, which failed on case-sensitive filesystems. Stop Dependabot version scanning of frozen snapshots.
+
 ## 1.6.0 — 2026-10-22
 
 - Refresh source A to `79c145da`, source B to `23a2a811`, and source D v2.13.0 to `e85f3cbc`; source C remains current at `989cae01`. Retain exact snapshots, tree hashes, licenses, and attribution.

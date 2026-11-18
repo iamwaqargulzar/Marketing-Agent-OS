@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import shutil
 import sys
 import uuid
@@ -107,6 +108,11 @@ def main() -> int:
     if unknown:
         print("Unknown skill(s): " + ", ".join(unknown), file=sys.stderr)
         return 2
+
+    if args.skill:
+        catalog = json.loads((ROOT / "catalog.json").read_text(encoding="utf-8"))
+        aliases = {item["name"]: item["alias_of"] for item in catalog["skills"] if item["alias_of"]}
+        requested = list(dict.fromkeys([*requested, *(aliases[name] for name in requested if name in aliases), "marketing-os"]))
 
     agents = ALL_AGENTS if args.agent == "all" else (args.agent,)
     destinations: list[tuple[str, Path]] = []

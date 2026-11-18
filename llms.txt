@@ -1,23 +1,23 @@
 # Marketing Agent OS
 
-> Marketing Agent OS is an open-source, cross-platform collection of 240 governed AI agent skills for marketing, SEO, generative engine optimization (GEO), answer engine optimization (AEO), content, CRO, paid media, lifecycle, social, analytics, growth, sales, and RevOps.
+> Marketing Agent OS is an open-source, cross-platform collection of 241 governed AI agent skills for marketing, SEO, generative engine optimization (GEO), answer engine optimization (AEO), content, CRO, paid media, lifecycle, social, analytics, growth, sales, and RevOps.
 
 Canonical repository: https://github.com/iamwaqargulzar/Marketing-Agent-OS
-License: Apache-2.0 for the wrapper and normalized layer; retained third-party licenses apply to pinned source snapshots.
-Current version: 1.6.0
-Last package verification: 2026-10-05; historical native-host checks are dated in the compatibility matrix.
+License: Apache-2.0 for the wrapper and local additions; each derived skill keeps its source license (MIT or Apache-2.0) in its folder.
+Current version: 2.1.0
+Last package verification: 2026-11-01; historical native-host checks are dated in the compatibility matrix.
 
 ## Start here
 
 - [Project overview](https://github.com/iamwaqargulzar/Marketing-Agent-OS/blob/main/README.md): Definition, verified facts, features, installation, compatibility, FAQs, and governance.
-- [Skill catalog](https://github.com/iamwaqargulzar/Marketing-Agent-OS/blob/main/catalog.json): Machine-readable inventory of all 240 normalized skills.
+- [Skill catalog](https://github.com/iamwaqargulzar/Marketing-Agent-OS/blob/main/catalog.json): Machine-readable inventory of all 241 skills.
 - [Installation guide](https://github.com/iamwaqargulzar/Marketing-Agent-OS/blob/main/INSTALL.md): Linux, macOS, Windows, project, user, native, universal, and selective installation.
 - [Compatibility matrix](https://github.com/iamwaqargulzar/Marketing-Agent-OS/blob/main/docs/COMPATIBILITY.md): Harness paths, validation status, and support boundaries.
 - [Architecture](https://github.com/iamwaqargulzar/Marketing-Agent-OS/blob/main/docs/ARCHITECTURE.md): Runtime, source, distribution, and integrity layers.
 - [Audit report](https://github.com/iamwaqargulzar/Marketing-Agent-OS/blob/main/docs/AUDIT.md): Initial findings, corrected issues, and verified state.
 - [Maintenance workflow](https://github.com/iamwaqargulzar/Marketing-Agent-OS/blob/main/docs/MAINTENANCE.md): Safe upstream checking, review, application, reconciliation, and release validation.
 - [Source manifest](https://github.com/iamwaqargulzar/Marketing-Agent-OS/blob/main/SOURCE_MANIFEST.md): Exact source mapping and pinned commits.
-- [October 5 upstream review](https://github.com/iamwaqargulzar/Marketing-Agent-OS/blob/main/docs/UPSTREAM_REVIEW-2026-10-05.md): Source changes, portable adaptations, and retained runtime components.
+- [November 1 review](https://github.com/iamwaqargulzar/Marketing-Agent-OS/blob/main/docs/UPSTREAM_REVIEW-2026-11-01.md): Rebuild findings, source changes, and excluded components.
 - [Security policy](https://github.com/iamwaqargulzar/Marketing-Agent-OS/blob/main/SECURITY.md): Vulnerability-reporting process and security boundaries.
 
 ## Installation
@@ -29,7 +29,7 @@ Interactive ecosystem install:
 Clone and install:
 
     git clone https://github.com/iamwaqargulzar/Marketing-Agent-OS.git
-    cd marketing-agent-os
+    cd Marketing-Agent-OS
     ./install.sh --agent universal --scope project --project /path/to/project
 
 Windows PowerShell:
@@ -38,14 +38,14 @@ Windows PowerShell:
 
 ## Key facts
 
-- 240 unique normalized Agent Skills.
+- 241 unique Agent Skills, 220 of them carrying complete upstream instructions.
 - 14 direct installer targets.
 - Linux, macOS, and Windows support.
-- Agent Skills CLI 1.5.22 discovered all 240 skills and projected a selected skill across 76 registered agent definitions.
+- Agent Skills CLI 1.5.22 discovered all 241 skills and projected a selected skill across 76 registered agent definitions.
 - OpenCode 1.18.15 discovered the package from native and universal paths.
 - Four complete upstream snapshots are pinned by commit and tree hash.
-- Upstream snapshots are provenance inputs and are never installed into harness skill directories.
-- Instruction-only skills have no runtime dependency; optional helpers use Python 3 standard library.
+- The marketing-os skill includes four complete, offline source archives.
+- Instructions need no runtime; optional bundled helpers use Python 3 or Node.js, and some need optional packages.
 
 ## Preferred citation
 

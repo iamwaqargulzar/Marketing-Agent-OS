@@ -20,7 +20,7 @@ Inspect the upstream commit range on GitHub. Review at least:
 - new dependencies and operating-system assumptions;
 - license, notice, and attribution changes.
 
-Do not copy an upstream directory over `skills/`. Resolve overlapping names into one governed Marketing Agent OS implementation.
+Pay particular attention to new promotions, sponsor links, self-update steps, and helpers that send, spend, or handle credentials. Review which belong directly in a portable specialist. The shared library always preserves the complete original source tree.
 
 ## 3. Refresh the pinned snapshot
 
@@ -38,7 +38,7 @@ python3 scripts/update_upstreams.py --source source-a --apply
 python3 scripts/reconcile_upstreams.py --write
 ```
 
-The command fails if a snapshot no longer matches its lock or any declared upstream skill name is absent from `skills/`. For every source diff, either update an existing normalized skill, add a portable skill, or record why the change does not affect the installable surface.
+Rebuild first with `python3 scripts/build_skills.py`, which carries upstream changes and new skills into `skills/`. Reconciliation fails if a snapshot no longer matches its lock or any declared upstream skill name is absent from `skills/`. Then review the generated diff, and put any local correction in `overlays/`.
 
 When an upstream adds orchestration or execution controls, preserve the useful invariant without importing a vendor-specific runtime blindly. Prefer the portable control-artifact contract for cross-skill or side-effecting workflows, and validate machine artifacts with:
 
@@ -46,9 +46,9 @@ When an upstream adds orchestration or execution controls, preserve the useful i
 python3 scripts/validate_control_artifact.py path/to/control-artifact.json
 ```
 
-Treat routing changes as behavior changes: compare new trigger language with `catalog.json`, verify every declared upstream name remains covered, and add a focused regression test when a changed boundary could misroute common requests.
+Treat routing changes as behavior changes: compare new trigger language with the table in `overlays/marketing-os/SKILL.md`, and add a focused regression test when a changed boundary could misroute common requests.
 
-Synchronize `catalog.json` and `skills/marketing-os/references/skill-index.json` after adding or changing skills. Keep source-specific identities out of product-facing files except provenance and legally required material.
+New upstream names, sponsors, or authors can leak through renaming. `scripts/doctor.py` fails on known ones; extend its patterns when a new one appears. Keep source-specific identities out of product-facing files except provenance and legally required material.
 
 ## 5. Validate and record
 
@@ -61,7 +61,7 @@ npx --yes skills@1.5.22 add . --list --full-depth
 
 Confirm the portable discovery count, smoke-test affected harness targets, update the pinned CLI version deliberately when its compatibility registry changes, update `CHANGELOG.md`, and commit the upstream snapshot, lockfile, normalized changes, status report, licenses/notices, and regenerated hash manifest together.
 
-Some pinned sources contain their own `.gitignore` files. When a reviewed source update adds an intentionally tracked file that matches one of those nested rules, stage the preserved snapshot explicitly with `git add -f upstreams/` so the Git commit remains complete.
+Snapshots include tracked bytecode, so never run a blanket `__pycache__` cleanup over `upstreams/`; the tree hash will fail. Some pinned sources contain their own `.gitignore` files. When a reviewed source update adds an intentionally tracked file that matches one of those nested rules, stage the preserved snapshot explicitly with `git add -f upstreams/` so the Git commit remains complete.
 
 ## 6. Publish and verify the release
 

@@ -21,6 +21,8 @@ jobs:
           python-version: "3.12"
       - name: Reconcile pinned sources
         run: python scripts/reconcile_upstreams.py
+      - name: Verify generated skills
+        run: python scripts/build_skills.py --check
       - name: Validate package
         run: python scripts/doctor.py
       - name: Run tests
@@ -40,7 +42,7 @@ jobs:
         run: |
           set -o pipefail
           npx --yes skills@1.5.22 add . --list --full-depth 2>&1 | tee /tmp/skills-discovery.txt
-          grep -q "240.*skills" /tmp/skills-discovery.txt
+          grep -q "241.*skills" /tmp/skills-discovery.txt
       - name: Verify major-harness projections
         shell: bash
         run: |
@@ -54,3 +56,6 @@ jobs:
           test -f .agents/skills/conversion-tracking/references/verification.md
           test -f .claude/skills/link-building/references/earned-link-plan.md
           test -f .pi/skills/conversion-tracking/references/delivery-options.md
+          for source in source-a source-b source-c source-d; do
+            cmp "$GITHUB_WORKSPACE/skills/marketing-os/assets/$source.tar.bz2" ".agents/skills/marketing-os/assets/$source.tar.bz2"
+          done

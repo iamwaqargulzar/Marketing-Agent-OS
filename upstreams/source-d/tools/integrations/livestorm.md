@@ -7,7 +7,7 @@ Video engagement platform for webinars, virtual events, and online meetings with
 | Integration | Available | Notes |
 |-------------|-----------|-------|
 | API | ✓ | Events, Sessions, People, Recordings, Webhooks |
-| MCP | - | Not available |
+| MCP | ✓ | Official remote server at `mcp.livestorm.co` ([docs](https://developers.livestorm.co/docs/model-context-protocol-mcp)), checked 2026-10-27 |
 | CLI | ✓ | [livestorm.js](../clis/livestorm.js) |
 | SDK | - | REST API with JSON:API format |
 

@@ -9,3 +9,11 @@ updates:
       - github-actions
     commit-message:
       prefix: chore
+  # upstreams/ holds frozen, never-installed provenance snapshots that must not be edited.
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 0
+    exclude-paths:
+      - "upstreams/**"

@@ -1,54 +1,80 @@
-# Event Portfolio Strategy
+# Event Portfolio Strategy — Which Events, Why, and the Economics
 
-Use this reference to decide whether an event deserves investment and how it fits a portfolio.
+The layer that sits *above* role and tactics. Events are the most expensive, riskiest, hardest-to-measure channel you can run — so the leverage is in **selection and portfolio design**, not execution. The single most common failure is treating "events" as one channel: attend two bad conferences, get few leads, and write the whole channel off — the same mistake as running Google Ads once, seeing poor results, and concluding all paid media is broken. **Each event is its own ecosystem.** Judge them individually.
 
-## Start with audience fit
+## Is in-person even necessary? (segment fit first)
 
-In-person investment is most defensible when trust, coordination, or product complexity makes direct interaction valuable—for example multi-stakeholder purchases, regulated evaluation, high-touch implementations, conservative industries, or long sales cycles. Treat these as hypotheses to validate against the user's sales evidence.
+Digital scales efficiently; in-person builds trust that digital can't. In-person earns its cost mainly for high-trust, high-consideration motions. Prioritize events when your ICP looks like:
 
-If the relevant audience is not demonstrably present, compare a small event experiment against digital, outbound, partner, or customer-marketing alternatives.
+- **Enterprise / multi-stakeholder** — high ACV, several people must build trust before a big commitment
+- **Regulated buyers** — healthcare, finance, government have strict vendor-evaluation norms
+- **High-touch / heavy customization** — significant integration or configuration work
+- **Conservative industries** — manufacturing, utilities still run on traditional relationship-building
+- **Long cycles** — 6+ month sales cycles get disproportionate acceleration from face time
 
-## Evaluate each event independently
+Reality check: a cybersecurity company found $500k+ ACV deals almost never closed without at least one in-person meeting — the trust to switch security vendors couldn't be built over Zoom. If your ICP is *not* in these buckets, spend on digital first and treat events as a small experiment.
 
-Do not treat “events” as one uniform channel. For every candidate, record:
+## The 80/20 of event selection
 
-- reachable ICP count and evidence source;
-- role and seniority mix;
-- expected qualified interactions;
-- all-in cost and staff capacity;
-- strategic value unavailable elsewhere;
-- historical performance or closest proxy;
-- measurement and attribution plan;
-- repeat, redesign, and stop thresholds.
+A small number of events generate the majority of event-attributed pipeline (one B2B SaaS program found **3 conferences drove ~70%** of it). The job is to find those and concentrate:
 
-Large attendance can increase cost and noise without increasing relevant access. Compare absolute reachable ICP and expected cost per qualified outcome, not headline attendance.
+- Increase presence at the winners — secure **speaking slots**, host **larger side events**, send **more of the right people**, buy **better placement**
+- Cut or minimize the long tail of low-yield events
+- Re-rank yearly; the 20% shifts as your ICP and market move
 
-## Portfolio types
+## Bigger isn't better (size ↔ ROI is often inverse)
 
-### Owned events
+Major conferences look can't-miss and frequently deliver the *worst* returns:
 
-Examples include dinners, workshops, roadshows, summits, meetups, webinars, and user conferences. They offer control but place demand generation, production, consent, accessibility, and financial risk on the host. Require a clear audience promise and a realistic distribution plan.
+- **Big events = more noise** — higher cost on everything (booth, hotels, travel), more competing vendors, attendees spread thin across tracks, endless competing side events
+- **Audience dilution** — you're paying to reach a crowd padded with students, investors, press, other vendors, consultants, and industry tourists; your ICP is a thin slice, so effective cost-per-qualified-lead balloons
+- **Small-event advantage** — a 50-person niche meetup can out-produce a 5,000-person conference; highest ROI is often **regional events of 100–200** where you can reach every qualified prospect in the room
 
-### Trade shows and conferences
+## The three event types (three risk profiles)
 
-The organizer supplies the audience while the participant controls less of the experience. Value usually depends on pre-booked interactions, staff quality, contextual notes, speaking access, and disciplined follow-up—not booth size alone.
+### 1. Owned events — maximum control, maximum risk
+You control everything from content to coffee breaks, and you carry all the risk. Range: exec dinners → roadshows → summits → user conferences.
+- **User conferences** turn customers into a community and a product into a movement (Dreamforce). Don't attempt before you have an audience that would come unbegged.
+- **Regional roadshows** take the message to scattered markets — one company generated more pipeline from a **6-city roadshow than its annual conference, at a third of the cost**.
+- **Industry summits** build thought leadership by tackling category problems, not product pitches — they pull in partners and influencers who amplify.
+- **Workshops / certifications** tie the event directly to customer success and can pay for themselves via fees.
+- **Three success factors:** ruthless **audience focus** (a clear "who," even at the expense of broader appeal), a **value proposition** attendees can't get elsewhere, and **strategic timing** (align to buyer budget/bandwidth — one company moved its conference Q4→Q1 and lifted attendance 40%).
+- **Model case — Drift HYPERGROWTH:** killed badges and sponsor booths, chose storytelling over product pitches, felt like TED not a software show → 3x pipeline acceleration for attendees, starting at 1,000 people year one.
 
-### Community events
+### 2. Trade shows & conferences — someone else's arena
+Less control, less risk — you rent instant access to an audience but work inside their format. **Success is 120 days of prep, not the 4 days on the floor.**
+- **Pre-show (starts ~120 days out):** mine the attendee list for *stories*, not just names (recent funding, press, job posts) → hooks far better than "want a demo?"; **book ~70% of meeting slots before anyone flies out** ("saw you opened a Singapore office — we helped 3 companies with APAC expansion last quarter, coffee at the show?")
+- **On the floor:** turn the booth into a **story-collection hub** — senior staff at the edges (not behind a counter), no physical barriers, customer success stories on screens, and bring real customers to tell their story. (One security company ran a live "Security Operations Center" that sparked real technical sales conversations.)
+- **The hidden game — satellite events:** morning coffee meetups and curated private dinners routinely out-generate the booth
+- **Post-show (where most teams fail):** tier leads and reference *specific conversation details* — hot → same-day, warm → personalized within 48h, general → nurture within a week; turn booth conversations into content (video testimonials, FAQ → blog/email)
 
-Small recurring gatherings can compound relationships when they provide independent value. Measure repeat participation, conversation quality, member-led activity, qualified relationships, and conversion over time. Do not force community activity into immediate lead-generation metrics.
+### 3. Community events — the compound interest of event marketing
+Small, regular investments that grow exponentially — often started on a tiny budget (monthly meetups for ~$500 of pizza and beer).
+- **Regular rhythm beats flash** — same format, same venue, every month builds momentum; chasing a bigger/flashier event each time burns teams out
+- **Never pitch — facilitate.** A "Tech Leaders Dinner" grew 8 → 40+ CTOs because it solved their real problems; the product came up naturally
+- **Turn customers into advocates** — support customer-run user groups but let them stay independent; they become a reference network prospects trust *because* they're not on your payroll
+- **The multiplier effect** — arm your most engaged attendees with playbooks, speaker connections, and seed funding to launch their own city events (one meetup spawned 12 across 3 countries)
+- **Metrics that fit** — monthly active members, conversation depth, community-initiated events, relationship velocity, member→customer conversion. The gut check is the **"Saturday Test": would people show up on a Saturday morning?** If yes, you built something real.
+- **Payoff** — prospects who attended **3+ community events showed an 85% higher close rate and 40% shorter cycle**; they understood the value in context before ever buying
 
-## Selection scorecard
+## Economics — real cost benchmarks
 
-Score each dimension using user-provided or measured evidence where available:
+Budget the full investment (money *and* time/opportunity cost) against pipeline, not just the sticker price.
 
-| Dimension | Question |
+| Line item | Typical range |
 |---|---|
-| ICP density | How many reachable attendees match the priority segment? |
-| Outcome fit | Can this format produce the declared primary outcome? |
-| Access quality | Can the team secure meaningful conversations, stage time, or owned sessions? |
-| Economics | Does expected cost per qualified outcome compare well with alternatives? |
-| Execution capacity | Can the team prepare, staff, follow up, and measure well? |
-| Strategic leverage | Will content, partnerships, customer trust, or category authority compound? |
-| Risk | What could invalidate audience, cost, rights, safety, or attribution assumptions? |
+| Conference ticket | $1,500–3,000 / person (major shows) |
+| Booth space (10×10, top-tier) | $15,000–40,000 |
+| Flights | $300–1,000 / person |
+| Hotel | $300–400 / night / person |
+| Booth staff | 3–4 people minimum at any significant show |
+| Private dinner (15–20 ppl) | $150–200 / person |
+| Breakfast meetup | $30–50 / person |
+| Happy hour | $50 / person |
+| Private meeting room | $500–1,500 / day |
 
-Do not hide weak evidence inside a numeric total. Present the score with confidence and the facts needed to change the decision.
+**Rule of thumb:** a significant show needs to generate **~5–10 solid opportunities** to justify sending a team. For the sponsor-specific go/no-go math and cost-per-qualified-meeting comparison against other channels, see [sponsorship-roi.md](sponsorship-roi.md).
+
+---
+
+*Distilled from Corey Haines's* Founding Marketing *(chapter: "Events create memorable experiences with potential customers"). Benchmarks are directional and pre-inflation-adjust as needed; re-verify current show pricing.*

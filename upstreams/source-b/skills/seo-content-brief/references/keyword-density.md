@@ -1,9 +1,9 @@
 <!-- Updated: 2026-04-17 -->
-# Keyword Density and Placement Rules
+# Keyword Placement Rules
 
-Internal readability and stuffing heuristic. This is not a Google percentage rule.
+Internal readability and stuffing heuristic. Google publishes no target density; its spam policies treat repeating words "so often that it sounds unnatural" as keyword stuffing (developers.google.com/search/docs/essentials/spam-policies).
 
-## Primary Keyword Density
+## Primary Keyword Use
 
 **Use check:** Confirm the primary keyword appears naturally in important locations and does not read as forced repetition.
 
@@ -27,7 +27,8 @@ The primary keyword MUST appear in all of these:
 3. **URL slug** (lowercase, hyphenated)
 4. **Meta description** (naturally integrated)
 5. **First paragraph / first 100 words** (establishes topic immediately)
-6. **At least one image alt text** (reinforces topic for image search)
+
+Image alt text is not on this list. Write it to describe the image; the topic appears there only when the image actually shows it.
 
 ## Locations Where It Is NOT Required
 
@@ -41,7 +42,7 @@ The primary keyword MUST appear in all of these:
 |------|-------|-------|
 | Closely related terms | 5-8 | Distribute through body content and H2-H6 headings |
 | Broader semantic terms | 10-15 | Cover related concepts and user intent variations |
-| Synonyms | As natural | Improve readability. Do NOT count toward primary density. |
+| Synonyms | As natural | Improve readability and cover how people phrase the topic. |
 
 ## Distribution Rules
 
@@ -56,5 +57,5 @@ The primary keyword MUST appear in all of these:
 1. **Exact-match obsession:** Using the exact phrase every time instead of natural variations. Google understands synonyms and related terms.
 2. **Heading stuffing:** Putting the primary keyword in every H2 and H3. One H1 mention plus 1-2 H2 mentions is sufficient.
 3. **Ignoring first 100 words:** The opening paragraph is the highest-value placement after the title and H1.
-4. **Forgetting image alt text:** A free placement opportunity that also helps image search rankings.
-5. **Counting synonyms as density:** "Web design", "website design", and "site design" are different strings. Only count exact-match appearances toward density.
+4. **Forgetting image alt text:** Every meaningful image needs descriptive alt text that names its subject. It helps accessibility and image search; it is not a keyword slot.
+5. **Counting density at all:** "Web design", "website design", and "site design" all describe the same topic. Judge whether the page covers the topic clearly, not how often one exact string appears.

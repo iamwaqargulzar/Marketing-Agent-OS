@@ -2,12 +2,15 @@ import hashlib
 import http.server
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
+import tarfile
 import tempfile
 import threading
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 
@@ -107,6 +110,8 @@ class PackageTests(unittest.TestCase):
             "conversion-tracking": "verification.md",
             "link-building": "earned-link-plan.md",
             "seo-technical": "stack-exposure.md",
+            "geo-technical": "continued.md",
+            "seo-local": "skill-contract.md",
         }
         targets = {
             "codex": ".agents/skills",
@@ -138,7 +143,7 @@ class PackageTests(unittest.TestCase):
                                 resource.read_bytes(),
                             )
 
-    def test_new_specialists_are_standalone_instruction_packages(self):
+    def test_installed_skills_are_self_contained_and_licensed(self):
         with tempfile.TemporaryDirectory() as directory:
             result = run_script(
                 "install.py", "--project", directory,
@@ -151,10 +156,104 @@ class PackageTests(unittest.TestCase):
                     (installed / "references/skill-contract.md").read_bytes(),
                     (ROOT / "references/skill-contract.md").read_bytes(),
                 )
-                files = [path for path in installed.rglob("*") if path.is_file()]
-                self.assertTrue(files)
-                self.assertTrue(all(path.suffix == ".md" for path in files))
+                self.assertTrue((installed / "LICENSE.txt").is_file())
+                self.assertIn("Derived from", (installed / "NOTICE.md").read_text(encoding="utf-8"))
+                self.assertFalse(list(installed.rglob("*.pyc")))
+                self.assertFalse((installed / "evals").exists())
                 self.assertFalse((Path(directory) / "upstreams").exists())
+
+    def test_installed_library_preserves_every_source_entry(self):
+        lock = json.loads((ROOT / "upstreams.lock.json").read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory() as directory:
+            result = run_script("install.py", "--project", directory, "--skill", "geo-audit", "--skill", "seo-audit")
+            self.assertEqual(result.returncode, 0, result.stderr)
+            skills = Path(directory) / ".agents/skills"
+            router = skills / "marketing-os"
+            for source, record in lock["sources"].items():
+                digest = hashlib.sha256()
+                with tarfile.open(router / "assets" / f"{source}.tar.bz2", "r|bz2") as archive:
+                    count = 0
+                    for entry in archive:
+                        mode = record["file_modes"].get(entry.name, "100644")
+                        self.assertEqual(entry.issym(), mode == "120000", entry.name)
+                        if entry.issym():
+                            payload = entry.linkname.encode("utf-8")
+                        else:
+                            self.assertTrue(entry.isfile(), entry.name)
+                            self.assertEqual(bool(entry.mode & 0o111), mode == "100755", entry.name)
+                            payload = archive.extractfile(entry).read()
+                        digest.update(entry.name.encode("utf-8") + b"\0" + payload + b"\0")
+                        count += 1
+                self.assertEqual(count, record["file_count"], source)
+                self.assertEqual(digest.hexdigest(), record["tree_sha256"], source)
+            result = subprocess.run([PYTHON, "scripts/validate_control_artifact.py", "--help"],
+                                    cwd=router, capture_output=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            for agent in (ROOT / "agents").glob("*.md"):
+                self.assertEqual((router / "references/agents" / agent.name).read_bytes(), agent.read_bytes())
+                if agent.name.startswith("geo-"):
+                    self.assertEqual((skills / "geo-audit/references/agents" / agent.name).read_bytes(), agent.read_bytes())
+            licenses = (skills / "seo-audit/LICENSE.txt").read_bytes()
+            for name in ("marketingskills-MIT.txt", "claude-seo-MIT.txt"):
+                self.assertIn((ROOT / "THIRD_PARTY_LICENSES" / name).read_bytes(), licenses)
+
+    def test_skills_keep_upstream_depth(self):
+        """Guard against regressing to templated wrappers that drop the source workflow."""
+        catalog = json.loads((ROOT / "catalog.json").read_text(encoding="utf-8"))
+        full = [item["name"] for item in catalog["skills"] if not item["alias_of"]]
+        self.assertGreaterEqual(len(full), 220)
+        for name in full:
+            text = (ROOT / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
+            self.assertNotIn("Use this skill for **", text, name)
+            self.assertNotIn("## Domain Checklist", text, name)
+            self.assertGreater(len(text), 1500, name)
+        phrases = {
+            "copywriting": "three-question gate",
+            "content-writer": "Mode Selector",
+            "seo-technical": "Technical",
+            "geo-citability": "Citab",
+        }
+        for name, phrase in phrases.items():
+            self.assertIn(phrase, (ROOT / "skills" / name / "SKILL.md").read_text(encoding="utf-8"), name)
+        self.assertTrue((ROOT / "skills/seo-audit/references/full-site-audit-workflow.md").is_file())
+
+    def test_build_is_reproducible(self):
+        result = run_script("build_skills.py", "--check")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_router_points_at_real_skills(self):
+        text = (ROOT / "skills/marketing-os/SKILL.md").read_text(encoding="utf-8")
+        table = text[text.index("## Choosing between"):text.index("Routing does not authorize")]
+        names = {path.parent.name for path in (ROOT / "skills").glob("*/SKILL.md")}
+        for name in re.findall(r"`([a-z0-9-]+)`", table):
+            self.assertIn(name, names)
+
+    def test_legacy_names_delegate_to_real_skills(self):
+        catalog = json.loads((ROOT / "catalog.json").read_text(encoding="utf-8"))
+        names = {item["name"] for item in catalog["skills"]}
+        for item in catalog["skills"]:
+            if item["alias_of"]:
+                self.assertIn(item["alias_of"], names)
+                self.assertIn(f"../{item['alias_of']}/SKILL.md",
+                              (ROOT / "skills" / item["name"] / "SKILL.md").read_text(encoding="utf-8"))
+
+    def test_bundled_helpers_load_and_exclude_denied_ones(self):
+        sys.path.insert(0, str(ROOT / "scripts"))
+        from build_skills import DENY_HELPERS
+
+        seen = {}
+        for path in sorted((ROOT / "skills").rglob("scripts/**/*.py")):
+            self.assertNotIn(path.name, DENY_HELPERS, path)
+            if not path.name.startswith("_"):
+                seen.setdefault(hashlib.sha256(path.read_bytes()).digest(), path)
+        self.assertGreater(len(seen), 30)
+        for path in seen.values():
+            result = subprocess.run(
+                [PYTHON, "-B", path.name, "--help"], cwd=path.parent,
+                capture_output=True, text=True, timeout=60,
+                env={**os.environ, "PYTHONUTF8": "1"}, encoding="utf-8", errors="replace",
+            )
+            self.assertEqual(result.returncode, 0, f"{path}: {result.stderr[-300:]}")
 
     def test_installer_rejects_unknown_and_traversal_names(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -390,7 +489,7 @@ class PackageTests(unittest.TestCase):
         result = run_script("reconcile_upstreams.py")
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         report = json.loads(result.stdout)
-        self.assertEqual(report["normalized_skill_count"], 240)
+        self.assertEqual(report["normalized_skill_count"], 241)
         self.assertTrue(
             all(source["snapshot_matches_lock"] for source in report["sources"].values())
         )
@@ -400,6 +499,30 @@ class PackageTests(unittest.TestCase):
                 for source in report["sources"].values()
             )
         )
+
+    def test_updater_restores_snapshot_when_staged_replace_fails(self):
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import update_upstreams as updater
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            old = root / "upstreams/source-a"
+            old.mkdir(parents=True)
+            (old / "original").touch()
+            stage = root / "snapshot-source-a"
+            stage.mkdir()
+            replace = os.replace
+
+            def fail_install(source, target):
+                if source == stage:
+                    raise OSError("simulated filesystem failure")
+                replace(source, target)
+
+            with patch.object(updater, "ROOT", root), patch.object(updater, "file_modes", return_value={}), \
+                    patch.object(updater, "snapshot_clone", return_value=0), patch.object(os, "replace", fail_install):
+                with self.assertRaisesRegex(OSError, "simulated"):
+                    updater.apply_snapshots(["source-a"], {"source-a": (root, "test")}, root)
+            self.assertTrue((old / "original").is_file())
 
     def test_upstream_updater_help_is_offline(self):
         result = run_script("update_upstreams.py", "--help")

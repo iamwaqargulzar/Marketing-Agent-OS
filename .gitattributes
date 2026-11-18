@@ -19,3 +19,5 @@
 *.gif binary
 *.webp binary
 *.pdf binary
+
+*.tar.bz2 binary

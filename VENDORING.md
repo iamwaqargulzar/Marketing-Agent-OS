@@ -1,6 +1,6 @@
 # Upstream snapshots
 
-The four complete source snapshots are already committed under `upstreams/` and pinned by `upstreams.lock.json`. They are legal, provenance, and maintenance inputs; the installer never copies them into a coding harness.
+The four complete source snapshots are already committed under `upstreams/` and pinned by `upstreams.lock.json`. The build also ships all four trees in the installed router as deterministic archives. Git modes in the lock preserve executable files and symlinks across build platforms.
 
 Check current default branches without changing local files:
 
@@ -12,6 +12,7 @@ After reviewing upstream releases, commits, diffs, and license changes, refresh 
 
 ```bash
 python3 scripts/update_upstreams.py --source source-a --apply
+python3 scripts/build_skills.py
 python3 scripts/reconcile_upstreams.py --write
 ```
 

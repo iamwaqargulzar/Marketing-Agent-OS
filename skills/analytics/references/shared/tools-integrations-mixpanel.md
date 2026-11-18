@@ -1,0 +1,174 @@
+# Mixpanel
+
+Product analytics platform for tracking user behavior and retention.
+
+## Capabilities
+
+| Integration | Available | Notes |
+|-------------|-----------|-------|
+| API | ✓ | Ingestion API, Query API, Data Export |
+| MCP | ✓ | Official hosted server at `https://mcp.mixpanel.com/mcp` (EU and IN regions have their own hosts); OAuth, or a service account for headless use; an org admin must enable it ([docs](https://docs.mixpanel.com/docs/mcp)), checked 2026-10-27 |
+| CLI | ✓ | mixpanel.js |
+| SDK | ✓ | JavaScript, iOS, Android, Python, etc. |
+
+## Authentication
+
+- **Ingestion**: Project token (public)
+- **Query API / Export**: Service Account (username:secret as Basic auth). Set
+  `MIXPANEL_API_KEY` to the service-account username and `MIXPANEL_SECRET` to its secret.
+  Supply `--project-id` for query/export commands; GET requests send it as `project_id`.
+- **Legacy fallback**: When `MIXPANEL_API_KEY` is absent, `MIXPANEL_PROJECT_SECRET`
+  (or `MIXPANEL_SECRET` alone) is sent as the Basic auth username with an empty password.
+  A configured service account always takes precedence; a username without its secret
+  is an error and does not fall back.
+- **Deprecation**: Project-secret authentication retires on March 3, 2027 and is
+  unavailable for new projects. Use service accounts for new integrations. See
+  [Service Accounts](https://docs.mixpanel.com/reference/service-accounts) and
+  [Project Secret](https://docs.mixpanel.com/reference/project-secret).
+
+```bash
+node tools/clis/mixpanel.js export events --project-id 123 \
+  --from-date 2024-01-01 --to-date 2024-01-31 --dry-run
+```
+
+## Common Agent Operations
+
+### Track event (Ingestion API)
+
+```bash
+POST https://api.mixpanel.com/track
+
+{
+  "event": "signup_completed",
+  "properties": {
+    "token": "{project_token}",
+    "distinct_id": "user_123",
+    "plan": "pro",
+    "time": 1705312800
+  }
+}
+```
+
+### Set user profile
+
+```bash
+POST https://api.mixpanel.com/engage
+
+{
+  "$token": "{project_token}",
+  "$distinct_id": "user_123",
+  "$set": {
+    "$email": "user@example.com",
+    "$name": "John Doe",
+    "plan": "pro"
+  }
+}
+```
+
+### Query events (Query API)
+
+```bash
+POST https://mixpanel.com/api/2.0/insights
+
+{
+  "project_id": {project_id},
+  "bookmark_id": null,
+  "params": {
+    "events": [{"event": "signup_completed"}],
+    "time_range": {
+      "from_date": "2024-01-01",
+      "to_date": "2024-01-31"
+    }
+  }
+}
+```
+
+### Get funnel data
+
+```bash
+GET https://mixpanel.com/api/2.0/funnels?project_id={project_id}&funnel_id={funnel_id}&from_date=2024-01-01&to_date=2024-01-31
+```
+
+### Export raw events
+
+```bash
+GET https://data.mixpanel.com/api/2.0/export?project_id={project_id}&from_date=2024-01-01&to_date=2024-01-01
+```
+
+### Get retention data
+
+```bash
+GET https://mixpanel.com/api/2.0/retention?project_id={project_id}&from_date=2024-01-01&to_date=2024-01-31&retention_type=birth&born_event=signup_completed
+```
+
+## JavaScript SDK
+
+```javascript
+// Initialize
+mixpanel.init('YOUR_TOKEN');
+
+// Identify user
+mixpanel.identify('user_123');
+
+// Set user properties
+mixpanel.people.set({
+  '$email': 'user@example.com',
+  'plan': 'pro'
+});
+
+// Track event
+mixpanel.track('Feature Used', {
+  'feature_name': 'export'
+});
+```
+
+## Key Concepts
+
+- **Events** - User actions (signup, purchase, etc.)
+- **Properties** - Attributes on events
+- **User Profiles** - Persistent user data
+- **Cohorts** - Saved user segments
+- **Funnels** - Conversion sequences
+- **Retention** - User return patterns
+
+## When to Use
+
+- Tracking product usage events
+- Analyzing conversion funnels
+- Measuring feature adoption
+- Retention analysis
+- User segmentation
+
+## Rate Limits
+
+- Ingestion: No hard limit (batch recommended)
+- Query API: Varies by plan
+
+## Relevant Skills
+
+- analytics
+- ab-testing
+- onboarding
+
+### Select the project's API region
+
+Set `MIXPANEL_REGION` to your existing project's region: `us` (default), `eu`,
+or `in`. One setting selects the documented ingestion, query, and raw-export
+API families consistently:
+
+| Region | Ingestion | Query | Export |
+|--------|-----------|-------|--------|
+| `us` | `api.mixpanel.com` | `mixpanel.com` | `data.mixpanel.com` |
+| `eu` | `api-eu.mixpanel.com` | `eu.mixpanel.com` | `data-eu.mixpanel.com` |
+| `in` | `api-in.mixpanel.com` | `in.mixpanel.com` | `data-in.mixpanel.com` |
+
+```bash
+MIXPANEL_REGION=eu node tools/clis/mixpanel.js track event \
+  --distinct-id owned-test-user --event 'Owned test event' --dry-run
+```
+
+Unknown regions fail before any request. Dry runs use the selected hosts and
+mask credentials as before. Authentication, payloads, and response parsing are
+unchanged. Match the region in your Mixpanel project settings; selecting a host
+does not move a project or establish a data-residency guarantee. See the
+[official API overview](https://docs.mixpanel.com/reference/overview).

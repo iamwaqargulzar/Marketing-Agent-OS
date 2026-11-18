@@ -7,18 +7,125 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.5.0] - 2026-10-22
+
+Security and accuracy fixes from a full audit, and Claude Desktop installs again.
+
+**Python 3.11 to 3.14 is now required.** Python 3.10 reached end of life on
+2026-10-01, and the Pillow 13.0.0 security release (28 advisories, no 12.x
+backport) needs 3.11. Python 3.15 is not supported yet because the Google Ads
+client library declares `< 3.15`. If your default Python is outside the range,
+the launcher and `install.ps1` now pick a supported one on their own, or you
+can set `CLAUDE_SEO_PYTHON`; `/seo setup` then rebuilds the runtime once.
+
 ### Added
 
-- 🚨 **Server stack CVE exposure check** in `seo-technical` (Security category).
-  A read-only, owner-authorized detection pass that flags a site running a
-  server-side stack with a known critical CVE, so the owner can patch or take it
-  offline. Reads the stack from a normal response (`X-Powered-By`, PHP session
-  cookie, WordPress signals, static/Node markers); it never fuzzes, sends
-  exploit payloads, or probes a site the operator does not control. Ships the
-  current PHP critical-RCE advisory (CVE-2026-109618 / CVE-2026-109619, CVSS
-  9.2, fixed in PHP 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35), detection signals, and
-  reporting bands in `skills/seo-technical/references/stack-cve-exposure.md`. A
-  managed or static host with no PHP signal is reported as not exposed.
+- **Server stack CVE exposure check** in `seo-technical` (Security category).
+  A read-only detection pass that flags a site running a server-side stack with
+  a known critical CVE, so the owner can patch or take it offline. Reads the
+  stack from the normal response for the audited URL (`X-Powered-By`, PHP
+  session cookie, WordPress signals, static/Node markers); it never fuzzes or
+  sends exploit payloads, and asks whether the user owns the site before
+  requesting any other path. Ships the current PHP critical-RCE advisory
+  (CVE-2026-109618 / CVE-2026-109619, CVSS v4.0 9.2, fixed in PHP 8.5.12 /
+  8.4.27 / 8.3.36 / 8.2.35; no upstream release for 8.1 and older), the
+  php.net interim mitigations, detection signals, and reporting bands in
+  `skills/seo-technical/references/stack-cve-exposure.md`, with sources
+  (php.net, both GitHub advisories, UK NCSC). A version string below the fixed
+  list is reported as High (likely exposed, confirm with the host), because
+  distributions backport fixes without changing it; Critical needs the owner
+  to confirm an unpatched build. A managed or static host with no PHP signal is
+  reported as not exposed.
+
+### Changed
+
+- **Data and guidance corrected against primary sources.**
+  - The September 2026 spam update is recorded as complete (Sep 24 to Oct 8,
+    13 d 16 h), with Google's October documentation changes added to the
+    updates ledger.
+  - Keyword density targets are gone from `seo-page`, `seo-content` and
+    `seo-content-brief`; alt text is "descriptive, naming the subject", not
+    keyword-rich.
+  - The Gemini image model reference had read a 2025 release date as a
+    shutdown date; `gemini-2.5-flash-image` is current until at least
+    2027-03-15.
+  - The Indexing API quota link (a 404) now points to the API Console quota
+    page.
+  - Breadcrumb (desktop only) and Event (publicly bookable, physical
+    location) rich result limits are documented.
+- Clearer skill triggers ("Use when" on `seo-geo`, `seo-local`,
+  `seo-technical`, `seo-agentic`; `seo-image-gen` only for SEO assets), the
+  hub and audit skills agree on when the backlinks agent runs, and the
+  extension copies of the DataForSEO and image agents match the core ones,
+  including `model` and `maxTurns`.
+- The supported Python range lives in one place (`MIN_PYTHON` and
+  `MAX_PYTHON` in `scripts/runtime.py`), and a test keeps the launcher,
+  `install.ps1`, `pyproject.toml`, CI and the docs in step with it.
+  `scripts/claude-seo` and `install.ps1` skip a default interpreter outside the
+  range (on Windows, `py -3` picks the newest installed Python, which can be
+  3.15) and fall back to the newest supported one, and `install.ps1` now honors
+  `CLAUDE_SEO_PYTHON`. `/seo setup` refuses an unsupported interpreter with a
+  clear message.
+- `requirements.txt` sets `pillow>=13.0.0` (it arrives through matplotlib and
+  WeasyPrint).
+- CI runs ruff, tests Python 3.11, 3.12 and 3.14, audits dependencies on both
+  3.11 and 3.14, pins GitHub Actions to commit SHAs, and no longer exposes
+  `GH_TOKEN` to install steps. The Windows smoke test covers a pinned
+  `CLAUDE_SEO_PYTHON` and the installer's own interpreter choice.
+- SECURITY.md and PRIVACY.md describe what the code does, including which
+  calls go to fixed vendor hosts and how to verify a signed release tag.
+
+### Fixed
+
+- **Claude Desktop installs claude-seo again (#344).** The claude-seo plugin
+  folder is the whole repository, and since v2.4.2 it held a second plugin
+  manifest at `plugins/seo-cockpit/.claude-plugin/plugin.json`, which Claude
+  Desktop refuses ("plugin.json must be at .claude-plugin/plugin.json at the
+  plugin root ... found nested"). seo-cockpit now lives on the `seo-cockpit`
+  branch of this repository and the marketplace installs it from there with a
+  `git-subdir` source pinned to a commit. It stays optional, keeps its install
+  id (`seo-cockpit@agricidaniel-claude-seo`) and moves to 0.3.4 (author and
+  homepage fields only). A new test fails if any nested plugin manifest
+  returns to the claude-seo tree.
+
+### Security
+
+- `agentic_check.py` rejects a well-known or ARD document nested deeper than
+  256 levels before parsing it. On Python 3.14 the JSON parser's limit follows
+  the machine's stack size, so the same hostile document could pass on one
+  machine and fail on another.
+- **Google sign-in is bound to its run.** The OAuth flow now sends a random
+  `state` and a PKCE S256 challenge, and the exchange sends the matching
+  `code_verifier`. The local redirect server waits up to 300 s for the request
+  with the right `state`; stray or forged requests get a 400 and no longer end
+  the sign-in, and a silent connection is dropped after 10 s. Both token calls
+  time out after 30 s. The redirect URI (`http://localhost:8085`) is unchanged,
+  so existing OAuth clients keep working.
+- **Manual sign-in.** A pending sign-in is saved (0600) as
+  `oauth-pending.json` next to the token and is valid for 10 minutes after
+  the browser wait ends. `--exchange --code` now also accepts the full
+  redirect URL and checks its `state`; with no valid pending sign-in it stops
+  with "No pending sign-in (missing or expired). Run --auth again." instead of
+  sending a request that cannot succeed.
+- **Headless renders block service workers and WebSockets.** A new
+  `url_safety.new_guarded_context()` is used by `render_page.py`,
+  `capture_screenshot.py` and `analyze_visual.py`: service workers are
+  blocked, every request goes through the SSRF route handler, and WebSockets
+  are routed to a handler that never connects them.
+- **Body size caps.** `fetch_page.py` and the raw path of `render_page.py`
+  stop after 10 MiB of decompressed body and report `too_large`; redirect
+  bodies are capped at 64 KiB before requests reads them, so a 3xx gzip bomb
+  cannot exhaust memory. `sitemap_discovery.py` uses the same shared reader.
+- **Untrusted content rules everywhere.** Every agent and every skill, core
+  and extension, now states that fetched pages, SERP results and API payloads
+  are untrusted data, never instructions. The `seo-cluster` agent no longer
+  has Bash, which it never used.
+- `capture_screenshot.py` checks the output folder with resolved paths, so a
+  sibling such as `/home/user2` no longer passes for `/home/user`.
+- The cluster map template escapes every SERP field it writes into the page,
+  allowlists colors and link types, and the skill embeds its data with `<`
+  escaped, so a crafted SERP title cannot run script in the generated file.
+- The schema validation hook has a 30 s timeout.
 
 ## [2.4.2] - 2026-10-04
 

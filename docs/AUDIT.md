@@ -1,3 +1,7 @@
+# Audit reports
+
+The 2026-11-01 rebuild audit is in [UPSTREAM_REVIEW-2026-11-01.md](UPSTREAM_REVIEW-2026-11-01.md). It supersedes the coverage claims below: covering an upstream name did not mean carrying its instructions.
+
 # Initial audit report
 
 Audit date: 2026-08-11
@@ -23,7 +27,7 @@ The initial upstream snapshots contained 1,897 tracked entries and 218 `SKILL.md
 
 ## Verified state
 
-Current package review: 2026-10-22, version 1.6.0. See [the upstream review](UPSTREAM_REVIEW-2026-10-22.md) for adaptations and source-only components. Historical native-host checks below retain their original scope.
+State as of version 1.6.0 on 2026-10-22, kept for history. Native-host checks below retain their original scope.
 
 - 240 normalized skills pass the local metadata validator.
 - Portable package discovery reports all 240 skills through the Agent Skills CLI.

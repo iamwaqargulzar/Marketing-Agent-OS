@@ -22,7 +22,7 @@ claude-seo/
   CONTRIBUTORS.md                    # Community credits (Pro Hub Challenge)
   AGENTS.md                          # Multi-platform agent instructions (Cursor, Antigravity)
   .claude-plugin/
-    plugin.json                    # Plugin manifest (v2.4.2)
+    plugin.json                    # Plugin manifest (v2.5.0)
     marketplace.json               # Marketplace catalog for distribution
   skills/                            # 26 sub-skills (auto-discovered)
     seo/                           # Main orchestrator skill
@@ -284,7 +284,7 @@ Promoting reviewed release changes:
   pushes are user-authorized per-release.
 - **`aimh` accepts day-to-day pushes.** No release-gate ceremony required
   for the private remote.
-- **v2.2.5 is tagged on both repositories.** Each tag points to that
+- **Every release is tagged on both repositories.** Each tag points to that
   repository's reviewed release commit.
 - **Never force-sync the histories.** Preserve reviewed divergence and never
   rewrite either remote without explicit per-operation authorization.

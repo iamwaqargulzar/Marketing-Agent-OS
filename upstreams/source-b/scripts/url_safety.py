@@ -845,6 +845,99 @@ def decode_body(raw: bytes, content_type: str = "") -> str:
     return raw.decode("utf-8", errors="replace")
 
 
+# Largest page body read, counted after decompression. Real HTML pages are
+# far smaller; the cap stops a decompression bomb or an endless stream.
+MAX_PAGE_BYTES = 10 * 1024 * 1024
+
+# A redirect's own body is never used, but requests reads it in full before
+# it follows Location. This much is read; the rest is dropped unread.
+MAX_REDIRECT_BODY_BYTES = 64 * 1024
+
+
+def read_bounded(response, max_bytes: int) -> tuple[bytes, bool]:
+    """Read a ``stream=True`` response body, stopping past ``max_bytes``.
+
+    Counts bytes after decompression, so a small gzip body that inflates
+    without bound (a decompression bomb) is cut off. Returns the bytes read
+    before the chunk that crossed the cap, and whether the cap was hit.
+    Decode the result with :func:`decode_body`, not ``response.content``.
+    """
+    chunks = []
+    size = 0
+    too_large = False
+    for chunk in response.iter_content(chunk_size=65536):
+        if not chunk:
+            continue
+        size += len(chunk)
+        if size > max_bytes:
+            too_large = True
+            break
+        chunks.append(chunk)
+    return b"".join(chunks), too_large
+
+
+# Deepest JSON nesting a fetched document may have. Real discovery and
+# profile documents stay under 20 levels. From Python 3.14 the json module's
+# recursion limit follows the C stack size, so a 100k-deep document may parse
+# on one machine and raise on another; check depth first for one answer.
+MAX_JSON_DEPTH = 256
+
+# The closing quote is optional so an unterminated string ends the scan in one
+# pass; requiring it made hostile input like '"\\' * n take quadratic time.
+_JSON_DEPTH_TOKEN_RE = re.compile(r'"(?:[^"\\]|\\[\s\S])*"?|[\[\]{}]')
+
+
+def json_depth_exceeds(text: str, max_depth: int = MAX_JSON_DEPTH) -> bool:
+    """Return True when ``text`` nests arrays or objects past ``max_depth``.
+
+    Brackets inside JSON strings are skipped. The scan does not validate the
+    document; call it before ``json.loads`` and treat True as a finding.
+    """
+    depth = 0
+    for match in _JSON_DEPTH_TOKEN_RE.finditer(text):
+        token = match.group()
+        if token in "[{":
+            depth += 1
+            if depth > max_depth:
+                return True
+        elif token in "]}":
+            depth -= 1
+    return False
+
+
+def _bound_redirect_body(response, *args, **kwargs):  # type: ignore[no-untyped-def]
+    """``response`` hook: read at most MAX_REDIRECT_BODY_BYTES of a 3xx body.
+
+    requests runs response hooks before it follows a redirect, and following
+    one reads the whole body (``resp.content``), decompressed and unbounded.
+    Filling the body here from a capped read means a redirect that carries a
+    decompression bomb is cut off; the connection is then closed rather than
+    drained. Non-redirect responses are left untouched.
+    """
+    if not response.is_redirect or response._content is not False:
+        return response
+    try:
+        body, _too_large = read_bounded(response, MAX_REDIRECT_BODY_BYTES)
+    except (requests.RequestException, RuntimeError):
+        body = b""
+    if response.raw is not None:
+        response.raw.close()
+    response._content = body
+    response._content_consumed = True
+    return response
+
+
+def _with_redirect_body_cap(kwargs: dict) -> dict:
+    """Put :func:`_bound_redirect_body` first in the call's response hooks."""
+    hooks = dict(kwargs.get("hooks") or {})
+    existing = hooks.get("response") or []
+    if callable(existing):
+        existing = [existing]
+    hooks["response"] = [_bound_redirect_body, *existing]
+    kwargs["hooks"] = hooks
+    return kwargs
+
+
 def _with_default_headers(kwargs: dict) -> dict:
     """Fill in DEFAULT_REQUEST_HEADERS for header keys the caller did not set."""
     headers = dict(DEFAULT_REQUEST_HEADERS)
@@ -871,7 +964,7 @@ def safe_requests_get(
     parsed = urlparse(norm_url)
     port = parsed.port or (443 if parsed.scheme == "https" else 80)
     assert parsed.hostname is not None  # validate_url_strict guarantees this
-    kwargs = _with_default_headers(kwargs)
+    kwargs = _with_redirect_body_cap(_with_default_headers(kwargs))
     exempt = _validated_proxy_hosts(norm_url, kwargs.get("proxies"))
     with _pin_dns(parsed.hostname, pinned_ip, port, exempt_hosts=exempt):
         return requests.get(norm_url, timeout=timeout, **kwargs)
@@ -913,6 +1006,9 @@ def safe_requests_session(url: str) -> Iterator[requests.Session]:
     port = parsed.port or (443 if parsed.scheme == "https" else 80)
     assert parsed.hostname is not None
     session = requests.Session()
+    # Session hooks apply to every request made on it, including each
+    # redirect hop, unless a request passes its own response hooks.
+    session.hooks["response"].append(_bound_redirect_body)
     exempt = _validated_proxy_hosts(norm_url, session.proxies)
     with _pin_dns(parsed.hostname, pinned_ip, port, exempt_hosts=exempt):
         try:
@@ -1000,6 +1096,45 @@ def make_safe_playwright_route_handler(
                 pass
 
     return handler
+
+
+def new_guarded_context(browser, route_handler, **context_kwargs):  # type: ignore[no-untyped-def]
+    """
+    Create a Playwright browser context with the SSRF guard on every page.
+
+    ``page.route()`` does not see WebSocket traffic or requests a service
+    worker makes, so page JavaScript could still reach loopback or LAN
+    hosts through them. This context:
+
+    * blocks service worker registration (``service_workers="block"``),
+      so every request stays visible to the route handler;
+    * routes every request of every page, popups included, through
+      ``route_handler`` (a page-level route still takes precedence);
+    * routes every WebSocket to a handler that never calls
+      ``connect_to_server()``, so Playwright mocks the socket and no
+      connection ever reaches a server (Playwright 1.48+). The handler
+      must not call ``ws.close()``: in the sync API that deadlocks the
+      navigation.
+
+    Args:
+        browser: a Playwright ``Browser``.
+        route_handler: the callback from
+            :func:`make_safe_playwright_route_handler`.
+        **context_kwargs: passed to ``browser.new_context()`` (viewport,
+            user_agent, and so on).
+
+    Returns:
+        The new ``BrowserContext``.
+    """
+    context = browser.new_context(service_workers="block", **context_kwargs)
+    context.route("**/*", route_handler)
+    context.route_web_socket("**/*", _never_connect_web_socket)
+    return context
+
+
+def _never_connect_web_socket(ws) -> None:  # type: ignore[no-untyped-def]
+    """Leave the routed WebSocket mocked: it is never connected to a server."""
+    return None
 
 
 def _cli() -> None:

@@ -12,6 +12,7 @@ Describe the problem and the result of this change.
 
 ## Validation
 
+- [ ] `python3 scripts/build_skills.py`
 - [ ] `python3 scripts/reconcile_upstreams.py --write`
 - [ ] `python3 scripts/build_manifest.py`
 - [ ] `python3 scripts/doctor.py`

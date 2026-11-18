@@ -32,3 +32,5 @@ Update installed GEO workflows only after identifying the installation source an
 ## Output
 
 Return source identity, installed identity, validation status, diff summary, preserved customizations, actions taken, and restart requirements.
+
+The original update workflow is available in the [complete source library](../marketing-os/references/source-library.md) under `source-c/skills/geo-update/SKILL.md`.

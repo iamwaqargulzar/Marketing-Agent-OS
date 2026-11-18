@@ -84,6 +84,19 @@ def tracked_paths(clone: Path) -> list[Path]:
     return [safe_relative(item.decode("utf-8")) for item in output.split(b"\0") if item]
 
 
+def file_modes(clone: Path, revision: str) -> dict[str, str]:
+    """Record Git's executable and link modes independently of checkout platform."""
+    tree = subprocess.check_output(["git", "-C", str(clone), "ls-tree", "-rz", revision])
+    modes = {}
+    for entry in tree.split(b"\0"):
+        if entry:
+            metadata, name = entry.split(b"\t", 1)
+            mode = metadata.split()[0].decode("ascii")
+            if mode != "100644":
+                modes[name.decode("utf-8")] = mode
+    return modes
+
+
 def snapshot_clone(clone: Path, destination: Path) -> int:
     destination.mkdir(parents=True, exist_ok=False)
     paths = tracked_paths(clone)
@@ -154,6 +167,7 @@ def apply_snapshots(selected: list[str], clones: dict[str, tuple[Path, str]], wo
             **source,
             "commit": commit,
             "file_count": file_count,
+            "file_modes": file_modes(clone, commit),
             "tree_sha256": tree_digest(stage),
         }
 
@@ -174,9 +188,9 @@ def apply_snapshots(selected: list[str], clones: dict[str, tuple[Path, str]], wo
             lock["sources"][source_id] = record
         write_lock(lock)
     except Exception:
-        for source_id in reversed(installed):
+        for source_id in reversed(selected):
             target = ROOT / SOURCES[source_id]["path"]
-            if target.exists() or target.is_symlink():
+            if source_id in installed and (target.exists() or target.is_symlink()):
                 shutil.rmtree(target) if target.is_dir() and not target.is_symlink() else target.unlink()
             if source_id in backups:
                 os.replace(backups[source_id], target)
@@ -193,7 +207,7 @@ def main() -> int:
         help="replace selected snapshots and update the lockfile after fetching",
     )
     args = parser.parse_args()
-    selected = args.source or list(SOURCES)
+    selected = list(dict.fromkeys(args.source or SOURCES))
     lock = load_lock()
 
     try:

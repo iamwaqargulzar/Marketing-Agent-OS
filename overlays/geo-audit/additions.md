@@ -1,0 +1,1 @@
+For Phase 2 on a host without named agents, perform the five analyses sequentially. Read each installed agent brief in `references/agents/` by the name in Phase 2 and combine their evidence and scores using the same report procedure.

@@ -1,20 +1,21 @@
 # Contributing
 
-Marketing Agent OS has a normalized runtime layer and immutable upstream snapshots. Keep those responsibilities separate.
+Marketing Agent OS has immutable upstream snapshots and a generated skill layer. `skills/`, `agents/`, and `catalog.json` are build output, so changes made there directly fail validation.
 
-For a normalized skill change:
+To change a skill:
 
-1. Use a unique lowercase hyphenated directory under `skills/` with a `SKILL.md` whose frontmatter name matches the directory.
-2. Write a specific trigger description and keep the skill portable; optional tools must degrade gracefully.
-3. Preserve evidence labels, permission gates, and current-source verification rules from `references/skill-contract.md`.
-4. Update `catalog.json` and its exact copy at `skills/marketing-os/references/skill-index.json`.
-5. Update `CHANGELOG.md` and `VERSION` when the release contract changes.
+1. Add local guidance in `overlays/<skill>/additions.md`, with any new files in `overlays/<skill>/references/`.
+2. For a skill that has no upstream source, write the whole skill in `overlays/<skill>/SKILL.md`.
+3. Change renaming, helper policy, or promotion filters in `scripts/build_skills.py`.
+4. Keep skills portable; optional tools must degrade gracefully. Preserve evidence labels, permission gates, and current-source verification rules from `references/skill-contract.md`.
+5. Run `python3 scripts/build_skills.py`, and update `CHANGELOG.md` and `VERSION` when the release contract changes.
 
-For an upstream update, follow `docs/MAINTENANCE.md`. Never edit `upstreams/source-*` manually or copy those trees directly into `skills/`.
+For an upstream update, follow `docs/MAINTENANCE.md`. Never edit `upstreams/source-*` manually.
 
 Before submitting a change:
 
 ```bash
+python3 scripts/build_skills.py
 python3 scripts/reconcile_upstreams.py --write
 python3 scripts/build_manifest.py
 python3 scripts/doctor.py

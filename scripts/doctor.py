@@ -8,16 +8,24 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 
 from reconcile_upstreams import reconcile
+from build_skills import DENY_HELPERS
 from update_upstreams import LOCK_PATH, SOURCES, tree_digest
 
 
 ROOT = Path(__file__).resolve().parents[1]
 NAME_RE = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 ALLOWED_FRONTMATTER = {"name", "description", "license", "metadata", "allowed-tools"}
+DENIED_HELPERS = DENY_HELPERS
+MARKDOWN_LINK = re.compile(r"\]\(([^()\s]+)\)")
+UPSTREAM_NAME = re.compile(r"aaron|zubair|trabzada|agrici|corey|haines|marketingskills|claude-seo|geo-seo-claude|CLAUDE_PLUGIN_ROOT", re.I)
+# Credit that a license or an honest citation requires stays where it is.
+ATTRIBUTION = re.compile(r"©|CC BY|\(MIT\)|Founding Marketing|citing Grammarly|Aaron Ross|Haines Index|^Source: github\.com|built on \[")
+PROMOTION = re.compile(r"skool\.com/ai-marketing|magistermarketing|Verified Partner|marketing-skills\.com/sponsorship|◆")
 
 
 def digest(path: Path) -> str:
@@ -210,29 +218,54 @@ def validate_upstreams(errors: list[str]) -> None:
 
 
 def validate_shared_copies(errors: list[str]) -> None:
-    canonical = {path.name: digest(path) for path in (ROOT / "scripts").glob("*.py")}
-    for path in (ROOT / "skills").glob("*/scripts/*.py"):
-        expected = canonical.get(path.name)
-        if expected and digest(path) != expected:
-            errors.append(f"{path.relative_to(ROOT)}: differs from canonical scripts/{path.name}")
-    shared_references = {
-        path.name: digest(path)
-        for path in (ROOT / "references").glob("*.md")
-        if path.name in {
-            "connectors.md",
-            "control-artifacts.md",
-            "product-context-schema.md",
-            "routing-policy.md",
-            "skill-contract.md",
-        }
-    }
-    for path in (ROOT / "skills").glob("*/references/*.md"):
-        expected = shared_references.get(path.name)
-        if expected and digest(path) != expected:
-            errors.append(f"{path.relative_to(ROOT)}: differs from canonical references/{path.name}")
+    contract = digest(ROOT / "references" / "skill-contract.md")
+    for path in (ROOT / "skills").glob("*/references/skill-contract.md"):
+        if digest(path) != contract:
+            errors.append(f"{path.relative_to(ROOT)}: differs from canonical references/skill-contract.md")
     index = ROOT / "skills" / "marketing-os" / "references" / "skill-index.json"
     if not index.is_file() or digest(index) != digest(ROOT / "catalog.json"):
         errors.append("skills/marketing-os/references/skill-index.json: stale catalog copy")
+
+
+def validate_skill_content(errors: list[str]) -> None:
+    """Check links, licensing, naming, and promotion rules in the generated layer."""
+    for directory in sorted((ROOT / "skills").iterdir()):
+        if not (directory / "SKILL.md").is_file():
+            continue
+        derived = '"source-' in (directory / "SKILL.md").read_text(encoding="utf-8", errors="replace")[:1600]
+        if derived and not ((directory / "LICENSE.txt").is_file() and (directory / "NOTICE.md").is_file()):
+            errors.append(f"{directory.name}: derived skill lacks LICENSE.txt or NOTICE.md")
+        for path in directory.rglob("*"):
+            if not path.is_file() or path.name in {"LICENSE.txt", "NOTICE.md", "SOURCE_MANIFEST.md"}:
+                continue
+            if path.name in DENIED_HELPERS:
+                errors.append(f"{path.relative_to(ROOT)}: excluded helper was bundled")
+            if path.suffix == ".pyc":
+                errors.append(f"{path.relative_to(ROOT)}: bytecode was bundled")
+            if path.suffix not in {".md", ".py", ".mjs", ".js", ".json"}:
+                continue
+            text = path.read_text(encoding="utf-8", errors="replace")
+            for line in text.splitlines():
+                if UPSTREAM_NAME.search(line) and not ATTRIBUTION.search(line):
+                    errors.append(f"{path.relative_to(ROOT)}: upstream name outside attribution: {line.strip()[:80]}")
+                    break
+                if PROMOTION.search(line):
+                    errors.append(f"{path.relative_to(ROOT)}: promotional text: {line.strip()[:80]}")
+                    break
+            if path.suffix == ".md":
+                for target in MARKDOWN_LINK.findall(text):
+                    relative = target.split("#")[0]
+                    if relative and "<" not in relative and not re.match(r"^[a-z]+:", relative):
+                        if not (path.parent / relative).exists():
+                            errors.append(f"{path.relative_to(ROOT)}: broken link {target}")
+                            break
+
+
+def validate_build(errors: list[str]) -> None:
+    result = subprocess.run([sys.executable, str(ROOT / "scripts" / "build_skills.py"), "--check"],
+                            capture_output=True, text=True)
+    if result.returncode != 0:
+        errors.append("skills/, agents/, or catalog.json differ from a fresh build; run scripts/build_skills.py")
 
 
 def validate_manifest(errors: list[str]) -> None:
@@ -276,6 +309,8 @@ def main() -> int:
     validate_versions(errors)
     validate_upstreams(errors)
     validate_shared_copies(errors)
+    validate_skill_content(errors)
+    validate_build(errors)
     if not args.skip_manifest:
         validate_manifest(errors)
     result = {"skills": len(skills), "errors": errors, "warnings": warnings}
