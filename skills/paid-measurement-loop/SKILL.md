@@ -3,7 +3,7 @@ name: paid-measurement-loop
 description: "Use when the user asks to \"read back\" a paid campaign change, \"did this ad change work\", or \"compare ROAS/CPA before and after\"; reads ROAS/CPA against a control over a fixed readback window and returns a Promote / Keep-testing / Rollback / Unproven readback decision with the math delegated to roi-calculator. Not for RQS scoring or veto adjudication — use ad-account-auditor; not for the ROI ratio math — use roi-calculator; not for cross-channel rollups — use performance-analyzer. 付费广告复盘/ROAS回看/投放效果归因"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "paid-measurement"
   provenance: "source-a"
 ---

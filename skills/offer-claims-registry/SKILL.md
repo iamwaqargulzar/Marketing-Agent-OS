@@ -3,7 +3,7 @@ name: offer-claims-registry
 description: "Use when the user asks to \"register this claim\", \"log our current offers\", or \"where is the proof for this figure\"; curates claim wording, evidence, disclosures, terms, review dates, and live offers through the append-only claims event stream. Not for scoring claim vetoes — use the relevant auditor; not for writing ad copy — use ad-creative-builder. 广告声明台账/优惠信息登记/证据溯源"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "strategy"
   provenance: "source-a"
 ---

@@ -31,6 +31,7 @@ Quick reference for AI agents to discover tool capabilities and integration meth
 | dataforseo | SEO | ✓ | - | ✓ | ✓ | dataforseo.md |
 | keywords-everywhere | SEO | ✓ | - | ✓ | - | keywords-everywhere.md |
 | rankparse | SEO | ✓ | ✓ | ✓ | - | rankparse.md |
+| cloro | AEO | ✓ | ✓ | ✓ | - | cloro.md |
 | clearbit | Data Enrichment (legacy) | ✓ | - | ✓ | ✓ | clearbit.md |
 | apollo | Data Enrichment | ✓ | ✓ | ✓ | - | apollo.md |
 | zoominfo | Data Enrichment | ✓ | ✓ | ✓ | - | zoominfo.md |
@@ -46,6 +47,7 @@ Quick reference for AI agents to discover tool capabilities and integration meth
 | attio | CRM | ✓ | ✓ | - | ✓ | attio.md |
 | stripe | Payments | ✓ | ✓ | ✓ | ✓ | stripe.md |
 | paddle | Payments | ✓ | - | ✓ | ✓ | paddle.md |
+| agentaos | Payments | ✓ | ✓ | ✓ | ✓ | agentaos.md |
 | rewardful | Referral | ✓ | - | ✓ | - | rewardful.md |
 | tolt | Referral | ✓ | ✓ | ✓ | - | tolt.md |
 | dub-co | Links | ✓ | - | ✓ | ✓ | dub-co.md |
@@ -71,6 +73,7 @@ Quick reference for AI agents to discover tool capabilities and integration meth
 | hunter | Email Outreach | ✓ | ✓ | ✓ | - | hunter.md |
 | snov | Email Outreach | ✓ | - | ✓ | - | snov.md |
 | truelist | Email Verification | ✓ | ✓ | ✓ | ✓ | truelist.md |
+| precleared | Email Compliance | ✓ | ✓ | - | - | precleared.md |
 | github | Developer Intent | ✓ | - | ✓ | ✓ | github.md |
 | firecrawl | Site Scraping & AI Search | ✓ | ✓ | ✓ | ✓ | firecrawl.md |
 | browserbase | Site Scraping | ✓ | ✓ | - | ✓ | browserbase.md |
@@ -102,7 +105,9 @@ Quick reference for AI agents to discover tool capabilities and integration meth
 | theirstack | Hiring & Tech Signals | ✓ | ✓ | - | - | theirstack.md |
 | gong | Revenue Intelligence | ✓ | - | - | - | gong.md |
 | airops | AI Content | ✓ | - | ✓ | - | airops.md |
+| admakeai | AI Content | ✓ | ✓ | - | - | admakeai.md |
 | buffer | Social | ✓ | ✓ | ✓ | - | buffer.md |
+| post-bridge | Social | ✓ | ✓ | ✓ | - | post-bridge.md |
 | wistia | Video | ✓ | - | ✓ | - | wistia.md |
 | heygen | Video | ✓ | ✓ | - | ✓ | heygen.md |
 | hyperframes | Video | - | - | ✓ | ✓ | hyperframes.md |
@@ -177,6 +182,7 @@ Payment processing and subscription management.
 |------|----------|:-------------:|
 | **stripe** | SaaS subscriptions, developer-friendly | ✓ |
 | **paddle** | SaaS billing with tax handling | - |
+| **agentaos** | Merchant of record for individuals and companies, local payouts in 85 countries | ✓ |
 
 **Agent recommendation**: Stripe for developer-first SaaS billing. Paddle for built-in tax compliance (merchant of record).
 
@@ -303,8 +309,9 @@ Social media scheduling, management, and analytics.
 | Tool | Best For | Notes |
 |------|----------|-------|
 | **buffer** | Social scheduling, analytics | Multi-platform |
+| **post-bridge** | Scheduling one video to many accounts and platforms, per-post analytics | Short-form video focus; daily view snapshots |
 
-**Agent recommendation**: Buffer for scheduling and analytics across social platforms.
+**Agent recommendation**: Use the scheduler the user already has. Both schedule across platforms through an API and MCP.
 
 ### Video
 
@@ -343,6 +350,16 @@ Pre-outreach email deliverability validation.
 | **truelist** | Bulk + single email verification, catch-all resolution | Returns `email_state` (ok / email_invalid / accept_all / risky / unknown) + `email_sub_state`. Batches with webhook + CSV results, `enhanced` strategy for catch-alls. Hosted OAuth MCP, CLI, 7-language SDKs. |
 
 **Agent recommendation**: Truelist for any prospect list before outreach — Apollo/ZoomInfo/Hunter data accuracy is typically 60–80%, validation is non-negotiable to keep sender reputation healthy.
+
+### Email Compliance
+
+Whether a cold or marketing email to a given recipient is allowed in their country (consent, sender identity and opt-out rules), as distinct from whether it will arrive.
+
+| Tool | Best For | Notes |
+|------|----------|-------|
+| **precleared** | Per-address permission check before the first cold email (UK, US, CA, DE, FR, AU, IE, NL) | Verdict, the rule quoted with its source, footer requirements, a signed receipt. Free daily allowance, API + MCP |
+
+**Agent recommendation**: Before the first cold email to anyone in the UK, Canada, Australia or Europe, settle whether consent is needed, either with a check like this or by hand against the official guidance linked in the guide. UK sole traders and German business addresses are the common traps. Deliverability verification (Truelist) answers a different question; do both.
 
 ### Developer Intent / GitHub
 
@@ -489,8 +506,9 @@ Answer engine optimization tools for AI visibility monitoring, competitor benchm
 | Tool | Best For | Notes |
 |------|----------|-------|
 | **omnia** | AI visibility monitoring, prompt discovery, competitor benchmarking, citation analysis, and agent-assisted content optimization and outreach | REST API + OAuth MCP for data access; built-in agent for execution |
+| **cloro** | Raw answers and cited sources from ChatGPT, Google AI Mode, Bing AI Mode, and Gemini, and Google results with the AI Overview, per country | API (sync and async batch), hosted MCP, CLI; credit-based; no dashboard |
 
-**Agent note**: Omnia is the only AEO tool with an integration guide here. The ai-seo skill's monitoring tools table lists the alternatives (Otterly AI, Peec AI, ZipTie, LLMrefs, Profound, Ahrefs Brand Radar, Semrush) and a DIY method; choose on coverage and fit. With Omnia, use MCP for interactive analysis or the API for recurring reports; the built-in Omnia Agent handles content updates, publishing, and outreach with user approval.
+**Agent note**: Omnia and cloro have integration guides here. Omnia is a monitoring platform with history and reports; cloro returns the raw answers and sources, and the agent does the counting. The ai-seo skill's monitoring tools table lists the alternatives (Otterly AI, Peec AI, ZipTie, LLMrefs, Profound, Ahrefs Brand Radar, Semrush) and a DIY method; choose on coverage and fit. With Omnia, use MCP for interactive analysis or the API for recurring reports; the built-in Omnia Agent handles content updates, publishing, and outreach with user approval.
 
 ### AI Content
 
@@ -499,6 +517,7 @@ AI-powered content generation and optimization platforms.
 | Tool | Best For | Notes |
 |------|----------|-------|
 | **airops** | AI content workflows, SEO content | Flow-based automation |
+| **admakeai** | Meta and TikTok ad images, UGC-style video ads, Meta Ad Library lookups | API + MCP; credit-based; publishes to Meta as paused drafts |
 
 **Agent recommendation**: AirOps for building AI content workflows that generate SEO-optimized content at scale.
 
@@ -594,6 +613,7 @@ These tools have Model Context Protocol servers available, enabling direct agent
 - **crossbeam** - Partner ecosystem data
 - **introw** - Partner relationship management
 - **omnia** - AI visibility, competitor mentions, and citation data (OAuth)
+- **cloro** - AI answers with cited sources, and Google results with the AI Overview
 - **exa** - AI-powered web search for LLMs and agents
 - **apollo** - B2B prospecting, enrichment, and sequences
 - **hubspot** - CRM read and write
@@ -604,6 +624,7 @@ These tools have Model Context Protocol servers available, enabling direct agent
 - **heyreach** - LinkedIn outreach (per-workspace MCP key)
 - **hunter** - Email finding and verification
 - **truelist** - Email verification and batches
+- **precleared** - Cold email permission check per address, with a signed receipt
 - **fullenrich** - Waterfall email and mobile enrichment
 - **leadmagic** - Enrichment, job changes, technographics
 - **rowbound** - Open-source Sheets enrichment with waterfalls (stdio MCP)
@@ -613,6 +634,7 @@ These tools have Model Context Protocol servers available, enabling direct agent
 - **firecrawl** - Page scraping and crawling
 - **browserbase** - Cloud browser automation
 - **calendly** - Availability and booking links
+- **admakeai** - Ad images, UGC video ads and Meta Ad Library lookups
 
 To use MCP tools, ensure the appropriate MCP server is configured in your environment. Most hosted servers sign in with per-user OAuth, which suits interactive sessions; for scheduled or unattended agent runs, use the tool's API key (with the CLI or API, or an MCP that accepts a key header). MCP status checked 2026-10-07.
 
@@ -677,7 +699,7 @@ Strategy, copy, cadence, and compliance live in the `prospecting` and `cold-emai
 | 1 | Build the account list | apollo, zoominfo, clay, exa (lookalikes), leadmagic (lookalikes), apify (public directories) | ✓ | ✓ |
 | 2 | Add buying signals | theirstack (hiring, tech), leadmagic (job changes), rb2b (site visitors), github (dev intent) | ✓ | ✓ (rb2b via Zapier) |
 | 3 | Find contacts and emails | apollo, fullenrich (waterfall), leadmagic, hunter, clay | ✓ | ✓ |
-| 4 | Verify before sending | truelist (catch-all resolution) | ✓ | ✓ |
+| 4 | Verify before sending | truelist (catch-all resolution), precleared (whether the email is allowed in the recipient's country) | ✓ | ✓ |
 | 5 | Send email sequences | instantly, lemlist, outreach (enterprise) | ✓ | ✓ |
 | 6 | LinkedIn steps | heyreach, lemlist (email + LinkedIn) | API | ✓ |
 | 7 | Book meetings | calendly, savvycal | ✓ | ✓ |

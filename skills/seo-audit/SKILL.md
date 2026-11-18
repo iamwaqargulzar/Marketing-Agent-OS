@@ -1,9 +1,9 @@
 ---
 name: seo-audit
-description: "When the user wants to audit, review, or diagnose SEO issues on their site. Also use when the user mentions \"SEO audit,\" \"technical SEO,\" \"why am I not ranking,\" \"SEO issues,\" \"on-page SEO,\" \"meta tags review,\" \"SEO health check,\" \"my traffic dropped,\" \"lost rankings,\" \"not showing up in Google,\" \"site isn't ranking,\" \"Google update hit me,\" \"page speed,\" \"core web vitals,\" \"crawl errors,\" \"indexing issues,\" \"stuck on page 2,\" \"striking distance keywords,\" \"title tag rewrite,\" \"low CTR,\" \"local SEO,\" \"Google Business Profile,\" or \"map pack.\" Use this even if the user just says something vague like \"my SEO is bad\" or \"help with SEO\" — start with an audit. For building pages at scale to target keywords, see programmatic-seo. For adding structured data, see schema. For AI search optimization, see ai-seo."
+description: "When the user wants to audit or diagnose SEO, or asks why traffic dropped, a page won't rank, or whether a setup like canonicals, hreflang, or redirects is right: technical SEO, indexing, Google updates, on-page and titles, Core Web Vitals, local SEO. Start here when someone just says their SEO is bad. For pages at scale, see programmatic-seo. For structured data, see schema. For AI search, see ai-seo."
 license: MIT AND Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "seo-geo"
   provenance: "source-d"
 ---
@@ -473,7 +473,7 @@ Read [the additions for this skill](references/additions.md) before finishing.
 
 ## Helper notes
 
-Some helpers need these Python packages: bs4, htmldate, matplotlib, numpy, openpyxl, playwright, pypdf, requests, trafilatura, weasyprint. Ask before installing them. If they are unavailable, use the host's own fetch or browser tools.
+Some helpers need these Python packages: bs4, htmldate, matplotlib, numpy, openpyxl, playwright, pypdf, requests, trafilatura, urllib3, weasyprint. Ask before installing them. If they are unavailable, use the host's own fetch or browser tools.
 
 Helpers referenced outside this folder: `backlinks_auth.py`, `drift_history.py`, `google_auth.py`, `matomo_auth.py`. Look them up in the complete source library described below. Run each from its original source root with its declared dependencies. If a helper is absent from the pinned source too, use a connected tool or user-provided data and identify any missing evidence.
 

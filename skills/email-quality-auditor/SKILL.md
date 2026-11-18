@@ -3,7 +3,7 @@ name: email-quality-auditor
 description: "Use when the user asks to \"audit an email program\" or \"is this campaign safe to send\"; runs a typed 20-item SEND profile with authentication, consent, opt-out, and claim veto checks on own evidence. Not for building deliverability setup — use deliverability-qa; not for designing lifecycle flows — use email-sequence-designer. 邮件质量审计/EQS评分/发送前放行"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "lifecycle"
   provenance: "source-a"
 ---

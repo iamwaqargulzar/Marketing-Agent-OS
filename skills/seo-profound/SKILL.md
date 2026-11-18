@@ -3,7 +3,7 @@ name: seo-profound
 description: "Profound LLM citation tracker (extension). Time-series brand citation rates across ChatGPT, Perplexity, and other LLMs. Pairs with seo-seranking for triangulated AI visibility coverage."
 license: MIT AND Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "seo-geo"
   provenance: "source-b"
 ---

@@ -3,7 +3,7 @@ name: seo-ahrefs
 description: "Ahrefs API analyst (extension). Reads referring domains, backlinks, organic keywords, and content explorer data via the tested @ahrefs/mcp@0.0.11 server. Pairs with seo-backlinks for multi-source confidence weighting."
 license: MIT AND Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "seo-geo"
   provenance: "source-b"
 ---

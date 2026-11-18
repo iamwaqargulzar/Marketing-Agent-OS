@@ -3,7 +3,7 @@ name: seo-google
 description: "Google SEO APIs: Search Console (Search Analytics, URL Inspection, Sitemaps), PageSpeed Insights v5, CrUX field data with 25-week history, Indexing API v3, and GA4 organic traffic. Provides real Google field data for Core Web Vitals, indexation status, search performance, and organic traffic trends. Use when user says \"search console\", \"GSC\", \"PageSpeed\", \"CrUX\", \"field data\", \"indexing API\", \"GA4 organic\", \"URL inspection\", or \"real CWV data\"."
 license: MIT
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "seo-geo"
   provenance: "source-b"
 ---
@@ -25,7 +25,7 @@ Before executing any command, check credentials:
 python3 scripts/google_auth.py --check --json
 ```
 
-Config file: `~/.config/marketing-agent-os/google-api.json`
+Config file: `~/.config/marketing-agent-os/google-api.json`, or `google-api.json` in `CLAUDE_SEO_PROFILE_DIR` when a project sets one (see `references/auth-setup.md`, Per-Project Profiles).
 ```json
 {
   "service_account_path": "/path/to/service_account.json",
@@ -114,6 +114,8 @@ Output includes per-metric trend direction, percentage change, and weekly p75 va
 Search Analytics: clicks, impressions, CTR, position for last 28 days.
 
 **Script:** `python3 scripts/gsc_query.py --property <property> --json`
+**Site URL or host instead of a property** (every site audit): `python3 scripts/gsc_query.py --domain <audited-domain> --json`
+**Which flag:** a GSC property (`sc-domain:example.com`, or a URL-prefix property the user named as such) goes to `--property`; a site URL or host goes to `--domain`, which looks up that site's property and refuses another site's. Never pass a property to `--domain` or leave either flag empty. With neither flag the script names the default property on stderr, or exits if a `sites` mapping is configured (`references/auth-setup.md`).
 **Reference:** `references/search-console-api.md`
 **Default:** 28 days, dimensions=query,page, type=web, limit=1000.
 
@@ -143,7 +145,7 @@ dimension rows, not the size of every pagination request.
 
 URL Inspection: real indexation status from Google.
 
-**Script:** `python3 scripts/gsc_inspect.py <url> --json`
+**Script:** `python3 scripts/gsc_inspect.py <url> --domain <audited-domain> --json`
 
 Returns: verdict (PASS/FAIL), coverage state, robots.txt status, indexing state,
 page fetch state, canonical selection, rich results. (`mobileUsabilityResult` is deprecated
@@ -153,7 +155,7 @@ in the API; do not report it as a mobile-usability check.)
 
 Batch inspection from a file (one URL per line). Rate limited to 2,000/day per site.
 
-**Script:** `python3 scripts/gsc_inspect.py --batch <file> --json`
+**Script:** `python3 scripts/gsc_inspect.py --batch <file> --domain <audited-domain> --json`
 
 ### `/seo google sitemaps <property>`
 
@@ -162,6 +164,7 @@ submitted counts only; URL Inspection API is the indexation truth for whether
 specific URLs are indexed.
 
 **Script:** `python3 scripts/gsc_query.py sitemaps --property <property> --json`
+**Site URL or host instead of a property:** `python3 scripts/gsc_query.py sitemaps --domain <audited-domain> --json`
 
 ---
 
@@ -176,6 +179,8 @@ Notify Google of a URL update.
 
 The Indexing API is officially for JobPosting and BroadcastEvent/VideoObject pages.
 Always inform the user of this restriction. Daily quota: 200 publish requests.
+An OAuth sign-in is read-only unless made with `google_auth.py --auth --indexing`;
+when the script reports `missing_indexing_scope`, relay the command it prints.
 
 ### `/seo google index-batch <file>`
 
@@ -191,7 +196,9 @@ Batch submit URLs from a file. Tracks quota usage.
 
 Organic traffic report: daily sessions, users, pageviews, bounce rate, engagement.
 
-**Script:** `python3 scripts/ga4_report.py --property <id> --json`
+**Script:** `python3 scripts/ga4_report.py --property <property-id> --json`
+**Site URL or host, or no property ID given** (every site audit): `python3 scripts/ga4_report.py --domain <audited-domain> --json`
+**Which flag:** a numeric GA4 property ID goes to `--property`; a site URL or host goes to `--domain`. Same rules as `gsc` above.
 **Reference:** `references/ga4-data-api.md`
 **Default:** 28 days, filtered to Organic Search channel group.
 
@@ -201,7 +208,8 @@ Organic traffic report: daily sessions, users, pageviews, bounce rate, engagemen
 
 Top organic landing pages ranked by sessions.
 
-**Script:** `python3 scripts/ga4_report.py --property <id> --report top-pages --json`
+**Script:** `python3 scripts/ga4_report.py --property <property-id> --report top-pages --json`
+**Site URL or host, or no property ID given:** `python3 scripts/ga4_report.py --domain <audited-domain> --report top-pages --json`
 
 ---
 
@@ -236,6 +244,7 @@ Full NLP analysis: entities, sentiment, content classification.
 
 **Script:** `python3 scripts/nlp_analyze.py --url <url> --json` or `--text "..."`
 **Reference:** `references/nlp-api.md`
+**Language:** auto-detected by default; add `--language <code>` (BCP-47, e.g. `pt-BR`) only to override the detection. The JSON `language` field reports the code used.
 **Free tier:** 5,000 units/month. Requires billing enabled on GCP project.
 
 ### `/seo google entities <url-or-text>`

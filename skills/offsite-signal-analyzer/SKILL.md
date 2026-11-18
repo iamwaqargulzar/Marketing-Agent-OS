@@ -3,7 +3,7 @@ name: offsite-signal-analyzer
 description: "Use when the user asks to \"analyze backlinks\", \"analyze my off-site signals\", or \"track AI traffic / ChatGPT / Perplexity referrals\"; profiles referring domains, anchor-text mix, toxic links, and disavow candidates (backlinks mode) or isolates AI-assistant referral sessions in GA4/GSC/logs and reports their trend, landing pages, and AI-vs-organic conversion (ai-referrals mode). Not for internal links — use site-structure-optimizer; not for keyword positions — use rank-tracker; not for multi-metric stakeholder reports — use performance-monitor. 外链分析/反向链接/AI流量/AI引荐/ChatGPT流量/AI转化"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "seo-geo"
   provenance: "source-a"
 ---

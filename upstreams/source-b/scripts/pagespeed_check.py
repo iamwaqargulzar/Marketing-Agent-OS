@@ -141,7 +141,16 @@ def run_pagespeed(
         return result
     except requests.exceptions.HTTPError as e:
         if resp.status_code == 429:
-            result["error"] = "PSI rate limit exceeded (240 QPM / 25,000 QPD). Wait and retry."
+            if api_key:
+                result["error"] = "PSI rate limit exceeded (240 QPM / 25,000 QPD). Wait and retry."
+            else:
+                # Keyless requests share one public quota that is often spent,
+                # so waiting rarely helps.
+                result["error"] = (
+                    "PSI rate limit exceeded. No API key was used, so this request shared "
+                    "Google's public keyless quota. Add a Google API key (run `/seo google setup` "
+                    "or pass --api-key) and retry."
+                )
         elif resp.status_code == 400:
             result["error"] = f"Invalid URL or parameters: {redact_google_api_key(resp.text)}"
         else:
@@ -537,9 +546,14 @@ def main():
         result = query_crux(args.url, api_key, form_factor=args.form_factor)
     elif args.psi_only:
         strategies = ["mobile", "desktop"] if args.strategy == "both" else [args.strategy]
-        result = {"psi": {}}
+        result = {"psi": {}, "error": None}
         for strat in strategies:
-            result["psi"][strat] = run_pagespeed(args.url, strategy=strat, api_key=api_key)
+            psi_result = run_pagespeed(args.url, strategy=strat, api_key=api_key)
+            result["psi"][strat] = psi_result
+            if psi_result.get("error"):
+                # Surface the per-strategy failure at the top level so the
+                # exit-code check below sees it, as combined_check already does.
+                result["error"] = psi_result["error"]
     else:
         result = combined_check(args.url, api_key=api_key, strategy=args.strategy)
 

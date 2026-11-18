@@ -3,7 +3,7 @@ name: seo-content-brief
 description: "Generate competitive SEO content briefs with per-section word counts, competitor scoring, keyword placement guidance, and page-type templates. Supports both new page briefs and improve-existing-page briefs. Use when user says \"content brief\", \"write a brief\", \"content outline\", \"blog brief\", \"service page brief\", \"brief for\", \"writing brief\", \"content plan\", or \"outline for\"."
 license: MIT
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "seo-geo"
   provenance: "source-b"
 ---
@@ -123,13 +123,13 @@ Image alt text describes the image; it is not a required keyword placement.
 ## Meta Tag Rules
 
 **Title tag:**
-- 50-60 characters (never under 50, never over 60)
+- 50-60 characters (never under 50, never over 60). This is a writing target inside the audit limits in `skills/seo/references/quality-gates.md` (30-60).
 - Primary keyword first, brand name last
 - Separate brand with a pipe or dash (match the site's existing pattern)
 - Lead with outcomes, numbers, or specifics when possible
 
 **Meta description:**
-- 130-150 characters (never under 130, never over 150)
+- 130-150 characters (never under 130, never over 150). A writing target inside the audit limits (120-160).
 - Active voice, expand on the title with USPs and specifics
 - End with a call to action
 - No brand name at the end (it's already in the title)

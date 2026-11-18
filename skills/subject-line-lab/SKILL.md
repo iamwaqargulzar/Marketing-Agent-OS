@@ -3,7 +3,7 @@ name: subject-line-lab
 description: "Use when the user asks to \"generate subject line variants\", \"pre-score my subject lines\", or \"will this subject get truncated / trigger spam filters\"; produces a labeled subject + preheader variant set and a per-variant heuristic pre-score card — spam-trigger flags, length/truncation across desktop + mobile, emoji-count, and the inbox preview render (from-name + subject + preheader) — before any test is run. Not for the body copy or CTA — use email-creative-builder; not for the A/B test design or significance read — use send-experiment-designer; not for the profile-weighted EQS or the S1/S2/N1/D1 vetoes — use email-quality-auditor. 邮件主题行生成/主题行预打分/截断与垃圾词检查"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "lifecycle"
   provenance: "source-a"
 ---

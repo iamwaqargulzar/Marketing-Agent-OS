@@ -3,7 +3,7 @@ name: budget-pacing-monitor
 description: "Use when the user asks to \"check pacing\", \"am I over/under-spending\", \"is this campaign on track to hit budget\", or \"why did spend spike/stall mid-flight\"; returns a spend-vs-target-curve read, learning-phase status, an over/under-delivery call, and a reallocation trigger. Not for initial budget allocation — use budget-optimizer; not for choosing the bid strategy — use bid-strategy-planner; not for the RQS gate — use ad-account-auditor. 付费广告预算节奏监控/跑量过快过慢/在途配速"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "paid-measurement"
   provenance: "source-a"
 ---

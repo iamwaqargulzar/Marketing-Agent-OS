@@ -3,7 +3,7 @@ name: geo-report
 description: "Generate a professional, client-facing GEO report combining all audit results into a single deliverable with scores, findings, and prioritized actions"
 license: MIT
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "seo-geo"
   provenance: "source-c"
 ---

@@ -3,7 +3,7 @@ name: crisis-response-planner
 description: "Use when the user asks to \"build our social crisis protocol\", \"mentions are exploding — what do we do first\", or \"when do we pause the posting queue\"; produces a 1-5 severity ladder with tunable Estimated trigger thresholds (mention-velocity multiples vs the 7-day listening baseline, sentiment flip, journalist/regulator contact, employee-conduct class), the first-mechanical-action rule — pause ALL scheduled posts AND paid amplification, with dated state markers dropped to the channels proposal protocol and reconciled post-incident — a pre-approved holding-statement library with committed update cadences, when-NOT-to-post rules, a spokesperson/approval matrix, and a post-crisis retro template; re-runs the social-quality-auditor pre-publish gate before un-pausing the queue. Not for email deliverability incidents (blocklist, spam-rate spikes) — use deliverability-qa; inside a launch window launch-day-conductor owns incident handling. 社媒危机预案/暂停队列/声明库/发言人矩阵"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "social-growth"
   provenance: "source-a"
 ---

@@ -3,7 +3,7 @@ name: social-measurement-loop
 description: "Use when the user asks to \"run the weekly social readout\", \"which denominator does our engagement rate use\", or \"which posts won this week and what changes next cycle\"; produces the organic-social metric dictionary (every rate names its denominator — ERR engagement-by-reach vs ERI by-impressions vs ER-by-follower — locked across periods), median-not-mean per-post rollups with organic and boosted separated, EMV as labeled exec-translation only (never inside any score), an attributed CHAOSS/Orbit-style community-health readout with employees excluded, and the best/worst-performer write-back the next calendar cycle consumes. Not for dollar-ROI math or the ECHO profile result gate verdict — use roi-calculator and social-quality-auditor. 社媒周报/互动率分母/指标字典/复盘回写"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "social-growth"
   provenance: "source-a"
 ---

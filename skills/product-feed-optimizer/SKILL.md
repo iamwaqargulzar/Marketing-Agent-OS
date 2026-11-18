@@ -3,7 +3,7 @@ name: product-feed-optimizer
 description: "Use when the user asks to \"optimize my Shopping feed\", \"fix product disapprovals\", \"improve product titles/attributes\", or \"build feed-driven PMax asset groups\"; audits and rewrites the Shopping/Performance Max product feed — title/description patterns, required and recommended attributes, GTIN/availability/price hygiene, disapproval triage, and feed-driven asset-group / listing-group structure — informing the ROAS O (Offer) dimension. Not for text ad copy — use ad-creative-builder; not for scoring the account or the RQS — use ad-account-auditor. 商品Feed优化/购物广告Feed/商品标题优化/商品禁投修复"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "paid-measurement"
   provenance: "source-a"
 ---

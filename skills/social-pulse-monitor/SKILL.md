@@ -3,7 +3,7 @@ name: social-pulse-monitor
 description: "Use when the user asks to \"monitor brand mentions\", \"set up social listening\", \"did anything spike about us this week\", or \"watch these accounts for buying triggers\"; runs always-on keyless listening — a versioned listening-query architecture (brand variants incl. misspellings and 中文 names, exclusion terms, per-source syntax for HN Algolia / Bluesky / GDELT / Tavily), a mention sweep with six-class triage (crisis / bug / lead / praise / question / spam) each routed with an SLA, a 7-day rolling baseline with spike flags (the crisis trigger input), a B2B trigger watchlist (funding / hiring / launch signals), and an explicit coverage disclosure where X/IG/TikTok/LinkedIn/小红书 numbers are proxy-labeled, never Measured. Not for launch-window telemetry (T-0→T+30 rank and review polling) — use launch-monitor. 舆情监听/品牌提及监测/基线突刺/触发信号"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "social-growth"
   provenance: "source-a"
 ---

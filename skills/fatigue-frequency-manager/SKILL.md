@@ -3,7 +3,7 @@ name: fatigue-frequency-manager
 description: "Use when the user asks to \"is my ad fatiguing\", \"why is CTR dropping at scale\", or \"should I rotate creative / widen the audience\"; reads frequency, CTR and CVR decay against an early-flight baseline and returns Rotate-creative / Widen-audience / Hold triggers with a per-ad-set fatigue read. Not for building the replacement creative — use ad-creative-builder; not for the RQS score or vetoes — use ad-account-auditor. 广告疲劳检测/频次管理/换素材还是扩人群"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "paid-measurement"
   provenance: "source-a"
 ---

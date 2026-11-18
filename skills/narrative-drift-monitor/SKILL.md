@@ -3,7 +3,7 @@ name: narrative-drift-monitor
 description: "Use when the user asks to \"check if our surfaces have drifted from the canon\", \"watch for competitor repositioning\", or \"define when we should reposition\"; produces a drift report — self-drift per flagship surface vs the narrative-registry canon over time (via wayback.py, change history Measured with as-of dates), competitor-repositioning alerts, an explicit repositioning-trigger condition set, and a D1/W1/M1 message-shift retro (intended vs actual pull-through, evidence-labeled) — feeding the TALE L drift-audit sub-items and the narrative-whiplash guardrail fact base. Not for the first-time consistency check before a surface ships — use narrative-cascade-planner; not for computing the TALE profile result or running the vetoes — use narrative-quality-auditor; not for echo-rate / AI-answer resonance measurement — use narrative-resonance-monitor. 自漂移监测/竞品重定位告警/重定位触发/叙事漂移复盘"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "strategy"
   provenance: "source-a"
 ---

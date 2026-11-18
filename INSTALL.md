@@ -38,7 +38,7 @@ Use repeated `--skill` flags, for example:
 
 `python3 scripts/install.py --agent codex --skill marketing-os --skill seo --skill ai-seo --skill cro`
 
-With 241 skills, a selective install improves discovery on hosts with limited context budgets. Skills mention related skills by name; if one is not installed, the agent says so instead of failing.
+With 243 skills, a selective install improves discovery on hosts with limited context budgets. Skills mention related skills by name; if one is not installed, the agent says so instead of failing.
 
 The Python installer includes the shared `marketing-os` library with specialist selections. When selecting specialists through a third-party skill manager, select `marketing-os` too. Each source runtime can be extracted offline, including its original dependency manifests, helpers, tests, and agent definitions. See the [source library guide](skills/marketing-os/references/source-library.md). Use `--force` to upgrade an existing package-owned skill after reviewing local changes.
 

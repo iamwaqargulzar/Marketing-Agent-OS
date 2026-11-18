@@ -3,7 +3,7 @@ name: serp-markup-builder
 description: "Use when the user asks to \"optimize meta tags\", \"write title tags / meta descriptions\", \"add Open Graph or Twitter cards\", or \"generate schema / JSON-LD\" for FAQ, HowTo, Article, Product, or LocalBusiness rich-result candidates. Produces title/description options, an OG+Twitter block, and validated JSON-LD for the document head. Not for body copy — use content-writer; not for crawl/index technical issues — use technical-seo-checker. 标题优化/元描述/Schema标记/结构化数据"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "seo-geo"
   provenance: "source-a"
 ---

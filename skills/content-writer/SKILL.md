@@ -3,7 +3,7 @@ name: content-writer
 description: "Use when the user asks to \"write SEO content\", \"draft a blog post / landing page\", \"update outdated content\", or \"fix traffic/ranking decay\"; two modes — new drafts pages with keywords, headers, snippets, and evidence boundaries; refresh scores decay, prioritizes update work, and produces a republish plan with GEO guidance. Not for AI-citation/GEO readiness scoring — use geo-content-optimizer; not for publish-gate scoring — use content-quality-auditor. SEO文章写作/内容更新/排名恢复"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "seo-geo"
   provenance: "source-a"
 ---

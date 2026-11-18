@@ -3,7 +3,7 @@ name: conversion-value-mapper
 description: "Use when the user asks to \"set up conversion values so tROAS optimizes profit not orders\", \"map margin onto my purchase value\", \"build value rules for lead / phone / signup conversions\", or \"stop bidding to revenue when I care about profit\"; defines and QAs the conversion VALUE model — per-conversion values, margin/net-value adjustment, static-vs-dynamic value rules, proxy values for non-revenue actions, and a value-vs-count sanity check — as a value-model spec plus a pre-launch value QA sheet. Not for whether the tag fires or UTMs are clean — use conversion-signal-qa; not for cross-platform double-count de-dup — use attribution-reconciler; not for scoring R1/R2 — that is a scored veto in ad-account-auditor. 付费广告转化价值建模/利润出价/价值规则QA"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "paid-measurement"
   provenance: "source-a"
 ---

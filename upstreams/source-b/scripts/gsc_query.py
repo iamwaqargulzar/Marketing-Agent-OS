@@ -30,10 +30,12 @@ except ImportError:
 
 try:
     from google_auth import get_oauth_credentials, load_config
+    from google_properties import resolve_site_property
 except ImportError:
     import os
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from google_auth import get_oauth_credentials, load_config
+    from google_properties import resolve_site_property
 
 GSC_SCOPES = ["https://www.googleapis.com/auth/webmasters.readonly"]
 INDEXATION_NOTE = (
@@ -436,9 +438,14 @@ def main():
         choices=["query", "sitemaps", "sites"],
         help="Command: query (default), sitemaps, sites",
     )
-    parser.add_argument(
+    property_group = parser.add_mutually_exclusive_group()
+    property_group.add_argument(
         "--property", "-p",
-        help="GSC property (e.g., sc-domain:example.com). Uses default from config if not specified.",
+        help="Explicit GSC property (e.g., sc-domain:example.com). Without --property or --domain the config default is used, unless a sites mapping is configured.",
+    )
+    property_group.add_argument(
+        "--domain",
+        help="Audited site domain/URL; resolves its sites entry and refuses another site's default.",
     )
     parser.add_argument("--days", "-d", type=int, default=28, help="Number of days (default: 28)")
     parser.add_argument("--start-date", help="Start date (YYYY-MM-DD)")
@@ -460,11 +467,37 @@ def main():
 
     args = parser.parse_args()
 
-    # Resolve property
+    # Resolve property. An empty flag value (an unset shell variable, say) must
+    # not fall through to the global default and report another site's data.
+    for flag, value in (("--property", args.property), ("--domain", args.domain)):
+        if value is not None and not value.strip():
+            print(f"Error: {flag} was given an empty value.", file=sys.stderr)
+            sys.exit(1)
     prop = args.property
-    if not prop:
+    if prop is None and args.command != "sites":
         config = load_config()
-        prop = config.get("default_property")
+        if args.domain is not None:
+            try:
+                prop = resolve_site_property(config, "gsc", args.domain)
+            except ValueError as error:
+                print(f"Error: {error}", file=sys.stderr)
+                sys.exit(1)
+        elif config.get("sites"):
+            print(
+                "Error: A sites mapping is configured, so the default property is "
+                "not assumed. Pass --domain <audited-domain> or --property <property>.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+        else:
+            prop = config.get("default_property")
+            if prop:
+                print(
+                    f"Note: no --domain or --property given; using the default GSC "
+                    f"property {prop} from config. Pass --domain <audited-domain> to "
+                    "bind the query to the audited site.",
+                    file=sys.stderr,
+                )
     if not prop and args.command != "sites":
         print("Error: No property specified. Use --property or set default_property in config.", file=sys.stderr)
         sys.exit(1)

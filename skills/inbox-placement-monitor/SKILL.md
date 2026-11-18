@@ -3,7 +3,7 @@ name: inbox-placement-monitor
 description: "Use when the user asks to \"track where my emails are actually landing after I send\", \"read my seed-list inbox vs spam vs promotions results\", \"trend my Gmail Postmaster / Microsoft SNDS reputation\", or \"did placement drop after my last send\"; produces a per-provider inbox/spam/promotions placement read, a domain/IP reputation trend from Postmaster + SNDS, a send-over-send delta with named regressions, and a reusable SEND-S placement snapshot on your own exported telemetry. Not for the pre-send SPF/DKIM/DMARC auth pre-flight — use deliverability-qa; not for computing the EQS or running the vetoes — use email-quality-auditor. 邮件收件箱落点监测/收件箱vs垃圾邮件/Postmaster声誉趋势"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "lifecycle"
   provenance: "source-a"
 ---

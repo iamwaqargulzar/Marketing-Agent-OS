@@ -265,6 +265,8 @@
     "seo-local": "seo-geo",
     "seo-maps": "seo-geo",
     "seo-matomo": "analytics",
+    "seo-posthog": "analytics",
+    "seo-shopify": "seo-geo",
     "seo-page": "seo-geo",
     "seo-plan": "seo-geo",
     "seo-profound": "seo-geo",

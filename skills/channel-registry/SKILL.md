@@ -3,7 +3,7 @@ name: channel-registry
 description: "Use when the user asks to register/query a social channel, record channel state, cadence, governance, voice adaptation, UGC permission, or advocacy facts; curates them through the append-only channels event stream and derived views. Not for ECHO scoring — use social-quality-auditor; not for channel selection — use channel-portfolio-planner. 渠道台账/账号档案/UGC授权记录"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "strategy"
   provenance: "source-a"
 ---

@@ -3,7 +3,7 @@ name: roi-calculator
 description: "Use when the user asks to \"calculate influencer ROI\", \"prove campaign value\", or \"what was our ROAS\"; produces direct ROI/ROAS, earned media value, attribution-modeled revenue, LTV-based ROI, and a stakeholder-ready summary. Not for building the full slide/written report — use report-generator. 达人营销ROI计算/投资回报测算"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "influencer"
   provenance: "source-a"
 ---

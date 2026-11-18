@@ -3,7 +3,7 @@ name: performance-analyzer
 description: "Use when the user asks to \"analyze influencer campaign performance\", \"compare influencers\", or \"find what content worked\"; produces metric scorecards vs target and benchmark, platform/influencer/content rankings, engagement-quality and sentiment reads, conversion-attribution breakdowns, and ranked learnings. Not for dollar-level return math — use roi-calculator. 达人营销效果分析/投放复盘"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "influencer"
   provenance: "source-a"
 ---

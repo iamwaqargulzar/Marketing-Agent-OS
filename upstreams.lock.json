@@ -1,9 +1,9 @@
 {
-  "audited_on": "2026-11-01",
+  "audited_on": "2026-11-18",
   "schema_version": 1,
   "sources": {
     "source-a": {
-      "commit": "903d6479165fe11fc32e73e0e3c8c0179ed0c55a",
+      "commit": "0d4f52b376da850d5b3a8825548f39aff09d0a5b",
       "file_count": 961,
       "file_modes": {
         ".githooks/pre-commit": "100755",
@@ -34,12 +34,12 @@
       "license": "Apache-2.0",
       "path": "upstreams/source-a",
       "repository": "aaron-he-zhu/aaron-marketing-skills",
-      "tree_sha256": "36bc766c9f31f1608616e05568d76dbe208586e34e75d508b4a0b0e010639e89",
+      "tree_sha256": "edfda5ea2c1134d01badf6269c0721f0709a706e2f49ae2c171362fd3fb1551c",
       "url": "https://github.com/aaron-he-zhu/aaron-marketing-skills.git"
     },
     "source-b": {
-      "commit": "6be93f45064ffbadced572b5d5c95f55fd263af0",
-      "file_count": 467,
+      "commit": "468ed5b0d9e3249394783710e54abb02837e326b",
+      "file_count": 575,
       "file_modes": {
         "extensions/ahrefs/install.sh": "100755",
         "extensions/ahrefs/uninstall.sh": "100755",
@@ -60,10 +60,14 @@
         "extensions/firecrawl/uninstall.sh": "100755",
         "extensions/matomo/install.sh": "100755",
         "extensions/matomo/uninstall.sh": "100755",
+        "extensions/posthog/install.sh": "100755",
+        "extensions/posthog/uninstall.sh": "100755",
         "extensions/profound/install.sh": "100755",
         "extensions/profound/uninstall.sh": "100755",
         "extensions/seranking/install.sh": "100755",
         "extensions/seranking/uninstall.sh": "100755",
+        "extensions/shopify/install.sh": "100755",
+        "extensions/shopify/uninstall.sh": "100755",
         "extensions/unlighthouse/install.sh": "100755",
         "extensions/unlighthouse/uninstall.sh": "100755",
         "hooks/validate-schema.py": "100755",
@@ -78,12 +82,14 @@
         "scripts/parasite_risk.py": "100755",
         "scripts/parse_html.py": "100755",
         "scripts/runtime.py": "100755",
+        "scripts/shopify_crawl.py": "100755",
+        "scripts/shopify_env.py": "100755",
         "uninstall.sh": "100755"
       },
       "license": "MIT",
       "path": "upstreams/source-b",
       "repository": "AgriciDaniel/claude-seo",
-      "tree_sha256": "cbaa65ec477698daa8528f4fef1198ccaae7481c78d224397f3972974c030ab0",
+      "tree_sha256": "e7efcb2182ddafa7e1e36613cef71d2f05d5401e7d4b95f9cab29b46fdfb01e0",
       "url": "https://github.com/AgriciDaniel/claude-seo.git"
     },
     "source-c": {
@@ -100,8 +106,8 @@
       "url": "https://github.com/zubair-trabzada/geo-seo-claude.git"
     },
     "source-d": {
-      "commit": "88c79f6528a9347420e57ceb1fff9a60de651768",
-      "file_count": 817,
+      "commit": "73573e94a06a39965978b3fa1f9c1eace8cebc7c",
+      "file_count": 840,
       "file_modes": {
         "CLAUDE.md": "120000",
         "skills/conversion-tracking/scripts/check_recipes.py": "100755",
@@ -177,7 +183,7 @@
       "license": "MIT",
       "path": "upstreams/source-d",
       "repository": "coreyhaines31/marketingskills",
-      "tree_sha256": "7977d3e859068326f1e5be9cf0a8dc78815b0d61ae7d023407fbf9c2835a26d3",
+      "tree_sha256": "fb3f6735d534d0837b4b06017b5f21329f7492f94dd674c89719936e28765d29",
       "url": "https://github.com/coreyhaines31/marketingskills.git"
     }
   }

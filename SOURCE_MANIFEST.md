@@ -13,10 +13,10 @@ The package was checked against these upstream revisions. The snapshot date refl
 
 | Repository | Commit |
 |---|---|
-| `aaron-marketing-skills` | `903d6479165fe11fc32e73e0e3c8c0179ed0c55a` |
-| `claude-seo` | `6be93f45064ffbadced572b5d5c95f55fd263af0` |
+| `aaron-marketing-skills` | `0d4f52b376da850d5b3a8825548f39aff09d0a5b` |
+| `claude-seo` | `468ed5b0d9e3249394783710e54abb02837e326b` |
 | `geo-seo-claude` | `989cae01e8ebbc42a9ec798eb9e7cb423f5ec89c` |
-| `marketingskills` | `88c79f6528a9347420e57ceb1fff9a60de651768` |
+| `marketingskills` | `73573e94a06a39965978b3fa1f9c1eace8cebc7c` |
 
 ## Scope and structure
 
@@ -34,4 +34,4 @@ This repository ships both a clean normalized compatibility layer and complete s
 | `source-c` | `geo-seo-claude` |
 | `source-d` | `marketingskills` |
 
-See `docs/MAINTENANCE.md` for the update workflow, `docs/UPSTREAM_REVIEW-2026-11-01.md` for the latest review decisions, and `UPSTREAM_STATUS.json` for the inventory reconciliation.
+See `docs/MAINTENANCE.md` for the update workflow, `docs/UPSTREAM_REVIEW-2026-11-18.md` for the latest review decisions, and `UPSTREAM_STATUS.json` for the inventory reconciliation.

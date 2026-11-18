@@ -26,7 +26,7 @@ jobs:
       - name: Validate package
         run: python scripts/doctor.py
       - name: Install helper smoke-test dependencies
-        run: python -m pip install "requests>=2.34.2,<3" "beautifulsoup4>=4.12,<5" "lxml>=6.1.1,<7"
+        run: python -m pip install "requests>=2.34.2,<3" "beautifulsoup4>=4.15,<5" "lxml>=6.1.3,<7"
       - name: Run tests
         run: python -m unittest discover -s tests -v
       - name: Installer smoke test
@@ -44,7 +44,7 @@ jobs:
         run: |
           set -o pipefail
           npx --yes skills@1.5.22 add . --list --full-depth 2>&1 | tee /tmp/skills-discovery.txt
-          grep -q "241.*skills" /tmp/skills-discovery.txt
+          grep -q "243.*skills" /tmp/skills-discovery.txt
       - name: Verify major-harness projections
         shell: bash
         run: |

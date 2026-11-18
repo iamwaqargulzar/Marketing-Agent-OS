@@ -3,7 +3,7 @@ name: narrative-quality-auditor
 description: "Use when the user asks to \"audit our brand narrative\" or \"is this message on-canon\"; runs separate typed TALE truth, system, or effectiveness profiles and never averages them into one composite. Checks differentiation, canon, landing consistency, and evidence integrity. Not for launch readiness — use launch-readiness-auditor; not for social operations — use social-quality-auditor. 品牌叙事分层审计/发布前一致性放行"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "strategy"
   provenance: "source-a"
 ---

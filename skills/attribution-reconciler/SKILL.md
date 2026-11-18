@@ -3,7 +3,7 @@ name: attribution-reconciler
 description: "Use when platform-reported conversions disagree with GA4/ecommerce, when you suspect Meta and Google are double-counting the same sales, or for a standing (monthly) reconciliation workbook that de-dups stacked credit against an order-ID truth set, normalizes attribution windows and currency, compares attribution models, and reads incrementality from a geo/holdout test. Not for the point-in-time R2 veto or RQS gate — use ad-account-auditor; not for the ROI/ROAS ratio math itself — use roi-calculator; not for organic dark-social share attribution or GA4 direct-traffic decomposition — use dark-social-attributor. 付费广告归因对账/去重/增量"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "paid-measurement"
   provenance: "source-a"
 ---

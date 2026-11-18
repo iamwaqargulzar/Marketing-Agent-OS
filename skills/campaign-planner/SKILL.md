@@ -3,7 +3,7 @@ name: campaign-planner
 description: "Use when the user asks to \"plan an influencer campaign\", \"build a campaign blueprint\", \"track or close a creator campaign\", or \"record a late campaign correction\"; produces the plan and, when requested, a non-canonical evidence tracker with scoped identity, publication, reconciliation, close, and reopen receipts. Not for individual creator briefs — use brief-generator; not for overall product launches without creators — use launch-tier-planner; not for sending, publishing, amplifying, or paying — use the owning execution workflow. 达人营销策划/种草方案/活动追踪与关账"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "influencer"
   provenance: "source-a"
 ---

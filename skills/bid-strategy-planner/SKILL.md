@@ -3,7 +3,7 @@ name: bid-strategy-planner
 description: "Use when the user asks to \"pick a bid strategy\", \"set a tCPA/tROAS target\", or \"plan the learning-phase entry\"; produces a bid-strategy choice (tCPA / tROAS / max-conversions / manual CPC), the starting target math, a portfolio grouping map, and a learning-phase entry plan. Not for splitting the budget across campaigns — use budget-optimizer; not for in-flight pacing/scale moves — use budget-pacing-monitor; not for scoring the account — use ad-account-auditor. 出价策略/tCPA目标/tROAS/学习期"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "paid-measurement"
   provenance: "source-a"
 ---

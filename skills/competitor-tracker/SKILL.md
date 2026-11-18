@@ -3,7 +3,7 @@ name: competitor-tracker
 description: "Use when the user asks to \"track competitor influencer marketing\", \"see who my rivals partner with\", or \"benchmark my influencer program\"; produces a competitor partnership roster, campaign and content-strategy breakdown, performance estimates, and a gap/opportunity list. Not for finding your own new creators — use influencer-discovery. 竞品达人合作追踪/竞品营销分析"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "influencer"
   provenance: "source-a"
 ---

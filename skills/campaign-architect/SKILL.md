@@ -3,7 +3,7 @@ name: campaign-architect
 description: "Use when the user asks to \"plan my paid account structure\", \"pick Search vs PMax\", \"lay out ad groups / asset groups\", or \"audit paid-vs-organic cannibalization\"; designs campaign-type selection, ad-group/asset-group layout, targeting + match types, negative/exclusion hygiene, and a paid↔organic overlap audit, and scores the ROAS A (Audience) dimension + structure. Not for computing the final RQS — use ad-account-auditor; not for budget split — use budget-optimizer; not for organic site architecture — use site-structure-optimizer. 付费广告账户结构/广告系列规划/否定关键词"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "paid-measurement"
   provenance: "source-a"
 ---

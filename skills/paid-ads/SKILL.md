@@ -3,7 +3,7 @@ name: paid-ads
 description: "Earlier name for ads, kept so existing setups keep working. Use when paid ads is requested by this exact name."
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "marketing"
   provenance: "marketing-agent-os"
 ---

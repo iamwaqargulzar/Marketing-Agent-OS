@@ -3,7 +3,7 @@ name: seo-bing
 description: "Bing Webmaster Tools + IndexNow extension. Microsoft Copilot citations are fed by the Bing index; this skill makes Bing visibility, link data, and IndexNow URL submission first-class."
 license: MIT AND Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "seo-geo"
   provenance: "source-b"
 ---
@@ -18,7 +18,12 @@ specifically for **Amazon/Bing/Naver/Seznam.cz/Yandex/Yep indexing** and
 
 ## Prerequisites
 
-- Run `extensions/bing-webmaster/install.sh` or `install.ps1`.
+- This skill loads with the marketing-agent-os plugin, so a plugin install needs no
+  skill copy. Manual installs get it from the main installer.
+- Store the keys once: run `extensions/bing-webmaster/install.sh` or `install.ps1`
+  from the plugin or repository folder. It writes `BING_WEBMASTER_API_KEY`,
+  `INDEXNOW_KEY` and `INDEXNOW_KEY_LOCATION` to the `env` block of
+  the host's settings; you can also add them there by hand.
 - A Bing Webmaster Tools API key.
 - Optional: an IndexNow host key (32+ chars) published at the URL
   declared as `INDEXNOW_KEY_LOCATION`.
@@ -74,7 +79,7 @@ Helpers referenced outside this folder: `bing_webmaster.py`, `indexnow_submit.py
 
 ## Complete source workflow
 
-Original entrypoints: `source-b/extensions/bing-webmaster/skills/seo-bing/SKILL.md`. For original commands, agents, references, and dependencies, use the [source library](../marketing-os/references/source-library.md) in the companion `marketing-os` skill.
+Original entrypoints: `source-b/skills/seo-bing/SKILL.md`. For original commands, agents, references, and dependencies, use the [source library](../marketing-os/references/source-library.md) in the companion `marketing-os` skill.
 
 ## Marketing Agent OS operating rules
 

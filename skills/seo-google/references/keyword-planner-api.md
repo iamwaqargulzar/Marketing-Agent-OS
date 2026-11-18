@@ -33,7 +33,7 @@ Predict clicks, impressions, and cost for keywords.
 
 ## Configuration
 
-Add to `~/.config/marketing-agent-os/google-api.json`:
+Add to `google-api.json` in the config directory (default `~/.config/marketing-agent-os/`, or `CLAUDE_SEO_PROFILE_DIR` when the project sets it):
 
 ```json
 {

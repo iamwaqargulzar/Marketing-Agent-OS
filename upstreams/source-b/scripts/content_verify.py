@@ -37,7 +37,16 @@ Output JSON::
       ],
       "claim_count": int,
       "uncited_count": int,
-      "uncited_ratio": 0..1
+      "uncited_ratio": 0..1,
+      "coverage":      present only for CJK-dominant or other non-Latin-
+                       alphabetic-dominant text (Greek, Cyrillic, ...), e.g.
+                       {"script": "cjk"|"non_latin_alphabetic",
+                        "claim_patterns": "english_only"}: the claim
+                       patterns above key on English words ("of", "million",
+                       "in 2025", "times") or Latin-cased attribution
+                       ("Per Gartner"), so a low claim_count in one of these
+                       scripts means this tool found nothing to check, not
+                       that the draft has no unsupported claims.
     }
 
 The script is *advisory*: it does not check whether a citation actually
@@ -64,7 +73,7 @@ _CLAIM_PATTERNS: tuple[tuple[re.Pattern, str], ...] = (
     (re.compile(r"\b\d+(?:\.\d+)?\s*%\s+of\s+[a-zA-Z]+(?:\s+[a-zA-Z]+){0,4}",
                 re.IGNORECASE),
      "statistic"),
-    (re.compile(r"\b\d+(?:\.\d+)?\s*%\b"), "statistic"),
+    (re.compile(r"\b\d+(?:\.\d+)?\s*%"), "statistic"),
     (re.compile(r"\$\s?\d+(?:\.\d+)?\s*(?:million|billion|trillion|k|M|B)\b",
                 re.IGNORECASE), "quantity"),
     (re.compile(r"\b\d{1,3}(?:,\d{3})+(?:\.\d+)?\s+\w+", re.IGNORECASE),
@@ -97,10 +106,12 @@ _CITATION_PATTERNS: tuple[re.Pattern, ...] = (
     re.compile(r"\[\^?\d+\]"),  # footnote-style [1] or [^1]
     re.compile(r"@type\s*:\s*[\"']Citation[\"']"),  # schema.org Citation
     re.compile(
-        # "Source:", "Via:", "See also:", "Cited in", "Cited by", or
-        # "Per/According to" followed by a Proper Noun.
-        r"\b(?:source\s*:|via\s*:|see\s+also\s*:|cited\s+(?:in|by)|"
-        r"according\s+to|per)\s+[A-Z]",
+        # "Source:", "Via:", "See also:", "Cited in", "Cited by" or
+        # "According to" followed by any word, or "Per" followed by a
+        # Proper Noun. Only "per" needs the case-sensitive capital: it is
+        # the one prefix that is also a common word ("per week").
+        r"\b(?:(?:source\s*:|via\s*:|see\s+also\s*:|cited\s+(?:in|by)|"
+        r"according\s+to)\s+\S|per\s+(?-i:[A-Z]))",
         re.IGNORECASE,
     ),
 )
@@ -143,15 +154,58 @@ def extract_claims(text: str) -> list[dict]:
     return claims
 
 
+# Used only to flag that the claim patterns above are English-pattern-only
+# (they key on English words like "of", "million", "in", "by", "times",
+# "as", or Latin-cased proper nouns), not to detect a language. Same
+# approach as content_quality.py's script coverage note, duplicated here
+# rather than imported: each script in this repo is independently
+# invocable, with no cross-script imports.
+_CJK_CHAR_RE = re.compile(r"[가-힣ぁ-ゖァ-ヺー㐀-䶿一-鿿]")
+# ASCII letters plus the accented Latin blocks, so French or Vietnamese text
+# counts as Latin (same class as content_quality.py).
+_LATIN_CHAR_RE = re.compile(
+    r"[A-Za-z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u024f\u1e00-\u1eff]"
+)
+_ALPHA_CHAR_RE = re.compile(r"[^\W\d_]")
+
+
+def _detect_script(text: str) -> str | None:
+    """Return "cjk", "non_latin_alphabetic", or None for the dominant script.
+
+    A zero ``claim_count`` found in Greek, Cyrillic, Arabic, Hebrew, CJK or
+    any other non-Latin-alphabetic text does not mean the draft has no
+    unsupported claims: it means these English-word-keyed patterns (and the
+    Latin-cased "Per Gartner"-style attribution check) found nothing to look
+    at, because the claim is phrased in a script or wording they don't
+    recognise. ``verify()`` adds a ``coverage`` note for the caller to
+    surface that distinction rather than reporting a false "no issues".
+    """
+    cjk_chars = len(_CJK_CHAR_RE.findall(text))
+    latin_chars = len(_LATIN_CHAR_RE.findall(text))
+    if cjk_chars and cjk_chars >= latin_chars:
+        return "cjk"
+    other_alpha_chars = len(_ALPHA_CHAR_RE.findall(text)) - cjk_chars - latin_chars
+    if other_alpha_chars > 0 and other_alpha_chars >= latin_chars:
+        return "non_latin_alphabetic"
+    return None
+
+
 def verify(text: str) -> dict:
     claims = extract_claims(text)
     uncited = [c for c in claims if not c["has_citation"]]
-    return {
+    result = {
         "claims": claims,
         "claim_count": len(claims),
         "uncited_count": len(uncited),
         "uncited_ratio": round(len(uncited) / len(claims), 3) if claims else 0.0,
     }
+    script = _detect_script(text)
+    if script in ("cjk", "non_latin_alphabetic"):
+        result["coverage"] = {
+            "script": script,
+            "claim_patterns": "english_only",
+        }
+    return result
 
 
 def main() -> int:
@@ -184,6 +238,18 @@ def main() -> int:
         for c in result["claims"]:
             mark = "✓" if c["has_citation"] else "✗"
             print(f"  [{mark} {c['kind']:<11}] {c['text']!r}")
+        if result.get("coverage"):
+            script_label = {
+                "cjk": "CJK",
+                "non_latin_alphabetic": "non-Latin-script",
+            }.get(result["coverage"]["script"], result["coverage"]["script"])
+            print(
+                f"  Note: {script_label} text detected. The claim patterns "
+                "above are English-word-keyed heuristics, so a low claim "
+                "count here does not mean the draft has no unsupported "
+                "claims -- it means this tool could not look for them in "
+                "this script/wording."
+            )
 
     return 0 if result["uncited_ratio"] <= args.threshold else 1
 

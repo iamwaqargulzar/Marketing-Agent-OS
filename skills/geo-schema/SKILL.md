@@ -3,7 +3,7 @@ name: geo-schema
 description: "Schema.org structured data audit and generation optimized for AI discoverability — detect, validate, and generate JSON-LD markup"
 license: MIT
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "seo-geo"
   provenance: "source-c"
 ---

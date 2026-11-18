@@ -3,7 +3,7 @@ name: geo-compare
 description: "Monthly delta tracking and progress reporting for GEO clients. Compares two GEO audits (baseline vs. current), calculates score improvements across all categories, tracks action item completion, and generates a \"here's your progress\" client report. Use when user says \"compare\", \"delta\", \"monthly report\", \"progress\", \"confronta\", \"progressi\", \"report mensile\", or when running a monthly client check-in."
 license: MIT
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "seo-geo"
   provenance: "source-c"
 ---

@@ -3,7 +3,7 @@ name: consent-registry
 description: "Use when the user asks to \"log this subscriber's opt-in\", record unsubscribes/complaints, or query lawful basis; curates pseudonymous consent facts through the append-only consent stream and applies suppression/erasure tombstones immediately. Not for SEND scoring — use email-quality-auditor; not for building segments — use list-segment-builder. 订阅同意台账/实时退订抑制/合法性依据登记"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "strategy"
   provenance: "source-a"
 ---

@@ -3,7 +3,7 @@ name: geo-technical
 description: "Technical SEO audit with GEO-specific checks — crawlability, indexability, security, performance, SSR, and AI crawler access"
 license: MIT
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "seo-geo"
   provenance: "source-c"
 ---

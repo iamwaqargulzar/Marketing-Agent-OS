@@ -3,7 +3,7 @@ name: influencer-discovery
 description: "Use when the user asks to \"find influencers\", \"build an influencer list\", or \"discover creators in [niche]\"; produces a multi-platform candidate pool, per-influencer evidence profiles, authenticity red-flag screening, and a Fit-readiness queue without action ranking. Not for STAR scoring or ranking a known shortlist — use fit-scorer. 达人挖掘/找达人/创作者名单"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "influencer"
   provenance: "source-a"
 ---

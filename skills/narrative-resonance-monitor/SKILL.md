@@ -3,7 +3,7 @@ name: narrative-resonance-monitor
 description: "Use when the user asks to \"measure how our narrative is landing\", \"track echo rate against our canon lexicon\", or \"check how AI answer engines describe our brand\"; produces a resonance report — echo rate (overlap of market language with the narrative-registry canon lexicon, method declared), AI-answer perception via tavily.py --answer (proxy-labeled), share-of-voice on a locked competitor panel (reusing share-of-voice-tracker), and resonance signals from bluesky.py / gdelt.py / pageviews.py — every number labeled Measured / proxy / User-provided, feeding the TALE E dimension and the upstream of the E1 evidence-integrity veto. Not for rebuilding share-of-voice machinery — use share-of-voice-tracker; not for own-site GA4/GSC analytics — use performance-monitor; not for scoring TALE profile result — use narrative-quality-auditor; not for adjudicating claims — use offer-claims-registry. 回声率/AI回答感知/份额之声/共鸣信号"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "strategy"
   provenance: "source-a"
 ---

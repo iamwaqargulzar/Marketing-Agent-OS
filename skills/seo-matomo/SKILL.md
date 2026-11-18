@@ -3,7 +3,7 @@ name: seo-matomo
 description: "Matomo Reporting API extension. Self-hosted or Matomo Cloud analytics as a GA4 alternative or complement. Organic traffic, landing pages, device / country breakdowns, referrers, search keywords. Triggers on \"Matomo\", \"self-hosted analytics\", \"analytics ohne Google\", \"GA4 alternative\", \"Matomo Reporting\", \"Piwik\"."
 license: MIT AND Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "analytics"
   provenance: "source-b"
 ---

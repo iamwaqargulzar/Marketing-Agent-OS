@@ -3,7 +3,7 @@ name: deliverability-qa
 description: "Use when the user asks to \"run a deliverability pre-flight before I send\", \"check my SPF/DKIM/DMARC/BIMI\", \"why am I landing in spam / promotions\", or \"score my sender reputation and list hygiene\"; runs the ONE-TIME pre-send SEND S1 authentication pre-flight and builds the SEND S (Sender-integrity / Deliverability) evidence read — DNS + DMARC-RUA auth, domain/IP reputation, inbox placement, content/link/render, and point-in-time bounce/complaint hygiene — using Pass/Partial/Fail/Unknown/N/A states and scoring only at complete applicable coverage. Not for the recurring hygiene trend — use list-hygiene-monitor; not for final EQS or veto verdicts — use email-quality-auditor; not for segments/suppression lists — use list-segment-builder. 邮件送达率预检/SPF DKIM DMARC认证/发件域声誉"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "lifecycle"
   provenance: "source-a"
 ---

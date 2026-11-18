@@ -3,7 +3,7 @@ name: site-structure-optimizer
 description: "Use when the user asks to \"plan my site structure\", \"design the page hierarchy / navigation / URL taxonomy\", \"fix internal linking\", or \"find orphan pages\"; runs two modes — architecture (hierarchy, nav, URL patterns, hub/spoke clusters, Mermaid site maps) and linking (link graph, authority flow, anchor text, orphan disposition, source/target/anchor plan) — and outputs a structure score /100 plus a handoff summary. Not for external backlinks — use offsite-signal-analyzer; not for XML sitemap or indexation issues — use technical-seo-checker. 网站架构/信息架构/站点地图/内链优化"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "seo-geo"
   provenance: "source-a"
 ---

@@ -3,7 +3,7 @@ name: placement-exclusion-manager
 description: "Use when the user asks to \"build my brand-safety exclusion lists\", \"set placement / topic / content exclusions before launch\", \"add network and audience exclusions\", or \"prep the A1 brand-safety evidence for the auditor\"; produces a placement/network exclusion list, a content-suitability & sensitive-topic block list, an audience/negative-audience exclusion set, and a packaged A1 brand/placement-safety evidence file for the gate. Not for building the audiences you target — use audience-segment-builder; not for computing the RQS or issuing the A1 verdict — use ad-account-auditor. 品牌安全/排除位置/否定受众列表"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "paid-measurement"
   provenance: "source-a"
 ---

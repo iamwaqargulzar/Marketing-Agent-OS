@@ -3,7 +3,7 @@ name: engagement-inbox-manager
 description: "Use when the user asks to \"triage our comments, DMs, and mentions\", \"draft replies to this thread\", \"can we repost this fan post\", or \"set up inbox SLAs and an escalation path\"; produces a ranked triage queue with register detection (sincere / ironic / performative / parasocial, sentiment-inversion table included — \"this is so bad\" under a comedy register is praise), a commenter taxonomy (troll monitor-only / rager / misguided / unhappy-customer / advocate) with a response-tier ladder and per-channel SLAs, an escalation matrix ending at the crisis path, a moderation ladder plus house rules for owned spaces, and a UGC curation-and-rights mode whose dated permission entries route to the channel registry — every reply is a ranked DRAFT a human posts; nothing is ever auto-sent. Not for launch-window feedback triage — use launch-feedback-synthesizer. 评论私信提及分诊/语域识别/回复草稿/UGC授权"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "social-growth"
   provenance: "source-a"
 ---

@@ -3,7 +3,7 @@ name: memory-management
 description: "Use when the user asks to \"remember project context\", review saved findings, initialize runtime memory, archive stale work, reconcile notes, or erase a subject; manages authorized HOT/WARM/COLD working memory across all disciplines while preserving registry event ownership and privacy controls. Not for changing canonical registry facts - route those through the owning registry. 项目记忆/跨会话"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "strategy"
   provenance: "source-a"
 ---

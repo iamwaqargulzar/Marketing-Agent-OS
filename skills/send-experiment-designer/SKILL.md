@@ -3,7 +3,7 @@ name: send-experiment-designer
 description: "Use when the user asks to \"design an email A/B test\", \"set up a multivariate subject/CTA test\", \"run a send-time test\", \"build a hold-out group\", or \"is this email result statistically and practically material?\"; produces a falsifiable hypothesis, one-variable-per-cell matrix, sample-size/MDE/duration/power plan, and an effect/uncertainty read from own ESP data. Applies only a precommitted owner-approved action rule; the helper never chooses a business action. Not for EQS/vetoes or writing the email. 邮件AB测试设计/多变量测试/发送时间测试/留出组/显著性判定"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "lifecycle"
   provenance: "source-a"
 ---

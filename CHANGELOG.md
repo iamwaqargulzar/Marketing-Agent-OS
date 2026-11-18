@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 2.2.0 — 2026-11-18
+
+- Refresh source A to `0d4f52b3`, source B to `468ed5b0`, and source D to `73573e94`. Source C remains current at `989cae01`.
+- Add Shopify SEO and PostHog analytics specialists and a PostHog agent. The combined install provides 243 skills, 25 agent briefs, and 2,447 original source entries.
+- Carry forward the revised marketing workflows and original tooling in the offline source library.
+
 ## 2.1.0 — 2026-11-18
 
 - Include four complete pinned source trees with the installed router. Specialists point to their original entrypoints and the local installer includes the shared library on selective installs.

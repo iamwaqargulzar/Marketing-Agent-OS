@@ -3,7 +3,7 @@ name: creator-registry
 description: "Use when the user asks \"what did we pay this creator last time\" or to \"update the creator roster\"; curates creator identity, rate, rights, exclusivity, compliance-event, and performance facts through the append-only creators event stream. Not for scoring fit — use fit-scorer; not for reviewing content — use creator-content-auditor. 创作者档案/达人名册"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "strategy"
   provenance: "source-a"
 ---

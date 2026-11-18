@@ -3,7 +3,7 @@ name: email-creative-builder
 description: "Use when the user asks to \"write the email\", \"draft subject lines\", or \"build email creative\"; produces the pre-click unit — subject-line variants + preheader, body copy, one clear CTA, and a plain-text alt — message-matched to the destination page and claims-ledger-aware. Not for pre-scoring or ranking subject-line variants (spam/truncation/render pre-score) — use subject-line-lab; not for scoring the email or computing EQS — use email-quality-auditor; not for the multi-step flow — use email-sequence-designer; not for the A/B test plan — use send-experiment-designer. 邮件文案/主题行/邮件创意"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "lifecycle"
   provenance: "source-a"
 ---

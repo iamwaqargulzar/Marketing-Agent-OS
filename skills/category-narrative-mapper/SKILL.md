@@ -3,7 +3,7 @@ name: category-narrative-mapper
 description: "Use when the user asks to \"map the category narrative\", \"tear down how competitors tell their story\", or \"find the language conventions in our market\"; produces a category narrative map — the dominant stories and points of view in the category, its language conventions and framing clichés, and a per-competitor narrative teardown (arc, claimed onlyness, proof pattern) plus how each rival's messaging has shifted over time (scraped copy vs archived copy). Not for the positioning canvas itself — use positioning-mapper; not for the beachhead's beliefs and objections — use audience-belief-mapper; not for SERP keyword targeting — use keyword-research; not for claim adjudication — use offer-claims-registry. 品类叙事/竞争叙事拆解/语言惯例/叙事演变"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "strategy"
   provenance: "source-a"
 ---

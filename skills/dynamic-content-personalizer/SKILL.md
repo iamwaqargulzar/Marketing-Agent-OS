@@ -3,7 +3,7 @@ name: dynamic-content-personalizer
 description: "Use when the user asks to \"personalize the email\", \"add merge tags / dynamic content\", \"set up conditional blocks per segment\", or \"make first-name and product-recommendation fields fall back safely\"; produces a merge-tag map with per-tag fallbacks, conditional-block rules with per-segment variations, a fallback-safety audit, and a PII guard on what may render, informing the SEND E (Engagement/personalization) dimension. Not for building the segments — use list-segment-builder; not for writing the base copy — use email-creative-builder; not for scoring EQS or running vetoes — use email-quality-auditor. 邮件个性化/合并标签/条件内容块/兜底默认值"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "lifecycle"
   provenance: "source-a"
 ---

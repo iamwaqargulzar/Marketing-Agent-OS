@@ -3,7 +3,7 @@ name: landing-experience-checker
 description: "Use when the user asks to \"pre-launch check the landing page\", \"run a Quality-Score preflight\", or \"verify ad-to-page message match before launch\"; produces an ad↔page continuity report — message-match gaps, above-the-fold check, page-speed read, form-friction count, mobile-render flags — as a pass/fix punch list. Not for redesigning or rewriting the page — use landing-optimizer; not for scoring the account or the RQS — use ad-account-auditor. 落地页体验预检/广告落地页一致性检查"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "paid-measurement"
   provenance: "source-a"
 ---

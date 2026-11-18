@@ -3,7 +3,7 @@ name: newsletter-monetization-planner
 description: "Use when the user asks to \"monetize my newsletter\", \"build a sponsorship rate card\", or \"model paid-subscription revenue\"; produces a revenue model (paid tiers, ad/sponsorship inventory + CPM/flat rate card, referral/boost loops), a list-growth ↔ revenue projection, and honest-offer / disclosure checks for the SEND-D lever. Not for scoring the whole program or running D1 — use email-quality-auditor; not for the return math — use roi-calculator; not for the post-click page — use landing-optimizer. 邮件newsletter变现/赞助刊例/付费订阅测算"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "lifecycle"
   provenance: "source-a"
 ---

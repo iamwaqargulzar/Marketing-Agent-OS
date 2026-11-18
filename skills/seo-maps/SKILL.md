@@ -3,7 +3,7 @@ name: seo-maps
 description: "Maps intelligence for local SEO: geo-grid rank tracking, GBP profile auditing via API, review intelligence across Google/Tripadvisor/Trustpilot, cross-platform NAP verification, competitor radius mapping, and LocalBusiness schema generation. Three tiers: free (Overpass + Geoapify), DataForSEO, and DataForSEO + Google. Use when user says \"maps\", \"geo-grid\", \"rank tracking\", \"GBP audit\", \"review velocity\", \"competitor radius\", or \"SoLV\"."
 license: MIT
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "seo-geo"
   provenance: "source-b"
 ---
@@ -42,12 +42,12 @@ Before any analysis, detect the available capability tier:
 ### Tier 0 (Free)
 **Detection:** DataForSEO MCP tools NOT available.
 **Capabilities:** Overpass API competitor discovery, Geoapify POI search, Nominatim geocoding, static GBP checklist, schema generation, cross-platform NAP guidance.
-**Load:** `../seo/references/maps-free-apis.md`
+**Load:** `skills/seo/references/maps-free-apis.md`
 
 ### Tier 1 (DataForSEO)
 **Detection:** `business_data_business_listings_search` MCP tool IS available.
 **Capabilities:** Everything in Tier 0 PLUS geo-grid rank tracking, live GBP profile audit, review intelligence (velocity, sentiment, distribution), GBP post activity, Q&A data, Tripadvisor/Trustpilot reviews.
-**Load:** `../seo/references/maps-api-endpoints.md`
+**Load:** `skills/seo/references/maps-api-endpoints.md`
 
 ### Tier 2 (DataForSEO + Google Maps Platform)
 **Detection:** Tier 1 available AND Google Maps API key in environment.
@@ -63,8 +63,8 @@ Before any analysis, detect the available capability tier:
 Simulates Google Maps searches from multiple GPS coordinates to show ranking
 variation across a geographic area. Requires DataForSEO.
 
-**Load:** `../seo/references/maps-geo-grid.md` for algorithm, SoLV formula, heatmap format.
-**Load:** `../seo/references/maps-api-endpoints.md` for Maps SERP endpoint details.
+**Load:** `skills/seo/references/maps-geo-grid.md` for algorithm, SoLV formula, heatmap format.
+**Load:** `skills/seo/references/maps-api-endpoints.md` for Maps SERP endpoint details.
 
 ### Workflow
 
@@ -97,7 +97,7 @@ DataForSEO credits will be consumed. Proceed?
 
 Audits the 25 fields that affect Google Business Profile quality and ranking.
 
-**Load:** `../seo/references/maps-gbp-checklist.md` for full checklist and scoring.
+**Load:** `skills/seo/references/maps-gbp-checklist.md` for full checklist and scoring.
 
 > **AI & 2026 context (third-party reported):** **Ask Maps**, reported by AP News
 > as a Gemini conversational Maps feature launched 2026-03-12 (iOS/Android,
@@ -132,7 +132,7 @@ Audits the 25 fields that affect Google Business Profile quality and ranking.
 
 Cross-platform review analysis: velocity, sentiment, rating distribution, fake detection.
 
-**Reference:** `../seo/references/local-seo-signals.md` for benchmarks (shared with seo-local).
+**Reference:** `skills/seo/references/local-seo-signals.md` for benchmarks (shared with seo-local).
 
 ### Workflow
 
@@ -162,7 +162,7 @@ Identify and analyze competitors within a defined radius.
 
 ### Tier 0 (Overpass API)
 
-**Load:** `../seo/references/maps-free-apis.md` for query templates.
+**Load:** `skills/seo/references/maps-free-apis.md` for query templates.
 
 1. Geocode business address
 2. Query Overpass API for businesses with same OSM tag within radius
@@ -200,7 +200,7 @@ Check business listing consistency across Google, Bing Places, Apple, and OSM.
 
 Generate LocalBusiness JSON-LD markup from collected data.
 
-**Reference:** `../seo/references/local-schema-types.md` for industry subtypes (shared with seo-local).
+**Reference:** `skills/seo/references/local-schema-types.md` for industry subtypes (shared with seo-local).
 
 ### Workflow
 
@@ -218,13 +218,13 @@ Generate LocalBusiness JSON-LD markup from collected data.
 ## Reference Files
 
 Load on-demand as needed (do NOT load all at startup):
-- `../seo/references/maps-api-endpoints.md`: DataForSEO endpoint details, params, costs
-- `../seo/references/maps-free-apis.md`: Overpass, Geoapify, Nominatim query templates
-- `../seo/references/maps-geo-grid.md`: Grid algorithm, SoLV formula, heatmap rendering
-- `../seo/references/maps-gbp-checklist.md`: 25-field GBP audit with industry weights
-- `../seo/references/local-seo-signals.md`: Ranking factors, review benchmarks (shared)
-- `../seo/references/local-schema-types.md`: LocalBusiness subtypes by industry (shared)
-- `../seo/references/local-schema-multilocation.md`: Multi-location schema pattern (shared)
+- `skills/seo/references/maps-api-endpoints.md`: DataForSEO endpoint details, params, costs
+- `skills/seo/references/maps-free-apis.md`: Overpass, Geoapify, Nominatim query templates
+- `skills/seo/references/maps-geo-grid.md`: Grid algorithm, SoLV formula, heatmap rendering
+- `skills/seo/references/maps-gbp-checklist.md`: 25-field GBP audit with industry weights
+- `skills/seo/references/local-seo-signals.md`: Ranking factors, review benchmarks (shared)
+- `skills/seo/references/local-schema-types.md`: LocalBusiness subtypes by industry (shared)
+- `skills/seo/references/local-schema-multilocation.md`: Multi-location schema pattern (shared)
 
 ---
 

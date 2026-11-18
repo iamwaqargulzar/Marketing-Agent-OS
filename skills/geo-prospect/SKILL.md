@@ -3,7 +3,7 @@ name: geo-prospect
 description: "CRM-lite for managing GEO agency prospects and clients. Track leads through the full sales pipeline: Lead → Qualified → Proposal Sent → Won → Lost. Store audit history, notes, deal values, and generate pipeline summaries. Use when user says \"prospect\", \"lead\", \"client\", \"pipeline\", \"crm\", \"nuovo prospect\", \"aggiungi cliente\", or when managing the business side of GEO services."
 license: MIT
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "seo-geo"
   provenance: "source-c"
 ---

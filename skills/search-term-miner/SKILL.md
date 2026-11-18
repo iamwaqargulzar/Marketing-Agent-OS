@@ -3,7 +3,7 @@ name: search-term-miner
 description: "Use when the user asks to \"mine my search terms\", \"find new keywords from converting queries\", \"build a negative-keyword list\", or \"cut wasted paid spend\"; harvests converting queries into new keywords/ad-groups, builds a standing negative-keyword list and an n-gram waste report from the search-terms export, and delivers a maintenance diff (add / negate / move). Not for account structure — use campaign-architect; not for budget split — use budget-optimizer; not for computing the final RQS — use ad-account-auditor. 付费广告搜索词挖掘/否定关键词/浪费词清单"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "paid-measurement"
   provenance: "source-a"
 ---

@@ -3,7 +3,7 @@ name: short-video-scripter
 description: "Use when the user asks to \"script this short video\", \"write a TikTok / Reels / Shorts script\", \"给这条抖音或视频号视频写脚本\", or \"fix the hook — viewers drop off in the first seconds\"; produces timestamped beat-sheet scripts on the retention-gate model (0-2s hook / 2-5s confirmation / 5-15s payoff / loop-or-CTA) with per-scene script lines, on-screen text for muted viewing, asset keywords, and 9:16 format-param rows per platform norm card for TikTok, Reels, Shorts, 抖音, and 视频号 — plus 2-3 hook options from named hook families and an AI-content disclosure line by default on realistic synthetic media. Spec-only: rendering, TTS, and publishing stay with the user's own tools — no pipelines, no upload automation. Not for creator video briefs — use brief-generator; long-form video SEO belongs to content-writer. 短视频脚本/抖音分镜/开头钩子/竖屏9:16"
 license: Apache-2.0
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   domain: "social-growth"
   provenance: "source-a"
 ---
